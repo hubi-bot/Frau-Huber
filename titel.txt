@@ -1,0 +1,78 @@
+# Überschriften der Seite. Ändere einfach den Text RECHTS vom Strich | und speichere.
+# Links vom Strich steht, was gemeint ist (Ordner oder Datei). Das bitte nicht ändern.
+# Der Link zum Material bleibt dabei gleich. Nach etwa 2 Minuten ist die Änderung auf der Seite zu sehen.
+# Eine Zeile, die mit # beginnt, wird nicht beachtet. Fehlt eine Datei hier, gilt ihr Dateiname als Titel.
+
+# --- Die Seite selbst ---
+Seitentitel | Unterrichtsmaterialien
+Untertitel | Übersicht für Lehrkräfte – bitte nur einzelne Kurzlinks an die Klasse weitergeben
+Startseite | Lernmaterial von Frau Huber
+Startseite-Text | Öffne bitte den Link oder scanne den QR-Code, den du im Unterricht bekommen hast.
+
+# --- Mathematik 5 ---
+Mathematik 5 | Mathematik 5
+Mathematik 5/Breakout - Rechnen mit natürlichen Zahlen.html | Breakout – Rechnen mit natürlichen Zahlen
+Mathematik 5/Mathe-Vokabeln - Fachbegriffe der Grundrechenarten.html | Mathe-Vokabeln – Fachbegriffe der Grundrechenarten
+Mathematik 5/Rechenheft - Distributivgesetz.html | Rechenheft – Distributivgesetz
+Mathematik 5/Rechenheft - Vorrangregeln.html | Rechenheft – Vorrangregeln
+Mathematik 5/Rechenheft – Schriftlich rechnen.html | Rechenheft – Schriftlich rechnen
+Mathematik 5/Zahlen-Giganten – Die große Nullen-Jagd.html | Zahlen-Giganten – Die große Nullen-Jagd
+
+# --- Mathematik 6 ---
+Mathematik 6 | Mathematik 6
+Mathematik 6/AB - Textaufgaben zu Brüchen.pdf | AB – Textaufgaben zu Brüchen
+Mathematik 6/Bruchheft - Brüche addieren und subtrahieren.html | Bruchheft – Brüche addieren und subtrahieren
+Mathematik 6/Bruchheft - Brüche am Zahlenstrahl; Brüche Vergleichen und Ordnen.html | Bruchheft – Brüche am Zahlenstrahl; Brüche Vergleichen und Ordnen
+Mathematik 6/Bruchheft - Brüche dividieren.html | Bruchheft – Brüche dividieren
+Mathematik 6/Bruchheft - Brüche multiplizieren.html | Bruchheft – Brüche multiplizieren
+Mathematik 6/Bruchheft - Gemischte Zahlen addieren und subtrahieren.html | Bruchheft – Gemischte Zahlen addieren und subtrahieren
+Mathematik 6/Brüche I Lerntrainer.html | Brüche I Lerntrainer
+
+# --- Mathe Klasse 8 ---
+Mathe Klasse 8 | Mathe Klasse 8
+Mathe Klasse 8/1-Lernmodul_Lineare_Funktionen_Nullstellenberechnung.html | Lernmodul Lineare Funktionen Nullstellenberechnung
+Mathe Klasse 8/-Anwendungsaufgaben.html | Anwendungsaufgaben
+Mathe Klasse 8/Lernmodul_Lineare_Funktionen_Anwendung.html | Lernmodul Lineare Funktionen Anwendung
+
+# --- Mathematik Klasse 12_Gk ---
+Mathematik Klasse 12_Gk | Mathematik Klasse 12 Gk
+Mathematik Klasse 12_Gk/Lernumgebung 1_Gleichungen und Schnittpunkte.html | Lernumgebung 1 Gleichungen und Schnittpunkte
+Mathematik Klasse 12_Gk/Lernumgebung_2_Ableitungen.html | Lernumgebung 2 Ableitungen
+
+# --- Mathematik Kurs ---
+Mathematik Kurs | Mathematik Kurs
+Mathematik Kurs/Binomialverteilung - Applet für Geogebra.ggb | Binomialverteilung – Applet für Geogebra
+Mathematik Kurs/Stochastik 19 - Sigma-Umgebungen (Arbeitsblatt).pdf | Stochastik 19 – Sigma-Umgebungen (Arbeitsblatt)
+Mathematik Kurs/Stochastik 20 - Normalverteilung mit dem TI-84 Plus CE.png | Stochastik 20 – Normalverteilung mit dem TI-84 Plus CE
+
+# --- Chemie Klasse 10 ---
+Chemie Klasse 10 | Chemie Klasse 10
+Chemie Klasse 10/Uebersicht_Siedetemperatur_und_WW.html | Uebersicht Siedetemperatur und WW
+Chemie Klasse 10/Uebung_Siedetemperatur_Freitext.html | Uebung Siedetemperatur Freitext
+Chemie Klasse 10/Uebung_Siedetemperatur_gefuehrt.html | Uebung Siedetemperatur gefuehrt
+Chemie Klasse 10/Uebung_Siedetemperatur_Selbstkontrolle.html | Uebung Siedetemperatur Selbstkontrolle
+Chemie Klasse 10/zwischenmolekulare-wechselwirkungen.html | zwischenmolekulare-wechselwirkungen
+
+# --- Chemie Oberstufe ---
+Chemie Oberstufe | Chemie Oberstufe
+Chemie Oberstufe/01 Startklar für Organik.html | Startklar für Organik
+Chemie Oberstufe/01 Startklar_Organik_höheres Niveau.html | Startklar Organik höheres Niveau
+Chemie Oberstufe/02 Nomenklatur-Trainer.html | Nomenklatur-Trainer
+Chemie Oberstufe/Chemie_Energetik_Wiederholung.html | Chemie Energetik Wiederholung
+Chemie Oberstufe/Lernumgebung_Redox.html | Lernumgebung Redox
+
+# --- Informatik 5 ---
+Informatik 5 | Informatik 5
+Informatik 5/Digitale_Mission_001_final.html | Digitale Mission 001 final
+Informatik 5/iserv-trainer_5.html | iserv-trainer 5
+Informatik 5/wissensdetektiv.html | wissensdetektiv
+
+# --- Forensik ---
+Forensik | Forensik
+Forensik/Lernumgebung_Genetik.html | Lernumgebung Genetik
+Forensik/Zitierheft_Forensik.html | Zitierheft Forensik
+Forensik/Zitierheft_Forensik_Mit Artikeln.html | Zitierheft Forensik Mit Artikeln
+
+# --- Jan ---
+Jan | Jan
+Jan/lernmodul_spanischer_kolonialismus_vollständig.html | lernmodul spanischer kolonialismus vollständig

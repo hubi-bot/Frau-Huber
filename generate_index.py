@@ -16,6 +16,8 @@
 #   links.txt                   -> Links ins Internet, eine Zeile pro Link:  Titel | https://...
 #   kurzlinks.txt               -> Kurznamen, eine Zeile pro Datei:  kurzname | Ordner/Dateiname
 #                                  Fehlt eine Datei dort, wird der Kurzname aus dem Dateinamen gebildet.
+#   titel.txt                   -> Überschriften, eine Zeile pro Eintrag:  Ordner/Dateiname | Neuer Titel
+#                                  So lässt sich ein Titel ändern, ohne die Datei umzubenennen (der Link bleibt gleich).
 #
 # Eine Zahl vorne im Namen bestimmt die Reihenfolge und wird nicht angezeigt:
 #   "1 Natürliche Zahlen", "2 Geometrie"  ->  "Natürliche Zahlen", "Geometrie"
@@ -47,7 +49,7 @@ FAECHER = [
 ]
 
 AUSGESCHLOSSEN = {".git", ".github", AUSGABE}
-NICHT_VEROEFFENTLICHEN = {"generate_index.py", "README.md", "kurzlinks.txt", "index.html", ".gitignore"}
+NICHT_VEROEFFENTLICHEN = {"generate_index.py", "README.md", "kurzlinks.txt", "titel.txt", "index.html", ".gitignore"}
 TYPEN = {
     ".html": "Ansehen", ".htm": "Ansehen",
     ".pdf": "PDF",
@@ -109,6 +111,33 @@ def ist_weiterleitung(pfad):
             return 'name="weiterleitung"' in f.read(1500)
     except OSError:
         return False
+
+
+# ---------- Überschriften aus titel.txt ----------
+def titel_lesen():
+    karte = {}
+    if os.path.isfile("titel.txt"):
+        with open("titel.txt", encoding="utf-8-sig") as f:
+            for zeile in f:
+                zeile = zeile.strip()
+                if not zeile or zeile.startswith("#") or "|" not in zeile:
+                    continue
+                was, titel = (t.strip() for t in zeile.split("|", 1))
+                if was and titel:
+                    karte[was.replace("\\", "/").rstrip("/")] = titel
+    return karte
+
+
+TITEL = titel_lesen()
+SEITENTITEL = TITEL.get("Seitentitel", SEITENTITEL)
+UNTERTITEL = TITEL.get("Untertitel", UNTERTITEL)
+START_TITEL = TITEL.get("Startseite", "Lernmaterial von Frau Huber")
+START_TEXT = TITEL.get("Startseite-Text", "Öffne bitte den Link oder scanne den QR-Code, den du im Unterricht bekommen hast.")
+
+
+def titel_fuer(pfad):
+    """Titel aus titel.txt, sonst aus dem Datei- oder Ordnernamen."""
+    return TITEL.get(pfad) or anzeigename(os.path.basename(pfad))
 
 
 # ---------- Kurznamen ----------
@@ -186,7 +215,7 @@ def ordner_lesen(ordner):
                 e += unter_e
             e += l  # Links eines Themas stehen am Ende des Themas
             if e:
-                themen.append((anzeigename(name), e))
+                themen.append((titel_fuer(pfad), e))
         elif name.lower() == "links.txt":
             links += links_lesen(pfad)
         else:
@@ -200,7 +229,7 @@ def ordner_lesen(ordner):
             nummer = kennnummer(name)
             if nummer:
                 id_karte.setdefault(nummer, quote(kurz))
-            eintraege.append({"titel": anzeigename(name), "kurz": kurz, "quelle": pfad, "typ": TYPEN[endung], "extern": False, "id": nummer})
+            eintraege.append({"titel": titel_fuer(pfad), "kurz": kurz, "quelle": pfad, "typ": TYPEN[endung], "extern": False, "id": nummer})
     return eintraege, themen, links
 
 
@@ -277,7 +306,7 @@ for kuerzel, fachname, symbol, _ in belegte_faecher:
 karten = ""
 knoepfe = ""
 for nr, (fach, ordnername, eintraege, themen) in enumerate(gruppen):
-    gruppe = anzeigename(ordnername)
+    gruppe = titel_fuer(ordnername)
     anker = f"g{nr}"
     knoepfe += f'<a class="btn btn-outline-primary btn-sm gruppen-knopf" data-fach="{fach}" href="#{anker}">{html.escape(gruppe)}</a>\n'
     inhalt = ""
@@ -459,7 +488,7 @@ startseite = f"""<!DOCTYPE html>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="robots" content="noindex">
-  <title>Lernmaterial von Frau Huber</title>
+  <title>{html.escape(START_TITEL)}</title>
   <script>
     /* Kurzlinks wie bisher: ?id=12 öffnet direkt die Datei, die mit "12-" beginnt. */
     (function () {{
@@ -478,8 +507,8 @@ startseite = f"""<!DOCTYPE html>
 <body>
   <main>
     <div class="bild" aria-hidden="true">📚</div>
-    <h1>Lernmaterial von Frau Huber</h1>
-    <p>Öffne bitte den Link oder scanne den QR-Code, den du im Unterricht bekommen hast.</p>
+    <h1>{html.escape(START_TITEL)}</h1>
+    <p>{html.escape(START_TEXT)}</p>
   </main>
 </body>
 </html>

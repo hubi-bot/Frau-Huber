@@ -55,7 +55,7 @@ In der Übersicht steht neben jedem Material **🔗 Link** (kopiert den Kurzlink
 
 - **Neue Version:** Die Datei mit **genau dem gleichen Namen** hochladen. Die alte Version wird ersetzt, alte Links und QR-Codes funktionieren weiter.
 - **Löschen:** Datei anklicken, oben rechts auf die **drei Punkte `…`** → **Delete file** → **Commit changes**.
-- **Anderer Titel:** Die alte Datei löschen und unter dem neuen Namen neu hochladen. Achtung: Alte Links auf diese Datei funktionieren dann nicht mehr.
+- **Anderer Titel:** Die Datei `titel.txt` öffnen, auf den Stift klicken und den Text **rechts** vom Strich `|` ändern. Das geht für Materialien, für die Überschriften der Kästen (z. B. „Mathe Klasse 8“) und für den Titel der Seite. Der Link zum Material bleibt dabei gleich.
 
 **Reihenfolge:** Eine Zahl vor den Namen setzen, also `1 Natürliche Zahlen`, `2 Geometrie`. Die Zahl wird auf der Seite nicht angezeigt.
 
@@ -87,4 +87,4 @@ In der Übersicht beim gewünschten Material auf **QR** klicken. Es erscheint ei
 - **Alles hier ist öffentlich.** Die Übersicht ist nur versteckt, nicht geschützt: Wer die Adresse kennt oder dieses Repository bei GitHub findet, sieht alle Materialien. Keine Namen von Schülern, keine Noten, keine Fotos von Schülern hochladen.
 - **Lösungen** erst hochladen, wenn die Klasse sie sehen darf.
 - **Keine Seiten aus Schulbüchern** einscannen und hochladen, nur eigene Arbeitsblätter.
-- **Diese Dateien bitte nicht löschen:** `generate_index.py`, `kurzlinks.txt`, den Ordner `.github` und `README.md` (diese Anleitung). Sie sorgen dafür, dass die Seite funktioniert.
+- **Diese Dateien bitte nicht löschen:** `generate_index.py`, `kurzlinks.txt`, `titel.txt`, den Ordner `.github` und `README.md` (diese Anleitung). Sie sorgen dafür, dass die Seite funktioniert.
