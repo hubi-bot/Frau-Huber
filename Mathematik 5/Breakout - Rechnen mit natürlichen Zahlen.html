@@ -269,7 +269,10 @@ footer .wrap{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
 .gridtools{display:flex;gap:12px;align-items:center;flex-wrap:wrap;justify-content:center;margin-top:14px}
 /* ---------- Spiel ---------- */
 .gamecard{max-width:820px;margin:10px auto 0;text-align:left}
-.gamecard canvas{width:100%;height:auto;display:block;border-radius:16px;touch-action:manipulation;cursor:pointer;background:#fff1dc}
+.gamecard canvas{width:100%;height:auto;display:block;border-radius:16px;touch-action:none;-webkit-touch-callout:none;user-select:none;-webkit-user-select:none;cursor:pointer;background:#fff1dc}
+.gamepick{display:flex;gap:10px;flex-wrap:wrap;margin:0 0 14px}
+.gamepick .go{font-size:17px;padding:9px 16px}
+#jumpbtn{touch-action:none;user-select:none;-webkit-user-select:none}
 .gamebar{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:12px}
 
 #numpad{position:fixed;left:0;right:0;bottom:0;z-index:40;background:var(--surface);border-top:2px solid var(--line);box-shadow:0 -6px 20px rgba(20,24,60,.15);
@@ -433,11 +436,12 @@ body.np-open{padding-bottom:110px}
   <div class="doorstage" id="doorstage">
     <div class="door"><div class="light">Überraschung!</div><div class="leaf l"></div><div class="leaf r"></div></div>
     <h2>Geschafft! Hier ist eure Überraschung.</h2>
-    <p style="max-width:52ch;margin:0 auto 20px">Ihr habt alle Rätsel geknackt und bewiesen, dass ihr im Rechnen mit natürlichen Zahlen richtig fit seid. Als Überraschung wartet jetzt ein Spiel auf euch: der Kastanien-Lauf!</p>
+    <p style="max-width:52ch;margin:0 auto 20px">Ihr habt alle Rätsel geknackt und bewiesen, dass ihr im Rechnen mit natürlichen Zahlen richtig fit seid. Als Überraschung warten jetzt drei Spiele auf euch. Sucht euch eins aus!</p>
     <button class="go" type="button" id="party">Nochmal jubeln</button>
-    <div class="card gamecard"><div class="lbl">Eure Überraschung: Kastanien-Lauf</div>
-      <canvas id="game" width="800" height="320" aria-label="Jump-and-Run-Spiel Kastanien-Lauf"></canvas>
-      <div class="gamebar"><button class="go" type="button" id="jumpbtn">Springen</button><span class="hint">Leertaste, Pfeil nach oben, Tippen aufs Bild oder der Knopf „Springen“. Zweimal schnell hintereinander gibt einen Doppelsprung.</span><span class="touchhint">Tippt auf „Springen“ oder direkt aufs Spielbild. Zweimal schnell tippen gibt einen Doppelsprung.</span></div>
+    <div class="card gamecard"><div class="lbl">Eure Überraschung: <span id="gname">Kastanien-Lauf</span></div>
+      <div class="gamepick" id="gamepick" role="group" aria-label="Spiel auswählen"></div>
+      <canvas id="game" width="800" height="320" aria-label="Spiel Kastanien-Lauf"></canvas>
+      <div class="gamebar"><button class="go" type="button" id="jumpbtn">Springen</button><span class="hint" id="ghint"></span><span class="touchhint" id="gtouch"></span></div>
     </div>
   </div>
 </section>
@@ -789,7 +793,7 @@ const zMark=()=>FIELDS.filter(f=>f.inp.id==='z-a'||f.inp.id==='z-b').forEach(mar
 bindInput($('#z-a'),zA,zMark);bindInput($('#z-b'),zB,zMark);
 
 /* ---------- Lehrkraft & Konfetti ---------- */
-const TCODE=992792;
+const TCODE=300021;
 function teacher(){const t=$('#teacher');t.innerHTML=`<button class="linkbtn" type="button" id="t-open">Für Lehrkräfte</button>`;
  $('#t-open').onclick=()=>{
   t.innerHTML=`<form id="t-form" style="display:inline-flex;gap:8px;align-items:center;flex-wrap:wrap"><label for="t-code">Lehrkraft-Code:</label><input id="t-code" type="password" inputmode="numeric" autocomplete="off" maxlength="8" style="width:90px;padding:4px 8px;border-radius:8px;border:2px solid var(--line);background:var(--surface)"><button class="linkbtn" type="submit">Bestätigen</button> · <button class="linkbtn" type="button" id="t-x0">Abbrechen</button><span id="t-msg" class="msg bad" style="margin:0"></span></form>`;
@@ -856,16 +860,20 @@ $$('[data-tips]').forEach(host=>{
   btn.onclick=()=>{S.hints[st]=Math.min(list.length,(S.hints[st]||0)+1);save();draw();};draw();
 });
 
-/* ---------- Belohnung: Kastanien-Lauf (Jump & Run) ---------- */
+/* ---------- Belohnung: drei Spiele zur Auswahl ---------- */
 (function(){
-const cv=$('#game'), g=cv.getContext('2d'), W=800, H=320, GROUND=262;
-let st='ready', speed, dist, score, leaves, obs, items, p, t0, frame=0, best=+(S.best||0), raf=null, hills=0;
-function reset(){speed=6;dist=0;score=0;leaves=0;obs=[];items=[];p={x:120,y:GROUND,vy:0,jumps:0};frame=0;}
-reset();
-function jump(){
-  if(st==='ready'||st==='over'){reset();st='run';loop();return;}
-  if(p.jumps<2){p.vy=p.jumps?-12.5:-15;p.jumps++;}
-}
+const cv=$('#game'), g=cv.getContext('2d'), W=800, H=320;
+let st='ready', raf=null, frame=0, act='run';
+const best=k=>+(S[k]||0);
+function finish(key,score){st='over';if(score>best(key)){S[key]=score;save();}}
+function hud(lines,right,col){g.fillStyle=col;g.font='600 20px Fredoka, sans-serif';g.textAlign='left';lines.forEach((t,i)=>g.fillText(t,18,32+i*26));g.textAlign='right';g.fillText(right,W-18,32);}
+
+/* ===== Spiel 1: Kastanien-Lauf (Jump & Run) ===== */
+const run=(function(){
+const GROUND=262;
+let speed, dist, score, leaves, obs, items, p, hills=0;
+function reset(){speed=6;dist=0;score=0;leaves=0;obs=[];items=[];p={x:120,y:GROUND,vy:0,jumps:0};}
+function press(){if(p.jumps<2){p.vy=p.jumps?-12.5:-15;p.jumps++;}}
 function spawn(){
   const last=obs[obs.length-1];
   if(!last||last.x<W-(260+Math.random()*260)){
@@ -881,13 +889,13 @@ function hit(o){
   return (cx-nx)**2+(cy-ny)**2<(r-4)**2;
 }
 function update(){
-  frame++;speed=Math.min(13,6+dist/2500);dist+=speed;score=Math.floor(dist/10)+leaves*25;hills=(hills+speed*.25)%W;
+  speed=Math.min(13,6+dist/2500);dist+=speed;score=Math.floor(dist/10)+leaves*25;hills=(hills+speed*.25)%W;
   p.vy+=0.8;p.y+=p.vy;if(p.y>=GROUND){p.y=GROUND;p.vy=0;p.jumps=0;}
   obs.forEach(o=>o.x-=speed);items.forEach(i=>i.x-=speed);
   obs=obs.filter(o=>o.x>-100);items=items.filter(i=>i.x>-40&&!i.got);
   items.forEach(i=>{if(Math.hypot(i.x-p.x,i.y-(p.y-19))<30){i.got=true;leaves++;}});
   spawn();
-  if(obs.some(hit)){st='over';if(score>best){best=score;S.best=best;save();}}
+  if(obs.some(hit))finish('best',score);
 }
 function draw(){
   const sky=g.createLinearGradient(0,0,0,H);sky.addColorStop(0,'#ffd9a8');sky.addColorStop(1,'#fff1dc');g.fillStyle=sky;g.fillRect(0,0,W,H);
@@ -921,24 +929,175 @@ function draw(){
   g.fillStyle='#24284a';g.beginPath();g.arc(x+7,y-2,2.4,0,7);g.arc(x+16,y-2,2,0,7);g.fill();
   g.strokeStyle='#24284a';g.lineWidth=2;g.beginPath();g.arc(x+11,y+6,4,.2,Math.PI-.2);g.stroke();
   g.fillStyle='#4f9a2a';g.beginPath();g.ellipse(x-4,y-22,8,4,-.6,0,7);g.fill();
+  hud(['Punkte: '+score,'Blätter: '+leaves],'Rekord: '+best('best'),'rgba(36,40,74,.85)');
+}
+return{name:'Kastanien-Lauf',icon:'🌰',btn:'Springen',reset,press,update,draw,
+  over:()=>'Autsch! '+score+' Punkte',
+  how:['Tippen oder Leertaste zum Springen – zweimal für einen Doppelsprung','Springt über Kürbisse, Igelschalen und Pfützen und sammelt goldene Blätter.'],
+  hint:'Leertaste, Pfeil nach oben, Tippen aufs Bild oder der Knopf „Springen“. Zweimal schnell hintereinander gibt einen Doppelsprung.',
+  touch:'Tippt auf „Springen“ oder direkt aufs Spielbild. Zweimal schnell tippen gibt einen Doppelsprung.'};
+})();
+
+/* ===== Spiel 2: Sternen-Flug (Raumschiff) ===== */
+const space=(function(){
+const back=[];for(let i=0;i<70;i++)back.push({x:Math.random()*W,y:Math.random()*H,r:Math.random()*1.6+.4,v:Math.random()*.5+.15});
+let ship, thrust, rocks, stars, dist, got, score, speed;
+function reset(){ship={x:130,y:H/2,vy:0};thrust=false;rocks=[];stars=[];dist=0;got=0;score=0;speed=4.5;}
+function press(){thrust=true;}
+function release(){thrust=false;}
+function spawn(){
+  const last=rocks[rocks.length-1];
+  if(!last||last.x<W-(200+Math.random()*170)){
+    const r=16+Math.random()*22,y=Math.random()<.4?Math.max(r,Math.min(H-r,ship.y+(Math.random()-.5)*50)):r+Math.random()*(H-2*r);
+    rocks.push({x:W+r,y,r,rot:Math.random()*6,spin:(Math.random()-.5)*.05});
+    if(Math.random()<.65){const sy=30+Math.random()*(H-60);if(Math.abs(sy-y)>r+34)stars.push({x:W+r+100,y:sy,got:false});}
+  }
+}
+function update(){
+  speed=Math.min(11,4.5+dist/3000);dist+=speed;
+  ship.vy=Math.max(-7,Math.min(7,ship.vy+(thrust?-.55:.45)));ship.y+=ship.vy;
+  if(ship.y<24){ship.y=24;ship.vy=0;}if(ship.y>H-24){ship.y=H-24;ship.vy=0;}
+  back.forEach(b=>{b.x-=b.v*speed*.4;if(b.x<0)b.x+=W;});
+  rocks.forEach(r=>{r.x-=speed;r.rot+=r.spin;});stars.forEach(s=>s.x-=speed);
+  rocks=rocks.filter(r=>r.x>-80);stars=stars.filter(s=>s.x>-30&&!s.got);
+  stars.forEach(s=>{if(Math.hypot(s.x-ship.x,s.y-ship.y)<30){s.got=true;got++;}});
+  spawn();score=Math.floor(dist/10)+got*25;
+  if(rocks.some(r=>Math.hypot(r.x-ship.x,r.y-ship.y)<r.r+12))finish('bestSpace',score);
+}
+function star(x,y,R){g.beginPath();for(let i=0;i<10;i++){const a=-Math.PI/2+i*Math.PI/5,q=i%2?R*.45:R;g.lineTo(x+Math.cos(a)*q,y+Math.sin(a)*q);}g.closePath();}
+function draw(){
+  const sky=g.createLinearGradient(0,0,0,H);sky.addColorStop(0,'#0f1233');sky.addColorStop(1,'#2b2f72');g.fillStyle=sky;g.fillRect(0,0,W,H);
+  g.fillStyle='#fff';back.forEach(b=>{g.globalAlpha=.35+b.r*.3;g.beginPath();g.arc(b.x,b.y,b.r,0,7);g.fill();});g.globalAlpha=1;
+  // Planet
+  g.fillStyle='#f29a2e';g.beginPath();g.arc(650,80,40,0,7);g.fill();g.strokeStyle='#ffd9a8';g.lineWidth=5;g.beginPath();g.ellipse(650,80,64,14,-.3,0,7);g.stroke();
+  rocks.forEach(r=>{g.save();g.translate(r.x,r.y);g.rotate(r.rot);g.fillStyle='#8d93b8';g.beginPath();
+    for(let i=0;i<9;i++){const a=i/9*Math.PI*2,q=r.r*(i%2?.86:1);g.lineTo(Math.cos(a)*q,Math.sin(a)*q);}g.closePath();g.fill();
+    g.fillStyle='#6b7198';g.beginPath();g.arc(-r.r*.3,-r.r*.2,r.r*.22,0,7);g.arc(r.r*.3,r.r*.25,r.r*.16,0,7);g.fill();g.restore();});
+  stars.forEach(s=>{g.fillStyle='#ffc93c';g.strokeStyle='#c98a00';g.lineWidth=2;star(s.x,s.y+Math.sin((frame+s.x)/12)*3,12);g.fill();g.stroke();});
+  // Raumschiff
+  const x=ship.x,y=ship.y;g.save();g.translate(x,y);g.rotate(Math.max(-.35,Math.min(.35,ship.vy*.05)));
+  if(thrust&&st==='run'){g.fillStyle='#ffc93c';g.beginPath();g.moveTo(-22,-7);g.lineTo(-40-Math.random()*14,0);g.lineTo(-22,7);g.closePath();g.fill();
+    g.fillStyle='#f2603f';g.beginPath();g.moveTo(-22,-4);g.lineTo(-32-Math.random()*8,0);g.lineTo(-22,4);g.closePath();g.fill();}
+  g.fillStyle='#f2603f';g.beginPath();g.moveTo(-18,-12);g.lineTo(-30,-22);g.lineTo(-8,-12);g.closePath();g.fill();
+  g.beginPath();g.moveTo(-18,12);g.lineTo(-30,22);g.lineTo(-8,12);g.closePath();g.fill();
+  g.fillStyle='#eef0ff';g.beginPath();g.moveTo(28,0);g.quadraticCurveTo(10,-17,-22,-13);g.lineTo(-22,13);g.quadraticCurveTo(10,17,28,0);g.fill();
+  g.fillStyle='#7f52f0';g.beginPath();g.moveTo(28,0);g.quadraticCurveTo(21,-7,13,-10);g.lineTo(13,10);g.quadraticCurveTo(21,7,28,0);g.fill();
+  g.fillStyle='#5aa9e6';g.strokeStyle='#24284a';g.lineWidth=2;g.beginPath();g.arc(0,0,6.5,0,7);g.fill();g.stroke();
+  g.restore();
+  hud(['Punkte: '+score,'Sterne: '+got],'Rekord: '+best('bestSpace'),'rgba(255,255,255,.92)');
+}
+return{name:'Sternen-Flug',icon:'🚀',btn:'Schub',hold:true,reset,press,release,update,draw,
+  over:()=>'Bumm! '+score+' Punkte',
+  how:['Gedrückt halten: Das Raumschiff steigt. Loslassen: Es sinkt.','Weicht den Asteroiden aus und sammelt goldene Sterne.'],
+  hint:'Leertaste, Pfeil nach oben, das Spielbild oder den Knopf „Schub“ gedrückt halten: Das Raumschiff steigt. Loslassen: Es sinkt.',
+  touch:'Haltet „Schub“ oder das Spielbild gedrückt, dann steigt das Raumschiff. Loslassen lässt es sinken.'};
+})();
+
+/* ===== Spiel 3: Elfmeter-König (Fußball) ===== */
+const soccer=(function(){
+const GL=250, GR=550, TOP=70, LINE=190, AIMY=128, KW=28, FLY=22, B0={x:400,y:292};
+let goals, miss, phase, t, ax, adir, av, kx, kdir, ks, kd, shot, msg, saved;
+function level(){av=Math.min(10,4+goals*.25);ks=Math.min(6,2.2+goals*.2);kd=Math.min(5.2,2+goals*.2);}
+function reset(){goals=0;miss=0;phase='aim';t=0;ax=GL+40;adir=1;kx=400;kdir=1;msg='';saved=false;level();}
+function press(){if(phase!=='aim')return;phase='fly';t=0;shot=ax;}
+function update(){
+  if(phase==='fly'){const d=shot-kx;kx+=Math.sign(d)*Math.min(Math.abs(d),kd);kx=Math.max(GL+KW,Math.min(GR-KW,kx));}
+  else if(phase==='aim'){kx+=ks*kdir;if(kx>GR-KW){kx=GR-KW;kdir=-1;}if(kx<GL+KW){kx=GL+KW;kdir=1;}}
+  if(phase==='aim'){ax+=av*adir;if(ax>GR+35){ax=GR+35;adir=-1;}if(ax<GL-35){ax=GL-35;adir=1;}}
+  else if(phase==='fly'){t++;if(t>=FLY){
+    saved=false;
+    if(shot<GL-6||shot>GR+6){msg='Vorbei!';miss++;}
+    else if(shot<GL+6||shot>GR-6){msg='Pfosten!';miss++;}
+    else if(Math.abs(shot-kx)<KW+9){msg='Gehalten!';miss++;saved=true;}
+    else{msg='TOR!';goals++;}
+    phase='show';t=0;}}
+  else{t++;if(t>=42){if(miss>=3){finish('bestSoccer',goals);return;}level();phase='aim';msg='';}}
+}
+function ball(x,y,r){g.fillStyle='#fff';g.strokeStyle='#24284a';g.lineWidth=2;g.beginPath();g.arc(x,y,r,0,7);g.fill();g.stroke();
+  g.fillStyle='#24284a';g.beginPath();g.arc(x,y,r*.32,0,7);g.fill();for(let i=0;i<5;i++){const a=i/5*Math.PI*2+.3;g.beginPath();g.arc(x+Math.cos(a)*r*.72,y+Math.sin(a)*r*.72,r*.16,0,7);g.fill();}}
+function draw(){
+  // Himmel, Tribüne, Rasen
+  g.fillStyle='#8fd3ff';g.fillRect(0,0,W,H);
+  g.fillStyle='#3b4cc0';g.fillRect(0,22,W,56);
+  for(let i=0;i<64;i++){g.fillStyle=['#ffc93c','#f2603f','#eef0ff','#3fd0cb'][i%4];g.beginPath();g.arc(8+i*12.6,36+(i%3)*13,4,0,7);g.fill();}
+  for(let i=0;i<8;i++){g.fillStyle=i%2?'#3f9b45':'#4aad50';g.fillRect(i*100,78,100,H-78);}
+  g.strokeStyle='rgba(255,255,255,.85)';g.lineWidth=3;g.beginPath();g.moveTo(0,LINE);g.lineTo(W,LINE);g.stroke();
+  g.strokeRect(150,LINE,500,150);g.fillStyle='#fff';g.beginPath();g.arc(B0.x,B0.y,4,0,7);g.fill();
+  // Tor mit Netz
+  g.strokeStyle='rgba(255,255,255,.55)';g.lineWidth=1;
+  for(let x=GL;x<=GR;x+=20){g.beginPath();g.moveTo(x,TOP);g.lineTo(x,LINE);g.stroke();}
+  for(let y=TOP;y<=LINE;y+=20){g.beginPath();g.moveTo(GL,y);g.lineTo(GR,y);g.stroke();}
+  g.strokeStyle='#fff';g.lineWidth=7;g.lineCap='round';g.beginPath();g.moveTo(GL,LINE);g.lineTo(GL,TOP);g.lineTo(GR,TOP);g.lineTo(GR,LINE);g.stroke();
+  // Ball im Netz
+  if(phase==='show'&&msg==='TOR!')ball(shot,AIMY,9);
+  // Torwart
+  const up=phase==='show'&&saved;
+  g.strokeStyle='#24284a';g.lineWidth=7;g.beginPath();g.moveTo(kx-9,LINE-30);g.lineTo(kx-11,LINE);g.moveTo(kx+9,LINE-30);g.lineTo(kx+11,LINE);g.stroke();
+  g.strokeStyle='#ffc93c';g.lineWidth=9;g.beginPath();g.moveTo(kx-14,LINE-64);g.lineTo(kx-KW,LINE-(up?92:52));g.moveTo(kx+14,LINE-64);g.lineTo(kx+KW,LINE-(up?92:52));g.stroke();
+  g.fillStyle='#ffc93c';g.fillRect(kx-15,LINE-72,30,44);
+  g.fillStyle='#f3c9a0';g.beginPath();g.arc(kx,LINE-84,12,0,7);g.fill();
+  g.fillStyle='#24284a';g.beginPath();g.arc(kx-4,LINE-86,1.8,0,7);g.arc(kx+4,LINE-86,1.8,0,7);g.fill();
+  // Zielpfeil
+  if(phase==='aim'&&st==='run'){g.strokeStyle='rgba(36,40,74,.45)';g.lineWidth=2;g.setLineDash([8,8]);g.beginPath();g.moveTo(B0.x,B0.y-14);g.lineTo(ax,AIMY);g.stroke();g.setLineDash([]);
+    g.strokeStyle='#e5484d';g.lineWidth=4;g.beginPath();g.arc(ax,AIMY,13,0,7);g.moveTo(ax-20,AIMY);g.lineTo(ax+20,AIMY);g.moveTo(ax,AIMY-20);g.lineTo(ax,AIMY+20);g.stroke();}
+  // Ball
+  if(phase==='fly'){const q=t/FLY,e=1-(1-q)*(1-q);ball(B0.x+(shot-B0.x)*e,B0.y+(AIMY-B0.y)*e-Math.sin(q*Math.PI)*26,14-5*q);}
+  else if(phase==='aim')ball(B0.x,B0.y-14,14);
+  if(phase==='show'){g.textAlign='center';g.font='700 52px Fredoka, sans-serif';g.lineWidth=8;g.strokeStyle='#24284a';g.strokeText(msg,W/2,260);
+    g.fillStyle=msg==='TOR!'?'#ffc93c':'#fff';g.fillText(msg,W/2,260);}
   // Anzeige
-  g.fillStyle='rgba(36,40,74,.85)';g.font='600 20px Fredoka, sans-serif';g.textAlign='left';
-  g.fillText('Punkte: '+score,18,32);g.fillText('Blätter: '+leaves,18,58);g.textAlign='right';g.fillText('Rekord: '+best,W-18,32);
+  g.fillStyle='rgba(18,21,47,.72)';g.fillRect(0,0,W,22);
+  g.fillStyle='#fff';g.font='600 17px Fredoka, sans-serif';g.textAlign='left';g.fillText('Tore: '+goals+'   Fehlschüsse: '+miss+' von 3',14,17);g.textAlign='right';g.fillText('Rekord: '+best('bestSoccer'),W-14,17);
+}
+return{name:'Elfmeter-König',icon:'⚽',btn:'Schießen',reset,press,update,draw,
+  over:()=>'Abpfiff! '+goals+(goals===1?' Tor':' Tore'),
+  how:['Das rote Fadenkreuz wandert hin und her. Tippt im richtigen Moment: Dorthin fliegt der Ball.','Zielt weit weg vom Torwart, denn er hechtet zum Ball. Nach drei Fehlschüssen ist Schluss.'],
+  hint:'Leertaste, Pfeil nach oben, Tippen aufs Bild oder der Knopf „Schießen“: Der Ball fliegt dorthin, wo das rote Fadenkreuz gerade steht.',
+  touch:'Tippt auf „Schießen“ oder aufs Spielbild, wenn das rote Fadenkreuz an der richtigen Stelle steht.'};
+})();
+
+/* ===== Gemeinsamer Rahmen ===== */
+const G={run,space,soccer};
+function draw(){
+  const a=G[act];a.draw();
   if(st!=='run'){g.fillStyle='rgba(36,40,74,.72)';g.fillRect(0,0,W,H);g.fillStyle='#fff';g.textAlign='center';
-    g.font='700 34px Fredoka, sans-serif';g.fillText(st==='over'?'Autsch! '+score+' Punkte':'Kastanien-Lauf',W/2,H/2-26);
-    g.font='600 19px Nunito, sans-serif';g.fillText(st==='over'?'Tippen oder Leertaste: nochmal laufen':'Tippen oder Leertaste zum Springen – zweimal für einen Doppelsprung',W/2,H/2+10);
-    g.fillText('Springt über Kürbisse, Igelschalen und Pfützen und sammelt goldene Blätter.',W/2,H/2+40);}
+    g.font='700 34px Fredoka, sans-serif';g.fillText(st==='over'?a.over():a.name,W/2,H/2-26);
+    g.font='600 19px Nunito, sans-serif';g.fillText(st==='over'?'Tippen oder Leertaste: nochmal spielen':a.how[0],W/2,H/2+10);
+    g.fillText(a.how[1],W/2,H/2+40);}
 }
 function loop(){
   if(raf)cancelAnimationFrame(raf);
-  const step=()=>{if(st==='run'&&!document.hidden){update();}draw();raf=st==='run'?requestAnimationFrame(step):null;};
+  const step=()=>{if(st==='run'&&!document.hidden){frame++;G[act].update();}draw();raf=st==='run'?requestAnimationFrame(step):null;};
   raf=requestAnimationFrame(step);
 }
-cv.addEventListener('pointerdown',e=>{e.preventDefault();jump();});
-$('#jumpbtn').addEventListener('pointerdown',e=>{e.preventDefault();jump();});$('#jumpbtn').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();jump();}});
-window.addEventListener('keydown',e=>{if(cur!=='door')return;if([' ','ArrowUp','w','W'].includes(e.key)){e.preventDefault();jump();}});
+function press(){
+  const a=G[act];
+  if(st==='ready'||st==='over'){a.reset();frame=0;st='run';if(a.hold)a.press();loop();return;}
+  a.press();
+}
+function release(){const a=G[act];if(a.release)a.release();}
+function choose(k,keep){
+  if(!G[k])k='run';
+  act=k;if(raf){cancelAnimationFrame(raf);raf=null;}st='ready';frame=0;G[k].reset();
+  const a=G[k];
+  $('#gname').textContent=a.name;$('#jumpbtn').textContent=a.btn;$('#ghint').textContent=a.hint;$('#gtouch').textContent=a.touch;
+  cv.setAttribute('aria-label','Spiel '+a.name);
+  $$('#gamepick button').forEach(b=>{const on=b.dataset.game===k;b.classList.toggle('ghost',!on);b.setAttribute('aria-pressed',on?'true':'false');});
+  if(!keep){S.game=k;save();}
+  draw();
+}
+$('#gamepick').innerHTML=Object.keys(G).map(k=>`<button class="go ghost" type="button" data-game="${k}" aria-pressed="false">${G[k].icon} ${G[k].name}</button>`).join('');
+$$('#gamepick button').forEach(b=>b.onclick=()=>{choose(b.dataset.game);b.blur();});
+cv.addEventListener('pointerdown',e=>{e.preventDefault();press();});
+cv.addEventListener('contextmenu',e=>e.preventDefault());
+$('#jumpbtn').addEventListener('pointerdown',e=>{e.preventDefault();press();});$('#jumpbtn').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.repeat){e.preventDefault();press();}});
+$('#jumpbtn').addEventListener('keyup',e=>{if(e.key==='Enter')release();});
+window.addEventListener('pointerup',release);window.addEventListener('pointercancel',release);window.addEventListener('blur',release);
+const KEYS=[' ','ArrowUp','w','W'];
+window.addEventListener('keydown',e=>{if(cur!=='door')return;if(KEYS.includes(e.key)){e.preventDefault();if(!e.repeat)press();}});
+window.addEventListener('keyup',e=>{if(KEYS.includes(e.key))release();});
 window.drawGame=draw;
-draw();
+choose(S.game||'run',true);
 })();
 
 /* ---------- Überprüfen-Knöpfe ---------- */
