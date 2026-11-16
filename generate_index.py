@@ -391,21 +391,23 @@ uebersicht = f"""<!DOCTYPE html>
           <textarea class="form-control form-control-sm mb-2" id="einfuegen-text" rows="3" readonly aria-label="Neuer Inhalt von titel.txt"></textarea>
           <button type="button" class="btn btn-sm btn-outline-secondary" id="einfuegen-fertig">Erledigt</button>
         </div>
-        <details class="mt-3">
-          <summary class="small">Direktes Speichern ohne den Umweg über GitHub einrichten</summary>
+        <details class="mt-3" id="einrichten">
+          <summary class="small fw-semibold">Einmal einrichten: danach speichert der Knopf „Speichern“ alles mit einem Klick</summary>
           <p class="small mt-2 mb-2" id="token-status"></p>
+          <p class="small mb-2">Diese Seite darf nur dann für dich bei GitHub speichern, wenn du es ihr einmal erlaubst. Das dauert etwa eine Minute und ist nur einmal pro Gerät nötig:</p>
           <ol class="small ps-3 mb-2">
-            <li><a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">Bei GitHub einen Zugangsschlüssel anlegen</a> (Fine-grained token).</li>
-            <li>„Repository access“: „Only select repositories“ und nur „Unterrichtsmaterial“ wählen.</li>
-            <li>„Permissions“ → „Repository permissions“ → „Contents“: „Read and write“.</li>
-            <li>Schlüssel erzeugen, kopieren und hier einfügen.</li>
+            <li><a href="https://github.com/settings/personal-access-tokens/new?name=Materialseite+Titel&amp;description=Titel+auf+der+Materialseite+speichern&amp;target_name={html.escape(REPO.split("github.com/", 1)[1].split("/")[0])}&amp;expires_in=none&amp;contents=write" target="_blank" rel="noopener"><strong>Diesen Link öffnen</strong></a>. Fast alles ist schon ausgefüllt. Falls GitHub nach deinem Passwort fragt, gib es ein.</li>
+            <li>Nach unten zu <strong>Repository access</strong> gehen, <strong>Only select repositories</strong> anklicken und in der Liste <strong>{html.escape(REPO.rsplit("/", 1)[1])}</strong> auswählen.</li>
+            <li>Ganz unten auf den grünen Knopf <strong>Generate token</strong> klicken und im kleinen Fenster noch einmal bestätigen.</li>
+            <li>GitHub zeigt jetzt eine lange Zeichenfolge, die mit <code>github_pat_</code> beginnt. Daneben auf das Kopier-Symbol klicken.</li>
+            <li>Hierher zurückkommen, die Zeichenfolge in das Feld einfügen und auf <strong>Übernehmen</strong> klicken.</li>
           </ol>
           <div class="input-group input-group-sm">
-            <input type="password" class="form-control" id="token-feld" placeholder="Zugangsschlüssel (github_pat_…)" autocomplete="off" aria-label="Zugangsschlüssel">
-            <button type="button" class="btn btn-outline-primary" id="token-ok">Übernehmen</button>
+            <input type="password" class="form-control" id="token-feld" placeholder="Hier einfügen (beginnt mit github_pat_)" autocomplete="off" aria-label="Zeichenfolge von GitHub">
+            <button type="button" class="btn btn-primary" id="token-ok">Übernehmen</button>
             <button type="button" class="btn btn-outline-danger" id="token-weg" hidden>Entfernen</button>
           </div>
-          <p class="small text-muted mt-2 mb-0">Der Schlüssel bleibt nur in diesem Browser gespeichert. Richte das nur auf deinem eigenen Gerät ein, nicht auf einem Schulgerät, das andere mitbenutzen.</p>
+          <p class="small text-muted mt-2 mb-0">Die Zeichenfolge bleibt nur in diesem Browser gespeichert und erlaubt nur Änderungen an diesem einen Repository. Richte das nur auf deinem eigenen Gerät ein, nicht auf einem Schulgerät, das andere mitbenutzen.</p>
         </details>
       </div>
     </section>
@@ -535,7 +537,8 @@ uebersicht = f"""<!DOCTYPE html>
       function melden(text, art) {{ meldung.textContent = text; meldung.className = "small mt-2 " + (art === "gut" ? "text-success" : art === "schlecht" ? "text-danger" : "text-muted"); }}
       function tokenAnzeige() {{
         const hat = !!tokenLesen();
-        document.getElementById("token-status").textContent = hat ? "Direktes Speichern ist auf diesem Gerät eingerichtet." : "Direktes Speichern ist auf diesem Gerät noch nicht eingerichtet.";
+        document.getElementById("token-status").textContent = hat ? "✓ Auf diesem Gerät eingerichtet: „Speichern“ erledigt alles mit einem Klick." : "Auf diesem Gerät noch nicht eingerichtet.";
+        document.getElementById("einrichten").open = !hat;
         document.getElementById("token-weg").hidden = !hat;
       }}
       function felder() {{ return Array.prototype.slice.call(document.querySelectorAll("input.edit-feld")); }}
@@ -609,7 +612,7 @@ uebersicht = f"""<!DOCTYPE html>
             try {{ await navigator.clipboard.writeText(neu); kopiert = true; }} catch (e) {{}}
             document.getElementById("einfuegen-hinweis").textContent = kopiert ? "Der neue Inhalt ist schon kopiert." : "Markiere den Text im Feld unten und kopiere ihn.";
             document.getElementById("einfuegen").hidden = false;
-            melden("Noch ein Schritt bei GitHub, siehe unten. Mit eingerichtetem direktem Speichern entfällt er.");
+            melden("Noch ein Schritt bei GitHub, siehe unten. Nach der einmaligen Einrichtung weiter unten entfällt er.");
           }}
         }} catch (e) {{ melden(e.message || String(e), "schlecht"); }}
         knopf.disabled = false;
@@ -620,7 +623,9 @@ uebersicht = f"""<!DOCTYPE html>
       document.getElementById("einfuegen-fertig").addEventListener("click", function () {{ bearbeitenAus(true); }});
       document.getElementById("token-ok").addEventListener("click", function () {{
         const f = document.getElementById("token-feld"), t = f.value.trim();
-        if (!t) return; tokenSetzen(t); f.value = ""; tokenAnzeige(); melden("Direktes Speichern ist eingerichtet. Der Schlüssel bleibt nur in diesem Browser.", "gut");
+        if (!t) return;
+        if (!/^(github_pat_|ghp_)/.test(t)) {{ melden("Das sieht nicht nach der Zeichenfolge von GitHub aus. Sie beginnt mit github_pat_.", "schlecht"); return; }}
+        tokenSetzen(t); f.value = ""; tokenAnzeige(); document.getElementById("einfuegen").hidden = true; melden("Eingerichtet. Ab jetzt speichert der Knopf „Speichern“ alles mit einem Klick.", "gut");
       }});
       document.getElementById("token-weg").addEventListener("click", function () {{ tokenSetzen(""); tokenAnzeige(); melden("Der Zugangsschlüssel wurde von diesem Gerät entfernt."); }});
     }})();
