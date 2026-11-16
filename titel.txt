@@ -11,55 +11,53 @@ Startseite-Text | Öffne bitte den Link oder scanne den QR-Code, den du im Unter
 
 # --- Mathematik 5 ---
 Mathematik 5 | Mathematik 5
-Mathematik 5/Breakout - Rechnen mit natürlichen Zahlen.html | Breakout – Rechnen mit natürlichen Zahlen
-Mathematik 5/Mathe-Vokabeln - Fachbegriffe der Grundrechenarten.html | Rechenheft – Fachbegriffe der Grundrechenarten
-Mathematik 5/Rechenheft - Distributivgesetz.html | Rechenheft – Distributivgesetz
-Mathematik 5/Rechenheft - Vorrangregeln.html | Rechenheft – Vorrangregeln
-Mathematik 5/Rechenheft – Schriftlich rechnen.html | Rechenheft – Schriftlich rechnen
-Mathematik 5/Zahlen-Giganten – Die große Nullen-Jagd.html | Rechenheft – Große Zahlen
+Mathematik 5/Natürliche Zahlen/Breakout - Rechnen mit natürlichen Zahlen.html | Breakout – Rechnen mit natürlichen Zahlen
+Mathematik 5/Natürliche Zahlen/Mathe-Vokabeln - Fachbegriffe der Grundrechenarten.html | Rechenheft – Fachbegriffe der Grundrechenarten
+Mathematik 5/Terme und Rechengesetze/Rechenheft - Distributivgesetz.html | Rechenheft – Distributivgesetz
+Mathematik 5/Terme und Rechengesetze/Rechenheft - Vorrangregeln.html | Rechenheft – Vorrangregeln
+Mathematik 5/Natürliche Zahlen/Rechenheft – Schriftlich rechnen.html | Rechenheft – Schriftlich rechnen
+Mathematik 5/Natürliche Zahlen/Zahlen-Giganten – Die große Nullen-Jagd.html | Rechenheft – Große Zahlen
 
 # --- Mathematik 6 ---
 Mathematik 6 | Mathematik 6
-Mathematik 6/AB - Textaufgaben zu Brüchen.pdf | AB – Textaufgaben zu Brüchen
-Mathematik 6/Bruchheft - Brüche addieren und subtrahieren.html | Bruchheft – Brüche addieren und subtrahieren
-Mathematik 6/Bruchheft - Brüche am Zahlenstrahl; Brüche Vergleichen und Ordnen.html | Bruchheft – Brüche am Zahlenstrahl; Brüche Vergleichen und Ordnen
-Mathematik 6/Bruchheft - Brüche dividieren.html | Bruchheft – Brüche dividieren
-Mathematik 6/Bruchheft - Brüche multiplizieren.html | Bruchheft – Brüche multiplizieren
-Mathematik 6/Bruchheft - Gemischte Zahlen addieren und subtrahieren.html | Bruchheft – Gemischte Zahlen addieren und subtrahieren
-Mathematik 6/Brüche I Lerntrainer.html | Brüche I Lerntrainer
+Mathematik 6/Bruchrechnung/AB - Textaufgaben zu Brüchen.pdf | AB – Textaufgaben zu Brüchen
+Mathematik 6/Bruchrechnung/Bruchheft - Brüche addieren und subtrahieren.html | Bruchheft – Brüche addieren und subtrahieren
+Mathematik 6/Bruchrechnung/Bruchheft - Brüche am Zahlenstrahl; Brüche Vergleichen und Ordnen.html | Bruchheft – Brüche am Zahlenstrahl; Brüche Vergleichen und Ordnen
+Mathematik 6/Bruchrechnung/Bruchheft - Brüche dividieren.html | Bruchheft – Brüche dividieren
+Mathematik 6/Bruchrechnung/Bruchheft - Brüche multiplizieren.html | Bruchheft – Brüche multiplizieren
+Mathematik 6/Bruchrechnung/Bruchheft - Gemischte Zahlen addieren und subtrahieren.html | Bruchheft – Gemischte Zahlen addieren und subtrahieren
+Mathematik 6/Bruchrechnung/Brüche I Lerntrainer.html | Brüche I Lerntrainer
 
 # --- Mathe Klasse 8 ---
 Mathe Klasse 8 | Mathe Klasse 8
-Mathe Klasse 8/1-Lernmodul_Lineare_Funktionen_Nullstellenberechnung.html | Lernmodul Lineare Funktionen Nullstellenberechnung
-Mathe Klasse 8/-Anwendungsaufgaben.html | Anwendungsaufgaben
-Mathe Klasse 8/Lernmodul_Lineare_Funktionen_Anwendung.html | Lernmodul Lineare Funktionen Anwendung
+Mathe Klasse 8/Lineare Funktionen/1-Lernmodul_Lineare_Funktionen_Nullstellenberechnung.html | Lernmodul Lineare Funktionen Nullstellenberechnung
+Mathe Klasse 8/Lineare Funktionen/-Anwendungsaufgaben.html | Anwendungsaufgaben
+Mathe Klasse 8/Lineare Funktionen/Lernmodul_Lineare_Funktionen_Anwendung.html | Lernmodul Lineare Funktionen Anwendung
 
-# --- Mathematik Klasse 12_Gk ---
-Mathematik Klasse 12_Gk | Mathematik Klasse 12 Gk
-Mathematik Klasse 12_Gk/Lernumgebung 1_Gleichungen und Schnittpunkte.html | Lernumgebung 1 Gleichungen und Schnittpunkte
-Mathematik Klasse 12_Gk/Lernumgebung_2_Ableitungen.html | Lernumgebung 2 Ableitungen
+# --- Mathematik Oberstufe ---
+Mathematik Oberstufe | Mathematik Oberstufe
+Mathematik Oberstufe/Analysis/Lernumgebung 1_Gleichungen und Schnittpunkte.html | Lernumgebung 1 Gleichungen und Schnittpunkte
+Mathematik Oberstufe/Analysis/Lernumgebung_2_Ableitungen.html | Lernumgebung 2 Ableitungen
 
-# --- Mathematik Kurs ---
-Mathematik Kurs | Mathematik Kurs
-Mathematik Kurs/Binomialverteilung - Applet für Geogebra.ggb | Binomialverteilung – Applet für Geogebra
-Mathematik Kurs/Stochastik 19 - Sigma-Umgebungen (Arbeitsblatt).pdf | Stochastik 19 – Sigma-Umgebungen (Arbeitsblatt)
-Mathematik Kurs/Stochastik 20 - Normalverteilung mit dem TI-84 Plus CE.png | Stochastik 20 – Normalverteilung mit dem TI-84 Plus CE
+Mathematik Oberstufe/Stochastik/Binomialverteilung - Applet für Geogebra.ggb | Binomialverteilung – Applet für Geogebra
+Mathematik Oberstufe/Stochastik/Stochastik 19 - Sigma-Umgebungen (Arbeitsblatt).pdf | Stochastik 19 – Sigma-Umgebungen (Arbeitsblatt)
+Mathematik Oberstufe/Stochastik/Stochastik 20 - Normalverteilung mit dem TI-84 Plus CE.png | Stochastik 20 – Normalverteilung mit dem TI-84 Plus CE
 
 # --- Chemie Klasse 10 ---
 Chemie Klasse 10 | Chemie Klasse 10
-Chemie Klasse 10/Uebersicht_Siedetemperatur_und_WW.html | Uebersicht Siedetemperatur und WW
-Chemie Klasse 10/Uebung_Siedetemperatur_Freitext.html | Uebung Siedetemperatur Freitext
-Chemie Klasse 10/Uebung_Siedetemperatur_gefuehrt.html | Uebung Siedetemperatur gefuehrt
-Chemie Klasse 10/Uebung_Siedetemperatur_Selbstkontrolle.html | Uebung Siedetemperatur Selbstkontrolle
-Chemie Klasse 10/zwischenmolekulare-wechselwirkungen.html | zwischenmolekulare-wechselwirkungen
+Chemie Klasse 10/Siedetemperatur und Wechselwirkungen/Uebersicht_Siedetemperatur_und_WW.html | Uebersicht Siedetemperatur und WW
+Chemie Klasse 10/Siedetemperatur und Wechselwirkungen/Uebung_Siedetemperatur_Freitext.html | Uebung Siedetemperatur Freitext
+Chemie Klasse 10/Siedetemperatur und Wechselwirkungen/Uebung_Siedetemperatur_gefuehrt.html | Uebung Siedetemperatur gefuehrt
+Chemie Klasse 10/Siedetemperatur und Wechselwirkungen/Uebung_Siedetemperatur_Selbstkontrolle.html | Uebung Siedetemperatur Selbstkontrolle
+Chemie Klasse 10/Siedetemperatur und Wechselwirkungen/zwischenmolekulare-wechselwirkungen.html | zwischenmolekulare-wechselwirkungen
 
 # --- Chemie Oberstufe ---
 Chemie Oberstufe | Chemie Oberstufe
-Chemie Oberstufe/01 Startklar für Organik.html | Startklar für Organik
-Chemie Oberstufe/01 Startklar_Organik_höheres Niveau.html | Startklar Organik höheres Niveau
-Chemie Oberstufe/02 Nomenklatur-Trainer.html | Nomenklatur-Trainer
-Chemie Oberstufe/Chemie_Energetik_Wiederholung.html | Chemie Energetik Wiederholung
-Chemie Oberstufe/Lernumgebung_Redox.html | Lernumgebung Redox
+Chemie Oberstufe/Organik/01 Startklar für Organik.html | Startklar für Organik
+Chemie Oberstufe/Organik/01 Startklar_Organik_höheres Niveau.html | Startklar Organik höheres Niveau
+Chemie Oberstufe/Organik/02 Nomenklatur-Trainer.html | Nomenklatur-Trainer
+Chemie Oberstufe/Energetik/Chemie_Energetik_Wiederholung.html | Chemie Energetik Wiederholung
+Chemie Oberstufe/Redoxreaktionen/Lernumgebung_Redox.html | Lernumgebung Redox
 
 # --- Informatik 5 ---
 Informatik 5 | Informatik 5
@@ -69,9 +67,9 @@ Informatik 5/wissensdetektiv.html | wissensdetektiv
 
 # --- Forensik ---
 Forensik | Forensik
-Forensik/Lernumgebung_Genetik.html | Lernumgebung Genetik
-Forensik/Zitierheft_Forensik.html | Zitierheft Forensik
-Forensik/Zitierheft_Forensik_Mit Artikeln.html | Zitierheft Forensik Mit Artikeln
+Forensik/Genetik/Lernumgebung_Genetik.html | Lernumgebung Genetik
+Forensik/Facharbeit/Zitierheft_Forensik.html | Zitierheft Forensik
+Forensik/Facharbeit/Zitierheft_Forensik_Mit Artikeln.html | Zitierheft Forensik Mit Artikeln
 
 # --- Jan ---
 Jan | Jan

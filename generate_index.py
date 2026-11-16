@@ -46,7 +46,8 @@ AUSGABE = "_site"
 FAECHER = [
     ("mathematik", "Mathematik", "📐", ("mathe",)),
     ("chemie", "Chemie", "🧪", ("chemie",)),
-    ("weitere", "Weitere Fächer", "🗂️", ()),  # alles andere
+    ("forensik", "Forensik", "🔬", ("forensik",)),
+    ("weitere", "Weitere", "🗂️", ()),  # alles andere
 ]
 
 AUSGESCHLOSSEN = {".git", ".github", AUSGABE}
@@ -298,38 +299,61 @@ reihenfolge = {k: i for i, (k, _, _, _) in enumerate(FAECHER)}
 gruppen.sort(key=lambda g: (reihenfolge[g[0]], gruppenschluessel(g[1])))
 belegte_faecher = [f for f in FAECHER if any(g[0] == f[0] for g in gruppen)]
 
-fachknoepfe = ""
-for kuerzel, fachname, symbol, _ in belegte_faecher:
-    anzahl = sum(1 for g in gruppen if g[0] == kuerzel)
-    fachknoepfe += (
-        f'<button type="button" class="btn btn-outline-primary fach-knopf" role="tab" data-fach="{kuerzel}" '
-        f'aria-selected="false" title="{anzahl} Gruppen">{symbol} {html.escape(fachname)}</button>\n'
-    )
-
+SPALTEN = [f for f in FAECHER if f[0] != "weitere"]  # links Mathematik, Mitte Chemie, rechts Forensik
+bereiche = []  # (fach, id, ordnername, titel, anzahl)
 karten = ""
-knoepfe = ""
-for nr, (fach, ordnername, eintraege, themen) in enumerate(gruppen):
+for fach, ordnername, eintraege, themen in gruppen:
     gruppe = titel_fuer(ordnername)
-    anker = f"g{nr}"
-    knoepfe += f'<a class="btn btn-outline-primary btn-sm gruppen-knopf" data-fach="{fach}" href="#{anker}">{html.escape(gruppe)}</a>\n'
+    anker = "b-" + kurzform(ordnername)
+    anzahl = len(eintraege) + sum(len(e) for _, e, _ in themen)
+    bereiche.append((fach, anker, ordnername, gruppe, anzahl))
     inhalt = ""
     if eintraege:
         inhalt += '<div class="list-group list-group-flush mb-2">' + "".join(eintrag_html(e) for e in eintraege) + "</div>"
     for thema, e, schluessel in themen:
         thema_html = f'<span class="edit" data-key="{html.escape(schluessel)}">{html.escape(thema)}</span>' if schluessel else html.escape(thema)
-        inhalt += f'<div class="thema"><h4 class="h6 thema-titel">{thema_html}</h4><div class="list-group list-group-flush">' + "".join(eintrag_html(x) for x in e) + "</div></div>"
+        inhalt += f'<div class="thema"><h3 class="h6 thema-titel">{thema_html}</h3><div class="list-group list-group-flush">' + "".join(eintrag_html(x) for x in e) + "</div></div>"
     if not inhalt:
         inhalt = '<p class="text-muted mb-0">Noch keine Materialien.</p>'
     karten += f"""
-    <section class="card gruppe" id="{anker}" data-fach="{fach}">
+    <section class="card gruppe" id="{anker}" hidden>
       <div class="card-body">
+        <a class="btn btn-sm btn-outline-secondary mb-3 zurueck" href="#">← Zur Auswahl</a>
         <h2 class="h4 gruppen-titel">📂 <span class="edit" data-key="{html.escape(ordnername)}">{html.escape(gruppe)}</span></h2>
         {inhalt}
       </div>
     </section>"""
 
+
+def bereich_knopf(b, klasse):
+    fach, anker, ordnername, gruppe, anzahl = b
+    return f'<a class="btn {klasse} bereich-knopf" href="#{anker}" data-b="{anker}"><span class="titel-kopie" data-key="{html.escape(ordnername)}">{html.escape(gruppe)}</span></a>'
+
+
+# Startauswahl: drei Spalten. Was zu keinem der drei Fächer gehört, steht rechts unter "Weitere".
+spalten = ""
+for kuerzel, fachname, symbol, _ in SPALTEN:
+    knopf_liste = "".join(bereich_knopf(b, "btn-lg btn-outline-primary") for b in bereiche if b[0] == kuerzel)
+    if kuerzel == SPALTEN[-1][0]:
+        weitere = "".join(bereich_knopf(b, "btn-outline-secondary") for b in bereiche if b[0] == "weitere")
+        if weitere:
+            knopf_liste += f'<h3 class="h6 text-muted mt-3 mb-0">Weitere</h3>{weitere}'
+    spalten += f"""
+      <div class="col-md-4">
+        <div class="card h-100 fach-spalte"><div class="card-body">
+          <h2 class="h4 text-center mb-3">{symbol} {html.escape(fachname)}</h2>
+          <div class="d-grid gap-2">{knopf_liste or '<p class="text-muted text-center mb-0">Noch keine Materialien.</p>'}</div>
+        </div></div>
+      </div>"""
+
+# Navigationsleiste: Start und alle Bereiche, nach Fach geordnet
+leiste = '<a class="btn btn-sm btn-primary" href="#" id="heim">🏠 Start</a>'
+for kuerzel, fachname, symbol, _ in FAECHER:
+    knopf_liste = "".join(bereich_knopf(b, "btn-sm btn-outline-primary") for b in bereiche if b[0] == kuerzel)
+    if knopf_liste:
+        leiste += f'<span class="leiste-fach">{symbol}</span>{knopf_liste}'
+
 stand = datetime.now(ZoneInfo("Europe/Berlin")).strftime("%d.%m.%Y, %H:%M Uhr")
-faecher_json = json.dumps([f[0] for f in belegte_faecher])
 id_json = json.dumps(id_karte, ensure_ascii=False)
 repo_name_json = json.dumps(REPO.split("github.com/", 1)[1])
 
@@ -352,10 +376,10 @@ uebersicht = f"""<!DOCTYPE html>
     input.edit-feld {{ display: inline-block; width: min(100%, 34rem); vertical-align: middle; }}
     .eintrag input.edit-feld {{ width: min(100%, 26rem); }}
     #edit-leiste {{ position: sticky; top: .5rem; z-index: 5; border: 2px solid #0d6efd; }}
-    .edit-an .fach-knopf {{ opacity: .9; }}
-    .fach-leiste {{ display: flex; flex-wrap: wrap; justify-content: center; gap: .5rem; margin-bottom: 1.25rem; }}
-    .fach-knopf {{ font-size: 1.1rem; font-weight: 600; padding: .55rem 1.3rem; border-width: 2px; border-radius: 999px; background: #fff; }}
-    .fach-knopf[aria-selected="true"] {{ background: #0d6efd; color: #fff; }}
+    .fach-spalte h2 {{ border-bottom: 2px solid #0d6efd; padding-bottom: .5rem; color: #495057; }}
+    .bereich-knopf[aria-current="page"] {{ background: #0d6efd; color: #fff; }}
+    #leiste {{ display: flex; flex-wrap: wrap; align-items: center; gap: .4rem; margin-bottom: 1rem; }}
+    .leiste-fach {{ margin-left: .6rem; font-size: 1.15rem; }}
     #qr-fenster {{ border: none; border-radius: 1rem; padding: 2rem; box-shadow: 0 10px 40px rgba(0,0,0,.25); text-align: center; max-width: 92vw; }}
     #qr-fenster::backdrop {{ background: rgba(0,0,0,.5); }}
     #qr-bild img, #qr-bild canvas {{ margin: 0 auto; width: min(70vw, 320px); height: auto; }}
@@ -414,16 +438,16 @@ uebersicht = f"""<!DOCTYPE html>
       </div>
     </section>
 
-    <div class="fach-leiste" role="tablist" aria-label="Fach wählen">
-      {fachknoepfe}
+    <nav id="leiste" aria-label="Bereiche">
+      {leiste}
+    </nav>
+
+    <div class="mb-4">
+      <input type="search" id="suche" class="form-control" placeholder="🔍 In allen Materialien suchen, z. B. Brüche, Redox …" aria-label="Materialien in allen Bereichen durchsuchen">
     </div>
 
-    <div class="mb-3">
-      <input type="search" id="suche" class="form-control form-control-lg" placeholder="🔍 Suchen, z. B. Brüche, Redox, Klasse 10 …" aria-label="Materialien in allen Fächern durchsuchen">
-    </div>
-    <nav class="d-flex flex-wrap gap-2 justify-content-center mb-4" id="gruppen-leiste">
-      {knoepfe}
-    </nav>
+    <section id="start" class="row g-3 mb-4" aria-label="Bereich auswählen">{spalten}
+    </section>
 
     <main id="liste">{karten}
       <p id="nichts" class="text-center text-muted" hidden>Nichts gefunden.</p>
@@ -442,25 +466,21 @@ uebersicht = f"""<!DOCTYPE html>
 
   <script>
     (function () {{
-      const faecher = {faecher_json};
       const suche = document.getElementById("suche");
-      let fach = faecher[0];
+      const karten = Array.prototype.slice.call(document.querySelectorAll(".gruppe"));
 
-      function merken(wert) {{ try {{ localStorage.setItem("um-fach", wert); }} catch (e) {{}} }}
-      function gemerkt() {{ try {{ return localStorage.getItem("um-fach"); }} catch (e) {{ return null; }} }}
-
-      /* Zeigt die Gruppen des gewählten Fachs. Beim Suchen werden alle Fächer durchsucht. */
+      /* Zeigt entweder die Startauswahl oder genau einen Bereich. Beim Suchen werden alle Bereiche durchsucht. */
       function anzeigen() {{
         const woerter = suche.value.toLowerCase().trim().split(/\\s+/).filter(Boolean);
         const sucht = woerter.length > 0;
+        const gewaehlt = decodeURIComponent(location.hash.slice(1));
+        const aktiv = sucht ? null : karten.find(function (k) {{ return k.id === gewaehlt; }}) || null;
         let gesamt = 0;
-        document.querySelectorAll(".fach-knopf").forEach(function (k) {{
-          k.setAttribute("aria-selected", !sucht && k.dataset.fach === fach ? "true" : "false");
+        document.getElementById("start").hidden = sucht || !!aktiv;
+        document.querySelectorAll("#leiste .bereich-knopf").forEach(function (k) {{
+          if (aktiv && k.dataset.b === aktiv.id) k.setAttribute("aria-current", "page"); else k.removeAttribute("aria-current");
         }});
-        document.querySelectorAll(".gruppen-knopf").forEach(function (k) {{
-          k.hidden = sucht || k.dataset.fach !== fach;
-        }});
-        document.querySelectorAll(".gruppe").forEach(function (karte) {{
+        karten.forEach(function (karte) {{
           const gruppe = karte.querySelector(".gruppen-titel").textContent.toLowerCase();
           let sichtbar = 0;
           karte.querySelectorAll(".eintrag").forEach(function (e) {{
@@ -473,29 +493,15 @@ uebersicht = f"""<!DOCTYPE html>
           karte.querySelectorAll(".thema").forEach(function (t) {{
             t.hidden = sucht && !t.querySelector(".eintrag:not(.d-none)");
           }});
-          karte.hidden = sucht ? sichtbar === 0 : karte.dataset.fach !== fach;
+          karte.querySelector(".zurueck").hidden = sucht;
+          karte.hidden = sucht ? sichtbar === 0 : karte !== aktiv;
           if (!karte.hidden) gesamt += sichtbar;
         }});
         document.getElementById("nichts").hidden = !sucht || gesamt > 0;
       }}
-
-      function waehlen(neu, adresseAendern) {{
-        if (!faecher.includes(neu)) return;
-        fach = neu;
-        merken(neu);
-        if (adresseAendern) history.replaceState(null, "", "#" + neu);
-        anzeigen();
-      }}
-
-      document.querySelectorAll(".fach-knopf").forEach(function (k) {{
-        k.addEventListener("click", function () {{ suche.value = ""; waehlen(k.dataset.fach, true); }});
-      }});
       suche.addEventListener("input", anzeigen);
-      window.addEventListener("hashchange", function () {{ waehlen(location.hash.slice(1), false); }});
-
-      /* Start: Fach aus der Adresse (z. B. …/#chemie), sonst das zuletzt gewählte, sonst das erste. */
-      const ausAdresse = location.hash.slice(1);
-      waehlen(faecher.includes(ausAdresse) ? ausAdresse : (faecher.includes(gemerkt()) ? gemerkt() : faecher[0]), false);
+      window.addEventListener("hashchange", function () {{ suche.value = ""; anzeigen(); window.scrollTo(0, 0); }});
+      anzeigen();
 
       /* Kurzlink kopieren */
       const voll = function (url) {{ return new URL(url, location.href).href; }};
@@ -563,6 +569,10 @@ uebersicht = f"""<!DOCTYPE html>
           const s = f.previousElementSibling;
           if (uebernehmen && f.value.trim()) s.textContent = f.value.trim();
           s.hidden = false; f.remove();
+        }});
+        if (uebernehmen) document.querySelectorAll(".titel-kopie").forEach(function (k) {{
+          const quelle = Array.prototype.slice.call(document.querySelectorAll(".edit")).find(function (s) {{ return s.dataset.key === k.dataset.key; }});
+          if (quelle) k.textContent = quelle.textContent;
         }});
         if (uebernehmen) document.querySelectorAll(".edit-start").forEach(function (f) {{ if (f.value.trim()) f.dataset.alt = f.value.trim(); }});
         leiste.hidden = true; document.getElementById("bearbeiten").hidden = false; document.body.classList.remove("edit-an");
@@ -685,19 +695,6 @@ for name in os.listdir("."):
 for e in alle_dateien:
     quelle = e["quelle"]
     shutil.copyfile(quelle, os.path.join(AUSGABE, e["kurz"]))  # Kurzlink
-    alt = os.path.join(AUSGABE, quelle)  # bisherige lange Adresse
-    os.makedirs(os.path.dirname(alt), exist_ok=True)
-    if quelle.lower().endswith((".html", ".htm")):
-        hoch = "../" * quelle.count("/")
-        with open(alt, "w", encoding="utf-8") as f:
-            f.write(weiterleitung_html(hoch + quote(e["kurz"]), e["titel"]))
-    else:
-        shutil.copyfile(quelle, alt)
-
-for pfad in weiterleitungen:  # vorhandene Weiterleitungen unverändert übernehmen
-    ziel = os.path.join(AUSGABE, pfad)
-    os.makedirs(os.path.dirname(ziel), exist_ok=True)
-    shutil.copyfile(pfad, ziel)
 
 # Auf GitHub wird nur der Inhalt von _site veröffentlicht: Die Ordner mit den Originalen,
 # dieses Skript und die Anleitung gehören nicht auf die Internetseite.

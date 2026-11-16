@@ -5,50 +5,50 @@
 # Achtung: Wer einen Kurznamen ändert, ändert auch den Link. Schon verteilte Links und QR-Codes gehen dann nicht mehr.
 
 # Mathematik 5
-breakout | Mathematik 5/Breakout - Rechnen mit natürlichen Zahlen.html
-vokabeln | Mathematik 5/Mathe-Vokabeln - Fachbegriffe der Grundrechenarten.html
-distributiv | Mathematik 5/Rechenheft - Distributivgesetz.html
-vorrang | Mathematik 5/Rechenheft - Vorrangregeln.html
-rechenheft | Mathematik 5/Rechenheft – Schriftlich rechnen.html
-zahlen-giganten | Mathematik 5/Zahlen-Giganten – Die große Nullen-Jagd.html
+breakout | Mathematik 5/Natürliche Zahlen/Breakout - Rechnen mit natürlichen Zahlen.html
+vokabeln | Mathematik 5/Natürliche Zahlen/Mathe-Vokabeln - Fachbegriffe der Grundrechenarten.html
+distributiv | Mathematik 5/Terme und Rechengesetze/Rechenheft - Distributivgesetz.html
+vorrang | Mathematik 5/Terme und Rechengesetze/Rechenheft - Vorrangregeln.html
+rechenheft | Mathematik 5/Natürliche Zahlen/Rechenheft – Schriftlich rechnen.html
+zahlen-giganten | Mathematik 5/Natürliche Zahlen/Zahlen-Giganten – Die große Nullen-Jagd.html
 
 # Mathematik 6
-bruch-textaufgaben | Mathematik 6/AB - Textaufgaben zu Brüchen.pdf
-bruch-plus-minus | Mathematik 6/Bruchheft - Brüche addieren und subtrahieren.html
-bruch-zahlenstrahl | Mathematik 6/Bruchheft - Brüche am Zahlenstrahl; Brüche Vergleichen und Ordnen.html
-bruch-geteilt | Mathematik 6/Bruchheft - Brüche dividieren.html
-bruch-mal | Mathematik 6/Bruchheft - Brüche multiplizieren.html
-bruch-gemischt | Mathematik 6/Bruchheft - Gemischte Zahlen addieren und subtrahieren.html
-bruch-trainer | Mathematik 6/Brüche I Lerntrainer.html
+bruch-textaufgaben | Mathematik 6/Bruchrechnung/AB - Textaufgaben zu Brüchen.pdf
+bruch-plus-minus | Mathematik 6/Bruchrechnung/Bruchheft - Brüche addieren und subtrahieren.html
+bruch-zahlenstrahl | Mathematik 6/Bruchrechnung/Bruchheft - Brüche am Zahlenstrahl; Brüche Vergleichen und Ordnen.html
+bruch-geteilt | Mathematik 6/Bruchrechnung/Bruchheft - Brüche dividieren.html
+bruch-mal | Mathematik 6/Bruchrechnung/Bruchheft - Brüche multiplizieren.html
+bruch-gemischt | Mathematik 6/Bruchrechnung/Bruchheft - Gemischte Zahlen addieren und subtrahieren.html
+bruch-trainer | Mathematik 6/Bruchrechnung/Brüche I Lerntrainer.html
 
 # Mathematik 8
-linfkt-anwendung | Mathe Klasse 8/-Anwendungsaufgaben.html
-linfkt-nullstellen | Mathe Klasse 8/1-Lernmodul_Lineare_Funktionen_Nullstellenberechnung.html
-linfkt-lernmodul | Mathe Klasse 8/Lernmodul_Lineare_Funktionen_Anwendung.html
+linfkt-anwendung | Mathe Klasse 8/Lineare Funktionen/-Anwendungsaufgaben.html
+linfkt-nullstellen | Mathe Klasse 8/Lineare Funktionen/1-Lernmodul_Lineare_Funktionen_Nullstellenberechnung.html
+linfkt-lernmodul | Mathe Klasse 8/Lineare Funktionen/Lernmodul_Lineare_Funktionen_Anwendung.html
 
 # Mathematik 12 und Kurs
-gleichungen | Mathematik Klasse 12_Gk/Lernumgebung 1_Gleichungen und Schnittpunkte.html
-ableitungen | Mathematik Klasse 12_Gk/Lernumgebung_2_Ableitungen.html
-binomial | Mathematik Kurs/Binomialverteilung - Applet für Geogebra.ggb
-sigma | Mathematik Kurs/Stochastik 19 - Sigma-Umgebungen (Arbeitsblatt).pdf
-normalverteilung | Mathematik Kurs/Stochastik 20 - Normalverteilung mit dem TI-84 Plus CE.png
+gleichungen | Mathematik Oberstufe/Analysis/Lernumgebung 1_Gleichungen und Schnittpunkte.html
+ableitungen | Mathematik Oberstufe/Analysis/Lernumgebung_2_Ableitungen.html
+binomial | Mathematik Oberstufe/Stochastik/Binomialverteilung - Applet für Geogebra.ggb
+sigma | Mathematik Oberstufe/Stochastik/Stochastik 19 - Sigma-Umgebungen (Arbeitsblatt).pdf
+normalverteilung | Mathematik Oberstufe/Stochastik/Stochastik 20 - Normalverteilung mit dem TI-84 Plus CE.png
 
 # Chemie
-siede-uebersicht | Chemie Klasse 10/Uebersicht_Siedetemperatur_und_WW.html
-siede-freitext | Chemie Klasse 10/Uebung_Siedetemperatur_Freitext.html
-siede-selbstkontrolle | Chemie Klasse 10/Uebung_Siedetemperatur_Selbstkontrolle.html
-siede-gefuehrt | Chemie Klasse 10/Uebung_Siedetemperatur_gefuehrt.html
-wechselwirkungen | Chemie Klasse 10/zwischenmolekulare-wechselwirkungen.html
-organik | Chemie Oberstufe/01 Startklar für Organik.html
-organik-plus | Chemie Oberstufe/01 Startklar_Organik_höheres Niveau.html
-nomenklatur | Chemie Oberstufe/02 Nomenklatur-Trainer.html
-energetik | Chemie Oberstufe/Chemie_Energetik_Wiederholung.html
-redox | Chemie Oberstufe/Lernumgebung_Redox.html
+siede-uebersicht | Chemie Klasse 10/Siedetemperatur und Wechselwirkungen/Uebersicht_Siedetemperatur_und_WW.html
+siede-freitext | Chemie Klasse 10/Siedetemperatur und Wechselwirkungen/Uebung_Siedetemperatur_Freitext.html
+siede-selbstkontrolle | Chemie Klasse 10/Siedetemperatur und Wechselwirkungen/Uebung_Siedetemperatur_Selbstkontrolle.html
+siede-gefuehrt | Chemie Klasse 10/Siedetemperatur und Wechselwirkungen/Uebung_Siedetemperatur_gefuehrt.html
+wechselwirkungen | Chemie Klasse 10/Siedetemperatur und Wechselwirkungen/zwischenmolekulare-wechselwirkungen.html
+organik | Chemie Oberstufe/Organik/01 Startklar für Organik.html
+organik-plus | Chemie Oberstufe/Organik/01 Startklar_Organik_höheres Niveau.html
+nomenklatur | Chemie Oberstufe/Organik/02 Nomenklatur-Trainer.html
+energetik | Chemie Oberstufe/Energetik/Chemie_Energetik_Wiederholung.html
+redox | Chemie Oberstufe/Redoxreaktionen/Lernumgebung_Redox.html
 
 # Weitere Fächer
-genetik | Forensik/Lernumgebung_Genetik.html
-zitierheft | Forensik/Zitierheft_Forensik.html
-zitierheft-artikel | Forensik/Zitierheft_Forensik_Mit Artikeln.html
+genetik | Forensik/Genetik/Lernumgebung_Genetik.html
+zitierheft | Forensik/Facharbeit/Zitierheft_Forensik.html
+zitierheft-artikel | Forensik/Facharbeit/Zitierheft_Forensik_Mit Artikeln.html
 digitale-mission | Informatik 5/Digitale_Mission_001_final.html
 iserv | Informatik 5/iserv-trainer_5.html
 wissensdetektiv | Informatik 5/wissensdetektiv.html
