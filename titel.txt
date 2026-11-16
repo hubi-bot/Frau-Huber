@@ -16,7 +16,7 @@ Mathematik 5/Mathe-Vokabeln - Fachbegriffe der Grundrechenarten.html | Mathe-Vok
 Mathematik 5/Rechenheft - Distributivgesetz.html | Rechenheft – Distributivgesetz
 Mathematik 5/Rechenheft - Vorrangregeln.html | Rechenheft – Vorrangregeln
 Mathematik 5/Rechenheft – Schriftlich rechnen.html | Rechenheft – Schriftlich rechnen
-Mathematik 5/Zahlen-Giganten – Die große Nullen-Jagd.html | Zahlen-Giganten – Die große Nullen-Jagd
+Mathematik 5/Zahlen-Giganten – Die große Nullen-Jagd.html | Rechenheft – Große Zahlen
 
 # --- Mathematik 6 ---
 Mathematik 6 | Mathematik 6
