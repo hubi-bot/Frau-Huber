@@ -12,7 +12,7 @@ Startseite-Text | Öffne bitte den Link oder scanne den QR-Code, den du im Unter
 # --- Mathematik 5 ---
 Mathematik 5 | Mathematik 5
 Mathematik 5/Breakout - Rechnen mit natürlichen Zahlen.html | Breakout – Rechnen mit natürlichen Zahlen
-Mathematik 5/Mathe-Vokabeln - Fachbegriffe der Grundrechenarten.html | Mathe-Vokabeln – Fachbegriffe der Grundrechenarten
+Mathematik 5/Mathe-Vokabeln - Fachbegriffe der Grundrechenarten.html | Rechenheft – Fachbegriffe der Grundrechenarten
 Mathematik 5/Rechenheft - Distributivgesetz.html | Rechenheft – Distributivgesetz
 Mathematik 5/Rechenheft - Vorrangregeln.html | Rechenheft – Vorrangregeln
 Mathematik 5/Rechenheft – Schriftlich rechnen.html | Rechenheft – Schriftlich rechnen
