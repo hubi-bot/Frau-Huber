@@ -52,4 +52,3 @@ zitierheft-artikel | Forensik/Facharbeit/Zitierheft_Forensik_Mit Artikeln.html
 digitale-mission | Informatik 5/Digitale_Mission_001_final.html
 iserv | Informatik 5/iserv-trainer_5.html
 wissensdetektiv | Informatik 5/wissensdetektiv.html
-kolonialismus | Jan/lernmodul_spanischer_kolonialismus_vollständig.html

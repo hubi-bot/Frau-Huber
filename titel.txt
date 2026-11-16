@@ -71,6 +71,3 @@ Forensik/Genetik/Lernumgebung_Genetik.html | Lernumgebung Genetik
 Forensik/Facharbeit/Zitierheft_Forensik.html | Zitierheft Forensik
 Forensik/Facharbeit/Zitierheft_Forensik_Mit Artikeln.html | Zitierheft Forensik Mit Artikeln
 
-# --- Jan ---
-Jan | Jan
-Jan/lernmodul_spanischer_kolonialismus_vollständig.html | lernmodul spanischer kolonialismus vollständig

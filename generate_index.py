@@ -47,6 +47,7 @@ FAECHER = [
     ("mathematik", "Mathematik", "📐", ("mathe",)),
     ("chemie", "Chemie", "🧪", ("chemie",)),
     ("forensik", "Forensik", "🔬", ("forensik",)),
+    ("informatik", "Informatik", "💻", ("informatik",)),
     ("weitere", "Weitere", "🗂️", ()),  # alles andere
 ]
 
@@ -299,7 +300,7 @@ reihenfolge = {k: i for i, (k, _, _, _) in enumerate(FAECHER)}
 gruppen.sort(key=lambda g: (reihenfolge[g[0]], gruppenschluessel(g[1])))
 belegte_faecher = [f for f in FAECHER if any(g[0] == f[0] for g in gruppen)]
 
-SPALTEN = [f for f in FAECHER if f[0] != "weitere"]  # links Mathematik, Mitte Chemie, rechts Forensik
+SPALTEN = [f for f in FAECHER if f[0] != "weitere"]  # von links: Mathematik, Chemie, Forensik, Informatik
 bereiche = []  # (fach, id, ordnername, titel, anzahl)
 karten = ""
 for fach, ordnername, eintraege, themen in gruppen:
@@ -339,19 +340,12 @@ for kuerzel, fachname, symbol, _ in SPALTEN:
         if weitere:
             knopf_liste += f'<h3 class="h6 text-muted mt-3 mb-0">Weitere</h3>{weitere}'
     spalten += f"""
-      <div class="col-md-4">
+      <div class="col-sm-6 col-lg-{12 // len(SPALTEN)}">
         <div class="card h-100 fach-spalte"><div class="card-body">
           <h2 class="h4 text-center mb-3">{symbol} {html.escape(fachname)}</h2>
           <div class="d-grid gap-2">{knopf_liste or '<p class="text-muted text-center mb-0">Noch keine Materialien.</p>'}</div>
         </div></div>
       </div>"""
-
-# Navigationsleiste: Start und alle Bereiche, nach Fach geordnet
-leiste = '<a class="btn btn-sm btn-primary" href="#" id="heim">🏠 Start</a>'
-for kuerzel, fachname, symbol, _ in FAECHER:
-    knopf_liste = "".join(bereich_knopf(b, "btn-sm btn-outline-primary") for b in bereiche if b[0] == kuerzel)
-    if knopf_liste:
-        leiste += f'<span class="leiste-fach">{symbol}</span>{knopf_liste}'
 
 stand = datetime.now(ZoneInfo("Europe/Berlin")).strftime("%d.%m.%Y, %H:%M Uhr")
 id_json = json.dumps(id_karte, ensure_ascii=False)
@@ -378,8 +372,6 @@ uebersicht = f"""<!DOCTYPE html>
     #edit-leiste {{ position: sticky; top: .5rem; z-index: 5; border: 2px solid #0d6efd; }}
     .fach-spalte h2 {{ border-bottom: 2px solid #0d6efd; padding-bottom: .5rem; color: #495057; }}
     .bereich-knopf[aria-current="page"] {{ background: #0d6efd; color: #fff; }}
-    #leiste {{ display: flex; flex-wrap: wrap; align-items: center; gap: .4rem; margin-bottom: 1rem; }}
-    .leiste-fach {{ margin-left: .6rem; font-size: 1.15rem; }}
     #qr-fenster {{ border: none; border-radius: 1rem; padding: 2rem; box-shadow: 0 10px 40px rgba(0,0,0,.25); text-align: center; max-width: 92vw; }}
     #qr-fenster::backdrop {{ background: rgba(0,0,0,.5); }}
     #qr-bild img, #qr-bild canvas {{ margin: 0 auto; width: min(70vw, 320px); height: auto; }}
@@ -418,7 +410,7 @@ uebersicht = f"""<!DOCTYPE html>
   </style>
 </head>
 <body>
-  <div class="container" style="max-width: 900px">
+  <div class="container" style="max-width: 1100px">
     <header class="text-center mb-4">
       <h1 class="display-6 fw-bold">📚 <span class="edit" data-key="Seitentitel">{html.escape(SEITENTITEL)}</span></h1>
       <p class="lead text-muted"><span class="edit" data-key="Untertitel">{html.escape(UNTERTITEL)}</span></p>
@@ -469,10 +461,6 @@ uebersicht = f"""<!DOCTYPE html>
       </div>
     </section>
 
-    <nav id="leiste" aria-label="Bereiche">
-      {leiste}
-    </nav>
-
     <div class="mb-4">
       <input type="search" id="suche" class="form-control" placeholder="🔍 In allen Materialien suchen, z. B. Brüche, Redox …" aria-label="Materialien in allen Bereichen durchsuchen">
     </div>
@@ -508,9 +496,6 @@ uebersicht = f"""<!DOCTYPE html>
         const aktiv = sucht ? null : karten.find(function (k) {{ return k.id === gewaehlt; }}) || null;
         let gesamt = 0;
         document.getElementById("start").hidden = sucht || !!aktiv;
-        document.querySelectorAll("#leiste .bereich-knopf").forEach(function (k) {{
-          if (aktiv && k.dataset.b === aktiv.id) k.setAttribute("aria-current", "page"); else k.removeAttribute("aria-current");
-        }});
         karten.forEach(function (karte) {{
           const gruppe = karte.querySelector(".gruppen-titel").textContent.toLowerCase();
           let sichtbar = 0;
