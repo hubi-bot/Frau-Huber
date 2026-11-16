@@ -358,7 +358,7 @@ id_json = json.dumps(id_karte, ensure_ascii=False)
 repo_name_json = json.dumps(REPO.split("github.com/", 1)[1])
 
 uebersicht = f"""<!DOCTYPE html>
-<html lang="de">
+<html lang="de" data-bs-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -384,6 +384,37 @@ uebersicht = f"""<!DOCTYPE html>
     #qr-fenster::backdrop {{ background: rgba(0,0,0,.5); }}
     #qr-bild img, #qr-bild canvas {{ margin: 0 auto; width: min(70vw, 320px); height: auto; }}
     #qr-adresse {{ overflow-wrap: anywhere; user-select: all; }}
+
+    /* Dunkles Design wie in den Rechenheften, mit Pink als Akzentfarbe */
+    :root {{
+      --grund: #121620; --papier: #1c2232; --linie: #2e3a55; --schrift: #e7ebf3; --leise: #a4aec3;
+      --pink: #ff6fb5; --pink-kraeftig: #d6267f; --pink-dunkel: #b81d6b;
+      --bs-body-bg: var(--grund); --bs-body-color: var(--schrift); --bs-secondary-color: var(--leise);
+      --bs-primary: var(--pink-kraeftig); --bs-primary-rgb: 214, 38, 127; --bs-border-color: var(--linie);
+      --bs-link-color: var(--pink); --bs-link-color-rgb: 255, 111, 181; --bs-link-hover-color: #ffa3d0; --bs-link-hover-color-rgb: 255, 163, 208;
+    }}
+    body {{ background-color: var(--grund); color: var(--schrift);
+      background-image: linear-gradient(rgba(46,58,85,.35) 1px, transparent 1px), linear-gradient(90deg, rgba(46,58,85,.35) 1px, transparent 1px); background-size: 22px 22px; }}
+    .card {{ background: var(--papier); box-shadow: 0 4px 14px rgba(0,0,0,.35); border-top: 4px solid var(--pink-kraeftig); }}
+    h1, h2 {{ color: var(--schrift); }}
+    .text-muted, .lead.text-muted {{ color: var(--leise) !important; }}
+    .gruppen-titel, .fach-spalte h2 {{ border-bottom-color: var(--pink-kraeftig); color: var(--schrift); }}
+    .thema-titel {{ color: var(--pink); }}
+    .list-group-item {{ background: transparent; border-color: var(--linie); color: var(--schrift); }}
+    .list-group-item:hover {{ background-color: #252d44; }}
+    .btn-primary {{ --bs-btn-bg: var(--pink-kraeftig); --bs-btn-border-color: var(--pink-kraeftig); --bs-btn-hover-bg: var(--pink-dunkel); --bs-btn-hover-border-color: var(--pink-dunkel); --bs-btn-active-bg: var(--pink-dunkel); --bs-btn-active-border-color: var(--pink-dunkel); --bs-btn-color: #fff; --bs-btn-hover-color: #fff; --bs-btn-active-color: #fff; }}
+    .btn-outline-primary {{ --bs-btn-color: var(--pink); --bs-btn-border-color: var(--pink-kraeftig); --bs-btn-hover-bg: var(--pink-kraeftig); --bs-btn-hover-border-color: var(--pink-kraeftig); --bs-btn-hover-color: #fff; --bs-btn-active-bg: var(--pink-dunkel); --bs-btn-active-border-color: var(--pink-dunkel); --bs-btn-active-color: #fff; }}
+    .btn-outline-secondary {{ --bs-btn-color: var(--leise); --bs-btn-border-color: #4a5778; --bs-btn-hover-bg: #34405f; --bs-btn-hover-border-color: #4a5778; --bs-btn-hover-color: #fff; --bs-btn-active-bg: #34405f; --bs-btn-active-color: #fff; }}
+    .bereich-knopf[aria-current="page"] {{ background: var(--pink-kraeftig); border-color: var(--pink-kraeftig); color: #fff; }}
+    .form-control {{ background-color: #161b29; border-color: var(--linie); color: var(--schrift); }}
+    .form-control:focus {{ background-color: #161b29; color: var(--schrift); border-color: var(--pink); box-shadow: 0 0 0 .2rem rgba(255,111,181,.25); }}
+    .form-control::placeholder {{ color: var(--leise); }}
+    #edit-leiste {{ border-color: var(--pink-kraeftig); }}
+    #qr-fenster {{ background: var(--papier); color: var(--schrift); }}
+    #qr-bild {{ background: #fff; padding: 12px; border-radius: 10px; display: inline-block; }}
+    .alert-warning {{ background: #3a3115; border-color: #6b5a1f; color: #ffe9a6; }}
+    footer .link-secondary {{ color: var(--leise) !important; }}
+    :focus-visible {{ outline: 3px solid var(--pink); outline-offset: 2px; }}
   </style>
 </head>
 <body>
@@ -662,8 +693,8 @@ startseite = f"""<!DOCTYPE html>
     }})();
   </script>
   <style>
-    body {{ margin: 0; min-height: 100vh; display: grid; place-items: center; background: #f8f9fa; color: #343a40; font-family: system-ui, -apple-system, "Segoe UI", sans-serif; text-align: center; padding: 24px; }}
-    h1 {{ font-size: 1.8rem; margin: 0 0 .5rem; }}
+    body {{ margin: 0; min-height: 100vh; display: grid; place-items: center; background: #121620; color: #e7ebf3; font-family: system-ui, -apple-system, "Segoe UI", sans-serif; text-align: center; padding: 24px; }}
+    h1 {{ font-size: 1.8rem; margin: 0 0 .5rem; color: #ff6fb5; }}
     p {{ font-size: 1.1rem; max-width: 34ch; margin: 0 auto; line-height: 1.5; }}
     .bild {{ font-size: 3.5rem; }}
   </style>
