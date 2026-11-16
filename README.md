@@ -55,7 +55,8 @@ In der Übersicht steht neben jedem Material **🔗 Link** (kopiert den Kurzlink
 
 - **Neue Version:** Die Datei mit **genau dem gleichen Namen** hochladen. Die alte Version wird ersetzt, alte Links und QR-Codes funktionieren weiter.
 - **Löschen:** Datei anklicken, oben rechts auf die **drei Punkte `…`** → **Delete file** → **Commit changes**.
-- **Anderer Titel:** Die Datei `titel.txt` öffnen, auf den Stift klicken und den Text **rechts** vom Strich `|` ändern. Das geht für Materialien, für die Überschriften der Kästen (z. B. „Mathe Klasse 8“) und für den Titel der Seite. Der Link zum Material bleibt dabei gleich.
+- **Anderer Titel, direkt auf der Seite:** In der Übersicht oben auf **✏️ Überschriften bearbeiten** klicken, die Titel in den Feldern ändern und auf **Speichern** klicken. Ohne weitere Einrichtung kommt danach ein Schritt bei GitHub (einfügen und bestätigen). Wer unter „Direktes Speichern einrichten“ einmal einen Zugangsschlüssel hinterlegt, speichert mit einem Klick.
+- **Anderer Titel, bei GitHub:** Die Datei `titel.txt` öffnen, auf den Stift klicken und den Text **rechts** vom Strich `|` ändern. Das geht für Materialien, für die Überschriften der Kästen (z. B. „Mathe Klasse 8“) und für den Titel der Seite. Der Link zum Material bleibt dabei gleich.
 
 **Reihenfolge:** Eine Zahl vor den Namen setzen, also `1 Natürliche Zahlen`, `2 Geometrie`. Die Zahl wird auf der Seite nicht angezeigt.
 

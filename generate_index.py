@@ -211,11 +211,11 @@ def ordner_lesen(ordner):
             if name in AUSGESCHLOSSEN:
                 continue
             e, t, l = ordner_lesen(pfad)
-            for unter_name, unter_e in t:  # tiefere Ebenen unter dem Thema einsortieren
+            for unter_name, unter_e, _ in t:  # tiefere Ebenen unter dem Thema einsortieren
                 e += unter_e
             e += l  # Links eines Themas stehen am Ende des Themas
             if e:
-                themen.append((titel_fuer(pfad), e))
+                themen.append((titel_fuer(pfad), e, pfad))
         elif name.lower() == "links.txt":
             links += links_lesen(pfad)
         else:
@@ -236,6 +236,7 @@ def ordner_lesen(ordner):
 def eintrag_html(e):
     symbol = "🔗" if e["typ"] == "Link" else SYMBOL.get(e["typ"], "📎")
     titel = html.escape(e["titel"])
+    titel_html = titel if e["typ"] == "Link" else f'<span class="edit" data-key="{html.escape(e["quelle"])}">{titel}</span>'
     if e["typ"] == "Link":
         url, knopf, farbe, ziel, extras = e["url"], "Öffnen", "text-bg-success", 'target="_blank" rel="noopener"', ""
     else:
@@ -251,7 +252,7 @@ def eintrag_html(e):
     nummer = f'<span class="badge text-bg-secondary me-1">ID {html.escape(e["id"])}</span>' if e.get("id") else ""
     return f"""
           <div class="list-group-item d-flex flex-wrap justify-content-between align-items-center gap-2 eintrag" data-id="{html.escape(e.get('id') or '')}">
-            <a href="{html.escape(url)}" {ziel} class="flex-grow-1 text-decoration-none text-body titel">{nummer}{symbol} {titel}</a>
+            <a href="{html.escape(url)}" {ziel} class="flex-grow-1 text-decoration-none text-body titel">{nummer}{symbol} {titel_html}</a>
             <span class="d-flex align-items-center gap-2">{extras}<a href="{html.escape(url)}" {ziel} class="badge rounded-pill {farbe} text-decoration-none">{html.escape(knopf)}</a></span>
           </div>"""
 
@@ -281,14 +282,14 @@ for name in os.listdir("."):
     if os.path.isdir(name) and name not in AUSGESCHLOSSEN and not name.startswith("."):
         eintraege, themen, links = ordner_lesen(name)
         alle_dateien += [e for e in eintraege if not e["extern"]]
-        for _, liste in themen:
+        for _, liste, _ in themen:
             alle_dateien += [e for e in liste if not e["extern"]]
         downloads = [e for e in eintraege if ist_download(e)]
         eintraege = [e for e in eintraege if not ist_download(e)]
         if downloads:  # Download-Dateien der Gruppe als eigener Abschnitt
-            themen.append(("Downloads", downloads))
+            themen.append(("Downloads", downloads, None))
         if links:  # Links der Gruppe kommen als eigener Abschnitt ans Ende
-            themen.append(("Links", links))
+            themen.append(("Links", links, None))
         gruppen.append((fach_von(name), name, eintraege, themen))
 
 reihenfolge = {k: i for i, (k, _, _, _) in enumerate(FAECHER)}
@@ -312,14 +313,15 @@ for nr, (fach, ordnername, eintraege, themen) in enumerate(gruppen):
     inhalt = ""
     if eintraege:
         inhalt += '<div class="list-group list-group-flush mb-2">' + "".join(eintrag_html(e) for e in eintraege) + "</div>"
-    for thema, e in themen:
-        inhalt += f'<div class="thema"><h4 class="h6 thema-titel">{html.escape(thema)}</h4><div class="list-group list-group-flush">' + "".join(eintrag_html(x) for x in e) + "</div></div>"
+    for thema, e, schluessel in themen:
+        thema_html = f'<span class="edit" data-key="{html.escape(schluessel)}">{html.escape(thema)}</span>' if schluessel else html.escape(thema)
+        inhalt += f'<div class="thema"><h4 class="h6 thema-titel">{thema_html}</h4><div class="list-group list-group-flush">' + "".join(eintrag_html(x) for x in e) + "</div></div>"
     if not inhalt:
         inhalt = '<p class="text-muted mb-0">Noch keine Materialien.</p>'
     karten += f"""
     <section class="card gruppe" id="{anker}" data-fach="{fach}">
       <div class="card-body">
-        <h2 class="h4 gruppen-titel">📂 {html.escape(gruppe)}</h2>
+        <h2 class="h4 gruppen-titel">📂 <span class="edit" data-key="{html.escape(ordnername)}">{html.escape(gruppe)}</span></h2>
         {inhalt}
       </div>
     </section>"""
@@ -327,6 +329,7 @@ for nr, (fach, ordnername, eintraege, themen) in enumerate(gruppen):
 stand = datetime.now(ZoneInfo("Europe/Berlin")).strftime("%d.%m.%Y, %H:%M Uhr")
 faecher_json = json.dumps([f[0] for f in belegte_faecher])
 id_json = json.dumps(id_karte, ensure_ascii=False)
+repo_name_json = json.dumps(REPO.split("github.com/", 1)[1])
 
 uebersicht = f"""<!DOCTYPE html>
 <html lang="de">
@@ -344,6 +347,10 @@ uebersicht = f"""<!DOCTYPE html>
     .thema-titel {{ color: #0d6efd; text-transform: uppercase; letter-spacing: .04em; font-size: .8rem; font-weight: 700; margin-bottom: .25rem; }}
     .list-group-item:hover {{ background-color: #f1f3f5; }}
     .eintrag .btn-sm {{ padding: .1rem .5rem; font-size: .78rem; }}
+    input.edit-feld {{ display: inline-block; width: min(100%, 34rem); vertical-align: middle; }}
+    .eintrag input.edit-feld {{ width: min(100%, 26rem); }}
+    #edit-leiste {{ position: sticky; top: .5rem; z-index: 5; border: 2px solid #0d6efd; }}
+    .edit-an .fach-knopf {{ opacity: .9; }}
     .fach-leiste {{ display: flex; flex-wrap: wrap; justify-content: center; gap: .5rem; margin-bottom: 1.25rem; }}
     .fach-knopf {{ font-size: 1.1rem; font-weight: 600; padding: .55rem 1.3rem; border-width: 2px; border-radius: 999px; background: #fff; }}
     .fach-knopf[aria-selected="true"] {{ background: #0d6efd; color: #fff; }}
@@ -356,9 +363,52 @@ uebersicht = f"""<!DOCTYPE html>
 <body>
   <div class="container" style="max-width: 900px">
     <header class="text-center mb-4">
-      <h1 class="display-6 fw-bold">📚 {html.escape(SEITENTITEL)}</h1>
-      <p class="lead text-muted">{html.escape(UNTERTITEL)}</p>
+      <h1 class="display-6 fw-bold">📚 <span class="edit" data-key="Seitentitel">{html.escape(SEITENTITEL)}</span></h1>
+      <p class="lead text-muted"><span class="edit" data-key="Untertitel">{html.escape(UNTERTITEL)}</span></p>
+      <button type="button" class="btn btn-sm btn-outline-secondary" id="bearbeiten">✏️ Überschriften bearbeiten</button>
+      <p class="text-success small mt-2 mb-0" id="edit-fertig" hidden></p>
     </header>
+
+    <section class="card" id="edit-leiste" hidden>
+      <div class="card-body">
+        <div class="d-flex flex-wrap align-items-center gap-2">
+          <strong class="me-auto">✏️ Überschriften bearbeiten</strong>
+          <button type="button" class="btn btn-primary" id="speichern">Speichern</button>
+          <button type="button" class="btn btn-outline-secondary" id="abbrechen">Abbrechen</button>
+        </div>
+        <p class="small mt-2" id="edit-meldung" aria-live="polite"></p>
+        <div class="row g-2 mt-1">
+          <div class="col-md-5"><label class="form-label small mb-1" for="start-titel">Überschrift der Startseite für Schüler</label><input type="text" class="form-control form-control-sm edit-feld edit-start" id="start-titel" data-key="Startseite" data-alt="{html.escape(START_TITEL)}"></div>
+          <div class="col-md-7"><label class="form-label small mb-1" for="start-text">Satz darunter</label><input type="text" class="form-control form-control-sm edit-feld edit-start" id="start-text" data-key="Startseite-Text" data-alt="{html.escape(START_TEXT)}"></div>
+        </div>
+        <div id="einfuegen" class="alert alert-warning mt-3 mb-0" hidden>
+          <p class="mb-2"><strong>Noch ein Schritt bei GitHub.</strong> <span id="einfuegen-hinweis"></span></p>
+          <ol class="mb-2 ps-3">
+            <li><a href="{REPO}/edit/main/titel.txt" target="_blank" rel="noopener">titel.txt bei GitHub öffnen</a></li>
+            <li>Dort alles markieren (Strg + A, am Mac Cmd + A) und einfügen (Strg + V, am Mac Cmd + V).</li>
+            <li>Auf „Commit changes…“ klicken und bestätigen.</li>
+          </ol>
+          <textarea class="form-control form-control-sm mb-2" id="einfuegen-text" rows="3" readonly aria-label="Neuer Inhalt von titel.txt"></textarea>
+          <button type="button" class="btn btn-sm btn-outline-secondary" id="einfuegen-fertig">Erledigt</button>
+        </div>
+        <details class="mt-3">
+          <summary class="small">Direktes Speichern ohne den Umweg über GitHub einrichten</summary>
+          <p class="small mt-2 mb-2" id="token-status"></p>
+          <ol class="small ps-3 mb-2">
+            <li><a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">Bei GitHub einen Zugangsschlüssel anlegen</a> (Fine-grained token).</li>
+            <li>„Repository access“: „Only select repositories“ und nur „Unterrichtsmaterial“ wählen.</li>
+            <li>„Permissions“ → „Repository permissions“ → „Contents“: „Read and write“.</li>
+            <li>Schlüssel erzeugen, kopieren und hier einfügen.</li>
+          </ol>
+          <div class="input-group input-group-sm">
+            <input type="password" class="form-control" id="token-feld" placeholder="Zugangsschlüssel (github_pat_…)" autocomplete="off" aria-label="Zugangsschlüssel">
+            <button type="button" class="btn btn-outline-primary" id="token-ok">Übernehmen</button>
+            <button type="button" class="btn btn-outline-danger" id="token-weg" hidden>Entfernen</button>
+          </div>
+          <p class="small text-muted mt-2 mb-0">Der Schlüssel bleibt nur in diesem Browser gespeichert. Richte das nur auf deinem eigenen Gerät ein, nicht auf einem Schulgerät, das andere mitbenutzen.</p>
+        </details>
+      </div>
+    </section>
 
     <div class="fach-leiste" role="tablist" aria-label="Fach wählen">
       {fachknoepfe}
@@ -476,6 +526,103 @@ uebersicht = f"""<!DOCTYPE html>
       }});
       document.getElementById("qr-schliessen").addEventListener("click", function () {{ fenster.close(); }});
       fenster.addEventListener("click", function (e) {{ if (e.target === fenster) fenster.close(); }});
+
+      /* ---------- Überschriften direkt auf der Seite bearbeiten ---------- */
+      const REPO_NAME = {repo_name_json}, DATEI = "titel.txt", API = "https://api.github.com/repos/" + REPO_NAME + "/contents/" + DATEI;
+      const leiste = document.getElementById("edit-leiste"), meldung = document.getElementById("edit-meldung");
+      const tokenLesen = function () {{ try {{ return localStorage.getItem("um-token") || ""; }} catch (e) {{ return ""; }} }};
+      const tokenSetzen = function (t) {{ try {{ if (t) localStorage.setItem("um-token", t); else localStorage.removeItem("um-token"); }} catch (e) {{}} }};
+      function melden(text, art) {{ meldung.textContent = text; meldung.className = "small mt-2 " + (art === "gut" ? "text-success" : art === "schlecht" ? "text-danger" : "text-muted"); }}
+      function tokenAnzeige() {{
+        const hat = !!tokenLesen();
+        document.getElementById("token-status").textContent = hat ? "Direktes Speichern ist auf diesem Gerät eingerichtet." : "Direktes Speichern ist auf diesem Gerät noch nicht eingerichtet.";
+        document.getElementById("token-weg").hidden = !hat;
+      }}
+      function felder() {{ return Array.prototype.slice.call(document.querySelectorAll("input.edit-feld")); }}
+      function bearbeitenAn() {{
+        suche.value = ""; anzeigen();
+        document.querySelectorAll(".edit").forEach(function (s) {{
+          const f = document.createElement("input");
+          f.type = "text"; f.className = "form-control form-control-sm edit-feld"; f.value = s.textContent; f.dataset.key = s.dataset.key; f.dataset.alt = s.textContent;
+          f.setAttribute("aria-label", "Überschrift für " + s.dataset.key);
+          f.addEventListener("click", function (e) {{ e.preventDefault(); e.stopPropagation(); }});
+          s.hidden = true; s.after(f);
+        }});
+        document.querySelectorAll(".edit-start").forEach(function (f) {{ f.value = f.dataset.alt; }});
+        leiste.hidden = false; document.getElementById("bearbeiten").hidden = true; document.body.classList.add("edit-an");
+        document.getElementById("einfuegen").hidden = true; tokenAnzeige();
+        melden("Ändere die Überschriften direkt in den Feldern und klicke dann auf Speichern.");
+      }}
+      function bearbeitenAus(uebernehmen) {{
+        document.querySelectorAll("input.edit-feld:not(.edit-start)").forEach(function (f) {{
+          const s = f.previousElementSibling;
+          if (uebernehmen && f.value.trim()) s.textContent = f.value.trim();
+          s.hidden = false; f.remove();
+        }});
+        if (uebernehmen) document.querySelectorAll(".edit-start").forEach(function (f) {{ if (f.value.trim()) f.dataset.alt = f.value.trim(); }});
+        leiste.hidden = true; document.getElementById("bearbeiten").hidden = false; document.body.classList.remove("edit-an");
+      }}
+      function aenderungen() {{
+        const liste = [];
+        felder().forEach(function (f) {{ const v = f.value.trim().replace(/\\s+/g, " "); if (v && v !== f.dataset.alt) liste.push([f.dataset.key, v]); }});
+        return liste;
+      }}
+      /* Trägt die neuen Titel in den Text von titel.txt ein. */
+      function eintragen(text, liste) {{
+        const zeilen = text.replace(/\\r/g, "").replace(/\\n+$/, "").split("\\n");
+        liste.forEach(function (paar) {{
+          const neu = paar[0] + " | " + paar[1];
+          const i = zeilen.findIndex(function (z) {{ return !z.trim().startsWith("#") && z.indexOf("|") > 0 && z.split("|")[0].trim() === paar[0]; }});
+          if (i >= 0) zeilen[i] = neu; else zeilen.push(neu);
+        }});
+        return zeilen.join("\\n") + "\\n";
+      }}
+      const zuBase64 = function (text) {{ const b = new TextEncoder().encode(text); let s = ""; for (let i = 0; i < b.length; i += 8192) s += String.fromCharCode.apply(null, b.subarray(i, i + 8192)); return btoa(s); }};
+      const vonBase64 = function (b64) {{ const s = atob(b64.replace(/\\s/g, "")); const b = new Uint8Array(s.length); for (let i = 0; i < s.length; i++) b[i] = s.charCodeAt(i); return new TextDecoder().decode(b); }};
+
+      async function speichern() {{
+        const liste = aenderungen();
+        if (!liste.length) {{ melden("Du hast nichts geändert."); return; }}
+        const knopf = document.getElementById("speichern"); knopf.disabled = true;
+        try {{
+          const token = tokenLesen();
+          if (token) {{
+            melden("Speichere …");
+            const kopf = {{ "Authorization": "Bearer " + token, "Accept": "application/vnd.github+json" }};
+            const a = await fetch(API + "?ref=main&t=" + Date.now(), {{ headers: kopf, cache: "no-store" }});
+            if (a.status === 401 || a.status === 403) throw new Error("Der Zugangsschlüssel wird von GitHub nicht angenommen. Bitte richte das direkte Speichern neu ein.");
+            if (!a.ok) throw new Error("GitHub antwortet mit Fehler " + a.status + ".");
+            const daten = await a.json();
+            const b = await fetch(API, {{ method: "PUT", headers: kopf, body: JSON.stringify({{ message: "Überschriften geändert (" + liste.length + ")", content: zuBase64(eintragen(vonBase64(daten.content), liste)), sha: daten.sha, branch: "main" }}) }});
+            if (b.status === 401 || b.status === 403 || b.status === 404) throw new Error("Der Zugangsschlüssel darf nicht in dieses Repository schreiben. Er braucht das Recht „Contents: Read and write“.");
+            if (!b.ok) throw new Error("Speichern fehlgeschlagen (Fehler " + b.status + "). Bitte versuche es noch einmal.");
+            bearbeitenAus(true);
+            document.getElementById("edit-fertig").textContent = "✓ Gespeichert (" + liste.length + (liste.length === 1 ? " Überschrift" : " Überschriften") + "). In etwa 2 Minuten ist die Änderung fest auf der Seite. Wenn du vorher neu lädst, siehst du kurz noch den alten Stand.";
+            document.getElementById("edit-fertig").hidden = false;
+          }} else {{
+            melden("Bereite vor …");
+            const a = await fetch("https://raw.githubusercontent.com/" + REPO_NAME + "/main/" + DATEI + "?t=" + Date.now(), {{ cache: "no-store" }});
+            if (!a.ok) throw new Error("Die Datei titel.txt konnte nicht geladen werden (Fehler " + a.status + ").");
+            const neu = eintragen(await a.text(), liste);
+            document.getElementById("einfuegen-text").value = neu;
+            let kopiert = false;
+            try {{ await navigator.clipboard.writeText(neu); kopiert = true; }} catch (e) {{}}
+            document.getElementById("einfuegen-hinweis").textContent = kopiert ? "Der neue Inhalt ist schon kopiert." : "Markiere den Text im Feld unten und kopiere ihn.";
+            document.getElementById("einfuegen").hidden = false;
+            melden("Noch ein Schritt bei GitHub, siehe unten. Mit eingerichtetem direktem Speichern entfällt er.");
+          }}
+        }} catch (e) {{ melden(e.message || String(e), "schlecht"); }}
+        knopf.disabled = false;
+      }}
+      document.getElementById("bearbeiten").addEventListener("click", function () {{ document.getElementById("edit-fertig").hidden = true; bearbeitenAn(); }});
+      document.getElementById("abbrechen").addEventListener("click", function () {{ bearbeitenAus(false); }});
+      document.getElementById("speichern").addEventListener("click", speichern);
+      document.getElementById("einfuegen-fertig").addEventListener("click", function () {{ bearbeitenAus(true); }});
+      document.getElementById("token-ok").addEventListener("click", function () {{
+        const f = document.getElementById("token-feld"), t = f.value.trim();
+        if (!t) return; tokenSetzen(t); f.value = ""; tokenAnzeige(); melden("Direktes Speichern ist eingerichtet. Der Schlüssel bleibt nur in diesem Browser.", "gut");
+      }});
+      document.getElementById("token-weg").addEventListener("click", function () {{ tokenSetzen(""); tokenAnzeige(); melden("Der Zugangsschlüssel wurde von diesem Gerät entfernt."); }});
     }})();
   </script>
 </body>
