@@ -1,75 +1,392 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Unterrichtsmaterialien Übersicht</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body { background-color: #f8f9fa; padding: 2rem 0; }
-        .card { border: none; box-shadow: 0 4px 6px rgba(0,0,0,0.05); margin-bottom: 1.5rem; }
-        .list-group-item:hover { background-color: #f1f3f5; }
-        .folder-title { border-bottom: 2px solid #0d6efd; padding-bottom: 0.5rem; margin-top: 1rem; color: #495057; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Unterrichtsmaterialien</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script>
+    /* Kurzlinks wie bisher: index.html?id=12 öffnet direkt die Datei, die mit "12-" beginnt. */
+    (function () {
+      const ids = {"1": "Mathe%20Klasse%208/1-Lernmodul_Lineare_Funktionen_Nullstellenberechnung.html"};
+      const id = new URLSearchParams(location.search).get("id");
+      if (id && ids[id]) location.replace(ids[id]);
+    })();
+  </script>
+  <style>
+    body { background-color: #f8f9fa; padding: 2rem 0; }
+    .card { border: none; box-shadow: 0 4px 6px rgba(0,0,0,0.05); margin-bottom: 1.5rem; scroll-margin-top: 1rem; }
+    .gruppen-titel { border-bottom: 2px solid #0d6efd; padding-bottom: .5rem; color: #495057; margin-bottom: 1rem; }
+    .thema { margin-top: 1rem; }
+    .thema-titel { color: #0d6efd; text-transform: uppercase; letter-spacing: .04em; font-size: .8rem; font-weight: 700; margin-bottom: .25rem; }
+    .list-group-item:hover { background-color: #f1f3f5; }
+    .fach-leiste { display: flex; flex-wrap: wrap; justify-content: center; gap: .5rem; margin-bottom: 1.25rem; }
+    .fach-knopf { font-size: 1.1rem; font-weight: 600; padding: .55rem 1.3rem; border-width: 2px; border-radius: 999px; background: #fff; }
+    .fach-knopf[aria-selected="true"] { background: #0d6efd; color: #fff; }
+    #qr-knopf { cursor: pointer; }
+    #qr-fenster { border: none; border-radius: 1rem; padding: 2rem; box-shadow: 0 10px 40px rgba(0,0,0,.25); text-align: center; }
+    #qr-fenster::backdrop { background: rgba(0,0,0,.5); }
+    #qr-bild img, #qr-bild canvas { margin: 0 auto; width: min(70vw, 320px); height: auto; }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <div class="text-center mb-5">
-            <h1 class="display-5 fw-bold">📚 Interaktive Lehrunterlagen</h1>
-            <p class="lead text-muted">Automatisch aktualisierte Übersicht deiner Materialien</p>
-        </div>
+  <div class="container" style="max-width: 900px">
+    <header class="text-center mb-4">
+      <h1 class="display-6 fw-bold"><span id="qr-knopf" title="QR-Code zu dieser Seite zeigen">📚</span> Unterrichtsmaterialien</h1>
+      <p class="lead text-muted">Arbeitsblätter, Lernumgebungen und Links</p>
+    </header>
 
-        <div class="row justify-content-center mb-4">
-            <div class="col-md-6">
-                <input type="text" id="searchInput" class="form-control form-control-lg" placeholder="🔍 Nach Fach, Klasse oder Thema suchen..." onkeyup="filterMaterials()">
-            </div>
-        </div>
+    <div class="fach-leiste" role="tablist" aria-label="Fach wählen">
+      <button type="button" class="btn btn-outline-primary fach-knopf" role="tab" data-fach="mathematik" aria-selected="false" title="5 Gruppen">📐 Mathematik</button>
+<button type="button" class="btn btn-outline-primary fach-knopf" role="tab" data-fach="chemie" aria-selected="false" title="2 Gruppen">🧪 Chemie</button>
+<button type="button" class="btn btn-outline-primary fach-knopf" role="tab" data-fach="weitere" aria-selected="false" title="3 Gruppen">🗂️ Weitere Fächer</button>
 
-        <div id="materialsList">
-
-            <div class="card material-item" data-search="mathe klasse 8">
-                <div class="card-body">
-                    <h3 class="h4 folder-title">📂 Mathe Klasse 8</h3>
-                    <div class="list-group list-group-flush mt-3">
-                        <a href="Mathe Klasse 8/Lernmodul_Lineare_Funktionen_Anwendung.html" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" target="_blank">
-                            📄 Lernmodul Lineare Funktionen Anwendung
-                            <span class="badge bg-primary rounded-pill">Ansehen</span>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
 
-    <script>
-        function filterMaterials() {
-            let input = document.getElementById("searchInput").value.toLowerCase();
-            let items = document.getElementsByClassName("material-item");
-            
-            for (let i = 0; i < items.length; i++) {
-                let item = items[i];
-                let folderText = item.getAttribute("data-search");
-                let links = item.getElementsByTagName("a");
-                let matchFound = folderText.includes(input);
-                
-                // Prüfe Inhalt der Links im Ordner
-                for (let j = 0; j < links.length; j++) {
-                    let linkText = links[j].textContent.toLowerCase();
-                    if (linkText.includes(input) || folderText.includes(input)) {
-                        links[j].style.setProperty("display", "flex", "important");
-                        matchFound = true;
-                    } else {
-                        links[j].style.setProperty("display", "none", "important");
-                    }
-                }
-                
-                if (matchFound) {
-                    item.style.display = "block";
-                } else {
-                    item.style.display = "none";
-                }
-            }
-        }
-    </script>
+    <div class="mb-3">
+      <input type="search" id="suche" class="form-control form-control-lg" placeholder="🔍 Suchen, z. B. Brüche, Redox, Klasse 10 …" aria-label="Materialien in allen Fächern durchsuchen">
+    </div>
+    <nav class="d-flex flex-wrap gap-2 justify-content-center mb-4" id="gruppen-leiste">
+      <a class="btn btn-outline-primary btn-sm gruppen-knopf" data-fach="mathematik" href="#g0">Mathematik 5</a>
+<a class="btn btn-outline-primary btn-sm gruppen-knopf" data-fach="mathematik" href="#g1">Mathematik 6</a>
+<a class="btn btn-outline-primary btn-sm gruppen-knopf" data-fach="mathematik" href="#g2">Mathe Klasse 8</a>
+<a class="btn btn-outline-primary btn-sm gruppen-knopf" data-fach="mathematik" href="#g3">Mathematik Klasse 12 Gk</a>
+<a class="btn btn-outline-primary btn-sm gruppen-knopf" data-fach="mathematik" href="#g4">Mathematik Kurs</a>
+<a class="btn btn-outline-primary btn-sm gruppen-knopf" data-fach="chemie" href="#g5">Chemie Klasse 10</a>
+<a class="btn btn-outline-primary btn-sm gruppen-knopf" data-fach="chemie" href="#g6">Chemie Oberstufe</a>
+<a class="btn btn-outline-primary btn-sm gruppen-knopf" data-fach="weitere" href="#g7">Informatik 5</a>
+<a class="btn btn-outline-primary btn-sm gruppen-knopf" data-fach="weitere" href="#g8">Forensik</a>
+<a class="btn btn-outline-primary btn-sm gruppen-knopf" data-fach="weitere" href="#g9">Jan</a>
+
+    </nav>
+
+    <main id="liste">
+    <section class="card gruppe" id="g0" data-fach="mathematik">
+      <div class="card-body">
+        <h2 class="h4 gruppen-titel">📂 Mathematik 5</h2>
+        <div class="list-group list-group-flush mb-2">
+          <a href="Mathematik%205/Breakout%20-%20Rechnen%20mit%20nat%C3%BCrlichen%20Zahlen.html" target="_blank" rel="noopener" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center gap-3 eintrag" data-id="">
+            <span>🖥️ Breakout – Rechnen mit natürlichen Zahlen</span>
+            <span class="badge rounded-pill text-bg-primary">Ansehen</span>
+          </a>
+          <a href="Mathematik%205/Rechenheft%20-%20Distributivgesetz.html" target="_blank" rel="noopener" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center gap-3 eintrag" data-id="">
+            <span>🖥️ Rechenheft – Distributivgesetz</span>
+            <span class="badge rounded-pill text-bg-primary">Ansehen</span>
+          </a>
+          <a href="Mathematik%205/Rechenheft%20%E2%80%93%20Schriftlich%20rechnen.html" target="_blank" rel="noopener" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center gap-3 eintrag" data-id="">
+            <span>🖥️ Rechenheft – Schriftlich rechnen</span>
+            <span class="badge rounded-pill text-bg-primary">Ansehen</span>
+          </a>
+          <a href="Mathematik%205/Zahlen-Giganten%20%E2%80%93%20Die%20gro%C3%9Fe%20Nullen-Jagd.html" target="_blank" rel="noopener" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center gap-3 eintrag" data-id="">
+            <span>🖥️ Zahlen-Giganten – Die große Nullen-Jagd</span>
+            <span class="badge rounded-pill text-bg-primary">Ansehen</span>
+          </a></div><div class="thema"><h4 class="h6 thema-titel">Links</h4><div class="list-group list-group-flush">
+          <a href="https://claude.ai/artifact/DZHD63s6d3WigFFc5ATh6U" target="_blank" rel="noopener" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center gap-3 eintrag" data-id="">
+            <span>🔗 Mathe-Vokabeln - Fachbegriffe der Grundrechenarten</span>
+            <span class="badge rounded-pill text-bg-success">Öffnen</span>
+          </a>
+          <a href="https://claude.ai/artifact/2yC5u2Q4fsaATJdg6GfR5T" target="_blank" rel="noopener" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center gap-3 eintrag" data-id="">
+            <span>🔗 Rechenheft - Vorrangregeln</span>
+            <span class="badge rounded-pill text-bg-success">Öffnen</span>
+          </a></div></div>
+      </div>
+    </section>
+    <section class="card gruppe" id="g1" data-fach="mathematik">
+      <div class="card-body">
+        <h2 class="h4 gruppen-titel">📂 Mathematik 6</h2>
+        <div class="list-group list-group-flush mb-2">
+          <a href="Mathematik%206/AB%20-%20Textaufgaben%20zu%20Br%C3%BCchen.pdf" target="_blank" rel="noopener" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center gap-3 eintrag" data-id="">
+            <span>📄 AB – Textaufgaben zu Brüchen</span>
+            <span class="badge rounded-pill text-bg-primary">Ansehen</span>
+          </a>
+          <a href="Mathematik%206/Br%C3%BCche%20I%20Lerntrainer.html" target="_blank" rel="noopener" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center gap-3 eintrag" data-id="">
+            <span>🖥️ Brüche I Lerntrainer</span>
+            <span class="badge rounded-pill text-bg-primary">Ansehen</span>
+          </a>
+          <a href="Mathematik%206/Station%20Gemischte%20Zahlen.html" target="_blank" rel="noopener" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center gap-3 eintrag" data-id="">
+            <span>🖥️ Station Gemischte Zahlen</span>
+            <span class="badge rounded-pill text-bg-primary">Ansehen</span>
+          </a>
+          <a href="Mathematik%206/Station%20Zahlenstrahl%20%26%20Vergleichen.html" target="_blank" rel="noopener" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center gap-3 eintrag" data-id="">
+            <span>🖥️ Station Zahlenstrahl &amp; Vergleichen</span>
+            <span class="badge rounded-pill text-bg-primary">Ansehen</span>
+          </a></div><div class="thema"><h4 class="h6 thema-titel">Links</h4><div class="list-group list-group-flush">
+          <a href="https://claude.ai/artifact/WVsJsSfQTerUbpzHrNJPf8" target="_blank" rel="noopener" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center gap-3 eintrag" data-id="">
+            <span>🔗 Bruchheft - Brüche am Zahlenstrahl; Brüche Vergleichen und Ordnen</span>
+            <span class="badge rounded-pill text-bg-success">Öffnen</span>
+          </a>
+          <a href="https://claude.ai/artifact/29BtUCagabqpDtnaVutXr5" target="_blank" rel="noopener" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center gap-3 eintrag" data-id="">
+            <span>🔗 Bruchheft - Brüche addieren und subtrahieren</span>
+            <span class="badge rounded-pill text-bg-success">Öffnen</span>
+          </a>
+          <a href="https://claude.ai/artifact/D9Jku3uSkXvHrak8Pu4afo" target="_blank" rel="noopener" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center gap-3 eintrag" data-id="">
+            <span>🔗 Bruchheft - Gemischte Zahlen addieren und subtrahieren</span>
+            <span class="badge rounded-pill text-bg-success">Öffnen</span>
+          </a>
+          <a href="https://claude.ai/artifact/R1ZYeQT3uH9hJwqdqea1r9" target="_blank" rel="noopener" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center gap-3 eintrag" data-id="">
+            <span>🔗 Bruchheft - Brüche multiplizieren</span>
+            <span class="badge rounded-pill text-bg-success">Öffnen</span>
+          </a>
+          <a href="https://claude.ai/artifact/CEEf5cAz6GmXkrEAuyvvA8" target="_blank" rel="noopener" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center gap-3 eintrag" data-id="">
+            <span>🔗 Bruchheft - Brüche dividieren</span>
+            <span class="badge rounded-pill text-bg-success">Öffnen</span>
+          </a>
+          <a href="https://claude.ai/artifact/AedpJx8XURM6Sk2BajwuE5" target="_blank" rel="noopener" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center gap-3 eintrag" data-id="">
+            <span>🔗 Rechenheft - Vorrangregeln mit Potenzen</span>
+            <span class="badge rounded-pill text-bg-success">Öffnen</span>
+          </a></div></div>
+      </div>
+    </section>
+    <section class="card gruppe" id="g2" data-fach="mathematik">
+      <div class="card-body">
+        <h2 class="h4 gruppen-titel">📂 Mathe Klasse 8</h2>
+        <div class="list-group list-group-flush mb-2">
+          <a href="Mathe%20Klasse%208/1-Lernmodul_Lineare_Funktionen_Nullstellenberechnung.html" target="_blank" rel="noopener" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center gap-3 eintrag" data-id="1">
+            <span><span class="badge text-bg-secondary me-1">ID 1</span>🖥️ Lernmodul Lineare Funktionen Nullstellenberechnung</span>
+            <span class="badge rounded-pill text-bg-primary">Ansehen</span>
+          </a>
+          <a href="Mathe%20Klasse%208/-Anwendungsaufgaben.html" target="_blank" rel="noopener" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center gap-3 eintrag" data-id="">
+            <span>🖥️ Anwendungsaufgaben</span>
+            <span class="badge rounded-pill text-bg-primary">Ansehen</span>
+          </a>
+          <a href="Mathe%20Klasse%208/Lernmodul_Lineare_Funktionen_Anwendung.html" target="_blank" rel="noopener" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center gap-3 eintrag" data-id="">
+            <span>🖥️ Lernmodul Lineare Funktionen Anwendung</span>
+            <span class="badge rounded-pill text-bg-primary">Ansehen</span>
+          </a></div>
+      </div>
+    </section>
+    <section class="card gruppe" id="g3" data-fach="mathematik">
+      <div class="card-body">
+        <h2 class="h4 gruppen-titel">📂 Mathematik Klasse 12 Gk</h2>
+        <div class="list-group list-group-flush mb-2">
+          <a href="Mathematik%20Klasse%2012_Gk/Lernumgebung%201_Gleichungen%20und%20Schnittpunkte.html" target="_blank" rel="noopener" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center gap-3 eintrag" data-id="">
+            <span>🖥️ Lernumgebung 1 Gleichungen und Schnittpunkte</span>
+            <span class="badge rounded-pill text-bg-primary">Ansehen</span>
+          </a>
+          <a href="Mathematik%20Klasse%2012_Gk/Lernumgebung_2_Ableitungen.html" target="_blank" rel="noopener" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center gap-3 eintrag" data-id="">
+            <span>🖥️ Lernumgebung 2 Ableitungen</span>
+            <span class="badge rounded-pill text-bg-primary">Ansehen</span>
+          </a></div>
+      </div>
+    </section>
+    <section class="card gruppe" id="g4" data-fach="mathematik">
+      <div class="card-body">
+        <h2 class="h4 gruppen-titel">📂 Mathematik Kurs</h2>
+        <div class="list-group list-group-flush mb-2">
+          <a href="Mathematik%20Kurs/Stochastik%2019%20-%20Sigma-Umgebungen%20%28Arbeitsblatt%29.pdf" target="_blank" rel="noopener" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center gap-3 eintrag" data-id="">
+            <span>📄 Stochastik 19 – Sigma-Umgebungen (Arbeitsblatt)</span>
+            <span class="badge rounded-pill text-bg-primary">Ansehen</span>
+          </a>
+          <a href="Mathematik%20Kurs/Stochastik%2020%20-%20Normalverteilung%20mit%20dem%20TI-84%20Plus%20CE.png" target="_blank" rel="noopener" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center gap-3 eintrag" data-id="">
+            <span>🖼️ Stochastik 20 – Normalverteilung mit dem TI-84 Plus CE</span>
+            <span class="badge rounded-pill text-bg-primary">Ansehen</span>
+          </a></div><div class="thema"><h4 class="h6 thema-titel">Downloads</h4><div class="list-group list-group-flush">
+          <a href="Mathematik%20Kurs/Binomialverteilung%20-%20Applet%20f%C3%BCr%20Geogebra.ggb" download class="list-group-item list-group-item-action d-flex justify-content-between align-items-center gap-3 eintrag" data-id="">
+            <span>📐 Binomialverteilung – Applet für Geogebra</span>
+            <span class="badge rounded-pill text-bg-warning">⬇ GeoGebra</span>
+          </a></div></div><div class="thema"><h4 class="h6 thema-titel">Links</h4><div class="list-group list-group-flush">
+          <a href="https://www.iqb.hu-berlin.de/media/documents/N_Mathematisch-naturwissenschaftliche_Formelsammlung.pdf" target="_blank" rel="noopener" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center gap-3 eintrag" data-id="">
+            <span>🔗 IQB-Formelsammlung</span>
+            <span class="badge rounded-pill text-bg-success">Öffnen</span>
+          </a>
+          <a href="https://www.geogebra.org" target="_blank" rel="noopener" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center gap-3 eintrag" data-id="">
+            <span>🔗 GeoGebra – Mathe-Werkzeuge im Browser</span>
+            <span class="badge rounded-pill text-bg-success">Öffnen</span>
+          </a>
+          <a href="https://za-aufgaben.nibis.de/" target="_blank" rel="noopener" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center gap-3 eintrag" data-id="">
+            <span>🔗 ZA-Aufgaben 2022 - 2026</span>
+            <span class="badge rounded-pill text-bg-success">Öffnen</span>
+          </a></div></div>
+      </div>
+    </section>
+    <section class="card gruppe" id="g5" data-fach="chemie">
+      <div class="card-body">
+        <h2 class="h4 gruppen-titel">📂 Chemie Klasse 10</h2>
+        <div class="list-group list-group-flush mb-2">
+          <a href="Chemie%20Klasse%2010/Uebersicht_Siedetemperatur_und_WW.html" target="_blank" rel="noopener" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center gap-3 eintrag" data-id="">
+            <span>🖥️ Uebersicht Siedetemperatur und WW</span>
+            <span class="badge rounded-pill text-bg-primary">Ansehen</span>
+          </a>
+          <a href="Chemie%20Klasse%2010/Uebung_Siedetemperatur_Freitext.html" target="_blank" rel="noopener" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center gap-3 eintrag" data-id="">
+            <span>🖥️ Uebung Siedetemperatur Freitext</span>
+            <span class="badge rounded-pill text-bg-primary">Ansehen</span>
+          </a>
+          <a href="Chemie%20Klasse%2010/Uebung_Siedetemperatur_gefuehrt.html" target="_blank" rel="noopener" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center gap-3 eintrag" data-id="">
+            <span>🖥️ Uebung Siedetemperatur gefuehrt</span>
+            <span class="badge rounded-pill text-bg-primary">Ansehen</span>
+          </a>
+          <a href="Chemie%20Klasse%2010/Uebung_Siedetemperatur_Selbstkontrolle.html" target="_blank" rel="noopener" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center gap-3 eintrag" data-id="">
+            <span>🖥️ Uebung Siedetemperatur Selbstkontrolle</span>
+            <span class="badge rounded-pill text-bg-primary">Ansehen</span>
+          </a>
+          <a href="Chemie%20Klasse%2010/zwischenmolekulare-wechselwirkungen.html" target="_blank" rel="noopener" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center gap-3 eintrag" data-id="">
+            <span>🖥️ zwischenmolekulare-wechselwirkungen</span>
+            <span class="badge rounded-pill text-bg-primary">Ansehen</span>
+          </a></div>
+      </div>
+    </section>
+    <section class="card gruppe" id="g6" data-fach="chemie">
+      <div class="card-body">
+        <h2 class="h4 gruppen-titel">📂 Chemie Oberstufe</h2>
+        <div class="list-group list-group-flush mb-2">
+          <a href="Chemie%20Oberstufe/01%20Startklar%20f%C3%BCr%20Organik.html" target="_blank" rel="noopener" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center gap-3 eintrag" data-id="">
+            <span>🖥️ Startklar für Organik</span>
+            <span class="badge rounded-pill text-bg-primary">Ansehen</span>
+          </a>
+          <a href="Chemie%20Oberstufe/01%20Startklar_Organik_h%C3%B6heres%20Niveau.html" target="_blank" rel="noopener" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center gap-3 eintrag" data-id="">
+            <span>🖥️ Startklar Organik höheres Niveau</span>
+            <span class="badge rounded-pill text-bg-primary">Ansehen</span>
+          </a>
+          <a href="Chemie%20Oberstufe/02%20Nomenklatur-Trainer.html" target="_blank" rel="noopener" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center gap-3 eintrag" data-id="">
+            <span>🖥️ Nomenklatur-Trainer</span>
+            <span class="badge rounded-pill text-bg-primary">Ansehen</span>
+          </a>
+          <a href="Chemie%20Oberstufe/Chemie_Energetik_Wiederholung.html" target="_blank" rel="noopener" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center gap-3 eintrag" data-id="">
+            <span>🖥️ Chemie Energetik Wiederholung</span>
+            <span class="badge rounded-pill text-bg-primary">Ansehen</span>
+          </a>
+          <a href="Chemie%20Oberstufe/Lernumgebung_Redox.html" target="_blank" rel="noopener" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center gap-3 eintrag" data-id="">
+            <span>🖥️ Lernumgebung Redox</span>
+            <span class="badge rounded-pill text-bg-primary">Ansehen</span>
+          </a></div>
+      </div>
+    </section>
+    <section class="card gruppe" id="g7" data-fach="weitere">
+      <div class="card-body">
+        <h2 class="h4 gruppen-titel">📂 Informatik 5</h2>
+        <div class="list-group list-group-flush mb-2">
+          <a href="Informatik%205/Digitale_Mission_001_final.html" target="_blank" rel="noopener" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center gap-3 eintrag" data-id="">
+            <span>🖥️ Digitale Mission 001 final</span>
+            <span class="badge rounded-pill text-bg-primary">Ansehen</span>
+          </a>
+          <a href="Informatik%205/iserv-trainer_5.html" target="_blank" rel="noopener" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center gap-3 eintrag" data-id="">
+            <span>🖥️ iserv-trainer 5</span>
+            <span class="badge rounded-pill text-bg-primary">Ansehen</span>
+          </a>
+          <a href="Informatik%205/wissensdetektiv.html" target="_blank" rel="noopener" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center gap-3 eintrag" data-id="">
+            <span>🖥️ wissensdetektiv</span>
+            <span class="badge rounded-pill text-bg-primary">Ansehen</span>
+          </a></div>
+      </div>
+    </section>
+    <section class="card gruppe" id="g8" data-fach="weitere">
+      <div class="card-body">
+        <h2 class="h4 gruppen-titel">📂 Forensik</h2>
+        <div class="list-group list-group-flush mb-2">
+          <a href="Forensik/Lernumgebung_Genetik.html" target="_blank" rel="noopener" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center gap-3 eintrag" data-id="">
+            <span>🖥️ Lernumgebung Genetik</span>
+            <span class="badge rounded-pill text-bg-primary">Ansehen</span>
+          </a>
+          <a href="Forensik/Zitierheft_Forensik.html" target="_blank" rel="noopener" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center gap-3 eintrag" data-id="">
+            <span>🖥️ Zitierheft Forensik</span>
+            <span class="badge rounded-pill text-bg-primary">Ansehen</span>
+          </a>
+          <a href="Forensik/Zitierheft_Forensik_Mit%20Artikeln.html" target="_blank" rel="noopener" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center gap-3 eintrag" data-id="">
+            <span>🖥️ Zitierheft Forensik Mit Artikeln</span>
+            <span class="badge rounded-pill text-bg-primary">Ansehen</span>
+          </a></div>
+      </div>
+    </section>
+    <section class="card gruppe" id="g9" data-fach="weitere">
+      <div class="card-body">
+        <h2 class="h4 gruppen-titel">📂 Jan</h2>
+        <div class="list-group list-group-flush mb-2">
+          <a href="Jan/lernmodul_spanischer_kolonialismus_vollst%C3%A4ndig.html" target="_blank" rel="noopener" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center gap-3 eintrag" data-id="">
+            <span>🖥️ lernmodul spanischer kolonialismus vollständig</span>
+            <span class="badge rounded-pill text-bg-primary">Ansehen</span>
+          </a></div>
+      </div>
+    </section>
+      <p id="nichts" class="text-center text-muted" hidden>Nichts gefunden.</p>
+    </main>
+
+    <footer class="text-center text-muted small mt-4">Stand: 16.11.2026, 15:30 Uhr · <a class="link-secondary" href="https://github.com/hubi-bot/Unterrichtsmaterial#readme">✏️ Seite bearbeiten</a></footer>
+  </div>
+
+  <!-- Verstecktes Extra: Klick auf 📚 öffnet einen QR-Code zu dieser Seite (mit dem gewählten Fach) -->
+  <dialog id="qr-fenster">
+    <div id="qr-bild"></div>
+    <p class="text-muted small mt-3 mb-3" id="qr-adresse"></p>
+    <button type="button" class="btn btn-primary" id="qr-schliessen">Schließen</button>
+  </dialog>
+
+  <script>
+    (function () {
+      const faecher = ["mathematik", "chemie", "weitere"];
+      const suche = document.getElementById("suche");
+      let fach = faecher[0];
+
+      function merken(wert) { try { localStorage.setItem("um-fach", wert); } catch (e) {} }
+      function gemerkt() { try { return localStorage.getItem("um-fach"); } catch (e) { return null; } }
+
+      /* Zeigt die Gruppen des gewählten Fachs. Beim Suchen werden alle Fächer durchsucht. */
+      function anzeigen() {
+        const woerter = suche.value.toLowerCase().trim().split(/\s+/).filter(Boolean);
+        const sucht = woerter.length > 0;
+        let gesamt = 0;
+        document.querySelectorAll(".fach-knopf").forEach(function (k) {
+          k.setAttribute("aria-selected", !sucht && k.dataset.fach === fach ? "true" : "false");
+        });
+        document.querySelectorAll(".gruppen-knopf").forEach(function (k) {
+          k.hidden = sucht || k.dataset.fach !== fach;
+        });
+        document.querySelectorAll(".gruppe").forEach(function (karte) {
+          const gruppe = karte.querySelector(".gruppen-titel").textContent.toLowerCase();
+          let sichtbar = 0;
+          karte.querySelectorAll(".eintrag").forEach(function (e) {
+            const thema = e.closest(".thema");
+            const text = gruppe + " " + (thema ? thema.querySelector(".thema-titel").textContent.toLowerCase() : "") + " " + e.textContent.toLowerCase();
+            const passt = woerter.every(function (w) { return text.includes(w) || e.dataset.id === w; });
+            e.classList.toggle("d-none", !passt);
+            if (passt) sichtbar++;
+          });
+          karte.querySelectorAll(".thema").forEach(function (t) {
+            t.hidden = sucht && !t.querySelector(".eintrag:not(.d-none)");
+          });
+          karte.hidden = sucht ? sichtbar === 0 : karte.dataset.fach !== fach;
+          if (!karte.hidden) gesamt += sichtbar;
+        });
+        document.getElementById("nichts").hidden = !sucht || gesamt > 0;
+      }
+
+      function waehlen(neu, adresseAendern) {
+        if (!faecher.includes(neu)) return;
+        fach = neu;
+        merken(neu);
+        if (adresseAendern) history.replaceState(null, "", "#" + neu);
+        anzeigen();
+      }
+
+      document.querySelectorAll(".fach-knopf").forEach(function (k) {
+        k.addEventListener("click", function () { suche.value = ""; waehlen(k.dataset.fach, true); });
+      });
+      suche.addEventListener("input", anzeigen);
+      window.addEventListener("hashchange", function () { waehlen(location.hash.slice(1), false); });
+
+      /* Start: Fach aus der Adresse (z. B. …/#chemie), sonst das zuletzt gewählte, sonst das erste. */
+      const ausAdresse = location.hash.slice(1);
+      waehlen(faecher.includes(ausAdresse) ? ausAdresse : (faecher.includes(gemerkt()) ? gemerkt() : faecher[0]), false);
+
+      /* QR-Code */
+      const fenster = document.getElementById("qr-fenster");
+      function zeigen() {
+        const adresse = location.origin + location.pathname.replace(/index\.html$/, "") + "#" + fach;
+        const bild = document.getElementById("qr-bild");
+        bild.innerHTML = "";
+        new QRCode(bild, { text: adresse, width: 512, height: 512, correctLevel: QRCode.CorrectLevel.M });
+        document.getElementById("qr-adresse").textContent = adresse;
+        fenster.showModal();
+      }
+      document.getElementById("qr-knopf").addEventListener("click", function () {
+        if (window.QRCode) return zeigen();
+        const skript = document.createElement("script");
+        skript.src = "https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js";
+        skript.onload = zeigen;
+        document.head.appendChild(skript);
+      });
+      document.getElementById("qr-schliessen").addEventListener("click", function () { fenster.close(); });
+      fenster.addEventListener("click", function (e) { if (e.target === fenster) fenster.close(); });
+    })();
+  </script>
 </body>
 </html>
