@@ -1,6 +1,6 @@
 # Kurznamen für die Links, die du an die Klasse weitergibst.
 # Eine Zeile pro Datei:   kurzname | Ordner/Dateiname
-# Aus "bruch-mal" wird der Link  https://hubi-bot.github.io/Unterrichtsmaterial/bruch-mal.html
+# Aus "bruch-mal" wird der Link  https://hubi-bot.github.io/frau-huber/bruch-mal
 # Steht eine Datei hier nicht, wird der Kurzname automatisch aus dem Dateinamen gebildet.
 # Achtung: Wer einen Kurznamen ändert, ändert auch den Link. Schon verteilte Links und QR-Codes gehen dann nicht mehr.
 

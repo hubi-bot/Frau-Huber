@@ -2,9 +2,9 @@
 # Dieses Skript läuft bei jeder Änderung von selbst auf GitHub – du musst nichts daran ändern.
 #
 # Was dabei entsteht:
-#   …/Unterrichtsmaterial/                     -> neutrale Startseite ohne Materialliste
-#   …/Unterrichtsmaterial/<kurzname>.html      -> jede Lernumgebung unter einem kurzen Link (für die Klasse)
-#   …/Unterrichtsmaterial/<UEBERSICHT>/        -> die Übersicht aller Materialien (nur für Lehrkräfte)
+#   …/frau-huber/                     -> neutrale Startseite ohne Materialliste
+#   …/frau-huber/<kurzname>.html      -> jede Lernumgebung unter einem kurzen Link (für die Klasse)
+#   …/frau-huber/<UEBERSICHT>/        -> die Übersicht aller Materialien (nur für Lehrkräfte)
 #
 # Wer einen Link zu einer einzelnen Lernumgebung bekommt, kommt von dort nicht zur Übersicht:
 # Die Startseite zeigt keine Liste, und die Ordner selbst werden nicht veröffentlicht.
@@ -38,7 +38,7 @@ from zoneinfo import ZoneInfo
 SEITENTITEL = "Unterrichtsmaterialien"
 UNTERTITEL = "Übersicht für Lehrkräfte – bitte nur einzelne Kurzlinks an die Klasse weitergeben"
 # Auf GitHub wird der Name des Repositorys automatisch erkannt (auch nach einem Umbenennen).
-REPO = "https://github.com/" + os.environ.get("GITHUB_REPOSITORY", "hubi-bot/Unterrichtsmaterial")
+REPO = "https://github.com/" + os.environ.get("GITHUB_REPOSITORY", "hubi-bot/frau-huber")
 UEBERSICHT = "uebersicht-x4brac"  # Ordnername der Übersicht; nicht an Schüler weitergeben
 AUSGABE = "_site"
 

@@ -1,8 +1,8 @@
 # ✏️ Anleitung: So pflegst du die Materialseite
 
-**Übersicht für Lehrkräfte:** https://hubi-bot.github.io/Unterrichtsmaterial/uebersicht-x4brac/
+**Übersicht für Lehrkräfte:** https://hubi-bot.github.io/frau-huber/uebersicht-x4brac/
 
-Diese Adresse bitte nicht an Schülerinnen und Schüler weitergeben. Für die Klasse gibt es zu jeder Lernumgebung einen eigenen **Kurzlink**, zum Beispiel `https://hubi-bot.github.io/Unterrichtsmaterial/bruch-mal.html`. Von dort kommt man nicht zur Übersicht: Die Startseite zeigt keine Materialliste.
+Diese Adresse bitte nicht an Schülerinnen und Schüler weitergeben. Für die Klasse gibt es zu jeder Lernumgebung einen eigenen **Kurzlink**, zum Beispiel `https://hubi-bot.github.io/frau-huber/bruch-mal`. Von dort kommt man nicht zur Übersicht: Die Startseite zeigt keine Materialliste.
 
 In der Übersicht steht neben jedem Material **🔗 Link** (kopiert den Kurzlink) und **QR** (zeigt einen QR-Code zu genau diesem Material).
 
