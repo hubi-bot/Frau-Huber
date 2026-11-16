@@ -37,7 +37,8 @@ from zoneinfo import ZoneInfo
 
 SEITENTITEL = "Unterrichtsmaterialien"
 UNTERTITEL = "Übersicht für Lehrkräfte – bitte nur einzelne Kurzlinks an die Klasse weitergeben"
-REPO = "https://github.com/hubi-bot/Unterrichtsmaterial"
+# Auf GitHub wird der Name des Repositorys automatisch erkannt (auch nach einem Umbenennen).
+REPO = "https://github.com/" + os.environ.get("GITHUB_REPOSITORY", "hubi-bot/Unterrichtsmaterial")
 UEBERSICHT = "uebersicht-x4brac"  # Ordnername der Übersicht; nicht an Schüler weitergeben
 AUSGABE = "_site"
 
@@ -245,9 +246,10 @@ def eintrag_html(e):
             knopf, farbe, ziel = f"⬇ {e['typ']}", "text-bg-warning", "download"
         else:
             knopf, farbe, ziel = "Ansehen", "text-bg-primary", 'target="_blank" rel="noopener"'
+        teilen = re.sub(r"\.html?$", "", url)  # zum Weitergeben reicht der Name ohne ".html"
         extras = (
-            f'<button type="button" class="btn btn-sm btn-outline-secondary kopieren" data-url="{html.escape(url)}" title="Kurzlink kopieren" aria-label="Kurzlink zu {titel} kopieren">🔗 Link</button>'
-            f'<button type="button" class="btn btn-sm btn-outline-secondary qr" data-url="{html.escape(url)}" data-titel="{titel}" title="QR-Code zeigen" aria-label="QR-Code zu {titel} zeigen">QR</button>'
+            f'<button type="button" class="btn btn-sm btn-outline-secondary kopieren" data-url="{html.escape(teilen)}" title="Kurzlink kopieren" aria-label="Kurzlink zu {titel} kopieren">🔗 Link</button>'
+            f'<button type="button" class="btn btn-sm btn-outline-secondary qr" data-url="{html.escape(teilen)}" data-titel="{titel}" title="QR-Code zeigen" aria-label="QR-Code zu {titel} zeigen">QR</button>'
         )
     nummer = f'<span class="badge text-bg-secondary me-1">ID {html.escape(e["id"])}</span>' if e.get("id") else ""
     return f"""
