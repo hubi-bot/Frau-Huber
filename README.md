@@ -1,8 +1,10 @@
 # ✏️ Anleitung: So pflegst du die Materialseite
 
-**Die Seite:** https://hubi-bot.github.io/Unterrichtsmaterial/
+**Übersicht für Lehrkräfte:** https://hubi-bot.github.io/Unterrichtsmaterial/uebersicht-x4brac/
 
-Direkt zu einem Fach: [Mathematik](https://hubi-bot.github.io/Unterrichtsmaterial/#mathematik) · [Chemie](https://hubi-bot.github.io/Unterrichtsmaterial/#chemie) · [Weitere Fächer](https://hubi-bot.github.io/Unterrichtsmaterial/#weitere)
+Diese Adresse bitte nicht an Schülerinnen und Schüler weitergeben. Für die Klasse gibt es zu jeder Lernumgebung einen eigenen **Kurzlink**, zum Beispiel `https://hubi-bot.github.io/Unterrichtsmaterial/bruch-mal.html`. Von dort kommt man nicht zur Übersicht: Die Startseite zeigt keine Materialliste.
+
+In der Übersicht steht neben jedem Material **🔗 Link** (kopiert den Kurzlink) und **QR** (zeigt einen QR-Code zu genau diesem Material).
 
 > **Vorher:** Oben rechts muss dein Profilbild zu sehen sein. Steht dort **Sign in**, klick darauf und melde dich an.
 
@@ -57,15 +59,15 @@ Direkt zu einem Fach: [Mathematik](https://hubi-bot.github.io/Unterrichtsmateria
 
 **Reihenfolge:** Eine Zahl vor den Namen setzen, also `1 Natürliche Zahlen`, `2 Geometrie`. Die Zahl wird auf der Seite nicht angezeigt.
 
-**Kurzlinks:** Beginnt ein Dateiname mit `Zahl-`, z. B. `12-Nullstellen.html`, ist das Material auch über `…/Unterrichtsmaterial/?id=12` erreichbar.
+**Kurzlinks:** Die Kurznamen stehen in der Datei `kurzlinks.txt`, eine Zeile pro Datei: `kurzname | Ordner/Dateiname`. Fehlt eine Datei dort, wird der Kurzname automatisch aus dem Dateinamen gebildet. Wer einen Kurznamen ändert, ändert auch den Link: Schon verteilte Links und QR-Codes funktionieren dann nicht mehr.
 
-**Weiterleitungen:** Einige ältere Fassungen sind durch kleine Weiterleitungs-Dateien ersetzt. Sie führen auf die neueste Fassung und stehen deshalb nicht in der Übersicht. Wer sie nicht mehr braucht, kann sie löschen.
+**Alte Adressen:** Die früheren langen Adressen (…/Mathematik 6/Bruchheft ….html) leiten automatisch auf den Kurzlink weiter.
 
 ---
 
 ## 📱 QR-Code für die Klasse
 
-Auf der Seite oben auf das **📚** klicken. Es erscheint ein großer QR-Code, der direkt zum gerade gewählten Fach führt.
+In der Übersicht beim gewünschten Material auf **QR** klicken. Es erscheint ein großer QR-Code, der nur zu diesem einen Material führt.
 
 ---
 
@@ -82,7 +84,7 @@ Auf der Seite oben auf das **📚** klicken. Es erscheint ein großer QR-Code, d
 
 ## ⚠️ Bitte beachten
 
-- **Die Seite ist für alle im Internet sichtbar.** Keine Namen von Schülern, keine Noten, keine Fotos von Schülern hochladen.
+- **Alles hier ist öffentlich.** Die Übersicht ist nur versteckt, nicht geschützt: Wer die Adresse kennt oder dieses Repository bei GitHub findet, sieht alle Materialien. Keine Namen von Schülern, keine Noten, keine Fotos von Schülern hochladen.
 - **Lösungen** erst hochladen, wenn die Klasse sie sehen darf.
 - **Keine Seiten aus Schulbüchern** einscannen und hochladen, nur eigene Arbeitsblätter.
-- **Diese Dateien bitte nicht verändern oder löschen:** `generate_index.py`, den Ordner `.github` und `README.md` (diese Anleitung). Sie sorgen dafür, dass die Seite funktioniert.
+- **Diese Dateien bitte nicht löschen:** `generate_index.py`, `kurzlinks.txt`, den Ordner `.github` und `README.md` (diese Anleitung). Sie sorgen dafür, dass die Seite funktioniert.

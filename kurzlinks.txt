@@ -1,0 +1,55 @@
+# Kurznamen für die Links, die du an die Klasse weitergibst.
+# Eine Zeile pro Datei:   kurzname | Ordner/Dateiname
+# Aus "bruch-mal" wird der Link  https://hubi-bot.github.io/Unterrichtsmaterial/bruch-mal.html
+# Steht eine Datei hier nicht, wird der Kurzname automatisch aus dem Dateinamen gebildet.
+# Achtung: Wer einen Kurznamen ändert, ändert auch den Link. Schon verteilte Links und QR-Codes gehen dann nicht mehr.
+
+# Mathematik 5
+breakout | Mathematik 5/Breakout - Rechnen mit natürlichen Zahlen.html
+vokabeln | Mathematik 5/Mathe-Vokabeln - Fachbegriffe der Grundrechenarten.html
+distributiv | Mathematik 5/Rechenheft - Distributivgesetz.html
+vorrang | Mathematik 5/Rechenheft - Vorrangregeln.html
+rechenheft | Mathematik 5/Rechenheft – Schriftlich rechnen.html
+zahlen-giganten | Mathematik 5/Zahlen-Giganten – Die große Nullen-Jagd.html
+
+# Mathematik 6
+bruch-textaufgaben | Mathematik 6/AB - Textaufgaben zu Brüchen.pdf
+bruch-plus-minus | Mathematik 6/Bruchheft - Brüche addieren und subtrahieren.html
+bruch-zahlenstrahl | Mathematik 6/Bruchheft - Brüche am Zahlenstrahl; Brüche Vergleichen und Ordnen.html
+bruch-geteilt | Mathematik 6/Bruchheft - Brüche dividieren.html
+bruch-mal | Mathematik 6/Bruchheft - Brüche multiplizieren.html
+bruch-gemischt | Mathematik 6/Bruchheft - Gemischte Zahlen addieren und subtrahieren.html
+bruch-trainer | Mathematik 6/Brüche I Lerntrainer.html
+
+# Mathematik 8
+linfkt-anwendung | Mathe Klasse 8/-Anwendungsaufgaben.html
+linfkt-nullstellen | Mathe Klasse 8/1-Lernmodul_Lineare_Funktionen_Nullstellenberechnung.html
+linfkt-lernmodul | Mathe Klasse 8/Lernmodul_Lineare_Funktionen_Anwendung.html
+
+# Mathematik 12 und Kurs
+gleichungen | Mathematik Klasse 12_Gk/Lernumgebung 1_Gleichungen und Schnittpunkte.html
+ableitungen | Mathematik Klasse 12_Gk/Lernumgebung_2_Ableitungen.html
+binomial | Mathematik Kurs/Binomialverteilung - Applet für Geogebra.ggb
+sigma | Mathematik Kurs/Stochastik 19 - Sigma-Umgebungen (Arbeitsblatt).pdf
+normalverteilung | Mathematik Kurs/Stochastik 20 - Normalverteilung mit dem TI-84 Plus CE.png
+
+# Chemie
+siede-uebersicht | Chemie Klasse 10/Uebersicht_Siedetemperatur_und_WW.html
+siede-freitext | Chemie Klasse 10/Uebung_Siedetemperatur_Freitext.html
+siede-selbstkontrolle | Chemie Klasse 10/Uebung_Siedetemperatur_Selbstkontrolle.html
+siede-gefuehrt | Chemie Klasse 10/Uebung_Siedetemperatur_gefuehrt.html
+wechselwirkungen | Chemie Klasse 10/zwischenmolekulare-wechselwirkungen.html
+organik | Chemie Oberstufe/01 Startklar für Organik.html
+organik-plus | Chemie Oberstufe/01 Startklar_Organik_höheres Niveau.html
+nomenklatur | Chemie Oberstufe/02 Nomenklatur-Trainer.html
+energetik | Chemie Oberstufe/Chemie_Energetik_Wiederholung.html
+redox | Chemie Oberstufe/Lernumgebung_Redox.html
+
+# Weitere Fächer
+genetik | Forensik/Lernumgebung_Genetik.html
+zitierheft | Forensik/Zitierheft_Forensik.html
+zitierheft-artikel | Forensik/Zitierheft_Forensik_Mit Artikeln.html
+digitale-mission | Informatik 5/Digitale_Mission_001_final.html
+iserv | Informatik 5/iserv-trainer_5.html
+wissensdetektiv | Informatik 5/wissensdetektiv.html
+kolonialismus | Jan/lernmodul_spanischer_kolonialismus_vollständig.html
