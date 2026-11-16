@@ -49,6 +49,8 @@ In der Übersicht steht neben jedem Material **🔗 Link** (kopiert den Kurzlink
    Den Strich `|` bekommst du unter **Windows** mit `AltGr` + `<`, am **Mac** mit `Alt` + `7`.
 3. Auf **Commit changes…** klicken, im kleinen Fenster nochmal auf **Commit changes**.
 
+Soll ein Link **ganz oben** im Bereich stehen (zum Beispiel eine TaskCards-Pinnwand), setze ein Ausrufezeichen davor: `! TaskCards Oberstufe | https://www.taskcards.de/...`
+
 ---
 
 ## 🔄 Ein Material austauschen, umbenennen oder löschen

@@ -14,6 +14,8 @@
 #   Unterordner darin           -> ein Thema   (z. B. "Mathematik 6/Bruchrechnung")
 #   Dateien                     -> Einträge (HTML, PDF, Word, PowerPoint, Excel, Bilder)
 #   links.txt                   -> Links ins Internet, eine Zeile pro Link:  Titel | https://...
+#                                  Beginnt die Zeile mit einem Ausrufezeichen (! Titel | https://...),
+#                                  steht der Link ganz oben im Bereich statt unten unter "Links".
 #   kurzlinks.txt               -> Kurznamen, eine Zeile pro Datei:  kurzname | Ordner/Dateiname
 #                                  Fehlt eine Datei dort, wird der Kurzname aus dem Dateinamen gebildet.
 #   titel.txt                   -> Überschriften, eine Zeile pro Eintrag:  Ordner/Dateiname | Neuer Titel
@@ -190,12 +192,14 @@ def links_lesen(pfad):
             zeile = zeile.strip()
             if not zeile or zeile.startswith("#"):
                 continue
+            oben = zeile.startswith("!")  # "! Titel | Adresse" steht ganz oben im Bereich
+            zeile = zeile.lstrip("! ").strip()
             if "|" in zeile:
                 titel, url = (t.strip() for t in zeile.split("|", 1))
             else:
                 titel, url = zeile, zeile
             if url.startswith(("http://", "https://")):
-                eintraege.append({"titel": titel, "url": url, "typ": "Link", "extern": True})
+                eintraege.append({"titel": titel, "url": url, "typ": "Link", "extern": True, "oben": oben})
     return eintraege
 
 
@@ -237,7 +241,7 @@ def ordner_lesen(ordner):
 
 
 def eintrag_html(e):
-    symbol = "🔗" if e["typ"] == "Link" else SYMBOL.get(e["typ"], "📎")
+    symbol = ("📌" if e.get("oben") else "🔗") if e["typ"] == "Link" else SYMBOL.get(e["typ"], "📎")
     titel = html.escape(e["titel"])
     titel_html = titel if e["typ"] == "Link" else f'<span class="edit" data-key="{html.escape(e["quelle"])}">{titel}</span>'
     if e["typ"] == "Link":
@@ -289,7 +293,8 @@ for name in os.listdir("."):
         for _, liste, _ in themen:
             alle_dateien += [e for e in liste if not e["extern"]]
         downloads = [e for e in eintraege if ist_download(e)]
-        eintraege = [e for e in eintraege if not ist_download(e)]
+        eintraege = [l for l in links if l.get("oben")] + [e for e in eintraege if not ist_download(e)]
+        links = [l for l in links if not l.get("oben")]
         if downloads:  # Download-Dateien der Gruppe als eigener Abschnitt
             themen.append(("Downloads", downloads, None))
         if links:  # Links der Gruppe kommen als eigener Abschnitt ans Ende
