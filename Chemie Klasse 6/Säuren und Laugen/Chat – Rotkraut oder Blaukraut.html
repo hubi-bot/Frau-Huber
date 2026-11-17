@@ -55,7 +55,13 @@ button{font-family:inherit;cursor:pointer}
 .m.media .cap{padding:4px 6px 0}
 .m.media .meta{margin-right:6px}
 .pic{display:block;border:0;padding:0;background:none;border-radius:8px;overflow:hidden;width:250px;max-width:100%;position:relative}
-.pic svg{display:block;width:100%;height:auto}
+.pic svg,.pic .photo{display:block;width:100%;height:auto}
+.photo{aspect-ratio:3/2;object-fit:cover}
+.lb .big .photo{width:100%;height:auto;border-radius:8px;display:block}
+.lb .credit{color:#ccc;font-size:12px;margin-top:6px}
+.lb .credit a{color:#9fd8ff}
+.credits{font-size:11px;color:var(--meta)}
+.credits a{color:inherit}
 .pic.clip{max-height:270px}
 .pic.clip::after{content:"";position:absolute;left:0;right:0;bottom:0;height:60px;background:linear-gradient(transparent,rgba(0,0,0,.25))}
 .pic .zoom{z-index:1;position:absolute;right:6px;bottom:6px;background:rgba(0,0,0,.55);color:#fff;font-size:11px;padding:2px 7px;border-radius:999px}
@@ -71,6 +77,12 @@ button{font-family:inherit;cursor:pointer}
 
 /* Startknopf über dem Chat */
 .start{position:absolute;inset:0;display:grid;place-items:center;background:rgba(11,20,26,.45);z-index:5}
+.roles{background:var(--in);color:var(--txt);border-radius:16px;padding:18px 20px;display:flex;flex-direction:column;gap:10px;align-items:center;text-align:center;max-width:300px;box-shadow:0 6px 20px rgba(0,0,0,.3)}
+.roles b{font-size:18px}
+.roles .r{border-radius:10px;padding:6px 12px;font-size:15px;width:100%}
+.roles .r.h{background:var(--in);border:2px solid #e0b030;text-align:left}
+.roles .r.t{background:var(--out);text-align:right}
+.roles small{color:var(--meta)}
 .start button{background:var(--accent);color:#fff;border:0;border-radius:999px;padding:14px 26px;font-size:18px;font-weight:700;box-shadow:0 6px 20px rgba(0,0,0,.3)}
 
 /* Steuerung */
@@ -92,7 +104,8 @@ button{font-family:inherit;cursor:pointer}
 .rc.blau .z{margin:2px 0 6px}
 .rc.rot{background:#5b3a8c;color:#fff;padding:10px 12px 12px;font-family:var(--ui)}
 .rc.rot h3{margin:0 0 6px;font-size:17px}
-.rc.rot .bowl{background:#fff;border-radius:6px;margin:0 0 8px}
+.rc.rot .bowl{background:#fff;border-radius:6px;margin:0 0 8px;overflow:hidden}
+.rc.rot .bowl .photo,.rc.rot .bowl svg{display:block;width:100%;height:auto}
 .rc.rot ul{margin:0 0 6px;padding-left:16px}
 .rc.rot ol{margin:0;padding-left:18px}
 .rc.rot .src{font-size:10px;opacity:.8;margin-top:6px}
@@ -142,7 +155,7 @@ button{font-family:inherit;cursor:pointer}
   </div>
   <div class="wall" id="wall" aria-live="polite"></div>
   <div class="bottom" aria-hidden="true"><div class="inp">😊  Nachricht</div><div class="send">🎤</div></div>
-  <div class="start" id="start"><button id="startBtn">▶ Chat starten</button></div>
+  <div class="start" id="start"><div class="roles"><b>Verteilt die Rollen!</b><span class="r h">Heike – Nachrichten links</span><span class="r t">Tabea – Nachrichten rechts</span><small>Lest jede Nachricht laut vor, sobald sie erscheint.</small><button id="startBtn">▶ Chat starten</button></div></div>
 </div>
 
 <div class="panel">
@@ -154,10 +167,11 @@ button{font-family:inherit;cursor:pointer}
   <button class="cbtn" id="resetBtn" title="Von vorn">↺<span class="t"> Von vorn</span></button>
   <span class="prog lbl">Tempo</span>
   <div class="speed" role="group" aria-label="Tempo">
-    <button data-sp="1.6">langsam</button><button data-sp="1">normal</button><button data-sp="0.55">schnell</button>
+    <button data-sp="1.4">langsam</button><button data-sp="1">normal</button><button data-sp="0.7">schneller</button>
   </div>
   <span class="prog" id="prog"></span>
   <p>Tipp: Fotos und Rezepte antippen – dann werden sie groß.</p>
+  <p class="credits">Fotos: MOs810 (<a href="https://creativecommons.org/licenses/by-sa/4.0/deed.de" target="_blank" rel="noopener">CC BY-SA 4.0</a>) und Benreis (<a href="https://creativecommons.org/licenses/by/3.0/deed.de" target="_blank" rel="noopener">CC BY 3.0</a>), Wikimedia Commons</p>
 </div>
 
 <div class="lb hidden" id="lb" role="dialog" aria-modal="true" aria-label="Großansicht">
@@ -182,8 +196,15 @@ function bowl(kraut,dark,light,label){
   s+=`<g transform="translate(196 104) rotate(-28)"><rect x="0" y="0" width="70" height="8" rx="4" fill="#b8b8b8"/><ellipse cx="0" cy="4" rx="12" ry="9" fill="#c8c8c8"/></g></svg>`;
   return s;
 }
-const BLUE=bowl("#34479e","#22327a","#6b83e0","Foto: eine Schüssel mit tiefblauem Kraut");
-const RED=bowl("#8e1b4f","#5e0f33","#c8336f","Foto: eine Schüssel mit rot-violettem Kraut");
+const IMG={
+  blau:{src:"https://thumb.wikimedia.org/wikipedia/commons/thumb/3/31/Modra_kapusta_po_poznansku.jpg/960px-Modra_kapusta_po_poznansku.jpg",alt:"Foto: eine Schüssel mit blau-violettem Kraut",credit:'Foto: MOs810, <a href="https://commons.wikimedia.org/wiki/File:Modra_kapusta_po_poznansku.jpg" target="_blank" rel="noopener">Wikimedia Commons</a>, <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.de" target="_blank" rel="noopener">CC BY-SA 4.0</a>',fb:bowl("#34479e","#22327a","#6b83e0","Zeichnung: Schüssel mit blauem Kraut")},
+  rot:{src:"https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d5/Blaukraut-Sch%C3%BCssel.JPG/960px-Blaukraut-Sch%C3%BCssel.JPG",alt:"Foto: eine Schüssel mit rotem Kraut",credit:'Foto: Benreis, <a href="https://commons.wikimedia.org/wiki/File:Blaukraut-Sch%C3%BCssel.JPG" target="_blank" rel="noopener">Wikimedia Commons</a>, <a href="https://creativecommons.org/licenses/by/3.0/deed.de" target="_blank" rel="noopener">CC BY 3.0</a>',fb:bowl("#8e1b4f","#5e0f33","#c8336f","Zeichnung: Schüssel mit rotem Kraut")}
+};
+const FB={};
+function photo(k){FB[k]=IMG[k].fb;return `<img class="photo" src="${IMG[k].src}" alt="${IMG[k].alt}" data-fb="${k}" loading="eager" decoding="async">`}
+const BLUE=photo("blau"), RED=photo("rot");
+// Ersatzzeichnung, falls kein Internet
+document.addEventListener("error",e=>{const im=e.target;if(im.tagName==="IMG"&&im.dataset.fb&&!im.dataset.done){im.dataset.done=1;im.outerHTML=FB[im.dataset.fb]}},true);
 
 const MAMA=`<div class="rc blau"><h3>Mamas Blaukraut</h3>
 <div class="z"><u>Zutaten:</u> 1 Kopf Blaukraut, 1 Zwiebel, 1 EL Schmalz, 1 Messerspitze Natron, Salz, 2 Lorbeerblätter, ¼ Liter Wasser</div>
@@ -199,15 +220,15 @@ const S=[
  ["t","19:06","text","Mmmh lecker 😍 Aber… Blaukraut?? Was soll das denn sein? 😅"],
  ["t","19:06","text","Bei uns gibt's zum Braten immer Rotkraut."],
  ["h","19:06","text","Rotkraut?? 🤨 Nie gehört. Blaukraut ist eine Kohlsorte und nach dem Kochen ist sie blau. Wart, ich schick dir ein Foto 📸"],
- ["h","19:07","pic",BLUE,"So sieht's bei uns aus 😋","Foto von Heike"],
+ ["h","19:07","pic",BLUE,"So sieht's bei uns aus 😋","Foto von Heike","blau"],
  ["t","19:07","text","Hä?! 😳 Das ist doch genau derselbe Kohl wie bei uns!"],
- ["t","19:08","pic",RED,"Das ist unser Rotkraut von letztem Sonntag. Bei uns ist der ROT! 🔴","Foto von Tabea"],
+ ["t","19:08","pic",RED,"Das ist unser Rotkraut von letztem Sonntag. Bei uns ist der ROT! 🔴","Foto von Tabea","rot"],
  ["h","19:08","text","Krass 😮 Gleicher Kohl – andere Farbe?!"],
  ["t","19:09","text","Vielleicht kocht ihr den irgendwie anders? 🤔"],
  ["h","19:09","text","Kann sein! Ich frag mal meine Mama nach ihrem Rezept 📝"],
  ["h","19:11","rec",MAMA,"Hier, Mamas Geheimrezept 🤫","Rezept von Heikes Mama"],
  ["t","19:12","text","Cool, danke! 🙏 Mein Papa hat sein Rezept auch aufgeschrieben, Moment…"],
- ["t","19:13","rec",PAPA,"Papas Rotkraut 😋","Rezept von Tabeas Papa"],
+ ["t","19:13","rec",PAPA,"Papas Rotkraut 😋","Rezept von Tabeas Papa","rot"],
  ["h","19:13","text","Und? Siehst du einen Unterschied? 🔍"],
  ["t","19:14","text","Hmm… ich glaub, da muss ich mal ganz genau hinschauen 🧐"],
  ["h","19:14","text","Sag Bescheid, wenn du's rausgefunden hast! Ich muss jetzt essen 🍽️ Pfiat di!"],
@@ -216,7 +237,7 @@ const S=[
 
 const wall=$("#wall");
 let idx=0, playing=false, timer=null, speed=1, typingEl=null, last=null;
-try{const v=localStorage.getItem("kohlchat_speed");if(v)speed=+v}catch(e){}
+try{const v=+localStorage.getItem("kohlchat_speed2");if([1.4,1,0.7].includes(v))speed=v}catch(e){}
 
 function esc(s){return String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]))}
 function meta(m){return `<span class="meta">${m[1]}${m[0]==="t"?' <span class="ticks" aria-label="gelesen">✓✓</span>':""}</span>`}
@@ -245,23 +266,25 @@ function prog(){
   $("#nextBtn").disabled=done;$("#allBtn").disabled=done;$("#pauseBtn").disabled=done;
   if(done){playing=false;setPauseLabel()}
 }
-function delayFor(m){
-  const len=m[2]==="text"?m[3].length:m[2]==="pic"?60:110;
-  return Math.min(4200,900+len*38)*speed;
+function words(m){return m[2]==="text"?m[3].trim().split(/\s+/).length:(m[4]||"").trim().split(/\s+/).length}
+// Zeit zum Vorlesen der gerade erschienenen Nachricht (Lesetempo Klasse 6, mit Rollenwechsel)
+function readTime(m){
+  if(m[2]==="text")return (1800+words(m)*480)*speed;
+  if(m[2]==="pic")return (5000+words(m)*480)*speed;
+  return (8000+words(m)*480)*speed;
 }
+// Zeit, in der die nächste Nachricht "geschrieben" wird
+function typeTime(m){return (m[0]==="h"?2000:1000)*speed}
 function step(){
   clearTimeout(timer);
   if(!playing||idx>=S.length)return;
   const m=S[idx];
   if(m[0]==="h"){
-    // Heike tippt
     setState(m[2]==="text"?"schreibt …":"sendet Foto …");
     removeTyping();typingEl=document.createElement("div");typingEl.className="typing";typingEl.setAttribute("aria-label","Heike schreibt");typingEl.innerHTML="<i></i><i></i><i></i>";
     wall.appendChild(typingEl);scroll();
-    timer=setTimeout(()=>{showNext();timer=setTimeout(step,700*speed)},delayFor(m));
-  }else{
-    timer=setTimeout(()=>{showNext();timer=setTimeout(step,500*speed)},delayFor(m)*0.85);
   }
+  timer=setTimeout(()=>{showNext();timer=setTimeout(step,readTime(m))},typeTime(m));
 }
 function setPauseLabel(){$("#pauseBtn").innerHTML=playing?'⏸<span class="t"> Pause</span>':'▶<span class="t"> Weiter</span>';$("#pauseBtn").title=playing?"Pause":"Weiter"}
 function play(){playing=true;setPauseLabel();step()}
@@ -272,14 +295,14 @@ $("#pauseBtn").addEventListener("click",()=>{if(!$("#start").classList.contains(
 $("#nextBtn").addEventListener("click",()=>{$("#start").classList.add("hidden");const was=playing;pause();showNext();if(was)play()});
 $("#allBtn").addEventListener("click",()=>{$("#start").classList.add("hidden");pause();while(idx<S.length)showNext()});
 $("#resetBtn").addEventListener("click",()=>{pause();wall.innerHTML='<div class="day">HEUTE</div>';idx=0;last=null;prog();$("#start").classList.remove("hidden")});
-document.querySelectorAll("[data-sp]").forEach(b=>b.addEventListener("click",()=>{speed=+b.dataset.sp;try{localStorage.setItem("kohlchat_speed",speed)}catch(e){}renderSpeed()}));
+document.querySelectorAll("[data-sp]").forEach(b=>b.addEventListener("click",()=>{speed=+b.dataset.sp;try{localStorage.setItem("kohlchat_speed2",speed)}catch(e){}renderSpeed()}));
 function renderSpeed(){document.querySelectorAll("[data-sp]").forEach(b=>b.setAttribute("aria-pressed",+b.dataset.sp===speed))}
 
 // Großansicht
 wall.addEventListener("click",e=>{
   const b=e.target.closest(".pic");if(!b)return;
   const m=S[+b.dataset.i];
-  $("#lbTitle").textContent=m[5];$("#lbBig").innerHTML=m[3];$("#lb").classList.remove("hidden");$("#lb").scrollTop=0;$("#lbClose").focus();
+  $("#lbTitle").textContent=m[5];$("#lbBig").innerHTML=m[3]+(m[6]?`<div class="credit">${IMG[m[6]].credit}</div>`:"");$("#lb").classList.remove("hidden");$("#lb").scrollTop=0;$("#lbClose").focus();
   if(playing){pause();$("#lb").dataset.resume="1"}
 });
 function closeLb(){$("#lb").classList.add("hidden");if($("#lb").dataset.resume){delete $("#lb").dataset.resume;play()}}
