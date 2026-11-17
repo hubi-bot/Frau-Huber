@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Kohl-Detektiv – Rotkraut oder Blaukraut?</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;700&family=Patrick+Hand&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#fdfcf7; --desk:#e9eef3; --karo:#cfdcec; --text:#25303f; --muted:#5b6677; --ink:#1c3fa0;
+  --red:#cf2f2a; --green:#1d8248; --hl:#fff09a; --focus:#e6eeff;
+  --chat:#2f7fc4; --lab:#8352bf; --quiz:#c2417e; --rev:#a8791a; --tab:var(--chat);
+  --heike:#fff3b8; --heikeB:#c9a400; --tabea:#d8ecfb; --tabeaB:#3b8fc7;
+  --hand:"Patrick Hand","Comic Sans MS","Segoe Print",cursive;
+  --ui:"Lexend",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --paper:#1c2232; --desk:#121620; --karo:#2e3a55; --text:#e7ebf3; --muted:#a4aec3; --ink:#93b6ff;
+    --red:#ff6b64; --green:#55d492; --hl:#5a5120; --focus:#26335a;
+    --chat:#5aa9ec; --lab:#ab85e8; --quiz:#ff6fb5; --rev:#e0ae45;
+    --heike:#4a4220; --heikeB:#e0c04a; --tabea:#1f3a55; --tabeaB:#5aa9ec;
+  }
+}
+*{box-sizing:border-box}
+html{height:100%}
+body{margin:0;min-height:100%;background:var(--desk);color:var(--text);font-family:var(--ui);font-size:16px;line-height:1.5;overflow-x:hidden}
+button,input,select,textarea{font-family:inherit;font-size:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--tab);outline-offset:2px}
+.hidden{display:none!important}
+main{max-width:860px;margin:0 auto;padding:18px 14px 48px}
+
+/* Umschlag */
+.cover{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap}
+.brand{display:flex;align-items:flex-start;gap:12px}
+.label{background:var(--paper);border:2px solid var(--text);border-radius:6px;padding:8px 18px 6px;transform:rotate(-1.2deg);box-shadow:3px 3px 0 var(--text)}
+.label h1{font-family:var(--hand);font-weight:400;font-size:44px;line-height:1;margin:0;color:var(--ink)}
+.label p{margin:0;font-size:13px;color:var(--muted)}
+.coverright{display:flex;flex-direction:column;align-items:flex-end;gap:8px;margin-left:auto;flex:1 1 280px}
+.stats{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+.stat{background:var(--paper);border-radius:999px;padding:4px 12px;font-size:13px;border:1px solid var(--karo)}
+.stat b{font-weight:700}
+.levels{display:flex;gap:6px;align-items:center;font-size:13px;font-weight:700}
+.levels button{border:2px solid var(--text);background:var(--paper);border-radius:999px;min-width:34px;padding:2px 10px;font-weight:700;box-shadow:2px 2px 0 var(--text)}
+.levels button[aria-pressed="true"]{background:var(--tab);border-color:var(--tab);color:#fff}
+.qrbtn{flex:none;width:30px;height:30px;display:grid;place-items:center;border:2px solid var(--text);border-radius:7px;background:var(--paper);color:var(--text);box-shadow:2px 2px 0 var(--text);padding:0}
+.qrbtn:active{transform:translate(2px,2px);box-shadow:none}
+
+/* Reiter */
+.tabs{display:flex;gap:6px;margin:22px 0 0 10px;position:relative;z-index:1;flex-wrap:wrap;align-items:flex-end}
+.tab{border:none;border-radius:12px 12px 0 0;padding:10px 13px 12px;font-weight:700;font-size:15px;white-space:nowrap;color:#fff;opacity:.55;transform:translateY(6px);transition:transform .15s,opacity .15s}
+.tab[data-kind="chat"]{background:var(--chat)} .tab[data-kind="lab"]{background:var(--lab)} .tab[data-kind="quiz"]{background:var(--quiz)} .tab[data-kind="rev"]{background:var(--rev)}
+.tab[aria-selected="true"]{opacity:1;transform:none}
+.tab .badge{display:inline-block;min-width:22px;padding:0 6px;margin-left:6px;border-radius:999px;background:rgba(255,255,255,.3);font-size:13px;text-align:center}
+@media (prefers-color-scheme: dark){.tab{color:#121620}}
+
+/* Heftseite */
+.sheet{position:relative;background:var(--paper);border-radius:4px 14px 14px 14px;border-top:6px solid var(--tab);padding:18px 16px 20px;box-shadow:0 2px 0 var(--karo),0 10px 30px rgba(20,30,50,.08);
+  background-image:linear-gradient(var(--karo) 1px,transparent 1px),linear-gradient(90deg,var(--karo) 1px,transparent 1px);background-size:22px 22px;background-position:-1px -1px}
+.sheet::before{content:"";position:absolute;top:0;bottom:0;left:44px;width:2px;background:color-mix(in srgb,var(--red) 45%,transparent);pointer-events:none}
+.inner{position:relative;padding-left:40px}
+.taskrow{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:6px}
+.taskrow .tl{font-size:13px;font-weight:700;color:var(--muted);background:var(--paper);padding:0 4px;border-radius:4px}
+.taskrow .tt{font-family:var(--hand);font-size:26px;line-height:1.25;color:var(--text);background:var(--paper);padding:0 6px;border-radius:6px}
+.lvtag{font-size:12px;font-weight:700;border:1.5px solid var(--tab);color:var(--tab);border-radius:999px;padding:0 8px;background:var(--paper)}
+.phases{list-style:none;display:flex;gap:6px;padding:0;margin:0 0 10px;flex-wrap:wrap}
+.phases li{background:var(--paper);border:1.5px solid var(--karo);border-radius:999px;padding:3px 12px;font-size:13px;color:var(--muted)}
+.phases li.now{border-color:var(--tab);color:var(--text);font-weight:700;box-shadow:inset 0 0 0 1px var(--tab)}
+.phases li.done{color:var(--green);border-color:var(--green)}
+.phases li.done::before{content:"✓ "}
+.work{position:relative;min-height:120px}
+.card{background:var(--paper);border:2px solid var(--karo);border-radius:12px;padding:12px 14px}
+.intro{background:var(--paper);padding:2px 6px;border-radius:6px;margin:0 0 10px;max-width:62ch}
+
+/* Chat */
+.phone{background:var(--desk);border:2px solid var(--text);border-radius:18px;padding:12px;max-width:520px;box-shadow:3px 3px 0 var(--text)}
+.msgs{display:flex;flex-direction:column;gap:8px;min-height:60px}
+.msg{max-width:80%;border:2px solid;border-radius:14px;padding:6px 12px 4px;animation:pop .25s ease-out}
+.msg .who{font-weight:700;font-size:13px}
+.msg .tm{font-size:11px;color:var(--muted);text-align:right}
+.msg.h{align-self:flex-start;background:var(--heike);border-color:var(--heikeB);border-bottom-left-radius:4px}
+.msg.h .who{color:var(--heikeB)}
+.msg.t{align-self:flex-end;background:var(--tabea);border-color:var(--tabeaB);border-bottom-right-radius:4px}
+.msg.t .who{color:var(--tabeaB)}
+.msg svg{display:block;width:180px;max-width:100%;height:auto;margin:4px 0}
+.typing{align-self:flex-start;background:var(--paper);border:2px solid var(--karo);border-radius:14px;padding:6px 12px;font-size:20px;letter-spacing:2px}
+@keyframes pop{from{transform:scale(.9);opacity:0}to{transform:none;opacity:1}}
+.recipes{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.recipe{background:var(--paper);border:2px solid;border-radius:12px;padding:10px 12px}
+.recipe.rot{border-color:#7b3fa6} .recipe.blau{border-color:#2f6fb0}
+.recipe h3{font-family:var(--hand);font-weight:400;font-size:28px;margin:0;line-height:1.1}
+.recipe.rot h3{color:#9b4fd0} .recipe.blau h3{color:#3d86d6}
+.recipe .by{font-size:12px;color:var(--muted);margin:0 0 6px}
+.recipe ol{margin:6px 0 0;padding-left:20px;font-size:14px}
+.zut{display:flex;flex-wrap:wrap;gap:6px}
+.chip{border:2px solid var(--karo);background:var(--paper);border-radius:999px;padding:4px 11px;font-size:14px;line-height:1.3;transition:transform .06s}
+.chip:active{transform:scale(.96)}
+.chip[aria-pressed="true"]{background:var(--hl);border-color:var(--text);font-weight:700}
+.chip.ok{border-color:var(--green);box-shadow:inset 0 0 0 1px var(--green)}
+.chip.bad{border-color:var(--red);background:color-mix(in srgb,var(--red) 12%,var(--paper))}
+.opts{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}
+textarea{width:100%;min-height:84px;border:2px solid var(--karo);border-radius:10px;background:var(--paper);color:var(--ink);font-family:var(--hand);font-size:22px;line-height:1.3;padding:8px 10px;resize:vertical}
+textarea:focus{outline:none;border-color:var(--ink);background:var(--focus)}
+.myguess{border-left:4px solid var(--chat);background:var(--paper);padding:6px 12px;border-radius:0 10px 10px 0;margin:0 0 12px;font-size:14px}
+.myguess q{font-family:var(--hand);font-size:20px;color:var(--ink)}
+
+/* Labor */
+.rack{display:grid;grid-template-columns:repeat(auto-fill,minmax(128px,1fr));gap:10px}
+.tube{background:var(--paper);border:2px solid var(--karo);border-radius:12px;padding:8px 6px 10px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:6px}
+.tube.ok{border-color:var(--green)} .tube.bad{border-color:var(--red);background:color-mix(in srgb,var(--red) 8%,var(--paper))}
+.tube .nm{font-weight:700;font-size:14px;line-height:1.2;min-height:2.4em;display:flex;align-items:center}
+.tube svg{width:46px;height:120px;display:block}
+.tube .liq{transition:fill .9s ease, height .6s ease, y .6s ease}
+.tube .pour{font-size:13px;padding:5px 8px}
+.sw{display:flex;flex-wrap:wrap;gap:4px;justify-content:center}
+.sw button{width:26px;height:26px;border-radius:50%;border:2px solid var(--text);padding:0}
+.sw button[aria-pressed="true"]{outline:3px solid var(--ink);outline-offset:2px}
+.cls{display:flex;flex-direction:column;gap:4px;width:100%}
+.cls button{border:2px solid var(--karo);background:var(--paper);border-radius:8px;padding:2px 4px;font-size:13px}
+.cls button[aria-pressed="true"]{background:var(--hl);border-color:var(--text);font-weight:700}
+.picked{font-family:var(--hand);font-size:20px;color:var(--ink);min-height:1.3em;line-height:1.1}
+
+/* Skala */
+.scale{background:var(--paper);border-radius:10px;padding:8px;margin:12px 0 0;max-width:640px}
+.scale .row{display:grid;grid-template-columns:repeat(15,1fr);gap:2px}
+.scale .ph{font-family:var(--hand);font-size:20px;text-align:center;color:#fff;border-radius:4px;line-height:1.5;position:relative}
+.scale .ph.dk{color:#222}
+.scale .ph.mark{outline:3px solid var(--text);outline-offset:1px;z-index:1;transform:scale(1.12)}
+.scale .ph.fade{opacity:.25}
+.scale .bands{display:grid;grid-template-columns:repeat(15,1fr);gap:2px;margin-top:4px;font-size:12px;font-weight:700;text-align:center}
+.scale .bands span{border:1.5px solid var(--karo);border-radius:4px;padding:1px 0;background:var(--paper)}
+.scale .bands span.hl{background:var(--hl);border-color:var(--text)}
+.scale .cap{font-size:12px;color:var(--muted);margin:0 0 4px}
+
+/* Quiz */
+.qcard{display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+.blob{width:84px;height:84px;border-radius:50%;border:3px solid var(--text);flex:none;box-shadow:3px 3px 0 var(--text)}
+.answers{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.ans{border:2px solid var(--text);background:var(--paper);border-radius:10px;padding:8px 16px;font-weight:700;box-shadow:2px 2px 0 var(--text);display:flex;align-items:center;gap:8px}
+.ans:active{transform:translate(2px,2px);box-shadow:none}
+.ans[aria-pressed="true"]{background:var(--hl);outline:3px solid var(--ink);outline-offset:1px}
+.ans.ok{border-color:var(--green);background:color-mix(in srgb,var(--green) 14%,var(--paper))}
+.ans.bad{border-color:var(--red);background:color-mix(in srgb,var(--red) 12%,var(--paper))}
+.ans .dot{width:18px;height:18px;border-radius:50%;border:2px solid var(--text);display:inline-block}
+
+/* Rückmeldung & Knöpfe */
+.note{background:var(--paper);border:2px solid var(--karo);border-radius:12px;padding:12px 14px;margin:12px 0 12px;max-width:62ch;min-height:20px}
+.note:empty{display:none}
+.note p{margin:0} .note ul{margin:6px 0 0;padding-left:20px} .note li{margin:4px 0}
+.note.good{border-color:var(--green)} .note.good>p>strong:first-child{color:var(--green)}
+.note.bad{border-color:var(--red)} .note.bad>p>strong:first-child{color:var(--red)}
+.note.info{border-color:var(--tab)}
+.actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.actions.more{margin-top:10px}
+.btn{border:2px solid var(--text);background:var(--paper);border-radius:10px;padding:9px 14px;font-weight:500;font-size:15px;box-shadow:2px 2px 0 var(--text);transition:transform .06s,box-shadow .06s}
+.btn:active{transform:translate(2px,2px);box-shadow:0 0 0 var(--text)}
+.btn.main{background:var(--tab);border-color:var(--tab);color:#fff;font-weight:700}
+@media (prefers-color-scheme: dark){.btn.main{color:#121620}}
+.btn:disabled{opacity:.4;cursor:default}
+.stamp{position:absolute;right:4%;top:6px;transform:rotate(-14deg);border:4px double var(--red);color:var(--red);font-family:var(--hand);font-size:40px;padding:0 16px;border-radius:10px;background:color-mix(in srgb,var(--paper) 85%,transparent);pointer-events:none;animation:stamp .4s cubic-bezier(.2,1.8,.4,1);z-index:3}
+@keyframes stamp{from{transform:rotate(-14deg) scale(2.2);opacity:0}to{transform:rotate(-14deg) scale(1);opacity:1}}
+.revinfo{background:var(--paper);border:2px dashed var(--rev);border-radius:10px;padding:6px 12px;margin:0 0 10px;font-size:14px;font-weight:700;color:var(--rev);width:fit-content}
+.empty{background:var(--paper);border-radius:12px;padding:16px;text-align:center}
+.empty .big{font-size:40px}
+
+/* Musterlösung */
+.solution{margin-top:18px}
+.solution h2{font-family:var(--hand);font-weight:400;font-size:32px;margin:0;color:var(--ink);background:var(--paper);width:fit-content;padding:0 8px;border-radius:6px}
+.soltext{background:var(--paper);border-left:4px solid var(--tab);padding:10px 14px;border-radius:0 10px 10px 0;min-height:64px;max-width:62ch;line-height:1.7}
+.soltext mark{background:var(--hl);color:inherit;padding:0 3px;border-radius:3px}
+.solnav{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:10px}
+.solnav .count{font-size:14px;color:var(--muted);background:var(--paper);padding:2px 8px;border-radius:6px}
+
+/* Overlays */
+.overlay{position:fixed;inset:0;background:rgba(15,20,35,.5);display:grid;place-items:center;padding:16px;z-index:20}
+.modal{background:var(--paper);border:2px solid var(--text);border-radius:14px;box-shadow:5px 5px 0 var(--text);padding:20px;max-width:460px;width:100%;max-height:100%;overflow:auto}
+.modal h2{font-family:var(--hand);font-weight:400;font-size:32px;margin:0 0 4px;color:var(--ink)}
+.modal .hint{margin:0 0 12px;font-size:14px;color:var(--muted)}
+.modal label{display:block;font-size:14px;font-weight:700;margin:8px 0 4px}
+.modal input[type=text],.modal input[inputmode]{width:100%;border:2px solid var(--karo);border-radius:8px;background:var(--paper);color:var(--ink);font-family:var(--hand);font-size:24px;padding:2px 10px}
+.modal input:focus{outline:none;border-color:var(--ink);background:var(--focus)}
+.modal .err{color:var(--red);min-height:22px;font-size:14px;margin:10px 0 4px}
+.modal .actions{justify-content:flex-end;margin-top:8px}
+.modal.qrmodal{max-width:none;width:auto;text-align:center;display:flex;flex-direction:column;align-items:center;gap:12px}
+.qrbox{background:#fff;padding:12px;border-radius:10px;border:2px solid var(--karo);line-height:0}
+.qrbox svg{display:block;width:min(calc(100vw - 100px),calc(100vh - 250px),460px);height:auto;min-width:160px}
+.qrurl{font-size:13px;color:var(--muted);margin:0;overflow-wrap:anywhere;user-select:all;max-width:460px}
+
+@media (max-width:620px){
+  .recipes{grid-template-columns:1fr}
+  .inner{padding-left:22px}
+  .sheet{padding-left:10px;padding-right:10px}
+  .sheet::before{left:24px}
+  .label h1{font-size:34px}
+  .tabs{margin-left:4px;gap:4px}
+  .tab{padding:8px 9px 10px;font-size:14px}
+  .tab .lg{display:none}
+  .rack{grid-template-columns:repeat(auto-fill,minmax(112px,1fr))}
+  .scale .ph{font-size:15px}
+  .scale .bands{font-size:9px}
+  .stamp{font-size:30px}
+  .msg{max-width:90%}
+}
+@media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<main>
+  <header class="cover">
+    <div class="brand">
+      <button class="qrbtn" id="qrBtn" type="button" title="QR-Code zu dieser Seite zeigen" aria-label="QR-Code zu dieser Seite zeigen">
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="currentColor"><path d="M3 3h8v8H3zm2 2v4h4V5zm8-2h8v8h-8zm2 2v4h4V5zM3 13h8v8H3zm2 2v4h4v-4zm8-2h2v2h-2zm2 2h2v2h-2zm2-2h2v2h-2zm2 2h2v2h-2zm-6 2h2v2h-2zm4 0h2v2h-2zm-2 2h2v2h-2zm4 0h2v2h-2z"/></svg>
+      </button>
+      <div class="label"><h1>Kohl-Detektiv</h1><p>Rotkraut oder Blaukraut? · sauer, neutral, alkalisch</p></div>
+    </div>
+    <div class="coverright">
+      <div class="levels hidden" id="levels" role="group" aria-label="Stufe">
+        <span>Stufe</span>
+        <button type="button" data-level="1" title="pH-Wert oder Farbe einordnen">1</button>
+        <button type="button" data-level="2" title="Dazu: Farbe vorhersagen">2</button>
+        <button type="button" data-level="3" title="Dazu: Was ist stärker sauer oder alkalisch?">3</button>
+      </div>
+      <div class="stats" id="stats"></div>
+    </div>
+  </header>
+
+  <nav class="tabs" role="tablist" aria-label="Bereich">
+    <button class="tab" role="tab" data-kind="chat" title="Der Chat" aria-label="Der Chat">💬<span class="lg"> Der Chat</span></button>
+    <button class="tab" role="tab" data-kind="lab" title="Kohl-Labor" aria-label="Kohl-Labor">🧪<span class="lg"> Kohl-Labor</span></button>
+    <button class="tab" role="tab" data-kind="quiz" title="Sauer oder alkalisch?" aria-label="Sauer oder alkalisch?">🎯<span class="lg"> Sauer oder alkalisch?</span></button>
+    <button class="tab" role="tab" data-kind="rev" title="Fehler-Training" aria-label="Fehler-Training">🔁<span class="lg"> Fehler-Training</span><span class="badge" id="revBadge">0</span></button>
+  </nav>
+
+  <section class="sheet">
+    <div class="inner">
+      <div class="revinfo hidden" id="revInfo"></div>
+      <div class="taskrow"><span class="tl">Aufgabe</span><span class="tt" id="taskText"></span><span class="lvtag hidden" id="lvTag"></span></div>
+      <ol class="phases" id="phases"></ol>
+      <div class="work" id="work"></div>
+      <div class="note" id="note" aria-live="polite"></div>
+      <div class="actions">
+        <button class="btn main" id="checkBtn">✓ Prüfen</button>
+        <button class="btn main hidden" id="goBtn">Weiter ▶</button>
+      </div>
+      <div class="actions more">
+        <button class="btn" id="solBtn">👀 Musterlösung</button>
+        <button class="btn" id="resetBtn">↺ Nochmal von vorn</button>
+        <button class="btn" id="newBtn">Neue Aufgabe</button>
+        <button class="btn" id="ownBtn">✏️ Eigene Aufgabe</button>
+      </div>
+      <div class="solution hidden" id="solution">
+        <h2>Musterlösung</h2>
+        <div id="solVis"></div>
+        <div class="soltext" id="solText" aria-live="polite"></div>
+        <div class="solnav">
+          <button class="btn" id="solPrev">◀ Zurück</button>
+          <button class="btn main" id="solNext">Weiter ▶</button>
+          <span class="count" id="solCount"></span>
+          <button class="btn" id="solClose">Selbst nochmal probieren</button>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div class="overlay hidden" id="qrOverlay">
+  <div class="modal qrmodal" role="dialog" aria-modal="true" aria-labelledby="qrTitle">
+    <h2 id="qrTitle">Kohl-Detektiv öffnen</h2>
+    <div class="qrbox" id="qrBox"></div>
+    <p class="qrurl" id="qrUrl"></p>
+    <div class="actions" style="justify-content:center"><button class="btn main" id="qrClose">Schließen</button></div>
+  </div>
+</div>
+
+<div class="overlay hidden" id="overlay">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="ownTitle">
+    <h2 id="ownTitle">Eigene Aufgabe</h2>
+    <p class="hint">Hast du im Buch eine Flüssigkeit mit pH-Wert gefunden? Trag sie hier ein. Dann übst du damit.</p>
+    <label for="oName">Name der Flüssigkeit</label>
+    <input type="text" id="oName" maxlength="30" placeholder="z. B. Tomatensaft" autocomplete="off">
+    <label for="oPh">pH-Wert (eine ganze Zahl von 0 bis 14)</label>
+    <input id="oPh" inputmode="numeric" maxlength="2" autocomplete="off">
+    <div class="err" id="ownErr"></div>
+    <div class="actions"><button class="btn" id="ownCancel">Abbrechen</button><button class="btn main" id="ownOk">Üben</button></div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
+<script>
+(function(){
+"use strict";
+const $=s=>document.querySelector(s);
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const store={get(k,d){try{const v=localStorage.getItem("kohl_"+k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem("kohl_"+k,JSON.stringify(v))}catch(e){}}};
+
+/* ---------- Fachliches ---------- */
+const PHCOL=["#b0102a","#c8143a","#d42450","#d23b6c","#b44a8e","#9a4c9f","#844ea8","#6e50b0","#4a62c2","#3478c4","#2a9488","#33a04e","#6aae2e","#c9b820","#e2c51c"];
+const COLORS=[{id:"rot",name:"rot",hex:"#d42450",from:0,to:3},{id:"violett",name:"violett",hex:"#844ea8",from:4,to:7},{id:"blau",name:"blau",hex:"#3d6fc6",from:8,to:9},{id:"gruen",name:"grün",hex:"#33a04e",from:10,to:12},{id:"gelb",name:"gelb",hex:"#e2c51c",from:13,to:14}];
+const colorOf=ph=>COLORS.find(c=>ph>=c.from&&ph<=c.to);
+const CLS={sauer:"sauer",neutral:"neutral",alk:"alkalisch"};
+const clsOf=ph=>ph<7?"sauer":ph===7?"neutral":"alk";
+const SUBST=[
+  {n:"Zitronensaft",ph:2},{n:"Essigessenz",ph:2},{n:"Speiseessig",ph:3},{n:"Cola",ph:3},{n:"Apfelsaft",ph:3},
+  {n:"Orangensaft",ph:4},{n:"Tomatensaft",ph:4},{n:"Kaffee",ph:5},{n:"Sprudelwasser",ph:5},{n:"Leitungswasser",ph:7},
+  {n:"destilliertes Wasser",ph:7},{n:"Zuckerwasser",ph:7},{n:"Salzwasser",ph:7},{n:"Meerwasser",ph:8},{n:"Natronlösung",ph:8},
+  {n:"Seifenwasser",ph:10},{n:"Waschmittellösung",ph:10},{n:"Sodalösung",ph:11},{n:"Kalkwasser",ph:12},{n:"Rohrreiniger",ph:14}
+];
+const LABPOOL=["Zitronensaft","Essigessenz","Speiseessig","Apfelsaft","Leitungswasser","Zuckerwasser","Natronlösung","Seifenwasser","Waschmittellösung","Sodalösung","Rohrreiniger"];
+const LABSTART=["Zitronensaft","Essigessenz","Leitungswasser","Natronlösung","Sodalösung","Rohrreiniger"];
+const sub=n=>SUBST.find(s=>s.n===n);
+
+/* ---------- Zustand ---------- */
+const KINDS=["chat","lab","quiz","rev"];
+let stats=store.get("stats",{chat:{s:0,a:0},lab:{s:0,a:0},quiz:{s:0,a:0}});
+let rev=store.get("rev",[]);
+let level=store.get("level",1);
+let kind="chat";
+let T=null;            // aktuelle Aufgabe
+let errs=0;            // Fehler in dieser Aufgabe
+let sol={steps:[],i:0};
+let revPos=0;
+
+function renderStats(){
+  const lab={chat:"💬",lab:"🧪",quiz:"🎯"};
+  $("#stats").innerHTML=["chat","lab","quiz"].map(k=>`<span class="stat">${lab[k]} <b>${stats[k].s}</b> gelöst · <b>${stats[k].a}</b> auf Anhieb</span>`).join("");
+}
+function renderBadge(){$("#revBadge").textContent=rev.length}
+function note(html,cls){const n=$("#note");n.className="note"+(cls?" "+cls:"");n.innerHTML=html}
+function stamp(word){
+  const old=document.querySelector(".stamp");if(old)old.remove();
+  const s=document.createElement("div");s.className="stamp";s.textContent=word||pick(["Prima!","Super!","Klasse!","Spitze!","Toll!"]);
+  $("#work").appendChild(s);
+}
+function phases(list,now){
+  $("#phases").innerHTML=list.map((p,i)=>`<li class="${i<now?"done":i===now?"now":""}">${i+1}. ${p}</li>`).join("");
+}
+function solved(k){
+  stats[k].s++; if(errs===0)stats[k].a++; store.set("stats",stats); renderStats();
+}
+function showBtns({check=true,go=false,sol=true,reset=true,neu=true,own=false}={}){
+  $("#checkBtn").classList.toggle("hidden",!check);
+  $("#goBtn").classList.toggle("hidden",!go);
+  $("#solBtn").classList.toggle("hidden",!sol);
+  $("#resetBtn").classList.toggle("hidden",!reset);
+  $("#newBtn").classList.toggle("hidden",!neu);
+  $("#ownBtn").classList.toggle("hidden",!own);
+}
+function scaleHTML(mark,cap){
+  const bands=[["sauer",0,6],["neutral",7,7],["alkalisch",8,14]];
+  const cl=mark==null?null:clsOf(mark);
+  return `<div class="scale" aria-label="Farbskala Rotkohlsaft von pH 0 bis 14">${cap?`<p class="cap">${cap}</p>`:""}<div class="row">${PHCOL.map((c,i)=>`<div class="ph${i>=13?" dk":""}${mark===i?" mark":""}${mark!=null&&mark!==i?" fade":""}" style="background:${c}">${i}</div>`).join("")}</div>
+  <div class="bands">${bands.map(([n,a,b])=>`<span style="grid-column:${a+1}/${b+2}" class="${cl&&CLS[cl]===n?"hl":""}">${n==="neutral"?"neutr.":n}</span>`).join("")}</div>
+  <div class="bands">${COLORS.map(c=>`<span style="grid-column:${c.from+1}/${c.to+2};border-color:${c.hex}" class="${mark!=null&&colorOf(mark)===c?"hl":""}">${c.name}</span>`).join("")}</div></div>`;
+}
+
+/* ================= CHAT ================= */
+const BOWL=`<svg viewBox="0 0 180 120" role="img" aria-label="Foto: eine Schüssel mit tiefblauem Kraut"><rect x="0" y="0" width="180" height="120" rx="8" fill="#e9e2d0"/><path d="M30 60 Q36 24 90 20 Q144 24 150 60 Z" fill="#33479e"/>${Array.from({length:30},(_,i)=>{const x=38+((i*41)%104),y=30+((i*17)%28);return `<path d="M${x} ${y} q7 -5 14 1" stroke="${i%3?"#6b83e0":"#22327a"}" stroke-width="3" fill="none" stroke-linecap="round"/>`}).join("")}<path d="M20 58 H160 Q154 108 90 110 Q26 108 20 58 Z" fill="#ffffff" stroke="#bdbdbd" stroke-width="2"/><ellipse cx="90" cy="58" rx="70" ry="5" fill="#f2f2f2" stroke="#bdbdbd" stroke-width="2"/><path d="M36 64 Q40 92 70 102" stroke="#e6e6e6" stroke-width="5" fill="none" stroke-linecap="round"/></svg>`;
+const CHAT=[
+  ["h","19:05","Hi! Hab nicht viel Zeit, gleich gibt’s Essen: Schweinebraten mit Knödeln und Blaukraut 😋"],
+  ["t","19:06","Lecker! Aber Blaukraut? Das kenne ich nicht. Bei uns gibt’s dazu immer Rotkraut."],
+  ["h","19:06","Rotkraut?? 🤨 Blaukraut ist eine Kohlsorte, und nach dem Kochen ist sie blau. Ich schick dir ein Foto."],
+  ["h","19:07",BOWL],
+  ["t","19:07","Das ist doch genau derselbe Kohl wie bei uns! Nur dass er bei uns rot ist. Wieso ist der bei dir blau?"],
+  ["h","19:08","Keine Ahnung 🤷‍♀️ Vielleicht liegt’s am Kochen? Ich schick dir das Rezept von meiner Mama."],
+  ["t","19:08","Gute Idee! Und ich dir das von meinem Papa. Dann vergleichen wir! 🔍"]
+];
+const RZ={
+  rot:{t:"Papas Rotkraut",by:"aus Tabeas Familie",z:["Rotkohl","Zwiebel","Äpfel","Zucker","Essig","Butter","Salz","Lorbeer","Wasser"],
+    s:["Kohl fein schneiden.","Zwiebel und Äpfel mit Zucker in Butter andünsten.","Kraut dazu und sofort den Essig darübergießen.","10 Minuten zugedeckt dünsten.","Wasser, Salz, Lorbeer dazu, 30–45 Minuten weich dünsten."]},
+  blau:{t:"Mamas Blaukraut",by:"aus Heikes Familie",z:["Rotkohl","Zwiebel","Natron","Butter","Salz","Lorbeer","Wasser"],
+    s:["Kohl fein schneiden.","Zwiebel in Butter andünsten.","Kraut dazu und ein klein wenig Natron darüberstreuen.","10 Minuten zugedeckt dünsten.","Wasser, Salz, Lorbeer dazu, 30–45 Minuten weich dünsten."]}
+};
+const ONLY={rot:["Äpfel","Zucker","Essig"],blau:["Natron"]};
+const GUESS=[["essig","Der Essig und das Natron"],["apfel","Die Äpfel"],["zucker","Der Zucker"],["zeit","Die Kochzeit"],["sorte","Es sind verschiedene Kohlsorten"]];
+
+function startChat(){
+  T={k:"chat",ph:0,shown:0,marks:{rot:[],blau:[]},guess:store.get("guess",{opts:[],text:""})};
+  errs=0; renderChat();
+}
+function renderChat(){
+  const P=["Chat lesen","Unterschied finden","Vermutung"];
+  phases(P,T.ph);
+  $("#taskText").textContent=["Heike und Tabea chatten. Lies mit!","Finde die Unterschiede in den Rezepten.","Stelle eine Vermutung auf."][T.ph];
+  const w=$("#work");
+  if(T.ph===0){
+    w.innerHTML=`<p class="intro">Heike wohnt in den Bergen in Bayern, Tabea in Norddeutschland. Sie haben sich im Urlaub kennengelernt. Tippe auf <b>Nächste Nachricht</b>.</p><div class="phone"><div class="msgs" id="msgs"></div></div>`;
+    const m=$("#msgs");
+    CHAT.slice(0,T.shown).forEach(c=>m.appendChild(msgEl(c)));
+    const done=T.shown>=CHAT.length;
+    note(done?`<p><strong>Merkwürdig!</strong> Derselbe Kohl – einmal rot, einmal blau. Schau dir jetzt die Rezepte an.</p>`:"","info");
+    $("#checkBtn").textContent="💬 Nächste Nachricht";
+    showBtns({check:!done,go:done,sol:false,neu:false});
+  }else if(T.ph===1){
+    w.innerHTML=`<p class="intro">Tippe in <b>beiden</b> Rezepten alle Zutaten an, die <b>nur in diesem einen</b> Rezept vorkommen.</p><div class="recipes">${["rot","blau"].map(k=>`<div class="recipe ${k}"><h3>${RZ[k].t}</h3><p class="by">${RZ[k].by}</p><div class="zut">${RZ[k].z.map(z=>`<button class="chip" data-r="${k}" data-z="${z}" aria-pressed="${T.marks[k].includes(z)}">${z}</button>`).join("")}</div><ol>${RZ[k].s.map(s=>`<li>${s}</li>`).join("")}</ol></div>`).join("")}</div>`;
+    w.querySelectorAll(".chip").forEach(b=>b.addEventListener("click",()=>{
+      const k=b.dataset.r,z=b.dataset.z,a=T.marks[k];const i=a.indexOf(z);if(i<0)a.push(z);else a.splice(i,1);
+      b.setAttribute("aria-pressed",i<0);b.classList.remove("ok","bad");
+    }));
+    $("#checkBtn").textContent="✓ Prüfen";
+    showBtns({sol:true,neu:false});
+  }else{
+    const g=T.guess;
+    w.innerHTML=`<p class="intro">Was macht das Kraut rot oder blau? Tippe an, was du vermutest. Du darfst mehreres antippen.</p>
+    <div class="opts">${GUESS.map(([id,t])=>`<button class="chip" data-g="${id}" aria-pressed="${g.opts.includes(id)}">${t}</button>`).join("")}</div>
+    <label for="gText" class="intro" style="display:block;font-weight:700">Schreibe deine Vermutung auf:</label>
+    <textarea id="gText" placeholder="Ich vermute, dass …, weil …">${esc(g.text)}</textarea>`;
+    w.querySelectorAll("[data-g]").forEach(b=>b.addEventListener("click",()=>{
+      const id=b.dataset.g;const i=g.opts.indexOf(id);if(i<0)g.opts.push(id);else g.opts.splice(i,1);b.setAttribute("aria-pressed",i<0);
+    }));
+    $("#gText").addEventListener("input",e=>{g.text=e.target.value});
+    $("#checkBtn").textContent="✓ Vermutung notieren";
+    showBtns({sol:false,neu:false});
+  }
+}
+function msgEl(c){
+  const d=document.createElement("div");d.className="msg "+c[0];
+  d.innerHTML=`<div class="who">${c[0]==="h"?"Heike":"Tabea"}</div><div>${c[2]}</div><div class="tm">${c[1]}</div>`;return d;
+}
+function chatCheck(){
+  if(T.ph===0){
+    const m=$("#msgs");
+    const reduce=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const c=CHAT[T.shown];T.shown++;
+    $("#checkBtn").disabled=true;
+    if(reduce){m.appendChild(msgEl(c));after();return}
+    const ty=document.createElement("div");ty.className="typing";ty.textContent="•••";ty.style.alignSelf=c[0]==="h"?"flex-start":"flex-end";m.appendChild(ty);
+    setTimeout(()=>{ty.remove();m.appendChild(msgEl(c));after()},650);
+    function after(){$("#checkBtn").disabled=false;if(T.shown>=CHAT.length)renderChat()}
+    return;
+  }
+  if(T.ph===1){
+    const fb=[];let good=true;
+    $("#work").querySelectorAll(".chip").forEach(b=>{
+      const k=b.dataset.r,z=b.dataset.z,on=T.marks[k].includes(z),should=ONLY[k].includes(z);
+      b.classList.remove("ok","bad");
+      if(on&&should)b.classList.add("ok");
+      if(on&&!should){b.classList.add("bad");good=false;fb.push(`<b>${z}</b> steht in beiden Rezepten.`)}
+    });
+    ["rot","blau"].forEach(k=>{
+      const miss=ONLY[k].filter(z=>!T.marks[k].includes(z)).length;
+      if(miss){good=false;fb.push(`Im Rezept „${RZ[k].t}“ ${miss===1?"fehlt dir noch eine Zutat":"fehlen dir noch "+miss+" Zutaten"}. Vergleiche Zeile für Zeile.`)}
+    });
+    if(good){
+      note(`<p><strong>Richtig!</strong> Nur bei Tabeas Papa kommen Äpfel, Zucker und Essig hinein. Nur bei Heikes Mama kommt Natron hinein.</p>`,"good");
+      stamp();T.ph=2;setTimeout(()=>{phases(["Chat lesen","Unterschied finden","Vermutung"],2)},10);
+      showBtns({check:false,go:true,sol:false,neu:false});
+    }else{errs++;note(`<p><strong>Noch nicht ganz.</strong></p><ul>${[...new Set(fb)].map(x=>`<li>${x}</li>`).join("")}</ul>`,"bad")}
+    return;
+  }
+  // Vermutung
+  const g=T.guess;
+  if(!g.opts.length&&g.text.trim().length<10){note(`<p><strong>Fast!</strong> Tippe mindestens eine Vermutung an oder schreibe einen Satz.</p>`,"bad");return}
+  const hints=[];
+  if(g.opts.includes("sorte"))hints.push("Schau nochmal in den Chat: Tabea schreibt, dass es <b>derselbe Kohl</b> ist.");
+  if(g.opts.includes("zeit"))hints.push("Die Kochzeit ist in beiden Rezepten <b>gleich</b> (30–45 Minuten).");
+  if(g.text.trim()&&!/weil/i.test(g.text))hints.push("Tipp: Eine gute Vermutung hat eine Begründung mit <b>weil …</b>");
+  store.set("guess",g);
+  note(`<p><strong>Notiert!</strong> Gute Detektivarbeit. Ob du recht hast, findest du im Versuch heraus – im Kohl-Labor oder im Chemieraum.</p>${hints.length?`<ul>${hints.map(h=>`<li>${h}</li>`).join("")}</ul>`:""}`,"good");
+  stamp("Notiert!");
+  if(!T.done){T.done=true;solved("chat")}
+  phases(["Chat lesen","Unterschied finden","Vermutung"],3);
+  $("#goBtn").textContent="🧪 Ab ins Kohl-Labor ▶";
+  showBtns({check:true,go:true,sol:false,neu:false});
+}
+function chatSolution(){
+  return [
+    {t:"Lies beide Zutatenlisten nebeneinander. <mark>Rotkohl, Zwiebel, Butter, Salz, Lorbeer und Wasser</mark> stehen in beiden Rezepten."},
+    {t:"Nur in <b>Papas Rotkraut</b> stehen: <mark>Äpfel, Zucker und Essig</mark>."},
+    {t:"Nur in <b>Mamas Blaukraut</b> steht: <mark>Natron</mark>."},
+    {t:"Diese Zutaten kommen also für eine Vermutung infrage. Welche davon macht das Kraut wohl rot – und welche blau?"}
+  ];
+}
+
+/* ================= LABOR ================= */
+function startLab(fixed){
+  const names=fixed?LABSTART.slice():shuffle(LABPOOL).slice(0,6);
+  T={k:"lab",ph:0,tubes:names.map(n=>({n,ph:sub(n).ph,filled:false,col:null,cls:null,res:null}))};
+  errs=0; renderLab();
+}
+function tubeSVG(t,i){
+  const fill=t.filled?PHCOL[t.ph]:"#e8eef5";
+  const lvl=t.filled?70:40;
+  return `<svg viewBox="0 0 46 120" aria-hidden="true"><defs><clipPath id="cp${i}"><path d="M9 6 V98 a14 14 0 0 0 28 0 V6 Z"/></clipPath></defs>
+  <rect class="liq" clip-path="url(#cp${i})" x="0" y="${118-lvl-6}" width="46" height="${lvl+6}" fill="${fill}"/>
+  <path d="M9 6 V98 a14 14 0 0 0 28 0 V6" fill="none" stroke="currentColor" stroke-width="2.5"/><path d="M5 6 H41" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>`;
+}
+function renderLab(){
+  const P=["Versuch","Farben notieren","Einordnen"];
+  phases(P,T.ph);
+  $("#taskText").textContent=["Gib in jedes Reagenzglas Rotkohlsaft.","Welche Farbe siehst du?","Sauer, neutral oder alkalisch?"][T.ph];
+  const g=store.get("guess",null);
+  let html=g&&(g.text.trim()||g.opts.length)?`<div class="myguess">Deine Vermutung aus dem Chat: <q>${esc(g.text.trim()||GUESS.filter(x=>g.opts.includes(x[0])).map(x=>x[1]).join(", "))}</q></div>`:"";
+  html+=`<p class="intro">${["In den Gläsern sind verdünnte Flüssigkeiten aus dem Haushalt. Tippe bei jedem Glas auf <b>Rotkohlsaft</b>.","Tippe unter jedem Glas die Farbe an, die du siehst.","Ordne jede Flüssigkeit ein. Die Farbskala hilft dir."][T.ph]}</p><div class="rack">`;
+  T.tubes.forEach((t,i)=>{
+    html+=`<div class="tube${t.res==="ok"?" ok":t.res==="bad"?" bad":""}" data-i="${i}"><div class="nm">${t.n}</div>${tubeSVG(t,i)}`;
+    if(T.ph===0)html+=t.filled?`<div class="picked">✓</div>`:`<button class="btn pour" data-pour="${i}">💧 Rotkohlsaft</button>`;
+    if(T.ph===1)html+=`<div class="sw" role="group" aria-label="Farbe für ${t.n}">${COLORS.map(c=>`<button data-col="${c.id}" data-i="${i}" title="${c.name}" aria-label="${c.name}" aria-pressed="${t.col===c.id}" style="background:${c.hex}"></button>`).join("")}</div><div class="picked">${t.col?COLORS.find(c=>c.id===t.col).name:""}</div>`;
+    if(T.ph===2)html+=`<div class="picked">${colorOf(t.ph).name}</div><div class="cls" role="group" aria-label="Einordnung ${t.n}">${Object.entries(CLS).map(([k,v])=>`<button data-cls="${k}" data-i="${i}" aria-pressed="${t.cls===k}">${v}</button>`).join("")}</div>`;
+    html+=`</div>`;
+  });
+  html+=`</div>`;
+  if(T.ph===2)html+=scaleHTML(null,"Farbskala von Rotkohlsaft");
+  $("#work").innerHTML=html;
+  const w=$("#work");
+  w.querySelectorAll("[data-pour]").forEach(b=>b.addEventListener("click",()=>{
+    const t=T.tubes[+b.dataset.pour];t.filled=true;renderLab();
+    if(T.tubes.every(x=>x.filled)){note(`<p><strong>Alle Gläser gefüllt!</strong> Schau genau hin: Welche Farben siehst du?</p>`,"info");showBtns({check:false,go:true,sol:false,neu:true})}
+  }));
+  w.querySelectorAll("[data-col]").forEach(b=>b.addEventListener("click",()=>{const t=T.tubes[+b.dataset.i];t.col=b.dataset.col;t.res=null;renderLab()}));
+  w.querySelectorAll("[data-cls]").forEach(b=>b.addEventListener("click",()=>{const t=T.tubes[+b.dataset.i];t.cls=b.dataset.cls;t.res=null;renderLab()}));
+  if(T.ph===0){
+    const all=T.tubes.every(x=>x.filled);
+    $("#checkBtn").textContent="💧 Alle auf einmal";
+    showBtns({check:!all,go:all,sol:false,neu:true});
+  }else{
+    $("#checkBtn").textContent="✓ Prüfen";
+    if(!T.fin)showBtns({sol:true,neu:true});
+  }
+}
+function labCheck(){
+  if(T.ph===0){T.tubes.forEach(t=>t.filled=true);renderLab();note(`<p><strong>Alle Gläser gefüllt!</strong> Schau genau hin: Welche Farben siehst du?</p>`,"info");showBtns({check:false,go:true,sol:false,neu:true});return}
+  const fb=[];let empty=0;
+  T.tubes.forEach(t=>{
+    const v=T.ph===1?t.col:t.cls;
+    if(!v){empty++;t.res=null;return}
+    const right=T.ph===1?colorOf(t.ph).id:clsOf(t.ph);
+    if(v===right)t.res="ok";
+    else{t.res="bad";
+      if(T.ph===1)fb.push(`<b>${t.n}</b>: Schau nochmal genau auf die Farbe im Glas.`);
+      else{
+        const c=colorOf(t.ph).name;
+        if(right==="neutral")fb.push(`<b>${t.n}</b>: Bei <b>${c}</b> ist die Flüssigkeit weder sauer noch alkalisch.`);
+        else if(v==="neutral")fb.push(`<b>${t.n}</b>: Neutral wäre violett. Hier ist der Saft aber <b>${c}</b>.`);
+        else fb.push(`<b>${t.n}</b>: Sauer und alkalisch vertauscht? Schau, auf welcher Seite der Skala <b>${c}</b> liegt.`);
+      }}
+  });
+  renderLab();
+  const bad=T.tubes.filter(t=>t.res==="bad").length;
+  if(!bad&&!empty){
+    if(T.ph===1){note(`<p><strong>Gut beobachtet!</strong> Jetzt ordnest du die Flüssigkeiten ein.</p>`,"good");stamp();showBtns({check:false,go:true,sol:false,neu:true})}
+    else{
+      note(`<p><strong>Alles richtig eingeordnet!</strong> Rot heißt sauer, violett neutral, blau, grün und gelb heißen alkalisch. Und deine Vermutung aus dem Chat? Essig ist sauer, Natron ist alkalisch!</p>`,"good");
+      stamp();if(!T.fin){T.fin=true;solved("lab")}
+      showBtns({check:false,sol:true,neu:true});
+    }
+    return;
+  }
+  if(bad)errs++;
+  note(`<p><strong>${bad?"Noch nicht ganz.":"Fast!"}</strong> ${bad?`${T.tubes.length-bad-empty} von ${T.tubes.length} stimmen schon.`:""}</p><ul>${fb.map(x=>`<li>${x}</li>`).join("")}${empty?`<li>Bei ${empty===1?"einem Glas":empty+" Gläsern"} fehlt noch deine Antwort.</li>`:""}</ul>`,bad?"bad":"info");
+}
+function labSolution(){
+  const st=[{t:"Rotkohlsaft ist ein <b>Indikator</b>: Seine Farbe zeigt, ob eine Flüssigkeit sauer, neutral oder alkalisch ist.",m:null}];
+  T.tubes.slice().sort((a,b)=>a.ph-b.ph).forEach(t=>{
+    const c=colorOf(t.ph).name,k=CLS[clsOf(t.ph)];
+    st.push({t:`<b>${t.n}</b>: Der Rotkohlsaft wird <mark>${c}</mark>. Auf der Skala liegt ${c} bei pH ≈ ${t.ph} – die Flüssigkeit ist <mark>${k}</mark>.`,m:t.ph});
+  });
+  return st;
+}
+
+/* ================= QUIZ ================= */
+function genQuiz(lv){
+  const types=lv===1?["ph","col"]:lv===2?["ph","col","pred"]:["col","pred","cmp","cmp"];
+  const ty=pick(types);
+  if(ty==="cmp"){
+    const side=pick(["sauer","alk"]);
+    const pool=SUBST.filter(s=>clsOf(s.ph)===side);
+    let a,b;do{a=pick(pool);b=pick(pool)}while(a.ph===b.ph);
+    return {ty,side,a:a.n,b:b.n,pa:a.ph,pb:b.ph};
+  }
+  const s=pick(SUBST);
+  return {ty,n:s.n,ph:s.ph};
+}
+function quizText(q){
+  if(q.ty==="ph")return `${q.n} hat den pH-Wert ${q.ph}. Ist die Flüssigkeit sauer, neutral oder alkalisch?`;
+  if(q.ty==="col")return `Rotkohlsaft wird in ${q.n} ${colorOf(q.ph).name}. Ist ${q.n} sauer, neutral oder alkalisch?`;
+  if(q.ty==="pred")return `${q.n} hat den pH-Wert ${q.ph}. Welche Farbe zeigt Rotkohlsaft?`;
+  return `Was ist stärker ${q.side==="sauer"?"sauer":"alkalisch"}: ${q.a} (pH ${q.pa}) oder ${q.b} (pH ${q.pb})?`;
+}
+function quizRight(q){
+  if(q.ty==="ph"||q.ty==="col")return clsOf(q.ph);
+  if(q.ty==="pred")return colorOf(q.ph).id;
+  const aMore=q.side==="sauer"?q.pa<q.pb:q.pa>q.pb;return aMore?"a":"b";
+}
+function startQuiz(q,fromRev){
+  T={k:fromRev?"rev":"quiz",q:q||genQuiz(level),pick:null,fin:false,fromRev:!!fromRev};
+  errs=0; renderQuiz();
+}
+function renderQuiz(){
+  const q=T.q;
+  phases(["Lesen","Antworten"],T.fin?2:1);
+  $("#taskText").textContent=quizText(q);
+  const lt=$("#lvTag");
+  if(T.k==="quiz"){lt.textContent="Stufe "+level;lt.classList.remove("hidden")}
+  let h=`<div class="qcard">`;
+  if(q.ty==="col")h+=`<div class="blob" style="background:${colorOf(q.ph).hex}" role="img" aria-label="Farbe ${colorOf(q.ph).name}"></div>`;
+  h+=`<div><div class="answers" role="group" aria-label="Antworten">`;
+  let opts;
+  if(q.ty==="pred")opts=COLORS.map(c=>[c.id,`<span class="dot" style="background:${c.hex}"></span>${c.name}`]);
+  else if(q.ty==="cmp")opts=[["a",q.a],["b",q.b]];
+  else opts=Object.entries(CLS);
+  h+=opts.map(([id,l])=>`<button class="ans" data-a="${id}" aria-pressed="${T.pick===id}">${l}</button>`).join("");
+  h+=`</div></div></div>`;
+  if(T.k!=="quiz"||level<3||T.fin)h+=scaleHTML(T.fin&&q.ty!=="cmp"?q.ph:null,"Farbskala von Rotkohlsaft");
+  $("#work").innerHTML=h;
+  $("#work").querySelectorAll(".ans").forEach(b=>b.addEventListener("click",()=>{if(T.fin)return;T.pick=b.dataset.a;renderQuiz();note("")}));
+  $("#checkBtn").textContent="✓ Prüfen";
+  showBtns({check:!T.fin,go:T.fin,sol:true,neu:T.k==="quiz",own:T.k==="quiz"});
+  $("#goBtn").textContent=T.k==="rev"?"Nächste Fehler-Aufgabe ▶":"Neue Aufgabe ▶";
+}
+function quizCheck(){
+  const q=T.q;
+  if(!T.pick){note(`<p><strong>Fast!</strong> Tippe zuerst eine Antwort an.</p>`,"info");return}
+  const right=quizRight(q);
+  const btn=$(`.ans[data-a="${T.pick}"]`);
+  if(T.pick===right){
+    T.fin=true;
+    let msg="";
+    if(q.ty==="ph"||q.ty==="col")msg=q.ph===7?"pH 7 ist genau die Mitte: neutral.":q.ph<7?`pH ${q.ph} liegt unter 7 – also sauer.`:`pH ${q.ph} liegt über 7 – also alkalisch.`;
+    if(q.ty==="col")msg=`Rotkohlsaft wird ${colorOf(q.ph).name} – `+msg;
+    if(q.ty==="pred")msg=`Bei pH ${q.ph} wird Rotkohlsaft ${colorOf(q.ph).name}.`;
+    if(q.ty==="cmp")msg=q.side==="sauer"?"Je kleiner der pH-Wert, desto stärker sauer.":"Je größer der pH-Wert, desto stärker alkalisch.";
+    note(`<p><strong>Richtig!</strong> ${msg}</p>`,"good");
+    renderQuiz();$(`.ans[data-a="${T.pick}"]`).classList.add("ok");stamp();
+    if(T.k==="quiz"){solved("quiz");if(errs>0)addRev(q)}
+    else{ if(errs===0){rev=rev.filter(r=>JSON.stringify(r)!==JSON.stringify(q));store.set("rev",rev);renderBadge()} }
+    return;
+  }
+  errs++;btn.classList.add("bad");
+  let why="";
+  if(q.ty==="ph"||q.ty==="col"){
+    const c=clsOf(q.ph);
+    if(c==="neutral")why=q.ty==="ph"?"pH 7 ist genau die Mitte der Skala.":"Violett zeigt Rotkohlsaft, wenn eine Flüssigkeit weder sauer noch alkalisch ist.";
+    else if(T.pick==="neutral")why=q.ty==="ph"?`Neutral ist nur pH 7. ${q.ph} ist ${q.ph<7?"kleiner":"größer"}.`:"Neutral wäre violett. Schau auf die Farbskala.";
+    else why=q.ty==="ph"?"Sauer und alkalisch vertauscht? Unter 7 und über 7 – auf welcher Seite liegt die Zahl?":"Auf welcher Seite der Farbskala liegt diese Farbe?";
+  }else if(q.ty==="pred"){
+    const p=COLORS.find(c=>c.id===T.pick);
+    why=(clsOf(q.ph)!==clsOf(p.from))?`${p.name} gehört zur anderen Seite der Skala. Ist pH ${q.ph} sauer, neutral oder alkalisch?`:`Du bist auf der richtigen Seite der Skala. Suche pH ${q.ph} genau.`;
+  }else why=q.side==="sauer"?"Achtung: Je <b>kleiner</b> der pH-Wert, desto stärker sauer.":"Achtung: Je <b>größer</b> der pH-Wert, desto stärker alkalisch.";
+  note(`<p><strong>Noch nicht.</strong> ${why} Versuch es nochmal!</p>`,"bad");
+  if(T.k==="quiz")addRev(q);
+}
+function addRev(q){const s=JSON.stringify(q);if(!rev.some(r=>JSON.stringify(r)===s)){rev.push(q);store.set("rev",rev);renderBadge()}}
+function quizSolution(){
+  const q=T.q;
+  if(q.ty==="cmp"){
+    const r=quizRight(q)==="a"?q.a:q.b;
+    return [{t:`Beide Flüssigkeiten sind ${CLS[q.side]}. Vergleiche die pH-Werte: <mark>${q.pa}</mark> und <mark>${q.pb}</mark>.`,m:null},
+      {t:q.side==="sauer"?"Bei sauren Flüssigkeiten gilt: <mark>Je kleiner der pH-Wert, desto stärker sauer.</mark>":"Bei alkalischen Flüssigkeiten gilt: <mark>Je größer der pH-Wert, desto stärker alkalisch.</mark>",m:null},
+      {t:`Also ist <mark>${r}</mark> stärker ${CLS[q.side]}.`,m:null}];
+  }
+  const c=colorOf(q.ph).name,k=CLS[clsOf(q.ph)];
+  const st=[];
+  if(q.ty==="col")st.push({t:`Suche die Farbe <mark>${c}</mark> in der unteren Zeile der Farbskala.`,m:q.ph});
+  else st.push({t:`Suche <mark>pH ${q.ph}</mark> auf der Skala.`,m:q.ph});
+  if(q.ty==="pred")st.push({t:`Darunter steht die Farbe von Rotkohlsaft: <mark>${c}</mark>.`,m:q.ph});
+  else st.push({t:q.ph===7?"pH 7 ist genau die Mitte – <mark>neutral</mark>.":q.ph<7?`Die Stelle liegt links von 7, also unter 7 – <mark>sauer</mark>.`:`Die Stelle liegt rechts von 7, also über 7 – <mark>alkalisch</mark>.`,m:q.ph});
+  st.push({t:`Ergebnis: ${q.n} ist <mark>${k}</mark>, Rotkohlsaft wird darin <mark>${c}</mark>.`,m:q.ph});
+  return st;
+}
+
+/* ================= Reiter & Steuerung ================= */
+function setTab(k){
+  kind=k;
+  document.querySelectorAll(".tab").forEach(t=>t.setAttribute("aria-selected",t.dataset.kind===k));
+  document.documentElement.style.setProperty("--tab",`var(--${k})`);
+  $("#levels").classList.toggle("hidden",k!=="quiz");
+  $("#lvTag").classList.add("hidden");$("#revInfo").classList.add("hidden");
+  closeSol();note("");
+  const old=document.querySelector(".stamp");if(old)old.remove();
+  $("#checkBtn").disabled=false;$("#goBtn").textContent="Weiter ▶";
+  if(k==="chat")startChat();
+  else if(k==="lab")startLab(!store.get("labDone",false));
+  else if(k==="quiz")startQuiz();
+  else startRev();
+}
+function startRev(){
+  $("#lvTag").classList.add("hidden");
+  if(!rev.length){
+    T=null;phases([],0);$("#taskText").textContent="Fehler-Training";
+    $("#work").innerHTML=`<div class="empty"><div class="big">🌟</div><p><b>Hier ist gerade nichts zu tun.</b><br>Aufgaben aus „Sauer oder alkalisch?“, bei denen du dich vertan hast, landen hier. Dann übst du sie nochmal.</p></div>`;
+    showBtns({check:false,sol:false,reset:false,neu:false});return;
+  }
+  if(revPos>=rev.length)revPos=0;
+  const ri=$("#revInfo");ri.textContent=`Fehler-Aufgabe ${revPos+1} von ${rev.length} · Ohne Fehler gelöst, verschwindet sie.`;ri.classList.remove("hidden");
+  startQuiz(rev[revPos],true);
+}
+function check(){
+  const old=document.querySelector(".stamp");if(old)old.remove();
+  if(!T)return;
+  if(T.k==="chat")chatCheck();else if(T.k==="lab")labCheck();else quizCheck();
+}
+function go(){
+  note("");const old=document.querySelector(".stamp");if(old)old.remove();
+  if(T.k==="chat"){if(T.ph===0){T.ph=1;renderChat()}else if(T.ph===2&&!T.done)renderChat();else setTab("lab")}
+  else if(T.k==="lab"){T.ph++;T.tubes.forEach(t=>t.res=null);if(T.ph>2)T.ph=2;renderLab()}
+  else if(T.k==="quiz")startQuiz();
+  else{ if(rev.some(r=>JSON.stringify(r)===JSON.stringify(T.q)))revPos++; startRev(); }
+}
+function reset(){
+  closeSol();note("");const old=document.querySelector(".stamp");if(old)old.remove();
+  if(!T)return;
+  if(T.k==="chat")startChat();
+  else if(T.k==="lab"){T.tubes.forEach(t=>{t.filled=false;t.col=null;t.cls=null;t.res=null});T.ph=0;T.fin=false;errs=0;renderLab()}
+  else{T.pick=null;T.fin=false;renderQuiz()}
+}
+function newTask(){
+  closeSol();note("");const old=document.querySelector(".stamp");if(old)old.remove();
+  if(kind==="lab"){store.set("labDone",true);startLab(false)}
+  else if(kind==="quiz")startQuiz();
+}
+
+/* Musterlösung */
+function openSol(){
+  if(!T)return;
+  sol.steps=T.k==="chat"?chatSolution():T.k==="lab"?labSolution():quizSolution();
+  sol.i=0;$("#solution").classList.remove("hidden");renderSol();
+  if(T.k!=="chat"&&!T.fin)errs++;
+  $("#solution").scrollIntoView({behavior:window.matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth",block:"nearest"});
+}
+function renderSol(){
+  const s=sol.steps[sol.i];
+  $("#solText").innerHTML=s.t;
+  $("#solVis").innerHTML=(T&&T.k!=="chat"&&!(T.q&&T.q.ty==="cmp"))?scaleHTML(s.m==null?null:s.m,null):"";
+  $("#solCount").textContent=`Schritt ${sol.i+1} von ${sol.steps.length}`;
+  $("#solPrev").disabled=sol.i===0;$("#solNext").disabled=sol.i===sol.steps.length-1;
+}
+function closeSol(){$("#solution").classList.add("hidden")}
+$("#solPrev").addEventListener("click",()=>{if(sol.i>0){sol.i--;renderSol()}});
+$("#solNext").addEventListener("click",()=>{if(sol.i<sol.steps.length-1){sol.i++;renderSol()}});
+$("#solClose").addEventListener("click",()=>{closeSol();reset()});
+
+/* Eigene Aufgabe */
+$("#ownBtn").addEventListener("click",()=>{$("#oName").value="";$("#oPh").value="";$("#ownErr").textContent="";$("#overlay").classList.remove("hidden");$("#oName").focus()});
+$("#ownCancel").addEventListener("click",()=>$("#overlay").classList.add("hidden"));
+$("#oPh").addEventListener("input",e=>{e.target.value=e.target.value.replace(/\D/g,"")});
+$("#ownOk").addEventListener("click",()=>{
+  const n=$("#oName").value.trim(),v=$("#oPh").value.trim();
+  if(!n){$("#ownErr").textContent="Schreibe bitte den Namen der Flüssigkeit auf.";return}
+  if(v===""){$("#ownErr").textContent="Trag bitte den pH-Wert ein.";return}
+  const ph=+v;if(ph<0||ph>14){$("#ownErr").textContent="Die pH-Skala geht nur von 0 bis 14.";return}
+  $("#overlay").classList.add("hidden");closeSol();note("");
+  startQuiz({ty:pick(["ph","pred"]),n,ph});
+});
+document.addEventListener("keydown",e=>{
+  if(e.key==="Escape"){$("#overlay").classList.add("hidden");if(!$("#qrOverlay").classList.contains("hidden"))closeQr()}
+  if(e.key==="Enter"&&!e.target.closest("textarea,.modal")&&!$("#checkBtn").classList.contains("hidden")&&document.activeElement.tagName!=="BUTTON"){check()}
+});
+
+/* Stufen */
+document.querySelectorAll("[data-level]").forEach(b=>b.addEventListener("click",()=>{level=+b.dataset.level;store.set("level",level);renderLevels();if(kind==="quiz"){closeSol();note("");startQuiz()}}));
+function renderLevels(){document.querySelectorAll("[data-level]").forEach(b=>b.setAttribute("aria-pressed",+b.dataset.level===level))}
+
+/* QR-Code */
+const PAGE_URL=location.origin+location.pathname;
+function openQr(){
+  const box=$("#qrBox");
+  try{const q=qrcode(0,"M");q.addData(PAGE_URL);q.make();box.innerHTML=q.createSvgTag({cellSize:8,margin:2,scalable:true});
+    const svg=box.querySelector("svg");svg.setAttribute("role","img");svg.setAttribute("aria-label","QR-Code zum Kohl-Detektiv");
+  }catch(e){box.innerHTML="<p>Der QR-Code konnte nicht geladen werden. Bitte die Seite neu laden.</p>"}
+  $("#qrUrl").textContent=PAGE_URL;$("#qrOverlay").classList.remove("hidden");$("#qrClose").focus();
+}
+const closeQr=()=>{$("#qrOverlay").classList.add("hidden");$("#qrBtn").focus()};
+$("#qrBtn").addEventListener("click",openQr);$("#qrClose").addEventListener("click",closeQr);
+$("#qrOverlay").addEventListener("click",e=>{if(e.target.id==="qrOverlay")closeQr()});
+
+$("#checkBtn").addEventListener("click",check);
+$("#goBtn").addEventListener("click",go);
+$("#solBtn").addEventListener("click",openSol);
+$("#resetBtn").addEventListener("click",reset);
+$("#newBtn").addEventListener("click",newTask);
+document.querySelectorAll(".tab").forEach(t=>t.addEventListener("click",()=>setTab(t.dataset.kind)));
+
+renderStats();renderBadge();renderLevels();setTab("chat");
+window.__kohl={genQuiz,quizRight,colorOf,clsOf,SUBST,cur:()=>T};
+})();
+</script>
+</body>
+</html>
