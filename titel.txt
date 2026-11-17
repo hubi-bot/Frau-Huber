@@ -45,6 +45,7 @@ Mathematik Oberstufe/Stochastik/Stochastik 20 - Normalverteilung mit dem TI-84 P
 
 # --- Chemie Klasse 6 ---
 Chemie Klasse 6 | Chemie Klasse 6
+Chemie Klasse 6/Säuren und Laugen/Chat – Rotkraut oder Blaukraut.html | Chat – Rotkraut oder Blaukraut?
 Chemie Klasse 6/Säuren und Laugen/Kohl-Detektiv – Rotkraut oder Blaukraut.html | Kohl-Detektiv – Rotkraut oder Blaukraut?
 
 # --- Chemie Klasse 10 ---

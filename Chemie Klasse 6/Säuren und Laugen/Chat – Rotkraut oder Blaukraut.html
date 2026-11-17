@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Chat – Rotkraut oder Blaukraut?</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Lexend:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --desk:#dfe5e9; --head:#075e54; --headtxt:#fff; --wall:#efe7dd; --doodle:#e2d7c9;
+  --in:#ffffff; --out:#d9fdd3; --txt:#111b21; --meta:#667781; --tick:#53bdeb; --chip:#ffffffd9;
+  --bar:#f0f2f5; --accent:#00a884;
+  --ui:"Lexend",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --hand:"Caveat","Segoe Print","Comic Sans MS",cursive;
+}
+@media (prefers-color-scheme: dark){
+  :root{--desk:#0b141a;--head:#202c33;--wall:#0b141a;--doodle:#13202a;--in:#202c33;--out:#005c4b;--txt:#e9edef;--meta:#8696a0;--chip:#182229e6;--bar:#202c33}
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--desk);font-family:var(--ui);color:var(--txt);display:flex;justify-content:center;align-items:center;gap:28px;padding:16px;overflow-x:hidden}
+button{font-family:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.hidden{display:none!important}
+
+.phone{width:min(420px,100%);height:min(860px,calc(100vh - 32px));border:12px solid #1d1f21;border-radius:42px;background:var(--wall);display:flex;flex-direction:column;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.25);position:relative}
+.status{background:var(--head);color:#fff;font-size:12px;display:flex;justify-content:space-between;padding:6px 20px 2px;font-weight:500}
+.top{background:var(--head);color:var(--headtxt);display:flex;align-items:center;gap:10px;padding:8px 12px 10px}
+.back{font-size:22px;opacity:.9}
+.av{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;font-weight:700;color:#fff;flex:none}
+.av.h{background:linear-gradient(135deg,#f6b73c,#e07b39)}
+.who b{display:block;font-size:16px}
+.who span{font-size:12.5px;opacity:.85}
+.top .ic{margin-left:auto;display:flex;gap:18px;font-size:18px;opacity:.9}
+
+.wall{flex:1;overflow-y:auto;padding:10px 12px 14px;display:flex;flex-direction:column;gap:3px;scroll-behavior:smooth;
+  background-color:var(--wall);
+  background-image:radial-gradient(circle at 20px 20px,var(--doodle) 2px,transparent 3px),radial-gradient(circle at 60px 50px,var(--doodle) 1.5px,transparent 2.5px);
+  background-size:80px 80px}
+.day{align-self:center;background:var(--chip);color:var(--meta);font-size:12px;padding:4px 10px;border-radius:8px;margin:6px 0 8px;box-shadow:0 1px 1px rgba(0,0,0,.08)}
+.sec{align-self:center;background:#ffeecd;color:#54656f;font-size:11.5px;padding:5px 10px;border-radius:8px;text-align:center;max-width:85%;margin-bottom:8px}
+@media (prefers-color-scheme: dark){.sec{background:#182229;color:#ffd279}}
+.m{max-width:82%;padding:6px 9px 4px;border-radius:10px;font-size:15px;line-height:1.38;position:relative;box-shadow:0 1px .5px rgba(0,0,0,.13);animation:pop .22s ease-out;word-wrap:break-word}
+.m.h{align-self:flex-start;background:var(--in)}
+.m.t{align-self:flex-end;background:var(--out)}
+.m.first.h{border-top-left-radius:0;margin-top:6px}
+.m.first.t{border-top-right-radius:0;margin-top:6px}
+.m.first.h::before{content:"";position:absolute;left:-8px;top:0;border-width:0 8px 10px 0;border-style:solid;border-color:transparent var(--in) transparent transparent}
+.m.first.t::before{content:"";position:absolute;right:-8px;top:0;border-width:0 0 10px 8px;border-style:solid;border-color:transparent transparent transparent var(--out)}
+.meta{float:right;font-size:11px;color:var(--meta);margin:6px 0 -2px 10px;display:flex;align-items:center;gap:3px;white-space:nowrap}
+.ticks{color:var(--tick);font-size:13px;letter-spacing:-4px;margin-right:3px}
+.m.media{padding:3px 3px 4px}
+.m.media .cap{padding:4px 6px 0}
+.m.media .meta{margin-right:6px}
+.pic{display:block;border:0;padding:0;background:none;border-radius:8px;overflow:hidden;width:250px;max-width:100%;position:relative}
+.pic svg{display:block;width:100%;height:auto}
+.pic.clip{max-height:270px}
+.pic.clip::after{content:"";position:absolute;left:0;right:0;bottom:0;height:60px;background:linear-gradient(transparent,rgba(0,0,0,.25))}
+.pic .zoom{z-index:1;position:absolute;right:6px;bottom:6px;background:rgba(0,0,0,.55);color:#fff;font-size:11px;padding:2px 7px;border-radius:999px}
+.typing{align-self:flex-start;background:var(--in);border-radius:0 10px 10px 10px;padding:10px 14px;margin-top:6px;display:flex;gap:4px;box-shadow:0 1px .5px rgba(0,0,0,.13)}
+.typing i{width:7px;height:7px;border-radius:50%;background:var(--meta);animation:blink 1.2s infinite}
+.typing i:nth-child(2){animation-delay:.2s}.typing i:nth-child(3){animation-delay:.4s}
+@keyframes blink{0%,60%,100%{opacity:.25}30%{opacity:1}}
+@keyframes pop{from{transform:translateY(6px) scale(.97);opacity:0}to{transform:none;opacity:1}}
+
+.bottom{background:var(--bar);display:flex;align-items:center;gap:8px;padding:8px 10px 12px}
+.inp{flex:1;background:var(--in);border-radius:22px;padding:9px 14px;color:var(--meta);font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.send{width:42px;height:42px;border-radius:50%;background:var(--accent);color:#fff;border:0;font-size:18px;display:grid;place-items:center;flex:none}
+
+/* Startknopf über dem Chat */
+.start{position:absolute;inset:0;display:grid;place-items:center;background:rgba(11,20,26,.45);z-index:5}
+.start button{background:var(--accent);color:#fff;border:0;border-radius:999px;padding:14px 26px;font-size:18px;font-weight:700;box-shadow:0 6px 20px rgba(0,0,0,.3)}
+
+/* Steuerung */
+.panel{display:flex;flex-direction:column;gap:10px;width:200px}
+.panel h1{font-size:20px;margin:0 0 4px;line-height:1.2}
+.panel p{margin:0;font-size:13px;color:var(--meta)}
+.cbtn{background:#fff;color:#111b21;border:2px solid #111b21;border-radius:10px;padding:9px 12px;font-size:14px;font-weight:500;text-align:left;box-shadow:2px 2px 0 #111b21}
+.cbtn:active{transform:translate(2px,2px);box-shadow:none}
+.cbtn:disabled{opacity:.4;cursor:default}
+.speed{display:flex;gap:4px}
+.speed button{flex:1;border:2px solid #111b21;background:#fff;color:#111b21;border-radius:8px;padding:4px 0;font-size:12px}
+.speed button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:700}
+.prog{font-size:12px;color:var(--meta)}
+
+/* Rezeptkarten */
+.rc{font-size:13px;line-height:1.35;color:#2b2b2b;text-align:left}
+.rc.blau{background:#fff7b0;padding:12px 14px 14px;font-family:var(--hand);font-size:20px;line-height:1.15;background-image:repeating-linear-gradient(transparent 0 22px,#e8d96a 22px 23px);border:1px dashed #d9c94a}
+.rc.blau h3{font-family:var(--hand);font-size:30px;margin:0 0 4px;color:#1f3d8a;font-weight:700}
+.rc.blau .z{margin:2px 0 6px}
+.rc.rot{background:#5b3a8c;color:#fff;padding:10px 12px 12px;font-family:var(--ui)}
+.rc.rot h3{margin:0 0 6px;font-size:17px}
+.rc.rot .bowl{background:#fff;border-radius:6px;margin:0 0 8px}
+.rc.rot ul{margin:0 0 6px;padding-left:16px}
+.rc.rot ol{margin:0;padding-left:18px}
+.rc.rot .src{font-size:10px;opacity:.8;margin-top:6px}
+.rc ol,.rc ul{margin-top:2px}
+
+/* Großansicht */
+.lb{position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:30;display:flex;flex-direction:column;align-items:center;padding:14px;overflow:auto}
+.lb .bar{width:100%;max-width:640px;display:flex;justify-content:space-between;align-items:center;color:#fff;margin-bottom:10px}
+.lb .x{background:none;border:2px solid #fff;color:#fff;border-radius:50%;width:40px;height:40px;font-size:20px}
+.lb .big{width:100%;max-width:640px}
+.lb .big svg{display:block;width:100%;height:auto;border-radius:8px}
+.lb .big .rc{font-size:18px}
+.lb .big .rc.blau{font-size:30px;padding:22px 26px;background-image:repeating-linear-gradient(transparent 0 33px,#e8d96a 33px 34px)}
+.lb .big .rc.blau h3{font-size:44px}
+.lb .big .rc.rot h3{font-size:26px}
+
+.qr{position:fixed;left:12px;top:12px;width:32px;height:32px;border-radius:8px;border:2px solid #111b21;background:#fff;color:#111b21;display:grid;place-items:center;padding:0;box-shadow:2px 2px 0 #111b21;z-index:4}
+.ov{position:fixed;inset:0;background:rgba(15,20,35,.6);display:grid;place-items:center;z-index:40;padding:16px}
+.mod{background:#fff;color:#111b21;border-radius:14px;padding:18px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:10px}
+.mod svg{width:min(calc(100vw - 80px),calc(100vh - 220px),420px);height:auto;display:block}
+.mod p{margin:0;font-size:13px;color:#54656f;overflow-wrap:anywhere;max-width:420px}
+
+@media (max-width:760px){
+  body{padding:0;display:block}
+  .phone{width:100%;height:100vh;height:100dvh;border:0;border-radius:0;box-shadow:none}
+  .status{display:none}
+  .panel{position:fixed;right:8px;top:12px;width:auto;z-index:6;flex-direction:row;gap:4px}
+  .top .ic{display:none}
+  .panel h1,.panel p,.panel .speed,.panel .prog,.panel .lbl{display:none}
+  .cbtn{padding:4px 8px;font-size:16px;background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,.7);box-shadow:none}
+  .cbtn .t{display:none}
+  .qr{display:none}
+}
+@media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<button class="qr" id="qrBtn" title="QR-Code zu dieser Seite zeigen" aria-label="QR-Code zu dieser Seite zeigen"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="currentColor"><path d="M3 3h8v8H3zm2 2v4h4V5zm8-2h8v8h-8zm2 2v4h4V5zM3 13h8v8H3zm2 2v4h4v-4zm8-2h2v2h-2zm2 2h2v2h-2zm2-2h2v2h-2zm2 2h2v2h-2zm-6 2h2v2h-2zm4 0h2v2h-2zm-2 2h2v2h-2zm4 0h2v2h-2z"/></svg></button>
+
+<div class="phone" aria-label="Chat zwischen Heike und Tabea">
+  <div class="status"><span>19:05</span><span>●●● 📶 🔋</span></div>
+  <div class="top">
+    <span class="back" aria-hidden="true">←</span>
+    <div class="av h" aria-hidden="true">H</div>
+    <div class="who"><b>Heike</b><span id="state">online</span></div>
+    <div class="ic" aria-hidden="true"><span>📹</span><span>📞</span><span>⋮</span></div>
+  </div>
+  <div class="wall" id="wall" aria-live="polite"></div>
+  <div class="bottom" aria-hidden="true"><div class="inp">😊  Nachricht</div><div class="send">🎤</div></div>
+  <div class="start" id="start"><button id="startBtn">▶ Chat starten</button></div>
+</div>
+
+<div class="panel">
+  <h1>Rotkraut oder Blaukraut?</h1>
+  <p>Heike wohnt in den Bergen in Bayern, Tabea in Norddeutschland. Sie haben sich im Urlaub kennengelernt.</p>
+  <button class="cbtn" id="pauseBtn" title="Pause">⏸<span class="t"> Pause</span></button>
+  <button class="cbtn" id="nextBtn" title="Nächste Nachricht">⏭<span class="t"> Nächste Nachricht</span></button>
+  <button class="cbtn" id="allBtn" title="Ganzen Chat zeigen">⏬<span class="t"> Ganzen Chat zeigen</span></button>
+  <button class="cbtn" id="resetBtn" title="Von vorn">↺<span class="t"> Von vorn</span></button>
+  <span class="prog lbl">Tempo</span>
+  <div class="speed" role="group" aria-label="Tempo">
+    <button data-sp="1.6">langsam</button><button data-sp="1">normal</button><button data-sp="0.55">schnell</button>
+  </div>
+  <span class="prog" id="prog"></span>
+  <p>Tipp: Fotos und Rezepte antippen – dann werden sie groß.</p>
+</div>
+
+<div class="lb hidden" id="lb" role="dialog" aria-modal="true" aria-label="Großansicht">
+  <div class="bar"><span id="lbTitle"></span><button class="x" id="lbClose" aria-label="Schließen">✕</button></div>
+  <div class="big" id="lbBig"></div>
+</div>
+
+<div class="ov hidden" id="qrOv"><div class="mod" role="dialog" aria-modal="true" aria-label="QR-Code"><b>Chat öffnen</b><div id="qrBox"></div><p id="qrUrl"></p><button class="cbtn" id="qrClose" style="text-align:center">Schließen</button></div></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
+<script>
+(function(){
+"use strict";
+const $=s=>document.querySelector(s);
+
+function bowl(kraut,dark,light,label){
+  let s=`<svg viewBox="0 0 250 180" role="img" aria-label="${label}"><rect width="250" height="180" fill="#d8c9a8"/><rect y="120" width="250" height="60" fill="#8a6a46"/>`;
+  s+=`<ellipse cx="125" cy="150" rx="105" ry="16" fill="rgba(0,0,0,.18)"/>`;
+  s+=`<path d="M42 92 Q50 40 125 34 Q200 40 208 92 Z" fill="${kraut}"/>`;
+  for(let i=0;i<46;i++){const x=55+((i*53)%140),y=46+((i*19)%42);s+=`<path d="M${x} ${y} q8 -6 16 1" stroke="${i%3?light:dark}" stroke-width="3.5" fill="none" stroke-linecap="round"/>`}
+  s+=`<path d="M30 90 H220 Q212 158 125 160 Q38 158 30 90 Z" fill="#fff" stroke="#c9c9c9" stroke-width="2"/><ellipse cx="125" cy="90" rx="95" ry="7" fill="#f4f4f4" stroke="#c9c9c9" stroke-width="2"/><path d="M48 98 Q54 136 92 150" stroke="#ececec" stroke-width="7" fill="none" stroke-linecap="round"/>`;
+  s+=`<g transform="translate(196 104) rotate(-28)"><rect x="0" y="0" width="70" height="8" rx="4" fill="#b8b8b8"/><ellipse cx="0" cy="4" rx="12" ry="9" fill="#c8c8c8"/></g></svg>`;
+  return s;
+}
+const BLUE=bowl("#34479e","#22327a","#6b83e0","Foto: eine Schüssel mit tiefblauem Kraut");
+const RED=bowl("#8e1b4f","#5e0f33","#c8336f","Foto: eine Schüssel mit rot-violettem Kraut");
+
+const MAMA=`<div class="rc blau"><h3>Mamas Blaukraut</h3>
+<div class="z"><u>Zutaten:</u> 1 Kopf Blaukraut, 1 Zwiebel, 1 EL Schmalz, 1 Messerspitze Natron, Salz, 2 Lorbeerblätter, ¼ Liter Wasser</div>
+<div><u>So wird's gemacht:</u> Das Kraut putzen, waschen und fein schneiden. In heißem Fett die gewürfelte Zwiebel andünsten, das Kraut zugeben und ein klein wenig Natron dazugeben. 10 Minuten zugedeckt dünsten. Einen Viertelliter Wasser dazugießen, Salz und Gewürze dazugeben. Zugedeckt 30–45 Minuten weich dünsten. Bei Bedarf heißes Wasser nachgießen.</div></div>`;
+const PAPA=`<div class="rc rot"><h3>Rotkraut à la Papa 👨‍🍳</h3><div class="bowl">${RED}</div>
+<b>Zutaten</b><ul><li>1 Kopf Rotkohl</li><li>1 Zwiebel</li><li>2 säuerliche Äpfel</li><li>1 EL Zucker</li><li>1 EL Butter</li><li>4 EL Essig</li><li>Salz, Nelken, 2 Lorbeerblätter</li><li>¼ Liter Wasser</li></ul>
+<b>Zubereitung</b><ol><li>Rotkohl putzen, waschen und fein schneiden.</li><li>Zwiebel und Äpfel würfeln und mit dem Zucker in heißer Butter andünsten.</li><li>Kraut zugeben und sofort den Essig darübergießen.</li><li>10 Minuten zugedeckt dünsten.</li><li>Wasser, Salz und Gewürze dazugeben und zugedeckt 30–45 Minuten weich dünsten. Bei Bedarf heißes Wasser nachgießen.</li></ol></div>`;
+
+// [wer, uhrzeit, typ, inhalt, unterschrift]
+const S=[
+ ["h","19:05","text","Servus Tabea! 👋 Hab grad nicht viel Zeit, gleich gibt's Essen 😋"],
+ ["h","19:05","text","Schweinebraten mit Knödeln und Blaukraut – mein Lieblingsessen!!"],
+ ["t","19:06","text","Mmmh lecker 😍 Aber… Blaukraut?? Was soll das denn sein? 😅"],
+ ["t","19:06","text","Bei uns gibt's zum Braten immer Rotkraut."],
+ ["h","19:06","text","Rotkraut?? 🤨 Nie gehört. Blaukraut ist eine Kohlsorte und nach dem Kochen ist sie blau. Wart, ich schick dir ein Foto 📸"],
+ ["h","19:07","pic",BLUE,"So sieht's bei uns aus 😋","Foto von Heike"],
+ ["t","19:07","text","Hä?! 😳 Das ist doch genau derselbe Kohl wie bei uns!"],
+ ["t","19:08","pic",RED,"Das ist unser Rotkraut von letztem Sonntag. Bei uns ist der ROT! 🔴","Foto von Tabea"],
+ ["h","19:08","text","Krass 😮 Gleicher Kohl – andere Farbe?!"],
+ ["t","19:09","text","Vielleicht kocht ihr den irgendwie anders? 🤔"],
+ ["h","19:09","text","Kann sein! Ich frag mal meine Mama nach ihrem Rezept 📝"],
+ ["h","19:11","rec",MAMA,"Hier, Mamas Geheimrezept 🤫","Rezept von Heikes Mama"],
+ ["t","19:12","text","Cool, danke! 🙏 Mein Papa hat sein Rezept auch aufgeschrieben, Moment…"],
+ ["t","19:13","rec",PAPA,"Papas Rotkraut 😋","Rezept von Tabeas Papa"],
+ ["h","19:13","text","Und? Siehst du einen Unterschied? 🔍"],
+ ["t","19:14","text","Hmm… ich glaub, da muss ich mal ganz genau hinschauen 🧐"],
+ ["h","19:14","text","Sag Bescheid, wenn du's rausgefunden hast! Ich muss jetzt essen 🍽️ Pfiat di!"],
+ ["t","19:15","text","Guten Appetit! Bis später 👋"]
+];
+
+const wall=$("#wall");
+let idx=0, playing=false, timer=null, speed=1, typingEl=null, last=null;
+try{const v=localStorage.getItem("kohlchat_speed");if(v)speed=+v}catch(e){}
+
+function esc(s){return String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]))}
+function meta(m){return `<span class="meta">${m[1]}${m[0]==="t"?' <span class="ticks" aria-label="gelesen">✓✓</span>':""}</span>`}
+function render(m,i){
+  const d=document.createElement("div");
+  const first=last!==m[0];
+  d.className=`m ${m[0]}${first?" first":""}${m[2]!=="text"?" media":""}`;
+  if(m[2]==="text")d.innerHTML=`${esc(m[3])}${meta(m)}`;
+  else{
+    d.innerHTML=`<button class="pic${m[2]==="rec"?" clip":""}" data-i="${i}" aria-label="${esc(m[5])} groß anzeigen">${m[3]}<span class="zoom">🔍 ${m[2]==="rec"?"Rezept öffnen":"antippen"}</span></button><div class="cap">${esc(m[4]||"")}${meta(m)}</div>`;
+  }
+  last=m[0];
+  return d;
+}
+function scroll(){wall.scrollTop=wall.scrollHeight}
+function showNext(){
+  if(idx>=S.length)return;
+  removeTyping();
+  wall.appendChild(render(S[idx],idx));idx++;scroll();setState();prog();
+}
+function removeTyping(){if(typingEl){typingEl.remove();typingEl=null}}
+function setState(t){$("#state").textContent=t||"online"}
+function prog(){
+  $("#prog").textContent=`Nachricht ${idx} von ${S.length}`;
+  const done=idx>=S.length;
+  $("#nextBtn").disabled=done;$("#allBtn").disabled=done;$("#pauseBtn").disabled=done;
+  if(done){playing=false;setPauseLabel()}
+}
+function delayFor(m){
+  const len=m[2]==="text"?m[3].length:m[2]==="pic"?60:110;
+  return Math.min(4200,900+len*38)*speed;
+}
+function step(){
+  clearTimeout(timer);
+  if(!playing||idx>=S.length)return;
+  const m=S[idx];
+  if(m[0]==="h"){
+    // Heike tippt
+    setState(m[2]==="text"?"schreibt …":"sendet Foto …");
+    removeTyping();typingEl=document.createElement("div");typingEl.className="typing";typingEl.setAttribute("aria-label","Heike schreibt");typingEl.innerHTML="<i></i><i></i><i></i>";
+    wall.appendChild(typingEl);scroll();
+    timer=setTimeout(()=>{showNext();timer=setTimeout(step,700*speed)},delayFor(m));
+  }else{
+    timer=setTimeout(()=>{showNext();timer=setTimeout(step,500*speed)},delayFor(m)*0.85);
+  }
+}
+function setPauseLabel(){$("#pauseBtn").innerHTML=playing?'⏸<span class="t"> Pause</span>':'▶<span class="t"> Weiter</span>';$("#pauseBtn").title=playing?"Pause":"Weiter"}
+function play(){playing=true;setPauseLabel();step()}
+function pause(){playing=false;clearTimeout(timer);removeTyping();setState();setPauseLabel()}
+
+$("#startBtn").addEventListener("click",()=>{$("#start").classList.add("hidden");play()});
+$("#pauseBtn").addEventListener("click",()=>{if(!$("#start").classList.contains("hidden"))$("#start").classList.add("hidden");playing?pause():play()});
+$("#nextBtn").addEventListener("click",()=>{$("#start").classList.add("hidden");const was=playing;pause();showNext();if(was)play()});
+$("#allBtn").addEventListener("click",()=>{$("#start").classList.add("hidden");pause();while(idx<S.length)showNext()});
+$("#resetBtn").addEventListener("click",()=>{pause();wall.innerHTML='<div class="day">HEUTE</div>';idx=0;last=null;prog();$("#start").classList.remove("hidden")});
+document.querySelectorAll("[data-sp]").forEach(b=>b.addEventListener("click",()=>{speed=+b.dataset.sp;try{localStorage.setItem("kohlchat_speed",speed)}catch(e){}renderSpeed()}));
+function renderSpeed(){document.querySelectorAll("[data-sp]").forEach(b=>b.setAttribute("aria-pressed",+b.dataset.sp===speed))}
+
+// Großansicht
+wall.addEventListener("click",e=>{
+  const b=e.target.closest(".pic");if(!b)return;
+  const m=S[+b.dataset.i];
+  $("#lbTitle").textContent=m[5];$("#lbBig").innerHTML=m[3];$("#lb").classList.remove("hidden");$("#lb").scrollTop=0;$("#lbClose").focus();
+  if(playing){pause();$("#lb").dataset.resume="1"}
+});
+function closeLb(){$("#lb").classList.add("hidden");if($("#lb").dataset.resume){delete $("#lb").dataset.resume;play()}}
+$("#lbClose").addEventListener("click",closeLb);
+$("#lb").addEventListener("click",e=>{if(e.target.id==="lb")closeLb()});
+
+// QR
+const PAGE_URL=location.origin+location.pathname;
+$("#qrBtn").addEventListener("click",()=>{
+  try{const q=qrcode(0,"M");q.addData(PAGE_URL);q.make();$("#qrBox").innerHTML=q.createSvgTag({cellSize:8,margin:2,scalable:true})}
+  catch(e){$("#qrBox").innerHTML="<p>Der QR-Code konnte nicht geladen werden.</p>"}
+  $("#qrUrl").textContent=PAGE_URL;$("#qrOv").classList.remove("hidden");$("#qrClose").focus();
+});
+$("#qrClose").addEventListener("click",()=>$("#qrOv").classList.add("hidden"));
+$("#qrOv").addEventListener("click",e=>{if(e.target.id==="qrOv")$("#qrOv").classList.add("hidden")});
+document.addEventListener("keydown",e=>{
+  if(e.key==="Escape"){if(!$("#lb").classList.contains("hidden"))closeLb();$("#qrOv").classList.add("hidden")}
+  if((e.key==="ArrowRight"||e.key===" ")&&$("#lb").classList.contains("hidden")&&e.target.tagName!=="BUTTON"){e.preventDefault();$("#nextBtn").click()}
+});
+
+wall.innerHTML='<div class="day">HEUTE</div>';
+renderSpeed();prog();
+window.__chat={S,count:()=>idx};
+})();
+</script>
+</body>
+</html>
