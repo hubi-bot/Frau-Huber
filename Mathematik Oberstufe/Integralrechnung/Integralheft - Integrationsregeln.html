@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Integralheft – Integrationsregeln beweisen und anwenden</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;700&family=Patrick+Hand&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<style>
+:root{
+  --paper:#fdfcf7; --desk:#e9eef3; --karo:#cfdcec; --text:#25303f; --muted:#5b6677; --ink:#1c3fa0;
+  --red:#cf2f2a; --green:#1d8248; --hl:#fff09a; --focus:#e6eeff; --pink:#d6267f;
+  --c1:#2f7fc4; --c2:#16877a; --c3:#8352bf; --c4:#e0592a; --rev:#a8791a; --tab:var(--c1);
+  --fA:#1c3fa0; --fB:#c2417e; --fill1:rgba(47,127,196,.28); --fill2:rgba(214,38,127,.25); --fill3:rgba(29,130,72,.28); --fillr:rgba(224,89,42,.22);
+  --hand:"Patrick Hand","Comic Sans MS","Segoe Print",cursive;
+  --ui:"Lexend",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --paper:#1c2232; --desk:#121620; --karo:#2e3a55; --text:#e7ebf3; --muted:#a4aec3; --ink:#93b6ff;
+    --red:#ff6b64; --green:#55d492; --hl:#5a5120; --focus:#26335a; --pink:#ff6fb5;
+    --c1:#5aa9ec; --c2:#3cc7b3; --c3:#ab85e8; --c4:#ff7a4d; --rev:#e0ae45;
+    --fA:#93b6ff; --fB:#ff6fb5; --fill1:rgba(90,169,236,.32); --fill2:rgba(255,111,181,.28); --fill3:rgba(85,212,146,.28); --fillr:rgba(255,122,77,.25);
+  }
+}
+*{box-sizing:border-box}
+html{height:100%}
+body{margin:0;min-height:100%;background:var(--desk);color:var(--text);font-family:var(--ui);font-size:16px;line-height:1.5;overflow-x:hidden}
+button,input,select{font-family:inherit;font-size:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--tab);outline-offset:2px}
+.hidden{display:none!important}
+main{max-width:880px;margin:0 auto;padding:18px 14px 48px}
+.katex{font-size:1.08em}
+
+/* Heft-Umschlag */
+.cover{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap}
+.brand{display:flex;align-items:flex-start;gap:12px}
+.label{background:var(--paper);border:2px solid var(--text);border-radius:6px;padding:8px 18px 6px;transform:rotate(-1.2deg);box-shadow:3px 3px 0 var(--text)}
+.label h1{font-family:var(--hand);font-weight:400;font-size:44px;line-height:1;margin:0;color:var(--ink)}
+.label p{margin:0;font-size:13px;color:var(--muted)}
+.coverright{display:flex;flex-direction:column;align-items:flex-end;gap:8px;margin-left:auto;flex:1 1 280px}
+.stats{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.stat{background:var(--paper);border-radius:999px;padding:3px 11px;font-size:12.5px;border:1px solid var(--karo)}
+.stat b{font-weight:700}
+.levels{display:flex;gap:6px;align-items:center;font-size:13px;font-weight:700}
+.levels button{border:2px solid var(--text);background:var(--paper);border-radius:999px;min-width:34px;padding:2px 10px;font-weight:700;box-shadow:2px 2px 0 var(--text)}
+.levels button[aria-pressed="true"]{background:var(--tab);border-color:var(--tab);color:#fff}
+.qrbtn{flex:none;width:30px;height:30px;display:grid;place-items:center;border:2px solid var(--text);border-radius:7px;background:var(--paper);color:var(--text);box-shadow:2px 2px 0 var(--text);padding:0}
+.qrbtn:active{transform:translate(2px,2px);box-shadow:none}
+
+/* Register-Reiter */
+.tabs{display:flex;gap:6px;margin:22px 0 0 10px;position:relative;z-index:1;flex-wrap:wrap;align-items:flex-end}
+.tab{border:none;border-radius:12px 12px 0 0;padding:10px 13px 12px;font-weight:700;font-size:15px;white-space:nowrap;color:#fff;opacity:.55;transform:translateY(6px);transition:transform .15s,opacity .15s}
+.tab[aria-selected="true"]{opacity:1;transform:none}
+.tab .badge{display:inline-block;min-width:22px;padding:0 6px;margin-left:6px;border-radius:999px;background:rgba(255,255,255,.3);font-size:13px;text-align:center}
+.tab .sm{display:none}
+
+/* Heftseite */
+.sheet{position:relative;background:var(--paper);border-radius:4px 14px 14px 14px;border-top:6px solid var(--tab);padding:18px 16px 20px;box-shadow:0 2px 0 var(--karo),0 10px 30px rgba(20,30,50,.08);
+  background-image:linear-gradient(var(--karo) 1px,transparent 1px),linear-gradient(90deg,var(--karo) 1px,transparent 1px);background-size:22px 22px;background-position:-1px -1px}
+.sheet::before{content:"";position:absolute;top:0;bottom:0;left:44px;width:2px;background:color-mix(in srgb,var(--red) 45%,transparent);pointer-events:none}
+.inner{position:relative;padding-left:40px}
+.revinfo{font-size:14px;color:var(--muted);background:var(--paper);padding:2px 8px;border-radius:6px;width:fit-content;margin-bottom:6px}
+.taskline{display:flex;gap:10px;align-items:baseline;flex-wrap:wrap;background:var(--paper);padding:6px 12px;border-radius:10px;width:fit-content;max-width:100%;margin-bottom:8px}
+.taskline .tl{font-family:var(--hand);font-size:24px;color:var(--muted)}
+.taskline .tt{font-size:16px;line-height:1.7}
+.lvltag{font-size:12px;font-weight:700;color:#fff;background:var(--tab);border-radius:999px;padding:1px 9px;white-space:nowrap}
+.phases{list-style:none;display:flex;gap:6px;padding:0;margin:4px 0 8px;flex-wrap:wrap}
+.phases li{background:var(--paper);border:1.5px solid var(--karo);border-radius:999px;padding:3px 12px;font-size:13px;color:var(--muted)}
+.phases li.now{border-color:var(--tab);color:var(--text);font-weight:700;box-shadow:inset 0 0 0 1px var(--tab)}
+.phases li.done{color:var(--green);border-color:var(--green)}
+.phases li.done::before{content:"✓ "}
+
+.workgrid{display:grid;grid-template-columns:minmax(0,1fr);gap:12px}
+.workgrid.withfig{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+@media (max-width:760px){.workgrid.withfig{grid-template-columns:minmax(0,1fr)}.fig{order:-1;position:static}}
+.fig{background:var(--paper);border:2px solid var(--karo);border-radius:12px;padding:6px;align-self:start;position:sticky;top:8px}
+.fig svg{display:block;width:100%;height:auto;touch-action:manipulation}
+.fig .cap{font-size:12.5px;color:var(--muted);padding:2px 6px 4px;line-height:1.35}
+.legend{display:flex;gap:10px;flex-wrap:wrap;font-size:12.5px;padding:0 6px 4px}
+.legend span{display:inline-flex;align-items:center;gap:5px}
+.legend i{display:inline-block;width:16px;height:10px;border-radius:3px}
+
+.steps{display:flex;flex-direction:column;gap:10px;min-width:0}
+.stepblk{background:var(--paper);border:2px solid var(--karo);border-radius:12px;padding:10px 12px;min-width:0}
+.stepblk.now{border-color:var(--tab);box-shadow:3px 3px 0 color-mix(in srgb,var(--tab) 35%,transparent)}
+.stepblk.done{border-color:color-mix(in srgb,var(--green) 55%,transparent)}
+.stepblk h3{margin:0 0 6px;font-size:14px;color:var(--muted);font-weight:700;letter-spacing:.02em}
+.stepblk.now h3{color:var(--tab)}
+.stepblk.done h3{color:var(--green)}
+.stepblk.done h3::before{content:"✓ "}
+.stepblk p{margin:4px 0}
+.stepblk .q{margin:2px 0 8px}
+.row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:6px 0}
+.row .lab{min-width:0}
+.fin{width:6.2em;height:1.75em;font-family:var(--hand);font-size:22px;line-height:1;text-align:center;color:var(--ink);-webkit-text-fill-color:var(--ink);background:color-mix(in srgb,var(--paper) 88%,transparent);border:2px solid var(--karo);border-radius:8px;padding:0 4px;caret-color:var(--ink)}
+.fin.s{width:3.6em}
+.fin:focus{outline:none;border-color:var(--ink);background:var(--focus)}
+.fin:disabled,.sel:disabled{opacity:1;cursor:default}
+.fin.ok,.sel.ok{border-color:var(--green);color:var(--green);-webkit-text-fill-color:var(--green)}
+.fin.bad,.sel.bad{border-color:var(--red);color:var(--red);-webkit-text-fill-color:var(--red);background:color-mix(in srgb,var(--red) 11%,transparent);box-shadow:0 0 0 1px var(--red)}
+.sel{font-size:14px;border:2px solid var(--karo);border-radius:8px;background:var(--paper);color:var(--ink);padding:4px 6px;max-width:100%}
+.choices{display:flex;flex-direction:column;gap:6px;margin:6px 0}
+.choice{display:flex;align-items:center;gap:10px;text-align:left;border:2px solid var(--karo);border-radius:10px;background:var(--paper);padding:7px 10px;font-size:15px;color:var(--text)}
+.choice[aria-pressed="true"]{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink);background:var(--focus)}
+.choice.ok{border-color:var(--green);box-shadow:inset 0 0 0 1px var(--green)}
+.choice.bad{border-color:var(--red);box-shadow:inset 0 0 0 1px var(--red);background:color-mix(in srgb,var(--red) 9%,transparent)}
+.choice .dot{flex:none;width:18px;height:18px;border-radius:50%;border:2px solid var(--muted)}
+.choice[aria-pressed="true"] .dot{border-color:var(--ink);background:radial-gradient(var(--ink) 45%,transparent 50%)}
+.choice.multi .dot{border-radius:4px}
+.choice.multi[aria-pressed="true"] .dot{background:var(--ink)}
+.choices.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
+.signs{display:inline-flex;gap:4px}
+.signs button{width:38px;height:34px;border:2px solid var(--text);border-radius:8px;background:var(--paper);font-family:var(--hand);font-size:24px;line-height:1;padding:0;box-shadow:2px 2px 0 var(--text)}
+.signs button[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+.signs.ok button[aria-pressed="true"]{background:var(--green);border-color:var(--green)}
+.signs.bad button[aria-pressed="true"]{background:var(--red);border-color:var(--red)}
+.slider{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:6px 0}
+.slider input[type=range]{flex:1 1 180px;accent-color:var(--tab)}
+.slider .val{font-family:var(--hand);font-size:24px;color:var(--ink);min-width:3em}
+
+/* Beweis-Puzzle */
+.proof{list-style:none;margin:6px 0;padding:0;display:flex;flex-direction:column;gap:6px;min-height:44px;border:2px dashed var(--karo);border-radius:10px;padding:6px}
+.proof:empty::after{content:"Tippen Sie unten auf die Schnipsel – in der richtigen Reihenfolge.";color:var(--muted);font-size:13px;padding:6px}
+.pline{display:flex;align-items:center;gap:8px;flex-wrap:wrap;background:var(--paper);border:2px solid var(--karo);border-radius:10px;padding:5px 10px;min-height:42px;text-align:left;width:100%;color:var(--text)}
+.pline .nr{font-family:var(--hand);font-size:20px;color:var(--muted);min-width:1.3em}
+.pline.fixed{border-style:solid;background:color-mix(in srgb,var(--karo) 25%,var(--paper))}
+.pline.ok{border-color:var(--green)}
+.pline.bad{border-color:var(--red);background:color-mix(in srgb,var(--red) 9%,transparent)}
+.pline .why{margin-left:auto}
+.pool{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 2px}
+.chip{border:2px solid var(--text);border-radius:10px;background:var(--paper);padding:6px 12px;box-shadow:2px 2px 0 var(--text);color:var(--text);min-height:42px;max-width:100%;overflow-x:auto}
+.chip:active{transform:translate(2px,2px);box-shadow:none}
+.pool .hint0{font-size:13px;color:var(--muted)}
+.pmini{font-size:13px;color:var(--muted);margin:2px 0}
+.cmp{display:grid;grid-template-columns:1fr 1fr;gap:6px 14px;margin-top:6px}
+.cmp>div{background:var(--paper);border:1.5px solid var(--karo);border-radius:8px;padding:6px 8px;overflow-x:auto}
+.cmp h4{margin:0 0 4px;font-size:13px;color:var(--muted)}
+@media (max-width:560px){.cmp{grid-template-columns:1fr}}
+
+/* Hilfe & Rückmeldung */
+.note{background:var(--paper);border:2px solid var(--karo);border-radius:12px;padding:12px 14px;margin:10px 0 10px;max-width:68ch}
+.note:empty{display:none}
+.note p{margin:0}
+.note ul{margin:6px 0 0;padding-left:20px}
+.note li{margin:5px 0}
+.note.good{border-color:var(--green)}
+.note.good>p>strong:first-child{color:var(--green)}
+.note.bad{border-color:var(--red)}
+.note.bad>p>strong:first-child{color:var(--red)}
+.hintbox{background:color-mix(in srgb,var(--hl) 55%,var(--paper));border:2px dashed var(--rev);border-radius:12px;padding:10px 14px;margin:8px 0;max-width:68ch}
+.hintbox h4{margin:0 0 6px;font-size:14px;color:var(--rev)}
+.hintbox .hl{margin:6px 0;padding-top:6px;border-top:1px dashed color-mix(in srgb,var(--rev) 50%,transparent)}
+.hintbox .hl:first-of-type{border-top:none;padding-top:0}
+.hintbox .hn{font-weight:700;color:var(--rev);margin-right:6px}
+
+.actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.actions.more{margin-top:14px;padding-top:12px;border-top:2px dashed var(--karo)}
+.btn{border:2px solid var(--text);background:var(--paper);border-radius:10px;padding:8px 14px;font-weight:500;font-size:15px;box-shadow:2px 2px 0 var(--text);transition:transform .06s,box-shadow .06s;color:var(--text)}
+.btn:active{transform:translate(2px,2px);box-shadow:0 0 0 var(--text)}
+.btn.main{background:var(--tab);border-color:var(--tab);color:#fff;font-weight:700;box-shadow:2px 2px 0 var(--text)}
+.btn.help{border-color:var(--rev);color:var(--rev);box-shadow:2px 2px 0 var(--rev)}
+.btn:disabled{opacity:.4;cursor:default}
+.settings{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;font-size:13px}
+.tog{font-size:12.5px;line-height:1.3;border:2px dashed var(--karo);border-radius:999px;background:var(--paper);padding:3px 10px;color:var(--muted)}
+.tog[aria-pressed="true"]{border:2px solid var(--ink);color:var(--ink);font-weight:700}
+
+.stamp{position:absolute;right:4%;top:6px;transform:rotate(-14deg);border:4px double var(--red);color:var(--red);font-family:var(--hand);font-size:40px;padding:0 16px;border-radius:10px;background:color-mix(in srgb,var(--paper) 80%,transparent);pointer-events:none;animation:stamp .4s cubic-bezier(.2,1.8,.4,1);z-index:3}
+@keyframes stamp{from{transform:rotate(-14deg) scale(2.2);opacity:0}to{transform:rotate(-14deg) scale(1);opacity:1}}
+
+/* Merkkasten / Musterbeispiel */
+.merk{background:var(--paper);border:2px solid var(--text);border-radius:12px;box-shadow:3px 3px 0 var(--text);padding:12px 14px;margin:0 0 14px}
+.merk h2{font-family:var(--hand);font-weight:400;font-size:28px;margin:0 0 4px;color:var(--ink)}
+.merk ol{margin:6px 0;padding-left:22px}
+.merk li{margin:3px 0}
+.mb{display:grid;grid-template-columns:auto 1fr 1fr;gap:4px 12px;align-items:center;margin-top:8px;overflow-x:auto}
+.mb .h{font-size:12.5px;font-weight:700;color:var(--muted);border-bottom:2px solid var(--karo)}
+.mb .c{padding:3px 0}
+.mb .n{font-size:12.5px;color:var(--rev);font-weight:700}
+@media (max-width:560px){.mb{grid-template-columns:1fr}.mb .h{display:none}.mb .n{margin-top:8px}}
+
+/* Musterlösung */
+.solution{margin-top:18px}
+.solution h2{font-family:var(--hand);font-weight:400;font-size:32px;margin:0;color:var(--ink);background:var(--paper);width:fit-content;padding:0 8px;border-radius:6px}
+.sollines{display:flex;flex-direction:column;gap:6px;margin:8px 0}
+.sollines .sl{background:var(--paper);border-radius:8px;padding:5px 10px;width:fit-content;max-width:100%;overflow-x:auto}
+.sollines .sl.hl{background:var(--hl)}
+.soltext{background:var(--paper);border-left:4px solid var(--tab);padding:10px 14px;border-radius:0 10px 10px 0;min-height:56px;max-width:68ch;line-height:1.7}
+.solfig{max-width:440px;margin-top:8px;background:var(--paper);border-radius:10px;padding:4px}
+.solfig svg{display:block;width:100%;height:auto}
+.solnav{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:10px}
+.solnav .count{font-size:14px;color:var(--muted);background:var(--paper);padding:2px 8px;border-radius:6px}
+
+/* Fenster */
+.overlay{position:fixed;inset:0;background:rgba(15,20,35,.5);display:grid;place-items:center;padding:16px;z-index:20}
+.modal{background:var(--paper);border:2px solid var(--text);border-radius:14px;box-shadow:5px 5px 0 var(--text);padding:20px;max-width:520px;width:100%;max-height:100%;overflow:auto}
+.modal h2{font-family:var(--hand);font-weight:400;font-size:32px;margin:0 0 4px;color:var(--ink)}
+.modal .hint{margin:0 0 12px;font-size:14px;color:var(--muted)}
+.modal .err{color:var(--red);min-height:22px;font-size:14px;margin:10px 0 4px}
+.modal .actions{justify-content:flex-end;margin-top:8px}
+.modal .row input{width:4.2em;height:1.6em;font-size:20px}
+.modal.qrmodal{max-width:none;width:auto;text-align:center;display:flex;flex-direction:column;align-items:center;gap:12px}
+.qrbox{background:#fff;padding:12px;border-radius:10px;border:2px solid var(--karo);line-height:0}
+.qrbox svg,.qrbox img{display:block;width:min(calc(100vw - 100px),calc(100vh - 250px),420px);height:auto;min-width:160px}
+.qrurl{font-size:13px;color:var(--muted);margin:0;max-width:420px;overflow-wrap:anywhere;user-select:all}
+
+/* Graph */
+.g-grid{stroke:var(--karo);stroke-width:1}
+.g-ax{stroke:var(--text);stroke-width:1.6}
+.g-tick{font-family:var(--ui);font-size:11px;fill:var(--muted)}
+.g-f{fill:none;stroke:var(--fA);stroke-width:3}
+.g-g{fill:none;stroke:var(--fB);stroke-width:3}
+.g-h{fill:none;stroke:var(--green);stroke-width:2.5;stroke-dasharray:7 5}
+.g-c{fill:none;stroke:var(--red);stroke-width:2.5}
+.g-ghost{fill:none;stroke:var(--muted);stroke-width:1.5;stroke-dasharray:4 4;opacity:.7}
+.g-fill1{fill:var(--fill1)} .g-fill2{fill:var(--fill2)} .g-fill3{fill:var(--fill3)} .g-fillr{fill:var(--fillr)}
+.g-hatch{fill:url(#hatch)}
+.g-rect{fill:none;stroke:var(--c4);stroke-width:2.5;stroke-dasharray:6 4}
+.g-lbl{font-family:var(--hand);font-size:22px;fill:var(--text);paint-order:stroke;stroke:var(--paper);stroke-width:4px}
+.g-lf{fill:var(--fA)} .g-lg{fill:var(--fB)}
+.g-pt{fill:var(--paper);stroke:var(--text);stroke-width:2.5}
+.g-focus{stroke:var(--ink);stroke-width:2.5;stroke-dasharray:none}
+
+@media (max-width:560px){
+  .inner{padding-left:22px}
+  .sheet{padding-left:8px;padding-right:8px}
+  .sheet::before{left:24px}
+  .label h1{font-size:34px}
+  .fin{font-size:20px;width:5.4em}
+  .tab{padding:8px 9px 10px;font-size:14px}
+  .tab .lg{display:none} .tab .sm{display:inline}
+  .tabs{margin-left:2px;gap:3px}
+}
+@media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
+
+</style>
+</head>
+<body>
+<main>
+  <header class="cover">
+    <div class="brand">
+      <button class="qrbtn" id="qrBtn" type="button" title="QR-Code zu dieser Seite zeigen" aria-label="QR-Code zu dieser Seite zeigen">
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="currentColor"><path d="M3 3h8v8H3zm2 2v4h4V5zm8-2h8v8h-8zm2 2v4h4V5zM3 13h8v8H3zm2 2v4h4v-4zm8-2h2v2h-2zm2 2h2v2h-2zm2-2h2v2h-2zm2 2h2v2h-2zm-6 2h2v2h-2zm4 0h2v2h-2zm-2 2h2v2h-2zm4 0h2v2h-2z"/></svg>
+      </button>
+      <div class="label"><h1>Integralheft</h1><p>Integrationsregeln beweisen und anwenden</p></div>
+    </div>
+    <div class="coverright">
+      <div class="levels hidden" id="levels" role="group" aria-label="Stufe"></div>
+      <div class="stats" id="stats"></div>
+    </div>
+  </header>
+
+  <nav class="tabs" id="tabs" role="tablist" aria-label="Aufgabenart"></nav>
+
+  <section class="sheet">
+    <div class="inner">
+      <div id="extra"></div>
+      <div class="revinfo hidden" id="revInfo"></div>
+      <div class="taskline" id="taskline"></div>
+      <ol class="phases" id="phases"></ol>
+      <div class="workgrid" id="workgrid">
+        <div class="steps" id="steps"></div>
+        <div class="fig hidden" id="fig"></div>
+      </div>
+      <div class="stamp hidden" id="stamp"></div>
+      <div class="note" id="note" aria-live="polite"></div>
+      <div class="hintbox hidden" id="hintbox" aria-live="polite"></div>
+      <div class="actions">
+        <button class="btn main" id="checkBtn">✓ Prüfen</button>
+        <button class="btn help" id="helpBtn">💡 Hilfe</button>
+        <button class="btn main hidden" id="nextBtn">Neue Aufgabe ▶</button>
+      </div>
+      <div class="actions more">
+        <button class="btn" id="solBtn">👀 Musterlösung</button>
+        <button class="btn" id="resetBtn">↺ Nochmal von vorn</button>
+        <button class="btn" id="newBtn">Neue Aufgabe</button>
+        <button class="btn" id="ownBtn">✏️ Eigene Aufgabe</button>
+      </div>
+      <div class="settings" id="settings"></div>
+
+      <div class="solution hidden" id="solution">
+        <h2>Musterlösung</h2>
+        <div class="sollines" id="solLines"></div>
+        <div class="soltext" id="solText" aria-live="polite"></div>
+        <div class="solfig hidden" id="solFig"></div>
+        <div class="solnav">
+          <button class="btn" id="solPrev">◀ Zurück</button>
+          <button class="btn main" id="solNext">Weiter ▶</button>
+          <span class="count" id="solCount"></span>
+          <button class="btn" id="solClose">Selbst nochmal probieren</button>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div class="overlay hidden" id="qrOverlay">
+  <div class="modal qrmodal" role="dialog" aria-modal="true" aria-labelledby="qrTitle">
+    <h2 id="qrTitle">Integralheft öffnen</h2>
+    <div class="qrbox" id="qrBox"></div>
+    <p class="qrurl" id="qrUrl"></p>
+    <div class="actions" style="justify-content:center"><button class="btn main" id="qrClose">Schließen</button></div>
+  </div>
+</div>
+
+<div class="overlay hidden" id="overlay">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="ownTitle">
+    <h2 id="ownTitle">Eigene Aufgabe</h2>
+    <p class="hint" id="ownHint"></p>
+    <div id="ownBody"></div>
+    <div class="err" id="ownErr"></div>
+    <div class="actions"><button class="btn" id="ownCancel">Abbrechen</button><button class="btn main" id="ownOk">Rechnen</button></div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script>
+/* ===== Heft-Engine (gemeinsam für beide Lernumgebungen) ===== */
+"use strict";
+const $=s=>document.querySelector(s);
+const $$=(s,r)=>Array.from((r||document).querySelectorAll(s));
+const rnd=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const escA=s=>String(s).replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;");
+const store={get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+
+/* ---- Formeln ---- */
+const K=t=>'<span class="k" data-t="'+escA(t)+'"></span>';
+function renderK(root){
+  $$(".k:not([data-r])",root||document).forEach(el=>{el.setAttribute("data-r","1");
+    if(window.katex){try{katex.render(el.getAttribute("data-t"),el,{throwOnError:false,displayMode:el.classList.contains("kd")});return}catch(e){}}
+    el.textContent=el.getAttribute("data-t").replace(/\\,/g," ").replace(/\\cdot/g,"·").replace(/\\int_\{?([^}\s]*)\}?\^\{?([^}\s]*)\}?/g,"∫[$1;$2] ").replace(/\\[a-z]+/g,"").replace(/[{}]/g,"");
+  });
+}
+
+/* ---- Zahlen ---- */
+function parseNum(s){
+  s=String(s==null?"":s).trim().replace(/\s+/g,"").replace(/[−–]/g,"-").replace(/,/g,".");
+  if(!s)return null;
+  let m=s.match(/^([+-]?)(\d+(?:\.\d+)?)\/(\d+(?:\.\d+)?)$/);
+  if(m){const d=+m[3];if(!d)return NaN;return(m[1]==="-"?-1:1)*(+m[2])/d}
+  if(/^[+-]?(\d+\.?\d*|\.\d+)$/.test(s))return +s;
+  return NaN;
+}
+const TOL=e=>Math.max(0.006,Math.abs(e)*2e-4);
+function near(v,e,tol){return v!=null&&!isNaN(v)&&Math.abs(v-e)<=(tol==null?TOL(e):tol)}
+function toFrac(v,maxD){maxD=maxD||96;for(let d=1;d<=maxD;d++){const n=Math.round(v*d);if(Math.abs(n/d-v)<1e-9)return[n,d]}return null}
+function dec(v,dp){dp=dp==null?2:dp;const r=Math.round(v*Math.pow(10,dp))/Math.pow(10,dp);return(Object.is(r,-0)?0:r).toString().replace(".",",").replace("-","−")}
+function fmt(v,dp){const f=toFrac(v);if(f){if(f[1]===1)return String(f[0]);return(f[0]<0?"-":"")+"\\frac{"+Math.abs(f[0])+"}{"+f[1]+"}"}return"\\approx "+(v<0?"-":"")+dec(Math.abs(v),dp==null?2:dp).replace("−","").replace(",","{,}")}
+function fmtT(v){const f=toFrac(v);if(f){if(f[1]===1)return String(f[0]).replace("-","−");return(f[0]<0?"−":"")+Math.abs(f[0])+"/"+f[1]}return"≈ "+dec(v)}
+function fmtD(v){const f=toFrac(v,48);if(f&&f[1]!==1)return fmt(v)+(Math.abs(v-Math.round(v*100)/100)>1e-9?"\\approx ":"=")+dec(v).replace("−","-").replace(",","{,}");return fmt(v)}
+
+/* ---- Polynome: c[0]+c[1]x+c[2]x^2+... ---- */
+const P={
+  ev:(c,x)=>c.reduce((s,a,i)=>s+a*Math.pow(x,i),0),
+  add:(a,b)=>{const n=Math.max(a.length,b.length),r=[];for(let i=0;i<n;i++)r.push((a[i]||0)+(b[i]||0));return P.trim(r)},
+  sub:(a,b)=>P.add(a,b.map(x=>-x)),
+  scale:(a,k)=>P.trim(a.map(x=>x*k)),
+  mul:(a,b)=>{const r=new Array(a.length+b.length-1).fill(0);a.forEach((x,i)=>b.forEach((y,j)=>r[i+j]+=x*y));return P.trim(r)},
+  int:c=>[0].concat(c.map((a,i)=>a/(i+1))),
+  der:c=>c.slice(1).map((a,i)=>a*(i+1)),
+  integ:(c,a,b)=>{const F=P.int(c);return P.ev(F,b)-P.ev(F,a)},
+  trim:c=>{c=c.map(x=>Math.abs(x)<1e-12?0:x);while(c.length>1&&c[c.length-1]===0)c.pop();return c},
+  deg:c=>P.trim(c).length-1,
+  fromRoots:(rs,s)=>rs.reduce((p,r)=>P.mul(p,[-r,1]),[s]),
+  tex:(c,v)=>{v=v||"x";c=P.trim(c);let s="";for(let i=c.length-1;i>=0;i--){const a=c[i];if(!a)continue;const f=toFrac(Math.abs(a));
+      let co=f?(f[1]===1?String(f[0]):"\\frac{"+f[0]+"}{"+f[1]+"}"):dec(Math.abs(a)).replace(",","{,}");
+      if(i>0&&Math.abs(a)===1)co="";
+      const t=co+(i===0?"":(co&&!f?"\\cdot ":"")+v+(i>1?"^{"+i+"}":""));
+      s+=(a<0?(s?"-":"-"):(s?"+":""))+t}
+    return s||"0"},
+  roots:(c,lo,hi)=>{ /* reelle Nullstellen numerisch */
+    c=P.trim(c);lo=lo==null?-60:lo;hi=hi==null?60:hi;const n=4000,r=[],f=x=>P.ev(c,x),d=P.der(c);
+    let px=lo,pv=f(lo);
+    const push=x=>{if(!r.some(y=>Math.abs(y-x)<1e-6))r.push(x)};
+    for(let i=1;i<=n;i++){const x=lo+(hi-lo)*i/n,v=f(x);
+      if(pv===0)push(px);
+      else if(pv*v<0){let a=px,b=x;for(let k=0;k<80;k++){const m=(a+b)/2;if(f(a)*f(m)<=0)b=m;else a=m}push((a+b)/2)}
+      px=x;pv=v}
+    if(pv===0)push(px);
+    /* doppelte Nullstellen: über Ableitung */
+    P.trim(d).length>1&&P.rootsSimple(d,lo,hi).forEach(x=>{if(Math.abs(f(x))<1e-9)push(x)});
+    return r.map(x=>{const q=Math.round(x*1e6)/1e6;return Math.abs(q-Math.round(q))<1e-7?Math.round(q):q}).sort((a,b)=>a-b);
+  },
+  rootsSimple:(c,lo,hi)=>{const n=4000,r=[],f=x=>P.ev(c,x);let px=lo,pv=f(lo);
+    for(let i=1;i<=n;i++){const x=lo+(hi-lo)*i/n,v=f(x);if(pv===0)r.push(px);else if(pv*v<0){let a=px,b=x;for(let k=0;k<80;k++){const m=(a+b)/2;if(f(a)*f(m)<=0)b=m;else a=m}r.push((a+b)/2)}px=x;pv=v}return r}
+};
+
+/* ---- Graph (SVG) ---- */
+function plot(o){
+  const W=o.w||440,Hh=o.h||360,pad={l:30,r:12,t:12,b:24};
+  const X=x=>pad.l+(x-o.x0)/(o.x1-o.x0)*(W-pad.l-pad.r), Y=y=>pad.t+(o.y1-y)/(o.y1-o.y0)*(Hh-pad.t-pad.b);
+  let s='<svg viewBox="0 0 '+W+" "+Hh+'" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="'+escA(o.aria||"Graph")+'">';
+  s+='<defs><pattern id="hatch" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="8" height="8" fill="var(--fillr)"/><line x1="0" y1="0" x2="0" y2="8" stroke="var(--c4)" stroke-width="2"/></pattern><clipPath id="clipg"><rect x="'+pad.l+'" y="'+pad.t+'" width="'+(W-pad.l-pad.r)+'" height="'+(Hh-pad.t-pad.b)+'"/></clipPath></defs>';
+  const st=o.step||1,sty=o.stepy||st;
+  for(let x=Math.ceil(o.x0/st)*st;x<=o.x1+1e-9;x+=st)s+='<line class="g-grid" x1="'+X(x)+'" x2="'+X(x)+'" y1="'+pad.t+'" y2="'+(Hh-pad.b)+'"/>';
+  for(let y=Math.ceil(o.y0/sty)*sty;y<=o.y1+1e-9;y+=sty)s+='<line class="g-grid" y1="'+Y(y)+'" y2="'+Y(y)+'" x1="'+pad.l+'" x2="'+(W-pad.r)+'"/>';
+  s+='<g clip-path="url(#clipg)">';
+  const samp=(f,a,b,n)=>{n=n||160;const p=[];for(let i=0;i<=n;i++){const x=a+(b-a)*i/n;p.push([x,f(x)])}return p};
+  (o.fills||[]).forEach(F=>{const up=samp(F.top,F.a,F.b),dn=samp(F.bot,F.a,F.b).reverse();
+    s+='<path class="'+F.cls+'" d="M'+up.concat(dn).map(p=>X(p[0]).toFixed(1)+","+Y(Math.max(o.y0-50,Math.min(o.y1+50,p[1]))).toFixed(1)).join("L")+'Z"'+(F.stroke?' stroke="'+F.stroke+'" stroke-width="2.5"':"")+'/>'});
+  (o.rects||[]).forEach(R=>{s+='<rect class="'+R.cls+'" x="'+X(R.a)+'" y="'+Y(R.top)+'" width="'+(X(R.b)-X(R.a))+'" height="'+(Y(R.bot)-Y(R.top))+'"/>'});
+  s+="</g>";
+  s+='<line class="g-ax" x1="'+pad.l+'" x2="'+(W-pad.r)+'" y1="'+Y(0)+'" y2="'+Y(0)+'"/>';
+  if(o.x0<=0&&o.x1>=0)s+='<line class="g-ax" y1="'+pad.t+'" y2="'+(Hh-pad.b)+'" x1="'+X(0)+'" x2="'+X(0)+'"/>';
+  const lx=o.lstep||st,ly=o.lstepy||sty;
+  for(let x=Math.ceil(o.x0/lx)*lx;x<=o.x1+1e-9;x+=lx)if(Math.abs(x)>1e-9)s+='<text class="g-tick" x="'+X(x)+'" y="'+Math.min(Hh-6,Math.max(pad.t+12,Y(0)+14))+'" text-anchor="middle">'+dec(x,2)+"</text>";
+  for(let y=Math.ceil(o.y0/ly)*ly;y<=o.y1+1e-9;y+=ly)if(Math.abs(y)>1e-9)s+='<text class="g-tick" x="'+(o.x0<=0&&o.x1>=0?X(0)-5:pad.l-4)+'" y="'+(Y(y)+4)+'" text-anchor="end">'+dec(y,2)+"</text>";
+  s+='<g clip-path="url(#clipg)">';
+  (o.vlines||[]).forEach(v=>{s+='<line class="'+(v.cls||"g-ghost")+'" x1="'+X(v.x)+'" x2="'+X(v.x)+'" y1="'+Y(v.y0==null?o.y0:v.y0)+'" y2="'+Y(v.y1==null?o.y1:v.y1)+'"/>'});
+  (o.fns||[]).forEach(F=>{const a=F.a==null?o.x0:F.a,b=F.b==null?o.x1:F.b,p=samp(F.f,a,b,300);
+    s+='<path class="'+F.cls+'" d="M'+p.map(q=>X(q[0]).toFixed(1)+","+Y(Math.max(o.y0-50,Math.min(o.y1+50,q[1]))).toFixed(1)).join("L")+'"/>'});
+  s+="</g>";
+  (o.pts||[]).forEach(p=>{s+='<circle class="g-pt" cx="'+X(p.x)+'" cy="'+Y(p.y)+'" r="5"/>'});
+  (o.labels||[]).forEach(L=>{s+='<text class="g-lbl '+(L.cls||"")+'" x="'+X(L.x)+'" y="'+Y(L.y)+'" text-anchor="'+(L.anchor||"middle")+'">'+L.t+"</text>"});
+  return s+"</svg>";
+}
+
+/* ---- Bausteine für Schritte ---- */
+/* Zahlen-Schritt: fields [{k,lab(html),val,tol,w}] */
+function numFields(fields){return fields.map(f=>'<div class="row"><span class="lab">'+f.lab+'</span><input class="fin'+(f.w?" s":"")+'" data-k="'+f.k+'" inputmode="decimal" autocomplete="off" aria-label="'+escA(f.aria||f.k)+'"'+(f.focus?' data-focus="'+f.focus+'"':"")+'>'+(f.after||"")+"</div>").join("")}
+function readVals(box){const v={};$$("input.fin",box).forEach(i=>v[i.dataset.k]=parseNum(i.value));return v}
+function readRaw(box){const v={};$$("input.fin",box).forEach(i=>v[i.dataset.k]=i.value.trim());return v}
+/* Standard-Prüfung für Zahlenfelder */
+function checkNums(box,fields,extra){
+  const v=readVals(box),marks={},msgs=[];let empty=0;
+  fields.forEach(f=>{const x=v[f.k];
+    if(x==null){empty++;return}
+    if(isNaN(x)){marks[f.k]=false;msgs.push("„"+(f.name||f.k)+"“: Das ist keine Zahl. Schreiben Sie z. B. 2,5 oder 7/3.");return}
+    const ok=f.check?f.check(x,v):near(x,f.val,f.tol);marks[f.k]=ok;
+    if(!ok){const m=(f.why&&f.why(x,v))||(f.tol==null&&Math.abs(x-f.val)<0.06?"„"+(f.name||f.k)+"“: Fast! Runden Sie auf zwei Nachkommastellen oder schreiben Sie das Ergebnis als Bruch.":"„"+(f.name||f.k)+"“ stimmt noch nicht.");msgs.push(m)}});
+  if(extra)extra(v,marks,msgs);
+  const ok=!empty&&fields.every(f=>marks[f.k]);
+  if(empty&&!msgs.length)msgs.push("Es sind noch Felder leer.");
+  else if(empty)msgs.push("Außerdem sind noch Felder leer.");
+  const partial=empty>0&&Object.keys(marks).every(k=>marks[k]);
+  return{ok,marks,msgs,empty:empty===fields.length,partial};
+}
+/* Auswahl (eine richtige oder mehrere) */
+function choiceHTML(opts,multi,grid){return'<div class="choices'+(grid?" grid2":"")+'">'+opts.map((o,i)=>'<button type="button" class="choice'+(multi?" multi":"")+'" data-i="'+i+'" aria-pressed="false"><span class="dot"></span><span>'+o+"</span></button>").join("")+"</div>"}
+function bindChoices(box,multi,onChange){$$(".choice",box).forEach(b=>b.addEventListener("click",()=>{if(b.disabled)return;
+  if(!multi)$$(".choice",box).forEach(x=>{if(b.closest(".choices")===x.closest(".choices"))x.setAttribute("aria-pressed","false")});
+  b.setAttribute("aria-pressed",multi&&b.getAttribute("aria-pressed")==="true"?"false":"true");$$(".choice",box).forEach(x=>x.classList.remove("ok","bad"));onChange&&onChange()}))}
+function chosen(box){return $$(".choice",box).filter(b=>b.getAttribute("aria-pressed")==="true").map(b=>+b.dataset.i)}
+/* Ordnen-Schritt (Beweisschnipsel) */
+function orderStep(o){ /* o: {name,intro,first(tex),lines:[tex],dis:[{t,why}],reasons?:..., hints} */
+  return{name:o.name||"Ordnen",TO:o.lines.length,
+    render(box,ctx){
+      const all=o.lines.map((t,i)=>({t,i})).concat((o.dis||[]).map((d,j)=>({t:d.t,i:"d"+j})));
+      ctx._pool=shuffle(all);ctx._placed=[];
+      box.innerHTML=(o.intro?'<p class="q">'+o.intro+"</p>":"")+'<ol class="proof"></ol><div class="pmini">Schnipsel (antippen zum Einfügen, im Beweis antippen zum Zurücklegen):</div><div class="pool"></div>'+(o.dis&&o.dis.length?'<div class="pmini">⚠️ Achtung: Nicht alle Schnipsel sind richtig!</div>':"");
+      const draw=()=>{
+        const pr=$(".proof",box),pl=$(".pool",box);
+        pr.innerHTML=(o.first?'<li class="pline fixed"><span class="nr">1</span>'+K(o.first)+"</li>":"")+ctx._placed.map((p,j)=>'<li><button type="button" class="pline" data-j="'+j+'"><span class="nr">'+(j+(o.first?2:1))+"</span>"+K(p.t)+"</button></li>").join("");
+        pl.innerHTML=ctx._pool.filter(p=>!ctx._placed.includes(p)).map(p=>'<button type="button" class="chip" data-i="'+p.i+'">'+K(p.t)+"</button>").join("")||'<span class="hint0">Alle Schnipsel sind verbaut.</span>';
+        renderK(box);
+        $$(".chip",box).forEach(b=>b.onclick=()=>{if(box.classList.contains("locked"))return;ctx._placed.push(ctx._pool.find(p=>String(p.i)===b.dataset.i));draw()});
+        $$(".proof button.pline",box).forEach(b=>b.onclick=()=>{if(box.classList.contains("locked"))return;ctx._placed.splice(+b.dataset.j,1);draw()});
+      };ctx._draw=draw;draw();
+    },
+    check(box,ctx){
+      const P_=ctx._placed,msgs=[];let ok=true;
+      if(!P_.length)return{ok:false,msgs:["Legen Sie zuerst Schnipsel in den Beweis."],empty:true};
+      const lis=$$(".proof button.pline",box);
+      P_.forEach((p,j)=>{const good=p.i===j;lis[j].classList.add(good?"ok":"bad");if(!good)ok=false;
+        if(typeof p.i==="string"){const d=o.dis[+p.i.slice(1)];msgs.push("Zeile "+(j+(o.first?2:1))+" ist ein Störschnipsel: "+d.why)}
+        else if(!good)msgs.push("Zeile "+(j+(o.first?2:1))+" steht an der falschen Stelle. Fragen Sie sich: Folgt sie direkt aus der Zeile davor?")});
+      if(P_.length<o.lines.length&&!P_.some((p,j)=>p.i!==j)){ok=false;msgs.push("Bis hierhin stimmt alles – aber der Beweis ist noch nicht fertig. Er endet erst mit der rechten Seite der Behauptung.");return{ok:false,msgs,partial:true}}
+      else if(P_.length<o.lines.length){ok=false}
+      if(P_.length>o.lines.length&&!msgs.length)ok=false;
+      return{ok,msgs};
+    },
+    reset(box,ctx){$$(".pline",box).forEach(l=>l.classList.remove("ok","bad"))},
+    hints:o.hints,
+    reveal(box,ctx){ /* nächsten richtigen Schnipsel einsetzen */
+      let j=0;while(j<ctx._placed.length&&ctx._placed[j].i===j)j++;
+      ctx._placed=ctx._placed.slice(0,j);ctx._placed.push(ctx._pool.find(p=>p.i===j));ctx._draw();
+    }};
+}
+/* Begründen-Schritt */
+function reasonStep(o){ /* o:{first,lines,ok:[[opt...]],opts:[..]} */
+  return{name:o.name||"Begründen",TR:o.ok,
+    render(box){
+      box.innerHTML='<p class="q">'+(o.intro||"Warum gilt jedes Gleichheitszeichen? Wählen Sie zu jeder Zeile die passende Begründung.")+'</p><ol class="proof">'+
+        (o.first?'<li class="pline fixed"><span class="nr">1</span>'+K(o.first)+"</li>":"")+
+        o.lines.map((t,j)=>'<li class="pline"><span class="nr">'+(j+2)+"</span>"+K(t)+'<select class="sel why" data-j="'+j+'" aria-label="Begründung für Zeile '+(j+2)+'"><option value="">– Begründung wählen –</option>'+o.opts.map((x,i)=>'<option value="'+i+'">'+x+"</option>").join("")+"</select></li>").join("")+"</ol>";
+      renderK(box);
+    },
+    check(box){const msgs=[];let ok=true,empty=0;
+      $$("select.why",box).forEach(s=>{s.classList.remove("ok","bad");const j=+s.dataset.j;if(s.value===""){empty++;ok=false;return}
+        const good=o.ok[j].includes(+s.value);s.classList.add(good?"ok":"bad");if(!good){ok=false;msgs.push("Zeile "+(j+2)+": "+(o.tips&&o.tips[j]||"Vergleichen Sie genau: Was ist anders als in der Zeile davor?"))}});
+      if(empty)msgs.push(empty===o.lines.length?"Wählen Sie zu jeder Zeile eine Begründung.":"Bei "+empty+" Zeile(n) fehlt noch die Begründung.");
+      return{ok,msgs,empty:empty===o.lines.length,partial:empty>0&&!$$("select.why.bad",box).length}},
+    hints:o.hints};
+}
+
+/* ===== Engine ===== */
+const ENG={};
+function startHeft(CFG){
+  const KINDS=CFG.kinds,KD={};KINDS.forEach(k=>KD[k.id]=k);
+  const S=store.get(CFG.key,{})||{};S.stats=S.stats||{};S.rev=S.rev||[];S.level=S.level||{};
+  KINDS.forEach(k=>{S.stats[k.id]=S.stats[k.id]||[0,0];if(k.levels&&!S.level[k.id])S.level[k.id]=1});
+  const save=()=>store.set(CFG.key,S);ENG.S=S;
+  let tab=KINDS[0].id,cur=null,revIdx=0,solI=0;
+
+  /* Reiter */
+  const tabs=$("#tabs");
+  tabs.innerHTML=KINDS.map(k=>'<button class="tab" role="tab" data-kind="'+k.id+'" style="background:'+k.color+'" title="'+escA(k.name)+'"><span class="lg">'+k.icon+" "+k.name+'</span><span class="sm">'+k.icon+" "+(k.short||"")+"</span></button>").join("")+
+    '<button class="tab" role="tab" data-kind="rev" style="background:var(--rev)" title="Fehler-Training">🔁<span class="lg"> Fehler-Training</span><span class="badge" id="revBadge">0</span></button>';
+  $$(".tab",tabs).forEach(b=>b.onclick=()=>{setTab(b.dataset.kind);newTask()});
+
+  function color(){const k=tab==="rev"?null:KD[tab];document.documentElement.style.setProperty("--tab",k?k.color:"var(--rev)")}
+  function renderStats(){
+    $("#stats").innerHTML=KINDS.map(k=>'<span class="stat">'+k.icon+" "+(k.short||k.name)+": <b>"+S.stats[k.id][0]+"</b> gelöst"+(S.stats[k.id][0]?", "+S.stats[k.id][1]+" auf Anhieb":"")+"</span>").join("");
+    $("#revBadge").textContent=S.rev.length;
+  }
+  function renderLevels(){
+    const k=KD[tab],el=$("#levels");
+    if(!k||!k.levels){el.classList.add("hidden");return}
+    el.classList.remove("hidden");
+    el.innerHTML="<span>"+(k.levels.label||"Stufe")+"</span>"+k.levels.names.map((n,i)=>'<button type="button" data-l="'+(i+1)+'" title="'+escA(k.levels.titles[i])+'" aria-pressed="'+(S.level[k.id]===i+1)+'">'+n+"</button>").join("");
+    $$("button",el).forEach(b=>b.onclick=()=>{S.level[k.id]=+b.dataset.l;save();renderLevels();newTask()});
+  }
+  function setTab(t){tab=t;$$(".tab",tabs).forEach(b=>b.setAttribute("aria-selected",b.dataset.kind===t));color();renderLevels();
+    $("#ownBtn").disabled=!(KD[t]&&KD[t].own);$("#ownBtn").title=KD[t]&&KD[t].own?"":"Eigene Aufgaben gibt es im Reiter „"+(KINDS.find(k=>k.own)||{name:""}).name+"“.";
+    $("#extra").innerHTML="";const k=KD[t];if(k&&k.extra){$("#extra").innerHTML=k.extra();renderK($("#extra"));k.extraBind&&k.extraBind($("#extra"))}
+  }
+
+  /* Aufgabe laden */
+  function load(kind,spec,isRev){
+    const k=KD[kind];const task=k.build(spec);
+    cur={kind,spec,task,i:0,err:false,sol:false,done:false,rev:!!isRev,ctx:task.ctx||{},hint:{}};
+    $("#stamp").classList.add("hidden");$("#solution").classList.add("hidden");$("#note").innerHTML="";$("#note").className="note";$("#hintbox").classList.add("hidden");
+    $("#taskline").innerHTML='<span class="tl">Aufgabe</span><span class="tt">'+task.title+"</span>"+(task.tag?'<span class="lvltag">'+task.tag+"</span>":"");
+    $("#steps").innerHTML=task.steps.map((s,i)=>'<div class="stepblk'+(i?" hidden":" now")+'" data-i="'+i+'"><h3>Schritt '+(i+1)+": "+s.name+'</h3><div class="body"></div></div>').join("");
+    task.steps.forEach((s,i)=>{const b=$$(".stepblk .body")[i];s.render(b,cur.ctx);bindBox(b)});
+    $("#revInfo").classList.toggle("hidden",!isRev);
+    if(isRev)$("#revInfo").textContent="Fehler-Aufgabe "+(revIdx+1)+" von "+S.rev.length;
+    $("#workgrid").classList.toggle("withfig",!!task.graph);$("#fig").classList.toggle("hidden",!task.graph);
+    renderK($("#taskline"));renderK($("#steps"));
+    phases();redraw();
+    $("#checkBtn").classList.remove("hidden");$("#helpBtn").classList.remove("hidden");$("#nextBtn").classList.add("hidden");
+    task.steps[0].enter&&task.steps[0].enter(curBox(),cur.ctx);
+  }
+  function bindBox(b){
+    $$("input.fin",b).forEach(inp=>{
+      inp.addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();check()}});
+      inp.addEventListener("input",()=>{inp.classList.remove("ok","bad")});
+      inp.addEventListener("focus",()=>{if(inp.dataset.focus){cur.focus=inp.dataset.focus;redraw()}});
+      inp.addEventListener("blur",()=>{if(cur.focus){cur.focus=null;setTimeout(redraw,0)}});
+    });
+  }
+  function curBox(){return $$(".stepblk .body")[cur.i]}
+  function phases(){$("#phases").innerHTML=cur.task.steps.map((s,i)=>'<li class="'+(i<cur.i||cur.done?"done":i===cur.i?"now":"")+'">'+(i+1)+" "+s.name+"</li>").join("")}
+  function redraw(){if(!cur||!cur.task.graph)return;const g=cur.task.graph(cur.ctx,cur.done?cur.task.steps.length:cur.i,cur.focus);$("#fig").innerHTML=g;renderK($("#fig"))}
+  ENG.redraw=redraw;ENG.check=()=>check();
+
+  function newTask(){
+    if(tab==="rev"){
+      if(!S.rev.length){cur=null;$("#taskline").innerHTML='<span class="tl">Fehler-Training</span><span class="tt">Hier ist gerade nichts zu tun – Sie haben keine offenen Fehler-Aufgaben. 🎉 Wenn beim Prüfen etwas nicht stimmt, landet die Aufgabe hier, damit Sie sie später nochmal üben können.</span>';
+        $("#steps").innerHTML="";$("#phases").innerHTML="";$("#note").innerHTML="";$("#fig").classList.add("hidden");$("#workgrid").classList.remove("withfig");$("#revInfo").classList.add("hidden");
+        $("#checkBtn").classList.add("hidden");$("#helpBtn").classList.add("hidden");$("#nextBtn").classList.add("hidden");$("#hintbox").classList.add("hidden");$("#solution").classList.add("hidden");$("#stamp").classList.add("hidden");return}
+      revIdx=Math.min(revIdx,S.rev.length-1);const r=S.rev[revIdx];color();load(r.kind,r.spec,true);
+      document.documentElement.style.setProperty("--tab","var(--rev)");return}
+    const k=KD[tab];load(tab,k.gen(S.level[tab]||1));
+  }
+  function addRev(){if(cur.rev||cur.inRev)return;const key=JSON.stringify({kind:cur.kind,spec:cur.spec});if(!S.rev.some(r=>JSON.stringify(r)===key)){S.rev.push({kind:cur.kind,spec:cur.spec});save();renderStats()}cur.inRev=true}
+
+  function check(){
+    if(!cur||cur.done)return;
+    const st=cur.task.steps[cur.i],box=curBox();
+    st.reset&&st.reset(box,cur.ctx);
+    const r=st.check(box,cur.ctx);
+    if(r.marks)Object.keys(r.marks).forEach(k=>{const el=box.querySelector('[data-k="'+k+'"]');if(el){el.classList.remove("ok","bad");el.classList.add(r.marks[k]?"ok":"bad")}});
+    const note=$("#note");
+    if(r.ok){
+      note.className="note good";note.innerHTML="<p><strong>Richtig!</strong> "+(r.good||(cur.i<cur.task.steps.length-1?"Weiter mit Schritt "+(cur.i+2)+".":""))+"</p>";renderK(note);
+      lock(cur.i);cur.i++;$("#hintbox").classList.add("hidden");
+      if(cur.i>=cur.task.steps.length)finish();
+      else{const nb=$$(".stepblk")[cur.i];nb.classList.remove("hidden");nb.classList.add("now");const ns=cur.task.steps[cur.i];ns.enter&&ns.enter(curBox(),cur.ctx);
+        phases();redraw();const inp=nb.querySelector("input.fin");if(inp&&window.innerWidth>700)inp.focus({preventScroll:true});nb.scrollIntoView({block:"nearest",behavior:"smooth"})}
+    }else{
+      if(!r.empty&&!r.partial){cur.err=true;addRev()}
+      note.className="note "+(r.partial?"good":"bad");note.innerHTML="<p><strong>"+(r.empty?"Noch nicht fertig.":r.partial?"Bis hierhin richtig!":"Noch nicht ganz.")+"</strong> "+(r.empty||r.partial?"":"Schauen Sie sich die rot markierten Stellen an:")+"</p>"+(r.msgs&&r.msgs.length?"<ul>"+r.msgs.map(m=>"<li>"+m+"</li>").join("")+"</ul>":"");
+      renderK(note);
+    }
+  }
+  function lock(i){const b=$$(".stepblk")[i];b.classList.remove("now");b.classList.add("done");b.querySelector(".body").classList.add("locked");
+    $$("input,select,.choice,.signs button,input[type=range]",b).forEach(x=>x.disabled=true)}
+  function finish(){
+    cur.done=true;phases();redraw();
+    const s=$("#stamp");s.textContent=pick(["Prima!","Super!","Klasse!","Spitze!","Toll!"]);s.classList.remove("hidden");
+    if(!cur.counted){cur.counted=true;S.stats[cur.kind][0]++;if(!cur.err&&!cur.sol)S.stats[cur.kind][1]++}
+    let extra="";
+    if(cur.rev&&!cur.err){const key=JSON.stringify({kind:cur.kind,spec:cur.spec});S.rev=S.rev.filter(r=>JSON.stringify(r)!==key);extra=" Diese Aufgabe ist jetzt aus dem Fehler-Training gelöscht."}
+    else if(cur.rev)revIdx++;
+    save();renderStats();
+    const note=$("#note");note.className="note good";note.innerHTML="<p><strong>Geschafft!</strong> "+(cur.task.finalMsg||"Alle Schritte sind richtig.")+extra+"</p>";renderK(note);
+    $("#checkBtn").classList.add("hidden");$("#helpBtn").classList.add("hidden");$("#nextBtn").classList.remove("hidden");
+  }
+  /* Hilfen */
+  function help(){
+    if(!cur||cur.done)return;const st=cur.task.steps[cur.i];
+    const hs=typeof st.hints==="function"?st.hints(cur.ctx):(st.hints||[]);
+    const n=(cur.hint[cur.i]||0)+1;cur.hint[cur.i]=Math.min(n,hs.length+(st.reveal?1:0));
+    const hb=$("#hintbox");hb.classList.remove("hidden");
+    const shown=hs.slice(0,cur.hint[cur.i]);
+    let h="<h4>💡 Gestufte Hilfe zu Schritt "+(cur.i+1)+" ("+Math.min(cur.hint[cur.i],hs.length)+" von "+hs.length+")</h4>"+shown.map((x,i)=>'<div class="hl"><span class="hn">Hilfe '+(i+1)+":</span>"+x+"</div>").join("");
+    if(cur.hint[cur.i]>hs.length&&st.reveal){st.reveal(curBox(),cur.ctx);h+='<div class="hl"><span class="hn">Hilfe '+(hs.length+1)+":</span>Der nächste richtige Schnipsel wurde für Sie eingesetzt.</div>"}
+    const more=cur.hint[cur.i]<hs.length||(st.reveal&&cur.hint[cur.i]<=hs.length);
+    h+='<div class="actions" style="margin-top:6px">'+(more?'<button class="btn help" id="hintMore">Nächste Hilfe</button>':'<span class="pmini">Mehr Hilfen gibt es zu diesem Schritt nicht. Schauen Sie sonst in die Musterlösung.</span>')+"</div>";
+    hb.innerHTML=h;renderK(hb);const m=$("#hintMore");if(m)m.onclick=help;
+    hb.scrollIntoView({block:"nearest",behavior:"smooth"});
+  }
+  /* Musterlösung */
+  function showSol(){if(!cur)return;cur.sol=true;solI=0;$("#solution").classList.remove("hidden");drawSol();$("#solution").scrollIntoView({behavior:"smooth",block:"start"})}
+  function drawSol(){const L=cur.task.solution;
+    $("#solLines").innerHTML=L.slice(0,solI+1).filter(x=>x.l).map((x,i,a)=>'<div class="sl'+(i===a.length-1&&L[solI].l?" hl":"")+'">'+x.l+"</div>").join("");
+    $("#solText").innerHTML=L[solI].t||"";
+    const fg=$("#solFig");if(L[solI].fig){fg.innerHTML=L[solI].fig();fg.classList.remove("hidden")}else fg.classList.add("hidden");
+    $("#solCount").textContent="Schritt "+(solI+1)+" von "+L.length;$("#solPrev").disabled=solI===0;$("#solNext").disabled=solI===L.length-1;
+    renderK($("#solution"))}
+  $("#solBtn").onclick=showSol;$("#solPrev").onclick=()=>{solI=Math.max(0,solI-1);drawSol()};$("#solNext").onclick=()=>{solI=Math.min(cur.task.solution.length-1,solI+1);drawSol()};
+  $("#solClose").onclick=()=>$("#solution").classList.add("hidden");
+  $("#checkBtn").onclick=check;$("#helpBtn").onclick=help;
+  $("#nextBtn").onclick=()=>newTask();$("#newBtn").onclick=()=>newTask();
+  $("#resetBtn").onclick=()=>{if(cur)load(cur.kind,cur.spec,cur.rev)};
+  /* Eigene Aufgabe */
+  $("#ownBtn").onclick=()=>{const k=KD[tab];if(!k||!k.own)return;$("#ownBody").innerHTML=k.own.html;$("#ownHint").innerHTML=k.own.hint||"";$("#ownErr").textContent="";$("#overlay").classList.remove("hidden");renderK($("#overlay"));const f=$("#ownBody input");f&&f.focus()};
+  $("#ownCancel").onclick=()=>$("#overlay").classList.add("hidden");
+  $("#ownOk").onclick=()=>{const k=KD[tab];const r=k.own.parse($("#ownBody"));if(r.err){$("#ownErr").textContent=r.err;return}$("#overlay").classList.add("hidden");load(tab,r.spec)};
+  /* QR */
+  const PAGE=location.origin+location.pathname;
+  $("#qrBtn").onclick=()=>{try{const q=qrcode(0,"M");q.addData(PAGE);q.make();$("#qrBox").innerHTML=q.createSvgTag({cellSize:6,margin:2,scalable:true})}catch(e){$("#qrBox").textContent="QR-Code konnte nicht erzeugt werden."}$("#qrUrl").textContent=PAGE;$("#qrOverlay").classList.remove("hidden")};
+  $("#qrClose").onclick=()=>$("#qrOverlay").classList.add("hidden");
+  document.addEventListener("keydown",e=>{if(e.key==="Escape"){$("#qrOverlay").classList.add("hidden");$("#overlay").classList.add("hidden")}});
+
+  renderStats();
+  /* Sprungmarke aus QR-Code (z. B. #beweis-faktor) */
+  const h=decodeURIComponent(location.hash.slice(1));const r=h&&CFG.route?CFG.route(h):null;
+  if(r){setTab(r.kind);if(r.level){S.level[r.kind]=r.level;renderLevels()}load(r.kind,r.spec||KD[r.kind].gen(S.level[r.kind]||1));if(r.help)setTimeout(help,300)}
+  else{setTab(tab);newTask()}
+  ENG.load=load;ENG.cur=()=>cur;ENG.S=S;
+}
+
+</script>
+<script>
+/* ===== Integralheft: Integrationsregeln beweisen und anwenden ===== */
+(function(){
+const OPTS=["Hauptsatz: Aus ∫ wird F(obere Grenze) − F(untere Grenze)","Klammer auflösen","Faktor (oder Minus) ausklammern","Summanden umsortieren","Gleiche Terme heben sich auf","Hauptsatz rückwärts: F(b) − F(a) wird wieder zum Integral"];
+const [H,KL,AK,US,WEG,RW]=[0,1,2,3,4,5];
+const I=(a,b,f)=>"\\int_{"+a+"}^{"+b+"}"+f+"\\,dx";
+const num=v=>{v=Math.round(v*1e9)/1e9;if(Number.isInteger(v))return String(v);if(Number.isInteger(Math.round(v*1000*1e6)/1e6))return String(v).replace(".","{,}");return fmt(v)};
+const pnum=v=>v<0?"("+num(v)+")":num(v);
+/* Potenzfunktion f(x)=c·x^n mit Stammfunktion F(x)=c/(n+1)·x^(n+1) */
+const fT=f=>(f.n===-2?(f.c===1?"\\frac{1}{x^2}":"\\frac{"+f.c+"}{x^2}"):(f.c===1?"":f.c)+"x"+(f.n>1?"^{"+f.n+"}":""));
+const FT=f=>{const q=f.c/(f.n+1);if(f.n===-2)return(q<0?"-":"")+"\\frac{"+Math.abs(q)+"}{x}";return(q===1?"":num(q))+"x^{"+(f.n+1)+"}"};
+const Fv=(f,x)=>f.c/(f.n+1)*Math.pow(x,f.n+1);
+const fv=(f,x)=>f.c*Math.pow(x,f.n);
+const Iv=(f,a,b)=>Fv(f,b)-Fv(f,a);
+
+/* ---------- Die Regeln ---------- */
+const RULES={
+ null:{name:"Gleiche Grenzen",claim:I("a","a","f(x)")+"=0",
+   first:I("a","a","f(x)"),lines:["=F(a)-F(a)","=0"],ok:[[H],[WEG]],
+   tips:["Hier verschwindet das Integralzeichen.","F(a) − F(a) ergibt …?"],
+   dis:[{t:"=F(a)\\cdot F(a)",why:"Der Hauptsatz liefert eine Differenz F(b) − F(a), kein Produkt."},{t:"=F(a)",why:"Von F(a) wird F(a) abgezogen – es bleibt nichts übrig."}],
+   conc:s=>({fields:[{k:"Fa",name:"F("+s.a+")",lab:"Stammfunktion: "+K("F(x)="+FT(s.f))+" &nbsp; "+K("F("+s.a+")="),val:Fv(s.f,s.a)},{k:"L",name:"Integral",lab:K(I(s.a,s.a,fT(s.f))+"="),val:0}],
+     lines:[I(s.a,s.a,fT(s.f)),"=F("+s.a+")-F("+s.a+")="+num(Fv(s.f,s.a))+"-"+pnum(Fv(s.f,s.a)),"=0"],Fs:["Stammfunktion: "+K("F(x)="+FT(s.f))],ins:K(I(s.a,s.a,fT(s.f))+"=F("+s.a+")-F("+s.a+")")})},
+ faktor:{name:"Faktorregel",claim:I("a","b","k\\cdot f(x)")+"=k\\cdot"+I("a","b","f(x)"),
+   first:I("a","b","k\\cdot f(x)"),lines:["=k\\cdot F(b)-k\\cdot F(a)","=k\\cdot\\big(F(b)-F(a)\\big)","=k\\cdot"+I("a","b","f(x)")],ok:[[H],[AK],[RW]],
+   tips:["Das Integralzeichen ist verschwunden. Eine Stammfunktion von k·f ist k·F.","Vergleichen Sie: Das k steht jetzt nur noch einmal vor einer Klammer.","Das Integralzeichen taucht wieder auf."],
+   dis:[{t:"=k\\cdot F(b)-F(a)",why:"Eine Stammfunktion von k·f ist k·F – der Faktor k gehört auch zu F(a)."},{t:"=k\\cdot\\big(F(b)+F(a)\\big)",why:"Beim Ausklammern bleibt das Minuszeichen stehen: k·F(b) − k·F(a) = k·(F(b) − F(a))."}],
+   conc:s=>{const kf={c:s.k*s.f.c,n:s.f.n},L=Iv(kf,s.a,s.b),In=Iv(s.f,s.a,s.b),Fb=Fv(s.f,s.b),Fa=Fv(s.f,s.a);
+     return{fields:[{k:"L",name:"linke Seite",lab:"Linke Seite: "+K(I(s.a,s.b,s.k+"\\cdot "+fT(s.f))+"="),val:L},
+       {k:"In",name:"Integral ohne Faktor",lab:"Ohne Faktor: "+K(I(s.a,s.b,fT(s.f))+"="),val:In},
+       {k:"R",name:"rechte Seite",lab:"Rechte Seite: "+K(s.k+"\\cdot"+I(s.a,s.b,fT(s.f))+"="),val:L,why:x=>near(x,In)?"Bei der rechten Seite fehlt noch der Faktor "+s.k+".":null}],
+       lines:[I(s.a,s.b,s.k+"\\cdot "+fT(s.f)),"="+s.k+"\\cdot "+pnum(Fb)+"-"+s.k+"\\cdot "+pnum(Fa),"="+s.k+"\\cdot\\big("+num(Fb)+"-"+pnum(Fa)+"\\big)","="+s.k+"\\cdot"+I(s.a,s.b,fT(s.f))+"="+s.k+"\\cdot "+pnum(In)+"="+num(L)],
+       Fs:["Stammfunktion von "+K(fT(s.f))+": "+K("F(x)="+FT(s.f))],
+       ins:K(I(s.a,s.b,fT(s.f))+"=F("+s.b+")-F("+s.a+")="+num(Fb)+"-"+pnum(Fa))}}},
+ summe:{name:"Summenregel",claim:I("a","b","\\big(f(x)+g(x)\\big)")+"="+I("a","b","f(x)")+"+"+I("a","b","g(x)"),
+   first:I("a","b","\\big(f(x)+g(x)\\big)"),lines:["=\\big(F(b)+G(b)\\big)-\\big(F(a)+G(a)\\big)","=F(b)+G(b)-F(a)-G(a)","=F(b)-F(a)+G(b)-G(a)","="+I("a","b","f(x)")+"+"+I("a","b","g(x)")],ok:[[H],[KL],[US],[RW]],
+   tips:["Das Integralzeichen ist verschwunden. Eine Stammfunktion von f + g ist F + G.","Die Klammern sind weg – achten Sie auf das Minus vor der zweiten Klammer.","Gleiche Terme, andere Reihenfolge.","Die Integralzeichen tauchen wieder auf."],
+   dis:[{t:"=F(b)+G(b)-F(a)+G(a)",why:"Ein Minus vor der Klammer ändert ALLE Vorzeichen in der Klammer: −(F(a) + G(a)) = −F(a) − G(a)."},{t:"=F(b)\\cdot G(b)-F(a)\\cdot G(a)",why:"Eine Stammfunktion von f + g ist F + G, nicht F · G."}],
+   conc:s=>sumConc(s,1)},
+ diff:{name:"Differenzregel",claim:I("a","b","\\big(f(x)-g(x)\\big)")+"="+I("a","b","f(x)")+"-"+I("a","b","g(x)"),
+   first:I("a","b","\\big(f(x)-g(x)\\big)"),lines:["=\\big(F(b)-G(b)\\big)-\\big(F(a)-G(a)\\big)","=F(b)-G(b)-F(a)+G(a)","=F(b)-F(a)-\\big(G(b)-G(a)\\big)","="+I("a","b","f(x)")+"-"+I("a","b","g(x)")],ok:[[H],[KL],[US,AK],[RW]],
+   tips:["Das Integralzeichen ist verschwunden. Eine Stammfunktion von f − g ist F − G.","Die Klammern sind weg – das Minus vor der zweiten Klammer dreht beide Vorzeichen.","Umsortiert und das Minus vor G(b) − G(a) ausgeklammert.","Die Integralzeichen tauchen wieder auf."],
+   dis:[{t:"=F(b)-G(b)-F(a)-G(a)",why:"−(F(a) − G(a)) = −F(a) + G(a). Das Minus vor der Klammer dreht auch das Vorzeichen von G(a)."},{t:"=F(b)-F(a)+\\big(G(b)-G(a)\\big)",why:"Hier ist das Minus vor dem g-Teil verloren gegangen: −G(b) + G(a) = −(G(b) − G(a))."}],
+   conc:s=>sumConc(s,-1)},
+ tausch:{name:"Grenzen vertauschen",claim:I("b","a","f(x)")+"=-"+I("a","b","f(x)"),
+   first:I("b","a","f(x)"),lines:["=F(a)-F(b)","=-\\big(F(b)-F(a)\\big)","=-"+I("a","b","f(x)")],ok:[[H],[AK],[RW]],
+   tips:["Das Integralzeichen ist verschwunden. Achtung: Obere Grenze ist hier a.","Ein Minus wurde vor die Klammer gezogen.","Das Integralzeichen taucht wieder auf."],
+   dis:[{t:"=F(b)-F(a)",why:"Beim Integral von b bis a ist a die obere Grenze. Also zuerst F(a), dann minus F(b)."},{t:"=-F(a)-F(b)",why:"Beim Ausklammern von −1 drehen sich beide Vorzeichen: F(a) − F(b) = −(F(b) − F(a))."}],
+   conc:s=>{const In=Iv(s.f,s.a,s.b),Fb=Fv(s.f,s.b),Fa=Fv(s.f,s.a);
+     return{fields:[{k:"L",name:"linke Seite",lab:"Linke Seite: "+K(I(s.b,s.a,fT(s.f))+"="),val:-In,why:x=>near(x,In)?"Achtung: Beim linken Integral ist "+s.a+" die obere Grenze. Also F("+s.a+") − F("+s.b+").":null},
+       {k:"R",name:"Integral mit getauschten Grenzen",lab:"Grenzen getauscht: "+K(I(s.a,s.b,fT(s.f))+"="),val:In}],
+       lines:[I(s.b,s.a,fT(s.f)),"=F("+s.a+")-F("+s.b+")="+num(Fa)+"-"+pnum(Fb),"=-\\big("+num(Fb)+"-"+pnum(Fa)+"\\big)","=-"+I(s.a,s.b,fT(s.f))+"=-"+pnum(In)],
+       Fs:["Stammfunktion: "+K("F(x)="+FT(s.f))],ins:K(I(s.b,s.a,fT(s.f))+"=F("+s.a+")-F("+s.b+")")}}},
+ add:{name:"Intervalle zusammenfügen",claim:I("a","b","f(x)")+"+"+I("b","c","f(x)")+"="+I("a","c","f(x)"),
+   first:I("a","b","f(x)")+"+"+I("b","c","f(x)"),lines:["=F(b)-F(a)+F(c)-F(b)","=F(c)-F(a)","="+I("a","c","f(x)")],ok:[[H],[WEG,US],[RW]],
+   tips:["Beide Integralzeichen sind verschwunden.","F(b) kommt einmal mit + und einmal mit − vor.","Das Integralzeichen taucht wieder auf."],
+   dis:[{t:"=F(b)-F(a)+F(b)-F(c)",why:"Beim zweiten Integral ist c die obere Grenze: F(c) − F(b), nicht umgekehrt."},{t:"=F(c)+F(a)",why:"Das Minus vor F(a) bleibt erhalten."}],
+   conc:s=>{const I1=Iv(s.f,s.a,s.m),I2=Iv(s.f,s.m,s.b),Fa=Fv(s.f,s.a),Fm=Fv(s.f,s.m),Fb=Fv(s.f,s.b);
+     return{fields:[{k:"I1",name:"erstes Integral",lab:K(I(s.a,s.m,fT(s.f))+"="),val:I1},{k:"I2",name:"zweites Integral",lab:K(I(s.m,s.b,fT(s.f))+"="),val:I2},
+       {k:"R",name:"rechte Seite",lab:"Rechte Seite: "+K(I(s.a,s.b,fT(s.f))+"="),val:I1+I2}],
+       lines:[I(s.a,s.m,fT(s.f))+"+"+I(s.m,s.b,fT(s.f)),"="+num(Fm)+"-"+pnum(Fa)+"+"+num(Fb)+"-"+pnum(Fm),"="+num(Fb)+"-"+pnum(Fa),"="+I(s.a,s.b,fT(s.f))+"="+num(I1+I2)],
+       Fs:["Stammfunktion: "+K("F(x)="+FT(s.f))],ins:K(I(s.a,s.m,fT(s.f))+"=F("+s.m+")-F("+s.a+")")}}}
+};
+function sumConc(s,sg){const op=sg>0?"+":"-",fg=s.f,gg=s.g,If=Iv(fg,s.a,s.b),Ig=Iv(gg,s.a,s.b),Fb=Fv(fg,s.b),Fa=Fv(fg,s.a),Gb=Fv(gg,s.b),Ga=Fv(gg,s.a);
+  const lines=sg>0?[I(s.a,s.b,"\\big("+fT(fg)+"+"+fT(gg)+"\\big)"),"=("+num(Fb)+"+"+num(Gb)+")-("+num(Fa)+"+"+num(Ga)+")","="+num(Fb)+"+"+num(Gb)+"-"+pnum(Fa)+"-"+pnum(Ga),"="+num(Fb)+"-"+pnum(Fa)+"+"+num(Gb)+"-"+pnum(Ga),"="+I(s.a,s.b,fT(fg))+"+"+I(s.a,s.b,fT(gg))+"="+num(If)+"+"+pnum(Ig)+"="+num(If+Ig)]
+   :[I(s.a,s.b,"\\big("+fT(fg)+"-"+fT(gg)+"\\big)"),"=("+num(Fb)+"-"+num(Gb)+")-("+num(Fa)+"-"+num(Ga)+")","="+num(Fb)+"-"+pnum(Gb)+"-"+pnum(Fa)+"+"+num(Ga),"="+num(Fb)+"-"+pnum(Fa)+"-("+num(Gb)+"-"+pnum(Ga)+")","="+I(s.a,s.b,fT(fg))+"-"+I(s.a,s.b,fT(gg))+"="+num(If)+"-"+pnum(Ig)+"="+num(If-Ig)];
+  return{fields:[{k:"L",name:"linke Seite",lab:"Linke Seite: "+K(I(s.a,s.b,"\\big("+fT(fg)+op+fT(gg)+"\\big)")+"="),val:If+sg*Ig},
+    {k:"If",name:"Integral über f",lab:K(I(s.a,s.b,fT(fg))+"="),val:If},{k:"Ig",name:"Integral über g",lab:K(I(s.a,s.b,fT(gg))+"="),val:Ig},
+    {k:"R",name:"rechte Seite",lab:"Rechte Seite: "+K(I(s.a,s.b,fT(fg))+op+I(s.a,s.b,fT(gg))+"="),val:If+sg*Ig}],
+    lines,Fs:["Stammfunktion von "+K("f(x)="+fT(fg))+": "+K("F(x)="+FT(fg)),"Stammfunktion von "+K("g(x)="+fT(gg))+": "+K("G(x)="+FT(gg))],
+    ins:K(I(s.a,s.b,fT(fg))+"=F("+s.b+")-F("+s.a+")="+num(Fb)+"-"+pnum(Fa))}}
+
+const ORDER=["null","faktor","summe","diff","tausch","add"];
+const randF=()=>{const n=rnd(1,3);return{c:(n+1)*pick([1,1,2]),n}};
+function genBeweis(lvl,r){
+  if(!r){let i=store.get("integralheft-seq",0);r=ORDER[i%ORDER.length];store.set("integralheft-seq",i+1)}
+  const a=rnd(0,2),b=a+rnd(1,2);
+  const s={r,lvl,a,b,f:randF(),k:pick([2,3,4,5])};
+  if(r==="summe"||r==="diff"){let g;do{g=randF()}while(g.n===s.f.n);s.g=g}
+  if(r==="add"){s.m=s.b;s.b=s.m+rnd(1,2)}
+  if(r==="null"){s.a=rnd(1,3)}
+  return s;
+}
+const reasonHints=R=>["Vergleichen Sie jede Zeile mit der Zeile direkt davor: Was hat sich verändert?",
+  "Merkhilfe: ∫ verschwindet → Hauptsatz. ∫ taucht wieder auf → Hauptsatz rückwärts. Klammer verschwindet → Klammer auflösen. Etwas steht neu vor einer Klammer → ausklammern.",
+  "Zeile 2: „"+OPTS[R.ok[0][0]]+"“"+(R.ok.length>1?" · Zeile 3: „"+OPTS[R.ok[1][0]]+"“":"")+"."];
+
+function buildBeweis(s){
+  const R=RULES[s.r],C=R.conc(s),steps=[],withConc=s.lvl<3,withDis=s.lvl>=2,withReason=s.lvl>=2;
+  if(withConc)steps.push({name:"Erst konkret",
+    render(box){box.innerHTML='<p class="q">Bevor Sie allgemein beweisen: Prüfen Sie die Regel an einem Beispiel. Rechnen Sie beide Seiten aus.</p>'+numFields(C.fields)+'<p class="pmini">Brüche wie 15/2 oder Dezimalzahlen wie 7,5 sind beide erlaubt.</p>'},
+    check(box){return checkNums(box,C.fields)},T:C.fields,
+    hints:["Rechnen Sie jedes Integral einzeln mit dem Hauptsatz aus: "+K("\\int_a^b f(x)\\,dx=F(b)-F(a)")+".",C.Fs.join("<br>"),"So geht es los: "+C.ins+" = …"],
+    good:"Beide Seiten sind gleich groß – die Regel stimmt für dieses Beispiel. Jetzt zeigen Sie, dass sie <em>immer</em> gilt."});
+  const conc2=withConc?'<div class="cmp" style="grid-template-columns:1fr"><div><h4>Ihr Beispiel mit Zahlen</h4>'+C.lines.map(K).join("<br>")+"</div></div>Zu jeder Zahlen-Zeile gibt es genau einen Schnipsel mit demselben Aufbau – nur mit F(a), F(b), … statt Zahlen.":"";
+  steps.push(orderStep({name:"Beweis ordnen",intro:"Zeigen Sie: "+K(R.claim)+"<br>Bringen Sie die Beweisschnipsel in die richtige Reihenfolge. Die erste Zeile ist vorgegeben.",
+    first:R.first,lines:R.lines,dis:withDis?R.dis:[],
+    hints:["Ein Beweis ist eine Kette aus Gleichheitszeichen: Sie starten mit der <b>linken Seite</b> der Behauptung und landen am Ende bei der <b>rechten Seite</b>.",
+      "Der erste Schritt ist fast immer der Hauptsatz: Aus jedem Integral wird „F(obere Grenze) − F(untere Grenze)“.",
+      withConc?"Ihre Zahlenrechnung aus Schritt 1 hat genau denselben Aufbau wie der Beweis:"+conc2:"Rechnen Sie das Ganze zuerst an einem Beispiel durch, z. B. mit "+K("f(x)=2x")+", a = 1, b = 2. Jede Zeile Ihrer Zahlenrechnung entspricht einem Schnipsel."]}));
+  if(withReason)steps.push(reasonStep({first:R.first,lines:R.lines,opts:OPTS,ok:R.ok,tips:R.tips,hints:reasonHints(R)}));
+  const sol=[{l:K("\\text{Behauptung: }"+R.claim),t:"Lesen Sie zuerst die Behauptung. Links steht der Start, rechts das Ziel. Sie formen die linke Seite so lange um, bis die rechte Seite dasteht."},
+    {l:K(R.first),t:"Start: die linke Seite der Behauptung."}];
+  R.lines.forEach((ln,j)=>sol.push({l:K(ln),t:"<b>"+OPTS[R.ok[Math.min(j,R.ok.length-1)][0]]+".</b> "+R.tips[j]}));
+  sol.push({t:"Fertig: Die rechte Seite ist erreicht. ∎<br><b>Probe mit Zahlen:</b><br>"+C.lines.map(K).join("<br>")});
+  return{title:"Beweisen Sie: "+K(R.claim),tag:R.name+" · Stufe "+s.lvl,steps,solution:sol,finalMsg:"Beweis vollständig. Diese Regel dürfen Sie ab jetzt benutzen."};
+}
+
+/* ---------- Regeln anwenden ---------- */
+const RULECH=["Summenregel: zwei Integrale mit gleichen Grenzen zu einem zusammenfassen","Faktorregel: den konstanten Faktor vor das Integral ziehen","Intervalle zusammenfügen: aneinandergrenzende Grenzen zu einem Integral"];
+function randPoly(deg,lo,hi){const c=[];for(let i=0;i<=deg;i++)c.push(rnd(lo,hi));if(!c[deg])c[deg]=1;return c}
+function genRegeln(lvl){
+  const t=pick(["sum","sum","faktor","grenzen"]),deg=lvl===1?2:3;
+  const a=lvl===3?rnd(-2,1):rnd(0,2),b=a+rnd(1,3);
+  if(t==="sum"){for(;;){const r=randPoly(deg,-4,4),q=randPoly(deg,-6,6);q[deg]=0;const k=rnd(0,deg-1);r[k]=0;if(!q[k])q[k]=pick([-5,-3,3,4,6]);const p=P.sub(r,q);
+      if(P.trim(r).length>1&&p.some(x=>x)&&q.filter(x=>x).length>=1)return{t,a,b,p:P.trim(p),q:P.trim(q),lvl}}}
+  if(t==="faktor"){const k=lvl===1?pick([2,3,4]):pick([1.2,0.5,1.5,2.5,0.25]);const inner=randPoly(deg,-3,3);return{t,a,b,k,inner,lvl}}
+  const f=lvl===3&&Math.random()<.5?{c:pick([1,2,3]),n:-2}:{c:(rnd(1,deg)+1)*1,n:rnd(1,deg)};f.c=f.n>0?(f.n+1)*pick([1,1,2]):f.c;
+  const lo=f.n<0?rnd(1,3):a,hi=lo+rnd(1,3),m=Math.round((lo+0.1+Math.random()*(hi-lo-0.2))*10)/10;
+  return{t:"grenzen",a:lo,b:hi,m:m===Math.round(m)?m+0.3:m,f,lvl};
+}
+const FBox=(c,a,b,lab)=>[{k:"Fb",name:"F("+num(b)+")",lab:K("F("+num(b)+")="),focus:null},{k:"Fa",name:"F("+num(a)+")",lab:K("F("+num(a)+")=")}];
+function fCheck(Fexp,fexp,a,b){ /* Prüfen von F(b), F(a) mit Konstante C erlaubt */
+  return(box)=>{const v=readVals(box),marks={},msgs=[];
+    if(v.Fb==null||v.Fa==null)return{ok:false,msgs:["Tragen Sie F(b) und F(a) ein."],empty:v.Fb==null&&v.Fa==null};
+    if(isNaN(v.Fb)||isNaN(v.Fa))return{ok:false,msgs:["Bitte nur Zahlen eintragen, z. B. 7,5 oder 15/2."]};
+    const C=v.Fb-Fexp(b),same=near(v.Fa-Fexp(a),C,0.02);
+    if(near(v.Fb,Fexp(b))&&near(v.Fa,Fexp(a)))return{ok:true,marks:{Fb:true,Fa:true}};
+    if(same&&Math.abs(C)>0.01)return{ok:true,marks:{Fb:true,Fa:true},good:"Sie haben eine Stammfunktion mit Konstante +C benutzt – das ist genauso richtig, denn C fällt bei F(b) − F(a) weg."};
+    ["Fb","Fa"].forEach(k=>{const x=k==="Fb"?b:a,ok=near(v[k],Fexp(x));marks[k]=ok;
+      if(!ok){if(fexp&&near(v[k],fexp(x)))msgs.push(k.replace("F","F(").replace("b",num(b)).replace("a",num(a))+"): Sie haben in f eingesetzt. Gesucht ist der Wert der <b>Stammfunktion</b> F.");
+        else msgs.push(k==="Fb"?"F("+num(b)+") stimmt noch nicht. Bilden Sie zuerst die Stammfunktion, dann einsetzen.":"F("+num(a)+") stimmt noch nicht. Achten Sie bei negativen Zahlen auf Klammern.")}});
+    return{ok:false,marks,msgs}}}
+function resultStep(val,Fb,Fa,extra){
+  return{name:"Ergebnis",T:[{k:"R",val}],render(box){box.innerHTML=numFields([{k:"R",lab:"Ergebnis: ",name:"Ergebnis"}])+'<p class="pmini">Als Bruch oder auf zwei Nachkommastellen gerundet.</p>'},
+    check(box){return checkNums(box,[{k:"R",name:"Ergebnis",val,why:x=>near(x,-val)&&Math.abs(val)>1e-9?"Das Vorzeichen ist vertauscht: Es heißt F(obere Grenze) − F(untere Grenze).":near(x,Fb+Fa)&&Math.abs(Fa)>1e-9?"Zwischen F(b) und F(a) gehört ein Minus, kein Plus.":(extra&&extra(x))||null}])},
+    hints:["Hauptsatz: "+K("\\int_a^b f(x)\\,dx=F(b)-F(a)")+".","Rechnen Sie "+K(num(Fb)+"-"+pnum(Fa))+(extra?" – und denken Sie an den Faktor.":".")]};
+}
+function ruleStep(right){return{name:"Regel erkennen",TC:[right],render(box){box.innerHTML='<p class="q">Welche Regel macht diese Aufgabe einfacher?</p>'+choiceHTML(RULECH);bindChoices(box)},
+  check(box){const c=chosen(box);if(!c.length)return{ok:false,empty:true,msgs:["Wählen Sie eine Regel aus."]};const ok=c[0]===right;$$(".choice",box).forEach(b=>{if(b.getAttribute("aria-pressed")==="true")b.classList.add(ok?"ok":"bad")});
+    return{ok,msgs:ok?[]:[["Schauen Sie auf die Grenzen und auf die Integranden: Sind die Grenzen gleich? Steht ein Faktor davor? Schließen die Intervalle aneinander an?"][0]]}},
+  hints:["Gleiche Grenzen, zwei Integrale → Summenregel. Ein Zahlenfaktor vor dem Funktionsterm → Faktorregel. Obere Grenze des ersten = untere Grenze des zweiten → Intervalle zusammenfügen."]}}
+function coefFields(n){const f=[];for(let i=n;i>=0;i--)f.push(i);return f}
+function buildRegeln(s){
+  const steps=[];let title,sol=[],val;
+  if(s.t==="sum"){const r=P.add(s.p,s.q),n=Math.max(s.p.length,s.q.length)-1,F=x=>P.ev(P.int(r),x);val=F(s.b)-F(s.a);
+    title="Berechnen Sie ohne GTR: "+K(I(s.a,s.b,"\\big("+P.tex(s.p)+"\\big)")+"+"+I(s.a,s.b,"\\big("+P.tex(s.q)+"\\big)"));
+    steps.push(ruleStep(0));
+    const cf=coefFields(n);
+    steps.push({name:"Zusammenfassen",T:cf.map(i=>({k:"c"+i,val:r[i]||0})),render(box){box.innerHTML='<p class="q">Fassen Sie zu einem Integral zusammen:</p><div class="row">'+K("\\int_{"+s.a+"}^{"+s.b+"}\\Big(")+cf.map((i,j)=>(j?"+":"")+'<input class="fin s" data-k="c'+i+'" inputmode="decimal" aria-label="Zahl vor x hoch '+i+'">'+(i?K("x"+(i>1?"^{"+i+"}":"")):"")).join(" ")+K("\\Big)\\,dx")+'</div><p class="pmini">Steht ein x gar nicht mehr da, tragen Sie 0 ein. Minus zählt mit, z. B. −2.</p>';renderK(box)},
+      check(box){const fl=cf.map(i=>({k:"c"+i,name:"vor x"+(i>1?"^"+i:i?"":"⁰"),val:r[i]||0,tol:1e-6}));const res=checkNums(box,fl);
+        if(!res.ok&&!res.empty){const v=readVals(box);if(cf.every(i=>near(v["c"+i],s.p[i]||0,1e-6)))res.msgs=["Sie haben nur den ersten Integranden übernommen. Addieren Sie die Glieder mit gleicher Potenz von x aus beiden Integralen."];
+          else res.msgs=res.msgs.map(m=>m.replace("stimmt noch nicht","stimmt noch nicht – addieren Sie die passenden Glieder beider Integranden"))}return res},
+      hints:["Nach der Summenregel gilt: "+K("\\int_a^b f\\,dx+\\int_a^b g\\,dx=\\int_a^b (f+g)\\,dx")+".","Sortieren Sie nach Potenzen: x² zu x², x zu x, Zahl zu Zahl.","Neuer Integrand: "+K("("+P.tex(s.p)+")+("+P.tex(s.q)+")")+" = …"]});
+    steps.push({name:"Stammfunktion einsetzen",T:[{k:"Fb",val:F(s.b)},{k:"Fa",val:F(s.a)}],render(box){box.innerHTML='<p class="q">Bilden Sie eine Stammfunktion F von '+K(P.tex(r))+" und setzen Sie die Grenzen ein.</p>"+numFields(FBox(r,s.a,s.b));renderK(box)},
+      check:fCheck(F,x=>P.ev(r,x),s.a,s.b),hints:["Potenzregel rückwärts: Aus "+K("x^n")+" wird "+K("\\frac{1}{n+1}x^{n+1}")+".",K("F(x)="+P.tex(P.int(r)))]});
+    steps.push(resultStep(val,F(s.b),F(s.a)));
+    sol=[{l:title.replace("Berechnen Sie ohne GTR: ",""),t:"Beide Integrale haben dieselben Grenzen. Also hilft die Summenregel."},{l:K("="+I(s.a,s.b,"\\big("+P.tex(r)+"\\big)")),t:"Die Integranden werden addiert. Dabei fällt etwas weg – die Rechnung wird kürzer."},
+      {l:K("=\\Big["+P.tex(P.int(r))+"\\Big]_{"+s.a+"}^{"+s.b+"}"),t:"Stammfunktion bilden."},{l:K("="+fmt(F(s.b))+"-"+(F(s.a)<0?"("+fmt(F(s.a))+")":fmt(F(s.a)))),t:"Grenzen einsetzen: F(obere) − F(untere)."},{l:K("="+fmtD(val)),t:"Ausrechnen."}];
+  }else if(s.t==="faktor"){const F=x=>P.ev(P.int(s.inner),x),In=F(s.b)-F(s.a);val=s.k*In;const kt=num(s.k);
+    title="Berechnen Sie ohne GTR: "+K(I(s.a,s.b,kt+"\\cdot\\big("+P.tex(s.inner)+"\\big)"));
+    steps.push(ruleStep(1));
+    steps.push({name:"Ohne Faktor rechnen",T:[{k:"Fb",val:F(s.b)},{k:"Fa",val:F(s.a)},{k:"In",val:In}],render(box){box.innerHTML='<p class="q">Ziehen Sie '+K(kt)+" vor das Integral und berechnen Sie zuerst "+K(I(s.a,s.b,"\\big("+P.tex(s.inner)+"\\big)"))+":</p>"+numFields(FBox(s.inner,s.a,s.b).concat([{k:"In",name:"Integral ohne Faktor",lab:K(I(s.a,s.b,"\\big("+P.tex(s.inner)+"\\big)")+"=")}]));renderK(box)},
+      check(box){const r=fCheck(F,x=>P.ev(s.inner,x),s.a,s.b)(box);const v=readVals(box);
+        if(v.In==null){r.ok=false;r.msgs=(r.msgs||[]).concat(["Das Integral ohne Faktor fehlt noch."]);return r}
+        const ok=near(v.In,In);r.marks=Object.assign(r.marks||{},{In:ok});if(!ok){r.ok=false;r.msgs=(r.msgs||[]).concat([near(v.In,val)?"Hier ist der Faktor schon drin – rechnen Sie erst ohne den Faktor.":near(v.In,-In)?"Vorzeichen: F(obere Grenze) − F(untere Grenze).":"Das Integral ohne Faktor stimmt noch nicht."])}return r},
+      hints:["Faktorregel: "+K("\\int_a^b k\\cdot f(x)\\,dx=k\\cdot\\int_a^b f(x)\\,dx")+". Der Faktor wartet draußen.",K("F(x)="+P.tex(P.int(s.inner)))]});
+    steps.push(resultStep(val,s.k*F(s.b),s.k*F(s.a),x=>near(x,In)?"Jetzt fehlt nur noch der Faktor "+kt+".":null));
+    sol=[{l:title.replace("Berechnen Sie ohne GTR: ",""),t:"Ein Zahlenfaktor steht vor dem Funktionsterm: Faktorregel."},{l:K("="+kt+"\\cdot"+I(s.a,s.b,"\\big("+P.tex(s.inner)+"\\big)")),t:"Den Faktor vor das Integral ziehen."},
+      {l:K("="+kt+"\\cdot\\Big["+P.tex(P.int(s.inner))+"\\Big]_{"+s.a+"}^{"+s.b+"}"),t:"Stammfunktion bilden."},{l:K("="+kt+"\\cdot\\big("+fmt(F(s.b))+"-"+(F(s.a)<0?"("+fmt(F(s.a))+")":fmt(F(s.a)))+"\\big)="+kt+"\\cdot "+(In<0?"("+fmt(In)+")":fmt(In))),t:"Grenzen einsetzen."},{l:K("="+fmtD(val)),t:"Mit dem Faktor multiplizieren."}];
+  }else if(s.t==="grenzen"){const f=s.f,F=x=>Fv(f,x);val=F(s.b)-F(s.a);
+    title="Berechnen Sie ohne GTR: "+K(I(num(s.a),num(s.m),fT(f))+"+"+I(num(s.m),num(s.b),fT(f)));
+    steps.push(ruleStep(2));
+    steps.push({name:"Neue Grenzen",T:[{k:"u",val:s.a},{k:"o",val:s.b}],render(box){box.innerHTML='<p class="q">Fassen Sie zu einem Integral zusammen. Welche Grenzen hat es?</p>'+numFields([{k:"u",lab:"untere Grenze: ",w:1},{k:"o",lab:"obere Grenze: ",w:1}])},
+      check(box){return checkNums(box,[{k:"u",name:"untere Grenze",val:s.a,tol:1e-6},{k:"o",name:"obere Grenze",val:s.b,tol:1e-6,why:x=>near(x,s.m,1e-6)?K(num(s.m))+" ist die Nahtstelle in der Mitte – die fällt weg.":null}])},
+      hints:["Das erste Integral endet dort, wo das zweite anfängt. Diese Nahtstelle fällt weg.","Es bleibt: von der ersten unteren Grenze bis zur letzten oberen Grenze."]});
+    steps.push({name:"Stammfunktion einsetzen",T:[{k:"Fb",val:F(s.b)},{k:"Fa",val:F(s.a)}],render(box){box.innerHTML='<p class="q">Stammfunktion von '+K(fT(f))+" bilden und einsetzen:</p>"+numFields(FBox(null,s.a,s.b));renderK(box)},
+      check:fCheck(F,x=>fv(f,x),s.a,s.b),hints:[f.n<0?"Schreiben Sie "+K("\\frac{1}{x^2}=x^{-2}")+". Potenzregel rückwärts: "+K("x^{-2}\\to\\frac{x^{-1}}{-1}=-\\frac{1}{x}")+".":"Potenzregel rückwärts: "+K("x^n\\to\\frac{1}{n+1}x^{n+1}")+".",K("F(x)="+FT(f))]});
+    steps.push(resultStep(val,F(s.b),F(s.a)));
+    sol=[{l:title.replace("Berechnen Sie ohne GTR: ",""),t:"Die Intervalle schließen bei "+num(s.m)+" aneinander an. Mit "+num(s.m)+" zu rechnen wäre mühsam – also zusammenfügen."},{l:K("="+I(num(s.a),num(s.b),fT(f))),t:"Die Nahtstelle "+num(s.m)+" fällt weg."},
+      {l:K("=\\Big["+FT(f)+"\\Big]_{"+num(s.a)+"}^{"+num(s.b)+"}"),t:"Stammfunktion bilden."},{l:K("="+fmt(F(s.b))+"-"+(F(s.a)<0?"\\left("+fmt(F(s.a))+"\\right)":fmt(F(s.a)))),t:"Grenzen einsetzen."},{l:K("="+fmtD(val)),t:"Ausrechnen."}];
+  }else{ /* eigene Aufgabe */
+    const F=x=>P.ev(P.int(s.p),x);val=F(s.b)-F(s.a);title="Berechnen Sie: "+K(I(num(s.a),num(s.b),"\\big("+P.tex(s.p)+"\\big)"));
+    steps.push({name:"Stammfunktion einsetzen",T:[{k:"Fb",val:F(s.b)},{k:"Fa",val:F(s.a)}],render(box){box.innerHTML=numFields(FBox(s.p,s.a,s.b))},check:fCheck(F,x=>P.ev(s.p,x),s.a,s.b),hints:[K("F(x)="+P.tex(P.int(s.p)))]});
+    steps.push(resultStep(val,F(s.b),F(s.a)));
+    sol=[{l:title.replace("Berechnen Sie: ",""),t:"Ein Integral – direkt mit dem Hauptsatz."},{l:K("=\\Big["+P.tex(P.int(s.p))+"\\Big]_{"+num(s.a)+"}^{"+num(s.b)+"}"),t:"Stammfunktion bilden."},{l:K("="+fmt(F(s.b))+"-"+(F(s.a)<0?"("+fmt(F(s.a))+")":fmt(F(s.a)))),t:"Einsetzen."},{l:K("="+fmtD(val)),t:"Ausrechnen."}];
+  }
+  return{title,tag:s.t==="own"?"eigene Aufgabe":"Stufe "+s.lvl,steps,solution:sol};
+}
+
+/* ---------- Musterbeispiel (aus AB 12) ---------- */
+const MB='<details class="merk" id="mbox"><summary><b>📖 Musterbeispiel: So ist ein Beweis aufgebaut</b> <span class="pmini">(antippen zum Öffnen)</span></summary>'+
+ '<ol><li><b>Behauptung lesen:</b> Links steht der Start, rechts das Ziel.</li><li><b>Mit der linken Seite starten</b> und den <b>Hauptsatz</b> anwenden: jedes ∫ wird zu F(obere) − F(untere).</li><li><b>Umformen:</b> Klammern auflösen, umsortieren, ausklammern, Gleiches wegheben.</li><li><b>Hauptsatz rückwärts:</b> F(b) − F(a) wieder als Integral schreiben – fertig, wenn die rechte Seite dasteht.</li></ol>'+
+ '<p class="pmini">Tipp: Rechnen Sie dieselben Schritte nebenher mit Zahlen. Hier mit '+K("f(x)=2x,\\;F(x)=x^2")+", a = 1, b = 2, c = 3.</p>"+
+ '<div class="mb"><span class="h"></span><span class="h">allgemein</span><span class="h">mit Zahlen</span>'+
+ [["Start",I("a","b","f(x)")+"+"+I("b","c","f(x)"),I(1,2,"2x")+"+"+I(2,3,"2x")],["Hauptsatz","=F(b)-F(a)+F(c)-F(b)","=4-1+9-4"],["wegheben","=F(c)-F(a)","=9-1=8"],["rückwärts","="+I("a","c","f(x)"),"="+I(1,3,"2x")+"=8\\;\\checkmark"]].map(r=>'<span class="n">'+r[0]+'</span><span class="c">'+K(r[1])+'</span><span class="c">'+K(r[2])+"</span>").join("")+"</div></details>";
+
+startHeft({key:"integralheft-v1",
+  route(h){h=h.toLowerCase();const m=h.match(/^beweis-(null|faktor|summe|diff|tausch|add)(?:-(\d))?$/);
+    if(m){const l=m[2]?+m[2]:1;return{kind:"beweis",level:l,spec:genBeweis(l,m[1])}}
+    if(h==="regeln")return{kind:"regeln"};return null},
+  kinds:[
+   {id:"beweis",name:"Beweise",short:"Beweise",icon:"🧩",color:"var(--c1)",
+    levels:{label:"Stufe",names:["1","2","3"],titles:["Erst mit Zahlen, dann Schnipsel ordnen","Mit Zahlen, Störschnipseln und Begründungen","Ohne Zahlenbeispiel, mit Störschnipseln und Begründungen"]},
+    gen:l=>genBeweis(l),build:buildBeweis,
+    extra:()=>MB,extraBind:el=>{const d=$("#mbox",el);if(d&&!ENG.S.stats.beweis[0])d.open=true;d.addEventListener("toggle",()=>renderK(d))}},
+   {id:"regeln",name:"Regeln anwenden",short:"Anwenden",icon:"🧮",color:"var(--c2)",
+    levels:{label:"Stufe",names:["1","2","3"],titles:["Quadratische Funktionen","Bis x³ und Dezimalfaktoren","Auch negative Grenzen und 1/x²"]},
+    gen:genRegeln,build:buildRegeln,
+    own:{hint:"Tippen Sie ein Integral aus dem Buch ab: "+K("\\int_a^b (a_3x^3+a_2x^2+a_1x+a_0)\\,dx")+". Leere Felder zählen als 0.",
+      html:'<div class="row">'+["3","2","1","0"].map(i=>'<input class="fin s" id="oc'+i+'" inputmode="decimal" aria-label="Zahl vor x hoch '+i+'">'+(i==="0"?"":K("x"+(i==="1"?"":"^"+i))+" +")).join(" ")+'</div><div class="row">untere Grenze <input class="fin s" id="oa" inputmode="decimal"> obere Grenze <input class="fin s" id="ob" inputmode="decimal"></div>',
+      parse(b){const c=["0","1","2","3"].map(i=>parseNum($("#oc"+i).value)).map(x=>x==null?0:x);if(c.some(isNaN))return{err:"Bitte nur Zahlen eingeben, z. B. −2 oder 1/4."};
+        const a=parseNum($("#oa").value),bb=parseNum($("#ob").value);if(a==null||bb==null||isNaN(a)||isNaN(bb))return{err:"Bitte beide Grenzen eintragen."};
+        if(!P.trim(c).some(x=>x))return{err:"Der Integrand ist 0 – tragen Sie mindestens eine Zahl ein."};return{spec:{t:"own",p:P.trim(c),a,b:bb}}}}}
+  ]});
+})();
+
+</script>
+</body>
+</html>
