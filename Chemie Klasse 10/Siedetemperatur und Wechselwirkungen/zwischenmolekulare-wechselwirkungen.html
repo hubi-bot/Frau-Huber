@@ -301,6 +301,8 @@ textarea.free:focus{outline:none;border-color:var(--cyan);background:rgba(8,217,
   .dd-bin{min-width:144px;}
   .cloze{line-height:2.7;}
 }
+
+@media (max-width:600px){table.ov{display:block;overflow-x:auto;max-width:100%;-webkit-overflow-scrolling:touch}}
 </style>
 </head>
 <body>
@@ -660,7 +662,7 @@ textarea.free:focus{outline:none;border-color:var(--cyan);background:rgba(8,217,
             <circle cx="144" cy="48" r="7.5" fill="url(#bH)"/><circle cx="144" cy="76" r="7.5" fill="url(#bH)"/>
             <line x1="70" y1="42" x2="96" y2="56" stroke="#0f9d8f" stroke-width="3" stroke-dasharray="1.5 5.5" stroke-linecap="round"/>
           </svg></div>
-          <div class="desc"><b>Methan · CH₄</b><br>Die Elektronegativitätsdifferenz zwischen C und H ist sehr klein (unter 0,5) – die C–H-Bindungen sind kaum polar, CH₄ ist unpolar.</div>
+          <div class="desc"><b>Methan · CH₄</b><br>Die Elektronegativitätsdifferenz zwischen C und H ist sehr klein (unter 0,5) und das Molekül ist symmetrisch gebaut – CH₄ ist unpolar.</div>
           <select class="pick"><option value="">— wählen —</option><option value="london">Londonkräfte</option><option value="dipol">Dipol-Dipol-Kräfte</option><option value="wb">Wasserstoffbrücken</option></select>
         </div>
         <div class="match-row" data-answer="wb">
@@ -693,7 +695,7 @@ textarea.free:focus{outline:none;border-color:var(--cyan);background:rgba(8,217,
           <li><b>HCl → Dipol-Dipol-Kräfte:</b> H und Cl haben unterschiedliche Elektronegativitäten, HCl ist ein permanenter Dipol. Chlor gehört aber nicht zu F, O, N – deshalb bilden sich keine Wasserstoffbrücken, sondern Dipol-Dipol-Kräfte.</li>
           <li><b>H₂O → Wasserstoffbrücken:</b> H ist an O gebunden. Das positiv geladene H-Atom des einen Moleküls wird von einem freien Elektronenpaar des O-Atoms eines anderen Moleküls angezogen.</li>
           <li><b>NH₃ → Wasserstoffbrücken:</b> Hier ist H an N gebunden. Wasserstoffbrücken gibt es also nicht nur bei Wasser, sondern bei allen Stoffen, in denen H an F, O oder N gebunden ist.</li>
-          <li><b>CH₄ → Londonkräfte:</b> Die Elektronegativitätsdifferenz zwischen C und H ist sehr klein (unter 0,5). Die C–H-Bindungen sind dadurch kaum polar und das Molekül ist insgesamt unpolar – es wirken nur Londonkräfte.</li>
+          <li><b>CH₄ → Londonkräfte:</b> Die Elektronegativitätsdifferenz zwischen C und H ist sehr klein (unter 0,5). Die C–H-Bindungen sind dadurch kaum polar, und weil das Molekül symmetrisch (tetraedrisch) gebaut ist, heben sich die winzigen Teilladungen auf – CH₄ ist unpolar, es wirken nur Londonkräfte.</li>
           <li><b>HF → Wasserstoffbrücken:</b> H ist an Fluor gebunden, das elektronegativste Element überhaupt – ideale Voraussetzung für Wasserstoffbrücken.</li>
         </ul>
         <p style="margin-top:8px;">Eselsbrücke „FON": Wasserstoffbrücken entstehen nur, wenn H an <b>F</b>, <b>O</b> oder <b>N</b> gebunden ist. Londonkräfte wirken zusätzlich <i>immer</i> mit – auch zwischen polaren Molekülen –, sind dort aber nicht die stärkste Wechselwirkung.</p>
@@ -816,8 +818,8 @@ textarea.free:focus{outline:none;border-color:var(--cyan);background:rgba(8,217,
         <h5>💡 Musterlösung</h5>
         <p>Prüfe bei jedem Stoff dieselbe Reihenfolge: H an F/O/N? – sonst permanenter Dipol? – sonst Londonkräfte.</p>
         <ul>
-          <li><b>Londonkräfte – O₂ und CH₄:</b> O₂ besteht aus zwei gleichen Atomen und ist unpolar. Bei CH₄ ist die Elektronegativitätsdifferenz zwischen C und H sehr klein, das Molekül ist ebenfalls unpolar. Zwischen den Molekülen wirken deshalb nur kurzzeitige (temporäre) Dipole, also Londonkräfte.</li>
-          <li><b>Dipol-Dipol-Kräfte – HBr und H₂S:</b> Beide Moleküle sind permanente Dipole. Brom und Schwefel gehören aber nicht zu F, O, N und sind nicht elektronegativ genug für Wasserstoffbrücken – es bleiben die Dipol-Dipol-Kräfte.</li>
+          <li><b>Londonkräfte – O₂ und CH₄:</b> O₂ besteht aus zwei gleichen Atomen und ist unpolar. Bei CH₄ ist die Elektronegativitätsdifferenz zwischen C und H sehr klein und das Molekül symmetrisch gebaut – es ist ebenfalls unpolar. Zwischen den Molekülen wirken deshalb nur kurzzeitige (temporäre) Dipole, also Londonkräfte.</li>
+          <li><b>Dipol-Dipol-Kräfte – HBr und H₂S:</b> Beide Moleküle sind permanente Dipole. Bei H₂S ist die S–H-Bindung zwar nur schwach polar, aber das Molekül ist gewinkelt wie Wasser – die Teilladungen heben sich nicht auf. Brom und Schwefel gehören aber nicht zu F, O, N und sind nicht elektronegativ genug für Wasserstoffbrücken – es bleiben die Dipol-Dipol-Kräfte.</li>
           <li><b>Wasserstoffbrücken – H₂O und HF:</b> Hier ist H an O bzw. an F gebunden. Das positiv geladene H-Atom wird vom freien Elektronenpaar des O- bzw. F-Atoms eines anderen Moleküls angezogen.</li>
         </ul>
         <p style="margin-top:8px;">Wichtig: Jede dieser Wechselwirkungen wirkt <b>zwischen</b> den Molekülen, niemals innerhalb eines Moleküls. Londonkräfte wirken übrigens auch bei HBr, H₂S, H₂O und HF zusätzlich mit – sie sind dort nur nicht die stärkste Wechselwirkung.</p>
@@ -982,7 +984,7 @@ textarea.free:focus{outline:none;border-color:var(--cyan);background:rgba(8,217,
           <li><b>3 – Elektronenpaarbindung (O–H):</b> Die durchgezogene Linie ist die kovalente Bindung <i>innerhalb</i> eines Moleküls. Sie hält O- und H-Atom im selben Molekül zusammen und ist eine starke Bindung.</li>
           <li><b>4 – Wasserstoffbrücke:</b> Die gestrichelte Linie ist die zwischenmolekulare Anziehung <i>zwischen</i> zwei verschiedenen Molekülen.</li>
         </ul>
-        <p style="margin-top:8px;">Merke dir den Unterschied: Die Elektronenpaarbindung (3) wirkt innerhalb eines Moleküls und ist stark. Die Wasserstoffbrücke (4) wirkt zwischen Molekülen und ist etwa zehnmal schwächer. Beim Sieden wird nur die schwächere Brücke (4) überwunden – die Bindung (3) bleibt erhalten.</p>
+        <p style="margin-top:8px;">Merke dir den Unterschied: Die Elektronenpaarbindung (3) wirkt innerhalb eines Moleküls und ist stark. Die Wasserstoffbrücke (4) wirkt zwischen Molekülen und ist rund zwanzigmal schwächer. Beim Sieden wird nur die schwächere Brücke (4) überwunden – die Bindung (3) bleibt erhalten.</p>
       </div>
     </div>
   </section>
@@ -1126,7 +1128,7 @@ textarea.free:focus{outline:none;border-color:var(--cyan);background:rgba(8,217,
         <ul>
           <li><b>1 – Stoff A:</b> Je stärker die zwischenmolekularen Wechselwirkungen sind, desto mehr Energie muss man aufwenden, um die Moleküle voneinander zu lösen. Stoff A hat die stärkeren Wechselwirkungen, also braucht es eine höhere Temperatur, bis er siedet – Stoff A hat die höhere Siedetemperatur.</li>
           <li><b>2 – die zwischenmolekularen Wechselwirkungen:</b> Beim Sieden lösen sich die Moleküle als Ganzes voneinander. Überwunden werden nur die Kräfte <i>zwischen</i> den Molekülen (bei Wasser vor allem die Wasserstoffbrücken). Die O–H-Bindungen <i>innerhalb</i> der Moleküle bleiben dabei vollständig erhalten – aus Wasserdampf bestehen weiterhin H₂O-Moleküle.</li>
-          <li><b>3 – nur schwache Londonkräfte:</b> CH₄ ist unpolar, weil die Elektronegativitätsdifferenz zwischen C und H sehr klein ist. Zwischen den Molekülen wirken deshalb ausschließlich schwache Londonkräfte. Diese sind leicht zu überwinden – CH₄ siedet bereits bei −161 °C.</li>
+          <li><b>3 – nur schwache Londonkräfte:</b> CH₄ ist unpolar, weil die Elektronegativitätsdifferenz zwischen C und H sehr klein und das Molekül symmetrisch gebaut ist. Zwischen den Molekülen wirken deshalb ausschließlich schwache Londonkräfte. Diese sind leicht zu überwinden – CH₄ siedet bereits bei −161 °C.</li>
         </ul>
         <p style="margin-top:8px;">Im Diagramm erkennst du dasselbe Prinzip wieder: HCl mit seinen Dipol-Dipol-Kräften siedet höher als CH₄, und H₂O siedet wegen der besonders starken Wasserstoffbrücken mit großem Abstand am höchsten.</p>
       </div>
@@ -1638,5 +1640,35 @@ initDrag();
 </script>
 
 
+<!-- QR-Knopf (Frau Huber) -->
+<style>
+.hq-btn{position:fixed;left:10px;bottom:10px;z-index:9998;width:34px;height:34px;opacity:.9;display:grid;place-items:center;border:2px solid #25303f;border-radius:9px;background:#fdfcf7;color:#25303f;box-shadow:2px 2px 0 #25303f;cursor:pointer;padding:0}
+.hq-btn:active{transform:translate(2px,2px);box-shadow:0 0 0 #25303f}
+.hq-ov{position:fixed;inset:0;background:rgba(15,20,35,.55);display:grid;place-items:center;padding:16px;z-index:9999}
+.hq-ov[hidden]{display:none}
+.hq-mod{background:#fdfcf7;color:#25303f;border:2px solid #25303f;border-radius:14px;box-shadow:5px 5px 0 #25303f;padding:18px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:10px;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;max-width:100%}
+.hq-box{background:#fff;padding:10px;border-radius:10px;border:2px solid #cfdcec;line-height:0}
+.hq-box svg{display:block;width:min(calc(100vw - 90px),calc(100vh - 220px),440px);height:auto;min-width:150px}
+.hq-url{font-size:13px;color:#5b6677;margin:0;max-width:min(calc(100vw - 90px),440px);overflow-wrap:anywhere;user-select:all}
+.hq-close{border:2px solid #25303f;background:#d6267f;color:#fff;font-weight:700;border-radius:10px;padding:8px 16px;box-shadow:2px 2px 0 #25303f;cursor:pointer;font-size:15px}
+@media print{.hq-btn,.hq-ov{display:none!important}}
+</style>
+<button class="hq-btn" id="hqBtn" type="button" title="QR-Code zu dieser Seite zeigen" aria-label="QR-Code zu dieser Seite zeigen"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" fill="currentColor"><path d="M3 3h8v8H3zm2 2v4h4V5zm8-2h8v8h-8zm2 2v4h4V5zM3 13h8v8H3zm2 2v4h4v-4zm8-2h2v2h-2zm2 2h2v2h-2zm2-2h2v2h-2zm2 2h2v2h-2zm-6 2h2v2h-2zm4 0h2v2h-2zm-2 2h2v2h-2zm4 0h2v2h-2z"/></svg></button>
+<div class="hq-ov" id="hqOv" hidden><div class="hq-mod" role="dialog" aria-modal="true" aria-label="QR-Code zu dieser Seite"><div class="hq-box" id="hqBox"></div><p class="hq-url" id="hqUrl"></p><button class="hq-close" id="hqClose" type="button">Schließen</button></div></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
+<script>
+(function(){
+  var U=location.origin+location.pathname,b=document.getElementById("hqBtn"),o=document.getElementById("hqOv");
+  function open(){var box=document.getElementById("hqBox");
+    try{var q=qrcode(0,"M");q.addData(U);q.make();box.innerHTML=q.createSvgTag({cellSize:8,margin:2,scalable:true});}
+    catch(e){box.innerHTML="<p style='line-height:1.4'>Der QR-Code konnte nicht geladen werden. Bitte die Seite neu laden.</p>"}
+    document.getElementById("hqUrl").textContent=U;o.hidden=false;document.getElementById("hqClose").focus();}
+  function close(){o.hidden=true;b.focus();}
+  b.addEventListener("click",open);document.getElementById("hqClose").addEventListener("click",close);
+  o.addEventListener("click",function(e){if(e.target===o)close()});
+  document.addEventListener("keydown",function(e){if(e.key==="Escape"&&!o.hidden)close()});
+})();
+</script>
+<!-- /QR-Knopf -->
 </body>
 </html>
