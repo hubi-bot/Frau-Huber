@@ -5,7 +5,7 @@
 
 # --- Die Seite selbst ---
 Seitentitel | Unterrichtsmaterialien
-Untertitel | Übersicht für Lehrkräfte – bitte nur einzelne Kurzlinks an die Klasse weitergeben
+Untertitel | Material von Frau Huber
 Startseite | Lernmaterial von Frau Huber
 Startseite-Text | Öffne bitte den Link oder scanne den QR-Code, den du im Unterricht bekommen hast.
 
@@ -75,4 +75,3 @@ Forensik | Forensik
 Forensik/Genetik/Lernumgebung_Genetik.html | Lernumgebung Genetik
 Forensik/Facharbeit/Zitierheft_Forensik.html | Zitierheft Forensik
 Forensik/Facharbeit/Zitierheft_Forensik_Mit Artikeln.html | Zitierheft Forensik Mit Artikeln
-
