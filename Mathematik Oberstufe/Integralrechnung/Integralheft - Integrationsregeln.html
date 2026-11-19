@@ -180,6 +180,7 @@ main{max-width:880px;margin:0 auto;padding:18px 14px 48px}
 .mb .h{font-size:12.5px;font-weight:700;color:var(--muted);border-bottom:2px solid var(--karo)}
 .mb .c{padding:3px 0}
 .mb .n{font-size:12.5px;color:var(--rev);font-weight:700}
+.mb.mb2{grid-template-columns:auto 1fr}
 @media (max-width:560px){.mb{grid-template-columns:1fr}.mb .h{display:none}.mb .n{margin-top:8px}}
 
 /* Musterlösung */
@@ -716,7 +717,7 @@ const RULES={
        Fs:["Stammfunktion von "+K(fT(s.f))+": "+K("F(x)="+FT(s.f))],
        ins:K(I(s.a,s.b,fT(s.f))+"=F("+s.b+")-F("+s.a+")="+num(Fb)+"-"+pnum(Fa))}}},
  summe:{name:"Summenregel",claim:I("a","b","\\big(f(x)+g(x)\\big)")+"="+I("a","b","f(x)")+"+"+I("a","b","g(x)"),
-   first:I("a","b","\\big(f(x)+g(x)\\big)"),lines:["=\\big(F(b)+G(b)\\big)-\\big(F(a)+G(a)\\big)","=F(b)+G(b)-F(a)-G(a)","=F(b)-F(a)+G(b)-G(a)","="+I("a","b","f(x)")+"+"+I("a","b","g(x)")],ok:[[H],[KL],[US],[RW]],
+   first:I("a","b","\\big(f(x)+g(x)\\big)"),lines:["=F(b)+G(b)-\\big(F(a)+G(a)\\big)","=F(b)+G(b)-F(a)-G(a)","=F(b)-F(a)+G(b)-G(a)","="+I("a","b","f(x)")+"+"+I("a","b","g(x)")],ok:[[H],[KL],[US],[RW]],
    tips:["Das Integralzeichen ist verschwunden. Eine Stammfunktion von f + g ist F + G.","Die Klammern sind weg – achten Sie auf das Minus vor der zweiten Klammer.","Gleiche Terme, andere Reihenfolge.","Die Integralzeichen tauchen wieder auf."],
    dis:[{t:"=F(b)+G(b)-F(a)+G(a)",why:"Ein Minus vor der Klammer ändert ALLE Vorzeichen in der Klammer: −(F(a) + G(a)) = −F(a) − G(a)."},{t:"=F(b)\\cdot G(b)-F(a)\\cdot G(a)",why:"Eine Stammfunktion von f + g ist F + G, nicht F · G."}],
    conc:s=>sumConc(s,1)},
@@ -735,8 +736,8 @@ const RULES={
        lines:[I(s.b,s.a,fT(s.f)),"=F("+s.a+")-F("+s.b+")="+num(Fa)+"-"+pnum(Fb),"=-\\big("+num(Fb)+"-"+pnum(Fa)+"\\big)","=-"+I(s.a,s.b,fT(s.f))+"=-"+pnum(In)],
        Fs:["Stammfunktion: "+K("F(x)="+FT(s.f))],ins:K(I(s.b,s.a,fT(s.f))+"=F("+s.a+")-F("+s.b+")")}}},
  add:{name:"Intervalle zusammenfügen",claim:I("a","b","f(x)")+"+"+I("b","c","f(x)")+"="+I("a","c","f(x)"),
-   first:I("a","b","f(x)")+"+"+I("b","c","f(x)"),lines:["=F(b)-F(a)+F(c)-F(b)","=F(c)-F(a)","="+I("a","c","f(x)")],ok:[[H],[WEG,US],[RW]],
-   tips:["Beide Integralzeichen sind verschwunden.","F(b) kommt einmal mit + und einmal mit − vor.","Das Integralzeichen taucht wieder auf."],
+   first:I("a","b","f(x)")+"+"+I("b","c","f(x)"),lines:["=F(b)-F(a)+F(c)-F(b)","=-F(a)+F(c)","=F(c)-F(a)","="+I("a","c","f(x)")],ok:[[H],[WEG],[US],[RW]],
+   tips:["Beide Integralzeichen sind verschwunden.","F(b) und −F(b) heben sich auf.","Umsortiert: erst F(c), dann −F(a).","Das Integralzeichen taucht wieder auf."],
    dis:[{t:"=F(b)-F(a)+F(b)-F(c)",why:"Beim zweiten Integral ist c die obere Grenze: F(c) − F(b), nicht umgekehrt."},{t:"=F(c)+F(a)",why:"Das Minus vor F(a) bleibt erhalten."}],
    conc:s=>{const I1=Iv(s.f,s.a,s.m),I2=Iv(s.f,s.m,s.b),Fa=Fv(s.f,s.a),Fm=Fv(s.f,s.m),Fb=Fv(s.f,s.b);
      return{fields:[{k:"I1",name:"erstes Integral",lab:K(I(s.a,s.m,fT(s.f))+"="),val:I1},{k:"I2",name:"zweites Integral",lab:K(I(s.m,s.b,fT(s.f))+"="),val:I2},
@@ -753,7 +754,7 @@ function sumConc(s,sg){const op=sg>0?"+":"-",fg=s.f,gg=s.g,If=Iv(fg,s.a,s.b),Ig=
     lines,Fs:["Stammfunktion von "+K("f(x)="+fT(fg))+": "+K("F(x)="+FT(fg)),"Stammfunktion von "+K("g(x)="+fT(gg))+": "+K("G(x)="+FT(gg))],
     ins:K(I(s.a,s.b,fT(fg))+"=F("+s.b+")-F("+s.a+")="+num(Fb)+"-"+pnum(Fa))}}
 
-const ORDER=["null","faktor","summe","diff","tausch","add"];
+const ORDER=["null","faktor","summe"];
 const randF=()=>{const n=rnd(1,3);return{c:(n+1)*pick([1,1,2]),n}};
 function genBeweis(lvl,r){
   if(!r){let i=store.get("integralheft-seq",0);r=ORDER[i%ORDER.length];store.set("integralheft-seq",i+1)}
@@ -769,30 +770,23 @@ const reasonHints=R=>["Vergleichen Sie jede Zeile mit der Zeile direkt davor: Wa
   "Zeile 2: „"+OPTS[R.ok[0][0]]+"“"+(R.ok.length>1?" · Zeile 3: „"+OPTS[R.ok[1][0]]+"“":"")+"."];
 
 function buildBeweis(s){
-  const R=RULES[s.r],C=R.conc(s),steps=[],withConc=s.lvl<3,withDis=s.lvl>=2,withReason=s.lvl>=2;
-  if(withConc)steps.push({name:"Erst konkret",
-    render(box){box.innerHTML='<p class="q">Bevor Sie allgemein beweisen: Prüfen Sie die Regel an einem Beispiel. Rechnen Sie beide Seiten aus.</p>'+numFields(C.fields)+'<p class="pmini">Brüche wie 15/2 oder Dezimalzahlen wie 7,5 sind beide erlaubt.</p>'},
-    check(box){return checkNums(box,C.fields)},T:C.fields,
-    hints:["Rechnen Sie jedes Integral einzeln mit dem Hauptsatz aus: "+K("\\int_a^b f(x)\\,dx=F(b)-F(a)")+".",C.Fs.join("<br>"),"So geht es los: "+C.ins+" = …"],
-    good:"Beide Seiten sind gleich groß – die Regel stimmt für dieses Beispiel. Jetzt zeigen Sie, dass sie <em>immer</em> gilt."});
-  const conc2=withConc?'<div class="cmp" style="grid-template-columns:1fr"><div><h4>Ihr Beispiel mit Zahlen</h4>'+C.lines.map(K).join("<br>")+"</div></div>Zu jeder Zahlen-Zeile gibt es genau einen Schnipsel mit demselben Aufbau – nur mit F(a), F(b), … statt Zahlen.":"";
-  steps.push(orderStep({name:"Beweis ordnen",intro:"Zeigen Sie: "+K(R.claim)+"<br>Bringen Sie die Beweisschnipsel in die richtige Reihenfolge. Die erste Zeile ist vorgegeben.",
+  const R=RULES[s.r],steps=[],withDis=s.lvl>=2,withReason=s.lvl>=3;
+  steps.push(orderStep({name:"Beweis ordnen",intro:"Zeigen Sie: "+K(R.claim)+"<br>Ordnen Sie die Schnipsel.",
     first:R.first,lines:R.lines,dis:withDis?R.dis:[],
-    hints:["Ein Beweis ist eine Kette aus Gleichheitszeichen: Sie starten mit der <b>linken Seite</b> der Behauptung und landen am Ende bei der <b>rechten Seite</b>.",
-      "Der erste Schritt ist fast immer der Hauptsatz: Aus jedem Integral wird „F(obere Grenze) − F(untere Grenze)“.",
-      withConc?"Ihre Zahlenrechnung aus Schritt 1 hat genau denselben Aufbau wie der Beweis:"+conc2:"Rechnen Sie das Ganze zuerst an einem Beispiel durch, z. B. mit "+K("f(x)=2x")+", a = 1, b = 2. Jede Zeile Ihrer Zahlenrechnung entspricht einem Schnipsel."]}));
+    hints:["Start: linke Seite. Ziel: rechte Seite.","Erster Schritt: Hauptsatz. Aus jedem Integral wird F(obere Grenze) − F(untere Grenze).","Schauen Sie ins Musterbeispiel oben – gleicher Aufbau."]}));
   if(withReason)steps.push(reasonStep({first:R.first,lines:R.lines,opts:OPTS,ok:R.ok,tips:R.tips,hints:reasonHints(R)}));
-  const sol=[{l:K("\\text{Behauptung: }"+R.claim),t:"Lesen Sie zuerst die Behauptung. Links steht der Start, rechts das Ziel. Sie formen die linke Seite so lange um, bis die rechte Seite dasteht."},
-    {l:K(R.first),t:"Start: die linke Seite der Behauptung."}];
-  R.lines.forEach((ln,j)=>sol.push({l:K(ln),t:"<b>"+OPTS[R.ok[Math.min(j,R.ok.length-1)][0]]+".</b> "+R.tips[j]}));
-  sol.push({t:"Fertig: Die rechte Seite ist erreicht. ∎<br><b>Probe mit Zahlen:</b><br>"+C.lines.map(K).join("<br>")});
-  return{title:"Beweisen Sie: "+K(R.claim),tag:R.name+" · Stufe "+s.lvl,steps,solution:sol,finalMsg:"Beweis vollständig. Diese Regel dürfen Sie ab jetzt benutzen."};
+  const sol=[{l:K(R.first),t:"Start: linke Seite."}];
+  R.lines.forEach((ln,j)=>sol.push({l:K(ln),t:"<b>"+OPTS[R.ok[Math.min(j,R.ok.length-1)][0]]+".</b>"}));
+  sol.push({t:"Rechte Seite erreicht. ∎"});
+  return{title:"Beweisen Sie: "+K(R.claim),tag:R.name+" · Stufe "+s.lvl,steps,solution:sol,finalMsg:"Beweis fertig. Diese Regel dürfen Sie ab jetzt benutzen."};
 }
 
 /* ---------- Regeln anwenden ---------- */
-const RULECH=["Summenregel: zwei Integrale mit gleichen Grenzen zu einem zusammenfassen","Faktorregel: den konstanten Faktor vor das Integral ziehen","Intervalle zusammenfügen: aneinandergrenzende Grenzen zu einem Integral"];
+const RULECH=["Summenregel","Faktorregel","Intervalle zusammenfügen"];
 function randPoly(deg,lo,hi){const c=[];for(let i=0;i<=deg;i++)c.push(rnd(lo,hi));if(!c[deg])c[deg]=1;return c}
+const FIX=[{t:"sum",a:1,b:5,p:[0,-6,1],q:[0,4]},{t:"faktor",a:1,b:2,k:1.2,inner:[0,-2,0,1]},{t:"grenzen",a:3,b:4,m:3.7,f:{c:1,n:-2}}];
 function genRegeln(lvl){
+  {const i=store.get("integralheft-fix",0);if(i<FIX.length){store.set("integralheft-fix",i+1);return Object.assign({lvl,fix:i},FIX[i])}}
   const t=pick(["sum","sum","faktor","grenzen"]),deg=lvl===1?2:3;
   const a=lvl===3?rnd(-2,1):rnd(0,2),b=a+rnd(1,3);
   if(t==="sum"){for(;;){const r=randPoly(deg,-4,4),q=randPoly(deg,-6,6);q[deg]=0;const k=rnd(0,deg-1);r[k]=0;if(!q[k])q[k]=pick([-5,-3,3,4,6]);const p=P.sub(r,q);
@@ -819,7 +813,7 @@ function resultStep(val,Fb,Fa,extra){
     check(box){return checkNums(box,[{k:"R",name:"Ergebnis",val,why:x=>near(x,-val)&&Math.abs(val)>1e-9?"Das Vorzeichen ist vertauscht: Es heißt F(obere Grenze) − F(untere Grenze).":near(x,Fb+Fa)&&Math.abs(Fa)>1e-9?"Zwischen F(b) und F(a) gehört ein Minus, kein Plus.":(extra&&extra(x))||null}])},
     hints:["Hauptsatz: "+K("\\int_a^b f(x)\\,dx=F(b)-F(a)")+".","Rechnen Sie "+K(num(Fb)+"-"+pnum(Fa))+(extra?" – und denken Sie an den Faktor.":".")]};
 }
-function ruleStep(right){return{name:"Regel erkennen",TC:[right],render(box){box.innerHTML='<p class="q">Welche Regel macht diese Aufgabe einfacher?</p>'+choiceHTML(RULECH);bindChoices(box)},
+function ruleStep(right){return{name:"Regel erkennen",TC:[right],render(box){box.innerHTML='<p class="q">Welche Regel hilft hier?</p>'+choiceHTML(RULECH);bindChoices(box)},
   check(box){const c=chosen(box);if(!c.length)return{ok:false,empty:true,msgs:["Wählen Sie eine Regel aus."]};const ok=c[0]===right;$$(".choice",box).forEach(b=>{if(b.getAttribute("aria-pressed")==="true")b.classList.add(ok?"ok":"bad")});
     return{ok,msgs:ok?[]:[["Schauen Sie auf die Grenzen und auf die Integranden: Sind die Grenzen gleich? Steht ein Faktor davor? Schließen die Intervalle aneinander an?"][0]]}},
   hints:["Gleiche Grenzen, zwei Integrale → Summenregel. Ein Zahlenfaktor vor dem Funktionsterm → Faktorregel. Obere Grenze des ersten = untere Grenze des zweiten → Intervalle zusammenfügen."]}}
@@ -872,19 +866,19 @@ function buildRegeln(s){
 }
 
 /* ---------- Musterbeispiel (aus AB 12) ---------- */
-const MB='<details class="merk" id="mbox"><summary><b>📖 Musterbeispiel: So ist ein Beweis aufgebaut</b> <span class="pmini">(antippen zum Öffnen)</span></summary>'+
- '<ol><li><b>Behauptung lesen:</b> Links steht der Start, rechts das Ziel.</li><li><b>Mit der linken Seite starten</b> und den <b>Hauptsatz</b> anwenden: jedes ∫ wird zu F(obere) − F(untere).</li><li><b>Umformen:</b> Klammern auflösen, umsortieren, ausklammern, Gleiches wegheben.</li><li><b>Hauptsatz rückwärts:</b> F(b) − F(a) wieder als Integral schreiben – fertig, wenn die rechte Seite dasteht.</li></ol>'+
- '<p class="pmini">Tipp: Rechnen Sie dieselben Schritte nebenher mit Zahlen. Hier mit '+K("f(x)=2x,\\;F(x)=x^2")+", a = 1, b = 2, c = 3.</p>"+
- '<div class="mb"><span class="h"></span><span class="h">allgemein</span><span class="h">mit Zahlen</span>'+
- [["Start",I("a","b","f(x)")+"+"+I("b","c","f(x)"),I(1,2,"2x")+"+"+I(2,3,"2x")],["Hauptsatz","=F(b)-F(a)+F(c)-F(b)","=4-1+9-4"],["wegheben","=F(c)-F(a)","=9-1=8"],["rückwärts","="+I("a","c","f(x)"),"="+I(1,3,"2x")+"=8\\;\\checkmark"]].map(r=>'<span class="n">'+r[0]+'</span><span class="c">'+K(r[1])+'</span><span class="c">'+K(r[2])+"</span>").join("")+"</div></details>";
+const MB='<details class="merk" id="mbox"><summary><b>📖 Musterbeispiel</b> <span class="pmini">(antippen)</span></summary>'+
+ '<p>Hauptsatz: '+K("\\int_a^b f(x)\\,dx=F(b)-F(a)")+'</p>'+
+ '<p>Zeige, dass gilt: '+K(I("a","b","f(x)")+"+"+I("b","c","f(x)")+"="+I("a","c","f(x)"))+'</p>'+
+ '<div class="mb mb2"><span class="h"></span><span class="h">Durch den Hauptsatz folgt:</span>'+
+ [["",I("a","b","f(x)")+"+"+I("b","c","f(x)")],["Hauptsatz","=F(b)-F(a)+F(c)-F(b)"],["F(b) hebt sich auf","=-F(a)+F(c)"],["umsortieren","=F(c)-F(a)"],["Hauptsatz rückwärts","="+I("a","c","f(x)")]].map(r=>'<span class="n">'+r[0]+'</span><span class="c">'+K(r[1])+"</span>").join("")+"</div></details>";
 
 startHeft({key:"integralheft-v1",
-  route(h){h=h.toLowerCase();const m=h.match(/^beweis-(null|faktor|summe|diff|tausch|add)(?:-(\d))?$/);
+  route(h){h=h.toLowerCase();const m=h.match(/^beweis-(null|faktor|summe)(?:-(\d))?$/);
     if(m){const l=m[2]?+m[2]:1;return{kind:"beweis",level:l,spec:genBeweis(l,m[1])}}
     if(h==="regeln")return{kind:"regeln"};return null},
   kinds:[
    {id:"beweis",name:"Beweise",short:"Beweise",icon:"🧩",color:"var(--c1)",
-    levels:{label:"Stufe",names:["1","2","3"],titles:["Erst mit Zahlen, dann Schnipsel ordnen","Mit Zahlen, Störschnipseln und Begründungen","Ohne Zahlenbeispiel, mit Störschnipseln und Begründungen"]},
+    levels:{label:"Stufe",names:["1","2","3"],titles:["Schnipsel ordnen","Mit Störschnipseln","Mit Störschnipseln und Begründungen"]},
     gen:l=>genBeweis(l),build:buildBeweis,
     extra:()=>MB,extraBind:el=>{const d=$("#mbox",el);if(d&&!ENG.S.stats.beweis[0])d.open=true;d.addEventListener("toggle",()=>renderK(d))}},
    {id:"regeln",name:"Regeln anwenden",short:"Anwenden",icon:"🧮",color:"var(--c2)",
