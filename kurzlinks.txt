@@ -34,6 +34,7 @@ sigma | Mathematik Oberstufe/Stochastik/Stochastik 19 - Sigma-Umgebungen (Arbeit
 normalverteilung | Mathematik Oberstufe/Stochastik/Stochastik 20 - Normalverteilung mit dem TI-84 Plus CE.png
 integralregeln | Mathematik Oberstufe/Integralrechnung/Integralheft - Integrationsregeln.html
 flaeche-graphen | Mathematik Oberstufe/Integralrechnung/Flächenheft - Fläche zwischen zwei Graphen.html
+flaeche-goodnotes | Mathematik Oberstufe/Integralrechnung/Flächenheft - Goodnotes-Heft.pdf
 
 # Chemie
 siede-uebersicht | Chemie Klasse 10/Siedetemperatur und Wechselwirkungen/Uebersicht_Siedetemperatur_und_WW.html

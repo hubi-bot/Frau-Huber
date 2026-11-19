@@ -40,6 +40,7 @@ Mathematik Oberstufe/Analysis/Lernumgebung 1_Gleichungen und Schnittpunkte.html 
 Mathematik Oberstufe/Analysis/Lernumgebung_2_Ableitungen.html | Lernumgebung 2 Ableitungen
 Mathematik Oberstufe/Integralrechnung/Integralheft - Integrationsregeln.html | Integralheft – Integrationsregeln beweisen und anwenden
 Mathematik Oberstufe/Integralrechnung/Flächenheft - Fläche zwischen zwei Graphen.html | Flächenheft – Fläche zwischen zwei Graphen
+Mathematik Oberstufe/Integralrechnung/Flächenheft - Goodnotes-Heft.pdf | Flächenheft – Goodnotes-Heft (PDF)
 
 Mathematik Oberstufe/Stochastik/Binomialverteilung - Applet für Geogebra.ggb | Binomialverteilung – Applet für Geogebra
 Mathematik Oberstufe/Stochastik/Stochastik 19 - Sigma-Umgebungen (Arbeitsblatt).pdf | Stochastik 19 – Sigma-Umgebungen (Arbeitsblatt)

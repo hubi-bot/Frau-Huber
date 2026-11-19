@@ -236,6 +236,13 @@ main{max-width:880px;margin:0 auto;padding:18px 14px 48px}
 }
 @media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
 
+.txt{width:100%;font-family:var(--hand);font-size:21px;line-height:1.35;color:var(--ink);background:color-mix(in srgb,var(--paper) 88%,transparent);border:2px solid var(--karo);border-radius:8px;padding:6px 10px;resize:vertical}
+.txt:focus{outline:none;border-color:var(--ink);background:var(--focus)}
+.pdfbtn{align-self:center;text-decoration:none;font-size:14px;padding:6px 12px;white-space:nowrap}
+.rows .row{gap:6px}
+.rows .sel{font-size:16px}
+.g-outline{fill:none}
+
 </style>
 </head>
 <body>
@@ -246,6 +253,7 @@ main{max-width:880px;margin:0 auto;padding:18px 14px 48px}
         <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="currentColor"><path d="M3 3h8v8H3zm2 2v4h4V5zm8-2h8v8h-8zm2 2v4h4V5zM3 13h8v8H3zm2 2v4h4v-4zm8-2h2v2h-2zm2 2h2v2h-2zm2-2h2v2h-2zm2 2h2v2h-2zm-6 2h2v2h-2zm4 0h2v2h-2zm-2 2h2v2h-2zm4 0h2v2h-2z"/></svg>
       </button>
       <div class="label"><h1>Integralheft</h1><p>Integrationsregeln beweisen und anwenden</p></div>
+      <a class="btn pdfbtn hidden" id="pdfBtn" href="#" download title="Das ganze Heft als PDF für Goodnotes herunterladen">📥 Goodnotes-Heft</a>
     </div>
     <div class="coverright">
       <div class="levels hidden" id="levels" role="group" aria-label="Stufe"></div>
@@ -274,7 +282,7 @@ main{max-width:880px;margin:0 auto;padding:18px 14px 48px}
         <button class="btn main hidden" id="nextBtn">Neue Aufgabe ▶</button>
       </div>
       <div class="actions more">
-        <button class="btn" id="solBtn">👀 Musterlösung</button>
+        <button class="btn" id="solBtn">🔒 Musterlösung</button>
         <button class="btn" id="resetBtn">↺ Nochmal von vorn</button>
         <button class="btn" id="newBtn">Neue Aufgabe</button>
         <button class="btn" id="ownBtn">✏️ Eigene Aufgabe</button>
@@ -303,6 +311,16 @@ main{max-width:880px;margin:0 auto;padding:18px 14px 48px}
     <div class="qrbox" id="qrBox"></div>
     <p class="qrurl" id="qrUrl"></p>
     <div class="actions" style="justify-content:center"><button class="btn main" id="qrClose">Schließen</button></div>
+  </div>
+</div>
+
+<div class="overlay hidden" id="lockOverlay">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="lockTitle">
+    <h2 id="lockTitle">🔒 Musterlösung</h2>
+    <p class="hint">Die Musterlösung ist gesperrt. Ihre Lehrkraft gibt den Code frei, wenn es so weit ist. Bis dahin helfen Ihnen die 💡 Hilfen.</p>
+    <div class="row"><label for="lockIn">Code:</label><input class="fin" id="lockIn" type="password" inputmode="numeric" autocomplete="off" maxlength="8"></div>
+    <div class="err" id="lockErr"></div>
+    <div class="actions"><button class="btn" id="lockCancel">Abbrechen</button><button class="btn main" id="lockOk">Öffnen</button></div>
   </div>
 </div>
 
@@ -499,6 +517,13 @@ function reasonStep(o){ /* o:{first,lines,ok:[[opt...]],opts:[..]} */
     hints:o.hints};
 }
 
+/* Freitext-Schritt (wird nicht automatisch bewertet) */
+function textStep(o){return{name:o.name||"In Worten",TX:true,
+  render(box){box.innerHTML='<p class="q">'+o.q+'</p><textarea class="txt" rows="4" aria-label="'+escA(o.name||"Antwort")+'" placeholder="'+escA(o.ph||"Schreiben Sie hier in ganzen Sätzen …")+'"></textarea>';renderK(box)},
+  check(box){const t=(box.querySelector("textarea").value||"").trim();if(t.length<(o.min||20))return{ok:false,empty:true,msgs:[t?"Schreiben Sie etwas ausführlicher – in ganzen Sätzen.":"Schreiben Sie Ihre Antwort in das Feld."]};
+    return{ok:true,good:o.good||"Danke! Vergleichen Sie Ihre Formulierung mit einer Nachbarin oder einem Nachbarn."}},
+  hints:o.hints||[]}}
+
 /* ===== Engine ===== */
 const ENG={};
 function startHeft(CFG){
@@ -591,7 +616,7 @@ function startHeft(CFG){
     }
   }
   function lock(i){const b=$$(".stepblk")[i];b.classList.remove("now");b.classList.add("done");b.querySelector(".body").classList.add("locked");
-    $$("input,select,.choice,.signs button,input[type=range]",b).forEach(x=>x.disabled=true)}
+    $$("input,select,textarea,.choice,.signs button,input[type=range]",b).forEach(x=>x.disabled=true)}
   function finish(){
     cur.done=true;phases();redraw();
     const s=$("#stamp");s.textContent=pick(["Prima!","Super!","Klasse!","Spitze!","Toll!"]);s.classList.remove("hidden");
@@ -607,7 +632,7 @@ function startHeft(CFG){
   function help(){
     if(!cur||cur.done)return;const st=cur.task.steps[cur.i];
     const hs=typeof st.hints==="function"?st.hints(cur.ctx):(st.hints||[]);
-    const n=(cur.hint[cur.i]||0)+1;cur.hint[cur.i]=Math.min(n,hs.length+(st.reveal?1:0));
+    const n=(cur.hint[cur.i]||0)+1;cur.hint[cur.i]=Math.min(n,hs.length+(st.reveal?1:0));cur.ctx.hintLvl=cur.hint[cur.i];redraw();
     const hb=$("#hintbox");hb.classList.remove("hidden");
     const shown=hs.slice(0,cur.hint[cur.i]);
     let h="<h4>💡 Gestufte Hilfe zu Schritt "+(cur.i+1)+" ("+Math.min(cur.hint[cur.i],hs.length)+" von "+hs.length+")</h4>"+shown.map((x,i)=>'<div class="hl"><span class="hn">Hilfe '+(i+1)+":</span>"+x+"</div>").join("");
@@ -618,7 +643,13 @@ function startHeft(CFG){
     hb.scrollIntoView({block:"nearest",behavior:"smooth"});
   }
   /* Musterlösung */
-  function showSol(){if(!cur)return;cur.sol=true;solI=0;$("#solution").classList.remove("hidden");drawSol();$("#solution").scrollIntoView({behavior:"smooth",block:"start"})}
+  const hc=s=>{let h=0x811c9dc5;for(const c of s){h^=c.charCodeAt(0);h=Math.imul(h,16777619)>>>0}return h};
+  let unlocked=false;
+  function askCode(){$("#lockErr").textContent="";$("#lockIn").value="";$("#lockOverlay").classList.remove("hidden");setTimeout(()=>$("#lockIn").focus(),50)}
+  $("#lockOk").onclick=()=>{if(hc("fh-musterloesung:"+$("#lockIn").value.trim())===3322625695){unlocked=true;$("#lockOverlay").classList.add("hidden");showSol()}else{$("#lockErr").textContent="Der Code stimmt nicht. Die Musterlösung gibt es bei Ihrer Lehrkraft."}};
+  $("#lockIn").addEventListener("keydown",e=>{if(e.key==="Enter")$("#lockOk").click()});
+  $("#lockCancel").onclick=()=>$("#lockOverlay").classList.add("hidden");
+  function showSol(){if(!cur)return;if(!unlocked){askCode();return}cur.sol=true;solI=0;$("#solution").classList.remove("hidden");drawSol();$("#solution").scrollIntoView({behavior:"smooth",block:"start"})}
   function drawSol(){const L=cur.task.solution;
     $("#solLines").innerHTML=L.slice(0,solI+1).filter(x=>x.l).map((x,i,a)=>'<div class="sl'+(i===a.length-1&&L[solI].l?" hl":"")+'">'+x.l+"</div>").join("");
     $("#solText").innerHTML=L[solI].t||"";
@@ -638,14 +669,15 @@ function startHeft(CFG){
   const PAGE=location.origin+location.pathname;
   $("#qrBtn").onclick=()=>{try{const q=qrcode(0,"M");q.addData(PAGE);q.make();$("#qrBox").innerHTML=q.createSvgTag({cellSize:6,margin:2,scalable:true})}catch(e){$("#qrBox").textContent="QR-Code konnte nicht erzeugt werden."}$("#qrUrl").textContent=PAGE;$("#qrOverlay").classList.remove("hidden")};
   $("#qrClose").onclick=()=>$("#qrOverlay").classList.add("hidden");
-  document.addEventListener("keydown",e=>{if(e.key==="Escape"){$("#qrOverlay").classList.add("hidden");$("#overlay").classList.add("hidden")}});
+  document.addEventListener("keydown",e=>{if(e.key==="Escape"){$("#qrOverlay").classList.add("hidden");$("#overlay").classList.add("hidden");$("#lockOverlay").classList.add("hidden")}});
+  if(CFG.pdf){const a=$("#pdfBtn");a.href=CFG.pdf;a.classList.remove("hidden")}
 
   renderStats();
   /* Sprungmarke aus QR-Code (z. B. #beweis-faktor) */
   const h=decodeURIComponent(location.hash.slice(1));const r=h&&CFG.route?CFG.route(h):null;
   if(r){setTab(r.kind);if(r.level){S.level[r.kind]=r.level;renderLevels()}load(r.kind,r.spec||KD[r.kind].gen(S.level[r.kind]||1));if(r.help)setTimeout(help,300)}
   else{setTab(tab);newTask()}
-  ENG.load=load;ENG.cur=()=>cur;ENG.S=S;
+  ENG.load=load;ENG.cur=()=>cur;ENG.S=S;ENG._unlock=()=>{unlocked=true};
 }
 
 </script>
