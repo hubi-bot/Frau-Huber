@@ -45,6 +45,12 @@ nomenklatur | Chemie Oberstufe/Organik/02 Nomenklatur-Trainer.html
 energetik | Chemie Oberstufe/Energetik/Chemie_Energetik_Wiederholung.html
 redox | Chemie Oberstufe/Redoxreaktionen/Lernumgebung_Redox.html
 
+# Informatik 5
+textverarbeitung | Informatik 5/Digitale Grundlagen/Lernreise - Textverarbeitung Basis.html
+textverarbeitung-plus | Informatik 5/Digitale Grundlagen/Lernreise - Textverarbeitung Plus.html
+dateien | Informatik 5/Digitale Grundlagen/Lernreise - Dateien im Explorer.html
+browser | Informatik 5/Digitale Grundlagen/Lernreise - Browser und Internet.html
+
 # Weitere Fächer
 genetik | Forensik/Genetik/Lernumgebung_Genetik.html
 zitierheft | Forensik/Facharbeit/Zitierheft_Forensik.html

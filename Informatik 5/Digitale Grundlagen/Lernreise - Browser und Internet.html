@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Lernreise – Browser und Internet</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;700&family=Patrick+Hand&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#fdfcf7; --desk:#e9eef3; --karo:#cfdcec; --text:#25303f; --muted:#5b6677; --ink:#1c3fa0;
+  --red:#cf2f2a; --green:#1d8248; --hl:#fff09a; --focus:#e6eeff;
+  --c0:#e0592a; --c1:#2f7fc4; --c2:#8352bf; --c3:#16877a; --c4:#c2417e; --c5:#5f8a1c; --c6:#1f6fb2;
+  --fin:#d6267f; --rev:#a8791a; --tab:var(--c0);
+  --hand:"Patrick Hand","Comic Sans MS","Segoe Print",cursive;
+  --ui:"Lexend",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --fs:16px;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --paper:#1c2232; --desk:#121620; --karo:#2e3a55; --text:#e7ebf3; --muted:#a4aec3; --ink:#93b6ff;
+    --red:#ff6b64; --green:#55d492; --hl:#5a5120; --focus:#26335a;
+    --c0:#ff7a4d; --c1:#5aa9ec; --c2:#ab85e8; --c3:#3cc7b4; --c4:#f07aae; --c5:#a3c94a; --c6:#6fb4ff;
+    --fin:#ff6fb5; --rev:#e0ae45;
+  }
+}
+:root.big{--fs:19px}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--desk);color:var(--text);font-family:var(--ui);font-size:var(--fs);line-height:1.55;overflow-x:hidden;
+  padding:env(safe-area-inset-top,0) env(safe-area-inset-right,0) env(safe-area-inset-bottom,0) env(safe-area-inset-left,0)}
+button,input{font-family:inherit;font-size:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--tab);outline-offset:2px}
+.hidden{display:none!important}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+main{max-width:860px;margin:0 auto;padding:18px 14px 40px}
+
+/* Kopf */
+.cover{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap}
+.brand{display:flex;align-items:flex-start;gap:12px}
+.label{background:var(--paper);border:2px solid var(--text);border-radius:6px;padding:8px 18px 6px;transform:rotate(-1.2deg);box-shadow:3px 3px 0 var(--text)}
+.label h1{font-family:var(--hand);font-weight:400;font-size:42px;line-height:1;margin:0;color:var(--ink)}
+.label p{margin:2px 0 0;font-size:13px;color:var(--muted)}
+.qrbtn{flex:none;width:30px;height:30px;display:grid;place-items:center;border:2px solid var(--text);border-radius:7px;background:var(--paper);color:var(--text);box-shadow:2px 2px 0 var(--text);padding:0}
+.qrbtn:active{transform:translate(2px,2px);box-shadow:0 0 0 var(--text)}
+.stats{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;margin-left:auto}
+.stat{background:var(--paper);border-radius:999px;padding:4px 12px;font-size:13px;border:1px solid var(--karo)}
+.stat b{font-family:var(--hand);font-size:20px;font-weight:400;line-height:0}
+
+/* Reiter */
+.tabs{display:flex;gap:5px;margin:22px 0 0 8px;position:relative;z-index:1;flex-wrap:wrap;align-items:flex-end}
+.tab{border:none;border-radius:12px 12px 0 0;padding:9px 12px 11px;font-weight:700;font-size:15px;white-space:nowrap;color:#fff;background:var(--k);opacity:.55;transform:translateY(6px);transition:transform .15s,opacity .15s}
+.tab[aria-selected="true"]{opacity:1;transform:none}
+.tab.locked{filter:grayscale(.75);opacity:.38}
+.tab.locked[aria-selected="true"]{opacity:.8}
+.tab .n{font-family:var(--hand);font-size:22px;font-weight:400;line-height:0;margin-right:3px}
+.tab .badge{display:inline-block;min-width:22px;padding:0 6px;margin-left:6px;border-radius:999px;background:rgba(255,255,255,.3);font-size:13px;text-align:center}
+.tab .sm{display:none}
+@media (prefers-color-scheme: dark){.tab{color:#141824}.tab .badge{background:rgba(0,0,0,.18)}}
+
+/* Heftseite */
+.sheet{position:relative;background:var(--paper);border-radius:4px 14px 14px 14px;border-top:6px solid var(--tab);padding:18px 16px 20px;box-shadow:0 2px 0 var(--karo),0 10px 30px rgba(20,30,50,.08);
+  background-image:linear-gradient(var(--karo) 1px,transparent 1px),linear-gradient(90deg,var(--karo) 1px,transparent 1px);background-size:22px 22px;background-position:-1px -1px}
+.sheet::before{content:"";position:absolute;top:0;bottom:0;left:44px;width:2px;background:color-mix(in srgb,var(--red) 45%,transparent);pointer-events:none}
+.inner{position:relative;padding-left:40px}
+.pb{background:var(--paper);border-radius:8px}
+
+.taskline{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:6px}
+.taskline .small{font-size:14px;color:var(--muted)}
+.taskline h2{font-family:var(--hand);font-weight:400;font-size:32px;line-height:1.1;margin:0;color:var(--text)}
+.chip{font-size:12px;border:1.5px solid var(--tab);color:var(--text);border-radius:999px;padding:1px 9px;background:var(--paper);white-space:nowrap}
+.goal{margin:0 0 10px;color:var(--muted);width:fit-content;padding:0 6px}
+.revinfo{font-size:14px;color:var(--muted);padding:2px 8px;width:fit-content;margin-bottom:6px}
+
+.phases{list-style:none;display:flex;gap:6px;padding:0;margin:0 0 12px;flex-wrap:wrap}
+.phases li{display:flex}
+.phases button{background:var(--paper);border:1.5px solid var(--karo);border-radius:999px;padding:3px 12px;font-size:13px;color:var(--muted)}
+.phases button:disabled{cursor:default}
+.phases .now button{border-color:var(--tab);color:var(--text);font-weight:700;box-shadow:inset 0 0 0 1px var(--tab)}
+.phases .done button{color:var(--green);border-color:var(--green)}
+
+.work{position:relative;max-width:64ch}
+.block{background:var(--paper);border-radius:12px;padding:12px 14px;margin:0 0 12px;border:2px solid var(--karo)}
+.block h3{font-family:var(--hand);font-weight:400;font-size:26px;line-height:1.1;margin:0 0 6px;color:var(--ink)}
+.steps{margin:0;padding-left:0;list-style:none;counter-reset:s}
+.steps li{counter-increment:s;position:relative;padding-left:34px;margin:8px 0}
+.steps li::before{content:counter(s);position:absolute;left:0;top:-1px;width:25px;height:25px;border-radius:50%;border:2px solid var(--tab);font-family:var(--hand);font-size:19px;line-height:21px;text-align:center;color:var(--text)}
+.box{border-radius:10px;padding:9px 12px;margin:10px 0 0}
+.box.merke{background:var(--hl);color:var(--text)}
+.box.tip{border:2px dashed var(--karo)}
+.box.safe{border:2px solid var(--red)}
+.box p{margin:0}
+kbd{font-family:var(--ui);font-size:.85em;border:1.5px solid var(--muted);border-bottom-width:3px;border-radius:5px;padding:0 5px;white-space:nowrap;background:var(--paper)}
+code{font-family:var(--hand);font-size:1.15em;color:var(--ink);background:color-mix(in srgb,var(--karo) 45%,transparent);padding:0 5px;border-radius:5px;overflow-wrap:anywhere}
+
+.checks{display:flex;flex-direction:column;gap:7px;margin-top:4px}
+.ck{display:flex;align-items:flex-start;gap:10px;background:var(--paper);border:2px solid var(--karo);border-radius:10px;padding:8px 12px;cursor:pointer}
+.ck input{width:22px;height:22px;flex:none;margin:1px 0 0;accent-color:var(--green)}
+.ck.on{border-color:var(--green)}
+.ck.bad{border-color:var(--red);background:color-mix(in srgb,var(--red) 11%,var(--paper))}
+
+.q{border:2px solid var(--karo);border-radius:12px;padding:10px 14px 12px;margin:0 0 12px;background:var(--paper)}
+.q legend{font-weight:700;padding:0 4px}
+.q .qn{font-family:var(--hand);font-weight:400;font-size:22px;color:var(--ink);margin-right:4px}
+.opt{display:flex;align-items:flex-start;gap:10px;border:2px solid var(--karo);border-radius:10px;padding:8px 12px;margin:7px 0 0;cursor:pointer;background:var(--paper)}
+.opt input{width:20px;height:20px;flex:none;margin:2px 0 0;accent-color:var(--ink)}
+.opt:has(input:checked){border-color:var(--ink);color:var(--ink)}
+.opt.ok{border-color:var(--green)!important;color:var(--green)!important}
+.opt.bad{border-color:var(--red)!important;color:var(--red)!important;background:color-mix(in srgb,var(--red) 11%,var(--paper));box-shadow:0 0 0 1px var(--red)}
+.opt.hl{background:var(--hl)}
+.q.ok{border-color:var(--green)}
+.q.bad{border-color:var(--red)}
+
+.lockbox{text-align:left}
+.lockbox .big{font-size:40px;line-height:1}
+
+.stamp{position:absolute;right:2%;top:10px;transform:rotate(-14deg);border:4px double var(--red);color:var(--red);font-family:var(--hand);font-size:40px;padding:0 16px;border-radius:10px;background:color-mix(in srgb,var(--paper) 80%,transparent);pointer-events:none;z-index:3;animation:stamp .4s cubic-bezier(.2,1.8,.4,1)}
+@keyframes stamp{from{transform:rotate(-14deg) scale(2.2);opacity:0}to{transform:rotate(-14deg) scale(1);opacity:1}}
+
+/* Rückmeldung */
+.note{background:var(--paper);border:2px solid var(--karo);border-radius:12px;padding:12px 14px;margin:4px 0 14px;max-width:64ch}
+.note:empty{display:none}
+.note p{margin:0}
+.note ul{margin:6px 0 0;padding-left:20px}
+.note li{margin:5px 0}
+.note.good{border-color:var(--green)}
+.note.good>p>strong:first-child{color:var(--green)}
+.note.bad{border-color:var(--red)}
+.note.bad>p>strong:first-child{color:var(--red)}
+
+.actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.btn{border:2px solid var(--text);background:var(--paper);border-radius:10px;padding:9px 14px;font-weight:500;font-size:15px;box-shadow:2px 2px 0 var(--text);transition:transform .06s,box-shadow .06s}
+.btn:active{transform:translate(2px,2px);box-shadow:0 0 0 var(--text)}
+.btn.main{background:var(--tab);border-color:var(--tab);color:#fff;font-weight:700;box-shadow:2px 2px 0 var(--text)}
+@media (prefers-color-scheme: dark){.btn.main{color:#141824}}
+.btn:disabled{opacity:.4;cursor:default}
+
+/* Musterlösung */
+.solution{margin-top:18px;max-width:64ch}
+.solution h2{font-family:var(--hand);font-weight:400;font-size:30px;margin:0 0 4px;color:var(--ink);background:var(--paper);width:fit-content;padding:0 8px;border-radius:6px}
+.soltext{background:var(--paper);border-left:4px solid var(--tab);padding:10px 14px;border-radius:0 10px 10px 0;min-height:64px}
+.soltext .sq{font-weight:700;margin:0 0 6px}
+.soltext .sa{background:var(--hl);border-radius:8px;padding:4px 10px;margin:0 0 8px;width:fit-content}
+.soltext p{margin:0}
+.solnav{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:10px}
+.solnav .count{font-size:14px;color:var(--muted);background:var(--paper);padding:2px 8px;border-radius:6px}
+
+/* Einstellungen + Hilfe */
+.settings{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:16px;padding-top:12px;border-top:2px dashed var(--karo);font-size:13px}
+.tog{font-size:12px;line-height:1.3;border:2px dashed var(--karo);border-radius:999px;background:var(--paper);padding:3px 10px;color:var(--muted)}
+.tog[aria-pressed="true"]{border:2px solid var(--ink);color:var(--ink);font-weight:700}
+.help{font-size:13px;color:var(--muted);background:var(--paper);border-radius:8px;padding:4px 8px;margin:10px 0 0;max-width:64ch}
+footer{text-align:center;color:var(--muted);font-size:12px;padding:16px 10px 4px}
+
+/* Fenster */
+.overlay{position:fixed;inset:0;background:rgba(15,20,35,.5);display:grid;place-items:center;padding:16px;z-index:20}
+.modal{background:var(--paper);border:2px solid var(--text);border-radius:14px;box-shadow:5px 5px 0 var(--text);padding:20px;max-width:460px;width:100%;max-height:100%;overflow:auto}
+.modal h2{font-family:var(--hand);font-weight:400;font-size:32px;margin:0 0 6px;color:var(--ink)}
+.modal p{margin:0 0 12px}
+.modal .actions{justify-content:flex-end}
+.modal.qrmodal{max-width:none;width:auto;text-align:center;display:flex;flex-direction:column;align-items:center;gap:12px}
+.modal.qrmodal h2{margin:0}
+.qrbox{background:#fff;padding:12px;border-radius:10px;border:2px solid var(--karo);line-height:0}
+.qrbox svg{display:block;width:min(calc(100vw - 100px),calc(100vh - 250px),460px);height:auto;min-width:160px}
+.qrurl{font-size:13px;color:var(--muted);margin:0!important;max-width:min(calc(100vw - 100px),460px);overflow-wrap:anywhere;user-select:all}
+
+@media (max-width:700px){
+  .tabs{margin-left:2px;gap:4px}
+  .tab{padding:8px 9px 10px;font-size:14px}
+  .tab .lg{display:none} .tab .sm{display:inline}
+}
+@media (max-width:560px){
+  main{padding:12px 8px 30px}
+  .inner{padding-left:22px}
+  .sheet{padding:14px 8px 16px}
+  .sheet::before{left:22px}
+  .label h1{font-size:34px}
+  .taskline h2{font-size:27px}
+  .block{padding:10px 10px}
+  .stamp{font-size:32px;right:0}
+}
+@media (max-width:400px){.tab{padding:7px 7px 9px;font-size:13px}.tabs{gap:3px;margin-left:0}}
+@media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<main>
+  <header class="cover">
+    <div class="brand">
+      <button class="qrbtn" id="qrBtn" type="button" title="QR-Code zu dieser Seite zeigen" aria-label="QR-Code zu dieser Seite zeigen">
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="currentColor"><path d="M3 3h8v8H3zm2 2v4h4V5zm8-2h8v8h-8zm2 2v4h4V5zM3 13h8v8H3zm2 2v4h4v-4zm8-2h2v2h-2zm2 2h2v2h-2zm2-2h2v2h-2zm2 2h2v2h-2zm-6 2h2v2h-2zm4 0h2v2h-2zm-2 2h2v2h-2zm4 0h2v2h-2z"/></svg>
+      </button>
+      <div class="label"><h1 id="lblTitle"></h1><p id="lblSub"></p></div>
+    </div>
+    <div class="stats" id="stats"></div>
+  </header>
+
+  <nav class="tabs" role="tablist" aria-label="Stationen" id="tabs"></nav>
+
+  <section class="sheet" role="tabpanel" id="sheet">
+    <div class="inner">
+      <div class="revinfo pb hidden" id="revInfo"></div>
+      <div class="taskline" id="taskline"></div>
+      <p class="goal pb" id="goal"></p>
+      <ol class="phases" id="phases" aria-label="Schritte"></ol>
+      <div class="work" id="work"></div>
+      <div class="stamp hidden" id="stamp" aria-hidden="true"></div>
+      <div class="note" id="note" aria-live="polite"></div>
+      <div class="actions" id="actions">
+        <button class="btn main" id="checkBtn" type="button">✓ Prüfen</button>
+        <button class="btn" id="solBtn" type="button">👀 Musterlösung</button>
+        <button class="btn" id="resetBtn" type="button">↺ Nochmal von vorn</button>
+        <button class="btn main hidden" id="nextBtn" type="button">Weiter ▶</button>
+      </div>
+      <div class="solution hidden" id="solution">
+        <h2>Musterlösung</h2>
+        <div class="soltext" id="soltext" aria-live="polite"></div>
+        <div class="solnav">
+          <button class="btn" id="solPrev" type="button">◀ Zurück</button>
+          <span class="count" id="solCount"></span>
+          <button class="btn" id="solNext" type="button">Weiter ▶</button>
+        </div>
+      </div>
+      <div class="settings">
+        <button class="tog" id="bigTog" type="button" aria-pressed="false">Große Schrift</button>
+        <button class="tog" id="wipeBtn" type="button" aria-pressed="false">Fortschritt löschen</button>
+      </div>
+      <p class="help">🆘 <b>Du kommst nicht weiter?</b> 1. Lies den Tipp der Station noch einmal. 2. Frag dein Nachbarkind. 3. Frag deine Lehrkraft.</p>
+    </div>
+  </section>
+  <footer id="foot"></footer>
+</main>
+
+<div class="overlay hidden" id="qrOverlay">
+  <div class="modal qrmodal" role="dialog" aria-modal="true" aria-labelledby="qrTitle">
+    <h2 id="qrTitle">Lernreise öffnen</h2>
+    <div class="qrbox" id="qrBox"></div>
+    <p class="qrurl" id="qrUrl"></p>
+    <div class="actions" style="justify-content:center"><button class="btn main" id="qrClose" type="button">Schließen</button></div>
+  </div>
+</div>
+<div class="overlay hidden" id="wipeOverlay">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="wipeTitle">
+    <h2 id="wipeTitle">Alles löschen?</h2>
+    <p>Dann sind alle Haken, geschafften Stationen und das Fehler-Training weg. Du fängst wieder bei Station 1 an.</p>
+    <div class="actions"><button class="btn" id="wipeNo" type="button">Nein, behalten</button><button class="btn main" id="wipeYes" type="button">Ja, löschen</button></div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
+<script>
+(function(){
+"use strict";
+const D={"key":"browser-internet","title":"Lernreise – Browser und Internet","label":"Browser & Internet","sub":"Lernreise · sicher surfen","footer":"Lernreise Browser und Internet · Informatik Klasse 5 · Frau Huber · ca. 45 Minuten","intro":"<h3>Darum geht es<\/h3><p style=\"margin:0\">Du lernst, was ein Browser ist und wie du Webseiten öffnest. Du probierst wichtige Werkzeuge aus und vergleichst zwei Browser. Das dauert ungefähr 45 Minuten. Du kannst allein oder zu zweit arbeiten.<\/p><div class=\"box safe\"><p>🔒 <b>Regeln für heute:<\/b> Öffne nur Seiten, die deine Lehrkraft freigegeben hat. Gib keine persönlichen Daten ein. Lade nichts herunter, ohne zu fragen.<\/p><\/div><div class=\"box tip\"><p>💡 Für Station 4 braucht ihr zwei verschiedene Browser. Hat dein Gerät nur einen? Dann vergleicht mit einem anderen Team.<\/p><\/div>","stations":[{"name":"Browser entdecken","short":"Browser","icon":"🧭","time":5,"goal":"Du findest heraus, welches Programm dich zu Webseiten bringt.","steps":["Schau dir die Programme auf deinem Gerät an. Öffne einen Browser, zum Beispiel Edge, Chrome, Firefox oder Safari.","Finde den Bereich, in dem die Webseite angezeigt wird.","Such oben die <b>Adressleiste<\/b> und die <b>Tabs<\/b> (die kleinen Reiter).","Besprich mit deinem Nachbarkind: Was ist ein Browser? Was ist eine Webseite?"],"merke":"Ein <b>Browser<\/b> ist ein Programm. Damit öffnest du Webseiten und schaust sie an. Ein Browser ist <b>keine<\/b> Suchmaschine.","tip":"Browser sehen verschieden aus. Aber sie haben fast alle dieselben Werkzeuge.","checks":["Ich habe einen Browser geöffnet.","Ich habe die Adressleiste und einen Tab gefunden.","Ich kann erklären: Ein Browser ist ein Programm."],"quiz":[{"q":"Was ist ein Browser?","a":[["Ein Programm zum Öffnen und Anzeigen von Webseiten",true],["Eine einzelne Webseite","Eine Webseite siehst du <i>im<\/i> Browser. Der Browser selbst ist das Programm."],["Ein Passwort für das Internet","Ein Passwort ist ein geheimes Wort. Mit Browsern hat das nichts zu tun."]],"ex":"Der Browser ist das Programm. Die Webseite ist das, was er dir zeigt."},{"q":"Welches davon ist ein Browser?","a":[["Firefox",true],["Eine Suchmaschine wie Google-Suche","Eine Suchmaschine ist eine Webseite zum Suchen. Du öffnest sie <i>im<\/i> Browser."],["Word","Word ist ein Schreibprogramm, kein Browser."]],"ex":"Firefox, Edge, Chrome und Safari sind Browser."}]},{"name":"Adressleiste und Suche","short":"Adresse","icon":"🔎","time":8,"goal":"Du öffnest eine Webseite und unterscheidest Adresse und Suchbegriff.","steps":["Tipp die Adresse, die deine Lehrkraft nennt, in die Adressleiste und drück <kbd>Enter<\/kbd>.","Schau: Was steht jetzt in der Adressleiste?","Hat deine Lehrkraft eine Suchseite für Kinder freigegeben? Dann such dort nach dem vereinbarten Thema.","Besprecht: Was ist der Unterschied zwischen einer <b>Webadresse<\/b> und einem <b>Suchbegriff<\/b>?"],"merke":"Eine <b>Webadresse<\/b> führt direkt zu einer bestimmten Seite, zum Beispiel <code>www.blinde-kuh.de<\/code>. Ein <b>Suchbegriff<\/b> beschreibt, wonach du suchst, zum Beispiel <code>Igel Winterschlaf<\/code>.","tip":"Lies Suchergebnisse, bevor du klickst. Der Titel und die Adresse zeigen dir, ob eine Seite passt.","safe":"Gib nie deinen Namen, deine Adresse oder dein Passwort in eine Suche ein.","checks":["Ich habe eine freigegebene Adresse eingetippt.","Ich kann Webadresse und Suchbegriff unterscheiden.","Ich habe keine persönlichen Daten eingegeben."],"quiz":[{"q":"Du willst eine ganz bestimmte Webseite öffnen. Was tippst du in die Adressleiste?","a":[["Die Webadresse der Seite",true],["Meinen Benutzernamen und mein Passwort","Das gehört nie in die Adressleiste. Das sind geheime Daten."],["Den Namen eines Programms","Programme öffnest du nicht über die Adressleiste."]],"ex":"Mit der Webadresse kommst du direkt zur richtigen Seite."},{"q":"Was ist ein Suchbegriff?","a":[["Ein Wort, das beschreibt, was du suchst – zum Beispiel „Igel Winterschlaf“",true],["www.kindernetz.de","Das ist eine Webadresse. Sie führt direkt zu einer Seite."],["Mein Passwort","Dein Passwort gibst du niemals in eine Suche ein."]],"ex":"Ein Suchbegriff beschreibt dein Thema. Die Suchmaschine zeigt dir dann passende Seiten."}]},{"name":"Tabs und Navigation","short":"Tabs","icon":"🗂️","time":8,"goal":"Du wechselst zwischen Webseiten und findest dich zurecht.","steps":["Öffne die Webseite aus Station 2.","Öffne einen neuen <b>Tab<\/b>: Klick auf das <b>+<\/b> neben dem Tab.","Öffne im neuen Tab eine zweite freigegebene Seite.","Wechsle zwischen den Tabs. Schließ dann nur den neuen Tab mit dem <b>×<\/b>.","Probier die Knöpfe <b>← Zurück<\/b>, <b>→ Vorwärts<\/b> und <b>↻ Neu laden<\/b>."],"merke":"<b>Tabs<\/b> sind wie Karteikarten. In einem Browserfenster können mehrere Seiten offen sein.","tip":"Schließ nicht aus Versehen den Tab mit dieser Lernreise! Passiert es doch: Frag nach, bevor du neu suchst.","checks":["Ich kann einen neuen Tab öffnen.","Ich kann zwischen zwei Tabs wechseln.","Ich kann einen Tab schließen.","Ich weiß, wofür Zurück und Neu laden da sind."],"quiz":[{"q":"Wofür sind Tabs besonders nützlich?","a":[["Damit mehrere Webseiten offen sind und ich wechseln kann",true],["Damit der Computer automatisch speichert","Tabs speichern nichts. Sie halten nur Seiten offen."],["Damit eine Webseite größer wird","Größer machst du eine Seite mit dem Zoom."]],"ex":"Mit Tabs hast du mehrere Seiten in einem Fenster offen."},{"q":"Was macht der Knopf ← (Zurück)?","a":[["Er zeigt die Seite, die du davor offen hattest.",true],["Er schließt den Browser.","Dafür ist das × oben am Fenster da."],["Er löscht den Verlauf.","Der Verlauf bleibt. Du gehst nur einen Schritt zurück."]],"ex":"Zurück bringt dich zur vorherigen Seite."}]},{"name":"Zwei Browser vergleichen","short":"Vergleich","icon":"🔄","time":12,"goal":"Du findest heraus, was bei Browsern gleich ist und was anders.","steps":["Öffnet dieselbe freigegebene Webseite in zwei verschiedenen Browsern.","Findet in beiden: Adressleiste, Tabs, Zurück und Neu laden.","Wo ist das Menü? Sind die Knöpfe gleich angeordnet?","Sieht die Webseite in beiden gleich aus?","Schreibt eine <b>Gemeinsamkeit<\/b> und einen <b>Unterschied<\/b> auf."],"merke":"Ein anderer Browser ist nicht besser oder schlechter. Wichtig ist: Du erkennst die Werkzeuge wieder.","tip":"Das Menü versteckt sich oft hinter drei Punkten <b>⋯<\/b> oder drei Strichen <b>☰<\/b>.","checks":["Wir haben zwei Browser ausprobiert oder verglichen.","Wir haben mindestens zwei gleiche Werkzeuge gefunden.","Wir können einen Unterschied beschreiben."],"quiz":[{"q":"Was ist beim Vergleich von zwei Browsern sinnvoll?","a":[["Dieselbe Seite öffnen und die Werkzeuge vergleichen",true],["Nur auf die Farben der Symbole achten","Die Farben sind nicht so wichtig. Vergleicht lieber, was die Werkzeuge können."],["In beiden Browsern ganz verschiedene Seiten öffnen","Dann kann man nicht gut vergleichen."]],"ex":"Gleiche Seite, gleiche Aufgabe – so sieht man die Unterschiede am besten."},{"q":"Edge und Firefox sehen verschieden aus. Was stimmt?","a":[["Die wichtigen Werkzeuge gibt es in beiden – nur an anderen Stellen.",true],["Nur einer von beiden kann Webseiten zeigen.","Beide sind Browser. Beide zeigen Webseiten."],["Der buntere Browser ist besser.","Die Farbe sagt nichts darüber, wie gut ein Browser ist."]],"ex":"Alle Browser haben Adressleiste, Tabs und Zurück. Sie sehen nur etwas anders aus."}]},{"name":"Werkzeuge und Sicherheit","short":"Sicherheit","icon":"⭐","time":12,"goal":"Du probierst Lesezeichen und Zoom aus und lernst, sicher zu surfen.","steps":["Öffne eine freigegebene Seite, die du wiederfinden möchtest.","Speichere sie als <b>Lesezeichen<\/b>. Manchmal heißt das <b>Favorit<\/b>. Oft geht das mit dem Stern ☆ in der Adressleiste.","Finde dein Lesezeichen wieder. Lösch es dann, wenn es nur zum Üben war.","Mach die Seite größer und kleiner (<b>Zoom<\/b>): <kbd>Strg<\/kbd> + <kbd>+<\/kbd> und <kbd>Strg<\/kbd> + <kbd>-<\/kbd>. Mit <kbd>Strg<\/kbd> + <kbd>0<\/kbd> ist alles wieder normal.","Finde im Menü den <b>Verlauf<\/b> und die <b>Downloads<\/b>. Öffne oder lade nichts herunter.","Besprich: Was tust du, bevor du etwas herunterlädst?"],"merke":"Der <b>Verlauf<\/b> zeigt, welche Seiten du besucht hast. <b>Downloads<\/b> sind Dateien, die du aus dem Internet geladen hast.","safe":"Gib keine persönlichen Daten weiter: keinen Namen, keine Adresse, kein Passwort. Lade nichts ohne Erlaubnis herunter. Das Schloss 🔒 in der Adressleiste heißt nur: Die Verbindung ist verschlüsselt. Ob die Seite gut ist, zeigt es nicht.","checks":["Ich kann ein Lesezeichen setzen und wiederfinden.","Ich kann zoomen und wieder auf normal stellen.","Ich weiß, wo Verlauf und Downloads sind.","Ich frage, bevor ich etwas herunterlade.","Ich gebe keine persönlichen Daten auf fremden Seiten ein."],"quiz":[{"q":"Eine Webseite will eine Datei herunterladen. Du brauchst sie nicht für die Aufgabe. Was tust du?","a":[["Nicht herunterladen und zuerst die Lehrkraft fragen",true],["Sofort herunterladen und öffnen","Unbekannte Dateien können schaden. Frag immer vorher."],["Die Datei an andere Kinder schicken","Dann bringst du auch andere in Gefahr."]],"ex":"Unbekannte Downloads nie einfach öffnen. Erst fragen."},{"q":"In der Adressleiste ist ein Schloss 🔒. Was heißt das?","a":[["Die Verbindung ist verschlüsselt. Die Seite kann trotzdem unseriös sein.",true],["Die Seite ist auf jeden Fall vertrauenswürdig.","Leider nein. Auch schlechte Seiten können ein Schloss haben."],["Die Seite ist extra für Kinder gemacht.","Das Schloss sagt nichts darüber, für wen eine Seite ist."]],"ex":"Das Schloss schützt die Daten auf dem Weg. Ob eine Seite gut ist, musst du selbst prüfen."}]}],"final":{"title":"Abschluss","goal":"Zeig, was du jetzt kannst.","quiz":[{"q":"Was ist der Unterschied zwischen Browser und Suchmaschine?","a":[["Der Browser ist ein Programm. Die Suchmaschine ist eine Webseite zum Suchen.",true],["Es gibt keinen Unterschied.","Doch: Die Suchmaschine öffnest du <i>im<\/i> Browser."],["Die Suchmaschine ist ein Programm, der Browser eine Webseite.","Genau andersrum."]],"ex":"Programm (Browser) – darin eine Webseite (Suchmaschine)."},{"q":"Wo tippst du eine Webadresse ein?","a":[["In die Adressleiste",true],["In einen Tab","Tabs sind die Reiter für offene Seiten. Getippt wird oben in die Adressleiste."],["In den Verlauf","Im Verlauf stehen nur besuchte Seiten."]],"ex":"Webadressen gehören in die Adressleiste oben."},{"q":"Wie öffnest du einen neuen Tab?","a":[["Mit dem + neben den Tabs",true],["Mit dem × am Tab","Das × schließt einen Tab."],["Mit ↻ Neu laden","Das lädt die Seite nur neu."]],"ex":"Das + öffnet einen neuen Tab."},{"q":"Wie bekommst du die normale Größe zurück, nachdem du gezoomt hast?","a":[["Strg + 0",true],["Strg + S","Strg + S speichert, statt den Zoom zurückzustellen."],["Den Browser neu installieren","Viel zu viel Aufwand! Strg + 0 reicht."]],"ex":"Strg + 0 setzt den Zoom auf 100 %."},{"q":"Welche Angabe darfst du auf einer fremden Webseite eingeben?","a":[["Keine persönlichen Daten – höchstens, wenn die Lehrkraft es erlaubt",true],["Meine Adresse, wenn die Seite schön aussieht","Schönes Aussehen heißt nicht, dass die Seite sicher ist."],["Mein Passwort, wenn ein Schloss zu sehen ist","Das Schloss zeigt nicht, ob eine Seite vertrauenswürdig ist."]],"ex":"Persönliche Daten bleiben bei dir. Im Zweifel fragst du."}],"taskTitle":"Browser-Profi in 60 Sekunden","taskIntro":"Zeig deinem Nachbarkind in einer Minute:","task":["wie du eine freigegebene Webseite öffnest,","wie du einen neuen Tab öffnest und zwischen Tabs wechselst,","wie du ein Lesezeichen setzt oder zoomst,","und erklär, wie du beim Surfen sicher bleibst."],"checks":["Ich habe eine Webseite über die Adressleiste geöffnet.","Ich habe Tabs geöffnet und gewechselt.","Ich habe ein Lesezeichen gesetzt oder gezoomt.","Ich habe die Regeln zum sicheren Surfen erklärt."],"doneTitle":"Lernreise geschafft!","doneText":"Du kennst jetzt die wichtigsten Werkzeuge im Browser und weißt, wie du sicher surfst. Sag deiner Lehrkraft Bescheid."}};
+const $=s=>document.querySelector(s);
+const store={
+  get(k,d){try{const v=localStorage.getItem(k);return v==null?d:JSON.parse(v)}catch(e){return d}},
+  set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}},
+  del(k){try{localStorage.removeItem(k)}catch(e){}}
+};
+const KEY="huber-lernreise-"+D.key;
+const N=D.stations.length;
+const STAMPS=["Prima!","Super!","Klasse!","Spitze!","Toll!"];
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+function fresh(){return{done:[],first:[],checks:{},wrong:[],quizOk:false,finChecks:[],finished:false,big:false}}
+let P=store.get(KEY,null);
+if(!P||typeof P!=="object")P=fresh();
+{const f=fresh();for(const k in f)if(!(k in P)||typeof P[k]!==typeof f[k]||Array.isArray(f[k])!==Array.isArray(P[k]))P[k]=f[k];}
+P.done=P.done.filter(i=>Number.isInteger(i)&&i>=0&&i<N);
+P.wrong=P.wrong.filter(r=>r&&qById(r));
+const save=()=>store.set(KEY,P);
+
+/* Fragen-Verzeichnis: "s2q1" = Station 3, Frage 2; "fq0" = Abschluss-Quiz Frage 1 */
+function qById(id){
+  if(typeof id!=="string")return null;
+  let m=/^s(\d+)q(\d+)$/.exec(id);
+  if(m){const s=D.stations[+m[1]];return s&&s.quiz[+m[2]]?{q:s.quiz[+m[2]],from:"Station "+(+m[1]+1)+": "+s.name}:null}
+  m=/^fq(\d+)$/.exec(id);
+  if(m){const q=D.final.quiz[+m[1]];return q?{q,from:"Abschluss-Quiz"}:null}
+  return null;
+}
+const isOpen=i=>{for(let k=0;k<i;k++)if(!P.done.includes(k))return false;return true};
+const allDone=()=>P.done.length>=N;
+
+/* Zustand der Ansicht */
+const S={tab:null,step:1,order:{},helped:false,firstTry:true,solIdx:0,solItems:[],revIdx:0,revWrong:false,qs:[]};
+
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+
+/* ---------- Kopf, Reiter, Zähler ---------- */
+function renderStats(){
+  $("#stats").innerHTML='<span class="stat">🗺️ <b>'+P.done.length+'</b> von '+N+' Stationen geschafft</span>'+
+    '<span class="stat">⭐ <b>'+P.first.length+'</b> auf Anhieb</span>'+
+    (P.finished?'<span class="stat">🏁 <b>✓</b> Ziel erreicht</span>':'');
+}
+function tabColor(t){return t==="fin"?"var(--fin)":t==="rev"?"var(--rev)":"var(--c"+(t%7)+")"}
+function renderTabs(){
+  const nav=$("#tabs");nav.innerHTML="";
+  const mk=(id,html,cls,label)=>{const b=document.createElement("button");b.className="tab"+(cls?" "+cls:"");b.type="button";b.setAttribute("role","tab");
+    b.dataset.t=id;b.style.setProperty("--k",tabColor(id));b.innerHTML=html;b.title=label;b.setAttribute("aria-label",label);
+    b.setAttribute("aria-selected",String(S.tab===id));b.addEventListener("click",()=>setTab(id));nav.appendChild(b)};
+  D.stations.forEach((s,i)=>{
+    const open=isOpen(i),done=P.done.includes(i);
+    const mark=done?"✓ ":open?"":"🔒 ";
+    mk(i,'<span class="lg">'+mark+'<span class="n">'+(i+1)+'</span> '+s.icon+" "+esc(s.short)+'</span><span class="sm">'+mark+'<span class="n">'+(i+1)+"</span> "+s.icon+"</span>",
+      open?"":"locked","Station "+(i+1)+": "+s.name+(done?" (geschafft)":open?"":" (noch gesperrt)"));
+  });
+  mk("fin",'<span class="lg">'+(allDone()?"":"🔒 ")+'🏁 Ziel</span><span class="sm">'+(allDone()?"":"🔒")+"🏁</span>",allDone()?"":"locked","Ziel: Abschluss"+(allDone()?"":" (noch gesperrt)"));
+  mk("rev",'🔁<span class="lg"> Fehler-Training</span><span class="badge">'+P.wrong.length+"</span>","","Fehler-Training: "+P.wrong.length+" Fragen");
+}
+function setColor(t){document.documentElement.style.setProperty("--tab",tabColor(t))}
+
+/* ---------- Bausteine ---------- */
+function phases(names,doneUpTo,clickable){
+  $("#phases").classList.remove("hidden");
+  $("#phases").innerHTML=names.map((n,k)=>{const nr=k+1,st=nr===S.step?"now":nr<=doneUpTo?"done":"";
+    return '<li class="'+st+'"><button type="button" data-p="'+nr+'" '+(clickable&&nr<=Math.max(doneUpTo,S.step)?"":"disabled")+">"+(nr<=doneUpTo&&nr!==S.step?"✓":nr)+" "+n+"</button></li>"}).join("");
+  $("#phases").querySelectorAll("button:not([disabled])").forEach(b=>b.addEventListener("click",()=>{S.step=+b.dataset.p;render()}));
+}
+function questionHTML(q,id,nr){
+  if(!S.order[id])S.order[id]=shuffle(q.a.map((_,k)=>k));
+  return '<fieldset class="q" data-id="'+id+'"><legend><span class="qn">'+nr+'.</span>'+q.q+"</legend>"+
+    S.order[id].map(k=>'<label class="opt"><input type="radio" name="'+id+'" value="'+k+'"><span>'+q.a[k][0]+"</span></label>").join("")+"</fieldset>";
+}
+function setNote(kind,html){const n=$("#note");n.className="note"+(kind?" "+kind:"");n.innerHTML=html||""}
+function stamp(text){
+  const s=$("#stamp");s.textContent=text||STAMPS[Math.floor(Math.random()*STAMPS.length)];
+  s.classList.remove("hidden");s.style.animation="none";void s.offsetWidth;s.style.animation="";
+}
+function hideStamp(){$("#stamp").classList.add("hidden")}
+function buttons(o){
+  $("#checkBtn").classList.toggle("hidden",!o.check);
+  if(o.check)$("#checkBtn").textContent=o.checkText||"✓ Prüfen";
+  $("#solBtn").classList.toggle("hidden",!o.sol);
+  $("#resetBtn").classList.toggle("hidden",!o.reset);
+  $("#nextBtn").classList.toggle("hidden",!o.next);
+  if(o.next)$("#nextBtn").textContent=o.next;
+  $("#actions").classList.toggle("hidden",!o.check&&!o.sol&&!o.reset&&!o.next);
+}
+function closeSol(){$("#solution").classList.add("hidden")}
+
+/* Fragen prüfen: gibt {open, wrong:[{id,why}], right} zurück und färbt die Felder */
+function gradeQuestions(ids,countEmpty){
+  const res={open:[],wrong:[],right:[]};
+  ids.forEach((id,idx)=>{
+    const fs=document.querySelector('fieldset[data-id="'+id+'"]');const q=qById(id).q;
+    fs.classList.remove("ok","bad");fs.querySelectorAll(".opt").forEach(l=>l.classList.remove("ok","bad"));
+    const sel=fs.querySelector("input:checked");
+    if(!sel){res.open.push(idx);return}
+    const a=q.a[+sel.value];
+    if(a[1]===true){res.right.push(idx);fs.classList.add("ok");sel.closest(".opt").classList.add("ok")}
+    else{res.wrong.push({id,idx,why:a[1]});fs.classList.add("bad");sel.closest(".opt").classList.add("bad")}
+  });
+  return res;
+}
+function addWrong(id){if(!P.wrong.includes(id))P.wrong.push(id)}
+
+/* Musterlösung */
+function openSol(items){
+  S.solItems=items;S.solIdx=0;S.helped=true;$("#solution").classList.remove("hidden");drawSol();
+  $("#solution").scrollIntoView({behavior:"smooth",block:"nearest"});
+}
+function drawSol(){
+  const it=S.solItems[S.solIdx];
+  $("#soltext").innerHTML=it;
+  $("#solCount").textContent="Schritt "+(S.solIdx+1)+" von "+S.solItems.length;
+  $("#solPrev").disabled=S.solIdx===0;$("#solNext").disabled=S.solIdx===S.solItems.length-1;
+}
+function solFor(ids){return ids.map(id=>{const q=qById(id).q;const r=q.a.find(a=>a[1]===true);
+  return '<p class="sq">'+q.q+'</p><p class="sa">✓ '+r[0]+"</p><p>"+q.ex+"</p>"})}
+
+/* ---------- Station ---------- */
+const PH=["Arbeitsauftrag","Selbstkontrolle","Freischalt-Fragen"];
+function renderStation(i){
+  const s=D.stations[i];
+  $("#taskline").innerHTML='<span class="small">Station '+(i+1)+" von "+N+"</span><h2>"+s.icon+" "+esc(s.name)+"</h2>"+(s.time?'<span class="chip">⏱ ca. '+s.time+" Min.</span>":"");
+  $("#goal").textContent=s.goal;$("#goal").classList.remove("hidden");
+  if(!isOpen(i)){
+    let first=0;while(P.done.includes(first))first++;
+    $("#phases").classList.add("hidden");
+    $("#work").innerHTML='<div class="block lockbox"><div class="big">🔒</div><p>Diese Station ist noch gesperrt.</p><p>Schaffe zuerst <b>Station '+(first+1)+": "+esc(D.stations[first].name)+"</b>. Dann geht es hier weiter.</p></div>";
+    setNote("","");buttons({next:"Zu Station "+(first+1)+" ▶"});S.nextGo=()=>setTab(first);return;
+  }
+  const done=P.done.includes(i);
+  const checks=P.checks[i]||(P.checks[i]=s.checks.map(()=>false));
+  phases(PH,done?3:S.step-1,true);
+  const w=$("#work");
+  if(S.step===1){
+    w.innerHTML=(i===0&&D.intro?'<div class="block">'+D.intro+"</div>":"")+
+      '<div class="block"><h3>So geht’s</h3><ol class="steps">'+s.steps.map(x=>"<li>"+x+"</li>").join("")+"</ol>"+
+      (s.merke?'<div class="box merke"><p>📌 <b>Merke:</b> '+s.merke+"</p></div>":"")+
+      (s.tip?'<div class="box tip"><p>💡 <b>Tipp:</b> '+s.tip+"</p></div>":"")+
+      (s.safe?'<div class="box safe"><p>🔒 <b>Sicher bleiben:</b> '+s.safe+"</p></div>":"")+"</div>";
+    setNote("","<p>Lies jeden Punkt und mach ihn am Gerät. Wenn du fertig bist, klick auf <b>Erledigt</b>.</p>");
+    buttons({check:true,checkText:"✓ Erledigt – weiter",reset:true});
+    S.check=()=>{S.step=2;render();focusWork()};
+  }else if(S.step===2){
+    w.innerHTML='<div class="block"><h3>Hake ab, was du geschafft hast</h3><div class="checks">'+
+      s.checks.map((c,k)=>'<label class="ck'+(checks[k]?" on":"")+'"><input type="checkbox" data-k="'+k+'"'+(checks[k]?" checked":"")+"><span>"+c+"</span></label>").join("")+"</div></div>";
+    w.querySelectorAll("input").forEach(cb=>cb.addEventListener("change",()=>{checks[+cb.dataset.k]=cb.checked;save();
+      const l=cb.closest(".ck");l.classList.toggle("on",cb.checked);l.classList.remove("bad")}));
+    setNote("","<p>Sei ehrlich: Hake nur ab, was wirklich geklappt hat. Wenn etwas fehlt, geh zurück zu Schritt 1.</p>");
+    buttons({check:true,reset:true});
+    S.check=()=>{
+      const miss=[];w.querySelectorAll(".ck").forEach((l,k)=>{if(!checks[k]){miss.push(s.checks[k]);l.classList.add("bad")}});
+      if(miss.length){setNote("bad","<p><strong>Da fehlt noch etwas.</strong> Diese Punkte hast du noch nicht abgehakt:</p><ul>"+miss.map(m=>"<li>"+m+"</li>").join("")+"</ul><p style=\"margin-top:6px\">Mach sie zuerst. Hilfe findest du in Schritt 1.</p>");return}
+      S.step=3;render();focusWork();
+    };
+  }else{
+    S.qs=s.quiz.map((_,k)=>"s"+i+"q"+k);
+    w.innerHTML=S.qs.map((id,k)=>questionHTML(qById(id).q,id,k+1)).join("");
+    bindOpts();
+    if(done){setNote("good","<p><strong>Diese Station hast du schon geschafft.</strong> Du kannst die Fragen zur Übung noch einmal beantworten.</p>")}
+    else setNote("","<p>Wähle bei jeder Frage <b>eine</b> Antwort. Dann klick auf <b>Prüfen</b>.</p>");
+    buttons({check:true,sol:true,reset:true,next:done?nextLabel(i):""});
+    S.check=()=>{
+      const r=gradeQuestions(S.qs);
+      if(r.open.length){setNote("bad","<p><strong>Noch nicht fertig.</strong> Bei "+(r.open.length===1?"Frage "+(r.open[0]+1)+" fehlt":"den Fragen "+r.open.map(x=>x+1).join(" und ")+" fehlen")+" noch deine Antwort.</p>"+
+        (r.wrong.length?"<ul>"+r.wrong.map(x=>"<li>Frage "+(x.idx+1)+": "+x.why+"</li>").join("")+"</ul>":""));
+        if(r.wrong.length&&!done){S.firstTry=false;r.wrong.forEach(x=>addWrong(x.id));save();renderTabs()}return}
+      if(r.wrong.length){
+        if(!done){S.firstTry=false;r.wrong.forEach(x=>addWrong(x.id));save();renderTabs()}
+        setNote("bad","<p><strong>Fast!</strong> "+(r.right.length?"Grün ist schon richtig. ":"")+"Schau dir die rote Antwort noch einmal an:</p><ul>"+
+          r.wrong.map(x=>"<li>Frage "+(x.idx+1)+": "+x.why+"</li>").join("")+"</ul><p style=\"margin-top:6px\">Wähle eine andere Antwort und prüfe noch einmal.</p>");return}
+      if(done){setNote("good","<p><strong>Alles richtig!</strong> Gut wiederholt.</p>");stamp();return}
+      P.done.push(i);if(S.firstTry&&!S.helped&&!P.first.includes(i))P.first.push(i);save();
+      stamp();closeSol();renderTabs();renderStats();
+      setNote("good","<p><strong>Alles richtig!</strong> "+(i<N-1?"Station "+(i+2)+" ist jetzt frei.":"Du hast alle Stationen geschafft. Jetzt wartet das Ziel 🏁.")+
+        (S.firstTry&&!S.helped?" Und das auf Anhieb! ⭐":"")+"</p>");
+      phases(PH,3,true);
+      buttons({next:nextLabel(i)});
+      $("#nextBtn").focus();
+    };
+    S.sol=()=>openSol(solFor(S.qs));
+  }
+  S.nextGo=()=>setTab(i<N-1?i+1:"fin");
+}
+function nextLabel(i){return i<N-1?"Weiter zu Station "+(i+2)+" ▶":"Zum Ziel 🏁 ▶"}
+function bindOpts(){
+  $("#work").querySelectorAll(".opt input").forEach(inp=>inp.addEventListener("change",()=>{
+    const fs=inp.closest("fieldset");fs.classList.remove("ok","bad");fs.querySelectorAll(".opt").forEach(l=>l.classList.remove("ok","bad"));hideStamp()}));
+}
+function focusWork(){const f=$("#work").querySelector("input,button");$("#sheet").scrollIntoView({behavior:"smooth",block:"start"});if(f)try{f.focus({preventScroll:true})}catch(e){}}
+
+/* ---------- Ziel ---------- */
+const PHF=["Abschluss-Quiz","Abschlussaufgabe"];
+function renderFinal(){
+  const F=D.final;
+  $("#taskline").innerHTML='<span class="small">Ziel</span><h2>🏁 '+esc(F.title)+"</h2>";
+  $("#goal").textContent=F.goal;$("#goal").classList.remove("hidden");
+  if(!allDone()){
+    const miss=D.stations.map((s,i)=>P.done.includes(i)?null:"Station "+(i+1)+": "+esc(s.name)).filter(Boolean);
+    $("#phases").classList.add("hidden");
+    $("#work").innerHTML='<div class="block lockbox"><div class="big">🔒</div><p>Das Ziel ist noch gesperrt. Dir fehlen noch:</p><ul>'+miss.map(m=>"<li>"+m+"</li>").join("")+"</ul></div>";
+    let first=0;while(P.done.includes(first))first++;
+    setNote("","");buttons({next:"Zu Station "+(first+1)+" ▶"});S.nextGo=()=>setTab(first);return;
+  }
+  if(S.step===2&&!P.quizOk)S.step=1;
+  phases(PHF,P.finished?2:P.quizOk?1:0,true);
+  const w=$("#work");
+  if(S.step===1){
+    S.qs=F.quiz.map((_,k)=>"fq"+k);
+    w.innerHTML='<div class="block"><p style="margin:0">Hier kommen Fragen zu <b>allen</b> Stationen. Du darfst so oft probieren, wie du willst.</p></div>'+
+      S.qs.map((id,k)=>questionHTML(qById(id).q,id,k+1)).join("");
+    bindOpts();
+    setNote("",P.quizOk?"<p><strong>Das Quiz hast du schon geschafft.</strong> Weiter geht es mit der Abschlussaufgabe.</p>":"<p>Beantworte alle "+S.qs.length+" Fragen. Dann klick auf <b>Prüfen</b>.</p>");
+    buttons({check:true,sol:true,reset:true,next:P.quizOk?"Zur Abschlussaufgabe ▶":""});
+    S.nextGo=()=>{S.step=2;render();focusWork()};
+    S.check=()=>{
+      const r=gradeQuestions(S.qs);
+      if(r.wrong.length){r.wrong.forEach(x=>addWrong(x.id));save();renderTabs()}
+      if(r.open.length||r.wrong.length){
+        setNote("bad","<p><strong>"+(r.right.length)+" von "+S.qs.length+" Fragen sind schon richtig.</strong></p><ul>"+
+          r.open.map(x=>"<li>Frage "+(x+1)+": Hier fehlt noch deine Antwort.</li>").join("")+
+          r.wrong.map(x=>"<li>Frage "+(x.idx+1)+": "+x.why+"</li>").join("")+"</ul>");return}
+      P.quizOk=true;save();stamp();closeSol();
+      setNote("good","<p><strong>Alle Fragen richtig!</strong> Jetzt fehlt nur noch die Abschlussaufgabe.</p>");
+      buttons({next:"Zur Abschlussaufgabe ▶"});phases(PHF,1,true);$("#nextBtn").focus();
+    };
+    S.sol=()=>openSol(solFor(S.qs));
+  }else{
+    const ch=P.finChecks.length===F.checks.length?P.finChecks:(P.finChecks=F.checks.map(()=>false));
+    w.innerHTML='<div class="block"><h3>'+esc(F.taskTitle)+"</h3>"+(F.taskIntro?"<p style=\"margin:0 0 6px\">"+F.taskIntro+"</p>":"")+
+      '<ol class="steps">'+F.task.map(x=>"<li>"+x+"</li>").join("")+"</ol></div>"+
+      '<div class="block"><h3>Das zeigst du deiner Lehrkraft</h3><div class="checks">'+
+      F.checks.map((c,k)=>'<label class="ck'+(ch[k]?" on":"")+'"><input type="checkbox" data-k="'+k+'"'+(ch[k]?" checked":"")+"><span>"+c+"</span></label>").join("")+"</div></div>"+
+      (P.finished?'<div class="block" style="border-color:var(--green)"><h3>🎉 '+esc(F.doneTitle)+"</h3><p style=\"margin:0\">"+F.doneText+"</p></div>":"");
+    w.querySelectorAll(".ck input").forEach(cb=>cb.addEventListener("change",()=>{ch[+cb.dataset.k]=cb.checked;save();
+      const l=cb.closest(".ck");l.classList.toggle("on",cb.checked);l.classList.remove("bad")}));
+    setNote("",P.finished?"":"<p>Mach die Aufgabe am Gerät. Hake dann jeden Punkt ab und klick auf <b>Prüfen</b>.</p>");
+    buttons({check:true,reset:true});
+    S.check=()=>{
+      const miss=[];w.querySelectorAll(".ck").forEach((l,k)=>{if(!ch[k]){miss.push(F.checks[k]);l.classList.add("bad")}});
+      if(miss.length){setNote("bad","<p><strong>Da fehlt noch etwas:</strong></p><ul>"+miss.map(m=>"<li>"+m+"</li>").join("")+"</ul>");return}
+      const was=P.finished;P.finished=true;save();renderStats();
+      stamp(was?null:"Geschafft!");
+      setNote("good","<p><strong>🎉 "+esc(F.doneTitle)+"</strong> "+F.doneText+"</p>");
+    };
+  }
+}
+
+/* ---------- Fehler-Training ---------- */
+function renderReview(){
+  $("#taskline").innerHTML="<h2>🔁 Fehler-Training</h2>";
+  $("#goal").classList.add("hidden");$("#phases").classList.add("hidden");
+  const W=P.wrong;
+  if(!W.length){
+    $("#revInfo").classList.add("hidden");
+    $("#work").innerHTML='<div class="block"><p style="margin:0">🎉 Hier ist gerade nichts zu üben.</p><p style="margin:6px 0 0">Wenn du bei einer Frage einen Fehler machst, kommt sie hierher. Dann kannst du sie in Ruhe noch einmal üben.</p></div>';
+    setNote("","");buttons({});return;
+  }
+  S.revIdx=S.revIdx%W.length;const id=W[S.revIdx];const info=qById(id);
+  $("#revInfo").textContent="Fehler-Frage "+(S.revIdx+1)+" von "+W.length+" · aus "+info.from;$("#revInfo").classList.remove("hidden");
+  S.qs=[id];delete S.order[id];
+  $("#work").innerHTML=questionHTML(info.q,id,1);bindOpts();
+  setNote("","<p>Wenn du diese Frage ohne Fehler löst, ist sie aus dem Fehler-Training raus.</p>");
+  buttons({check:true,sol:true});
+  S.revWrong=false;S.helped=false;
+  S.check=()=>{
+    const r=gradeQuestions(S.qs);
+    if(r.open.length){setNote("bad","<p><strong>Wähle zuerst eine Antwort.</strong></p>");return}
+    if(r.wrong.length){S.revWrong=true;setNote("bad","<p><strong>Noch nicht.</strong> "+r.wrong[0].why+"</p><p style=\"margin-top:6px\">Probier eine andere Antwort.</p>");return}
+    stamp();
+    if(!S.revWrong&&!S.helped){P.wrong.splice(S.revIdx,1);save();renderTabs();
+      setNote("good","<p><strong>Richtig!</strong> Die Frage ist aus deinem Fehler-Training raus."+(P.wrong.length?" Noch "+P.wrong.length+" übrig.":" Alles geschafft! 🎉")+"</p>");}
+    else{S.revIdx++;setNote("good","<p><strong>Richtig!</strong> Weil es nicht beim ersten Mal geklappt hat, kommt die Frage später noch einmal.</p>")}
+    closeSol();buttons({next:P.wrong.length?"Nächste Fehler-Frage ▶":"Fertig ✓"});$("#nextBtn").focus();
+  };
+  S.sol=()=>openSol(solFor(S.qs));
+  S.nextGo=()=>{if(!P.wrong.length){render();return}render()};
+}
+
+/* ---------- Steuerung ---------- */
+function setTab(t){
+  if(S.tab!==t){S.order={};S.helped=false;S.firstTry=true;S.revIdx=0;
+    if(typeof t==="number")S.step=P.done.includes(t)?3:1;else if(t==="fin")S.step=P.quizOk?2:1;}
+  S.tab=t;setColor(t);renderTabs();render();
+  const sel=$("#tabs").querySelector('[aria-selected="true"]');if(sel)try{sel.focus({preventScroll:true})}catch(e){}
+}
+function render(){
+  hideStamp();closeSol();$("#revInfo").classList.add("hidden");
+  if(S.tab==="rev")renderReview();else if(S.tab==="fin")renderFinal();else renderStation(S.tab);
+}
+$("#checkBtn").addEventListener("click",()=>S.check&&S.check());
+$("#solBtn").addEventListener("click",()=>S.sol&&S.sol());
+$("#nextBtn").addEventListener("click",()=>S.nextGo&&S.nextGo());
+$("#resetBtn").addEventListener("click",()=>{
+  if(typeof S.tab==="number"&&!P.done.includes(S.tab)){P.checks[S.tab]=D.stations[S.tab].checks.map(()=>false);save()}
+  if(S.tab==="fin"&&S.step===2&&!P.finished){P.finChecks=D.final.checks.map(()=>false);save()}
+  S.order={};S.helped=false;
+  if(typeof S.tab==="number")S.step=1;
+  render();
+});
+$("#solPrev").addEventListener("click",()=>{if(S.solIdx>0){S.solIdx--;drawSol()}});
+$("#solNext").addEventListener("click",()=>{if(S.solIdx<S.solItems.length-1){S.solIdx++;drawSol()}});
+$("#tabs").addEventListener("keydown",e=>{
+  if(e.key!=="ArrowRight"&&e.key!=="ArrowLeft")return;
+  const bs=[...$("#tabs").querySelectorAll(".tab")];const k=bs.indexOf(document.activeElement);if(k<0)return;
+  const n=bs[(k+(e.key==="ArrowRight"?1:-1)+bs.length)%bs.length];n.focus();e.preventDefault();
+});
+document.addEventListener("keydown",e=>{
+  if(e.key!=="Enter"||e.shiftKey||e.ctrlKey||e.metaKey||e.altKey)return;
+  if(!$("#qrOverlay").classList.contains("hidden")||!$("#wipeOverlay").classList.contains("hidden"))return;
+  const a=document.activeElement;if(a&&(a.tagName==="BUTTON"||a.tagName==="A"))return;
+  if(!$("#checkBtn").classList.contains("hidden")){e.preventDefault();$("#checkBtn").click()}
+  else if(!$("#nextBtn").classList.contains("hidden")){e.preventDefault();$("#nextBtn").click()}
+});
+
+/* Einstellungen */
+function applyBig(){document.documentElement.classList.toggle("big",!!P.big);$("#bigTog").setAttribute("aria-pressed",String(!!P.big))}
+$("#bigTog").addEventListener("click",()=>{P.big=!P.big;save();applyBig()});
+$("#wipeBtn").addEventListener("click",()=>{$("#wipeOverlay").classList.remove("hidden");$("#wipeNo").focus()});
+const closeWipe=()=>{$("#wipeOverlay").classList.add("hidden");$("#wipeBtn").focus()};
+$("#wipeNo").addEventListener("click",closeWipe);
+$("#wipeOverlay").addEventListener("click",e=>{if(e.target.id==="wipeOverlay")closeWipe()});
+$("#wipeYes").addEventListener("click",()=>{const big=P.big;P=fresh();P.big=big;save();$("#wipeOverlay").classList.add("hidden");renderStats();S.tab=null;setTab(0)});
+
+/* QR-Code */
+const PAGE_URL=location.origin+location.pathname;
+function openQr(){
+  const box=$("#qrBox");
+  try{const q=qrcode(0,"M");q.addData(PAGE_URL);q.make();
+    box.innerHTML=q.createSvgTag({cellSize:8,margin:2,scalable:true});
+    const svg=box.querySelector("svg");svg.setAttribute("role","img");svg.setAttribute("aria-label","QR-Code zu dieser Lernreise");
+  }catch(e){box.innerHTML="<p>Der QR-Code konnte nicht geladen werden. Bitte die Seite neu laden.</p>"}
+  $("#qrUrl").textContent=PAGE_URL;$("#qrOverlay").classList.remove("hidden");$("#qrClose").focus();
+}
+const closeQr=()=>{$("#qrOverlay").classList.add("hidden");$("#qrBtn").focus()};
+$("#qrBtn").addEventListener("click",openQr);
+$("#qrClose").addEventListener("click",closeQr);
+$("#qrOverlay").addEventListener("click",e=>{if(e.target.id==="qrOverlay")closeQr()});
+document.addEventListener("keydown",e=>{if(e.key!=="Escape")return;
+  if(!$("#qrOverlay").classList.contains("hidden"))closeQr();
+  if(!$("#wipeOverlay").classList.contains("hidden"))closeWipe()});
+
+/* Start */
+$("#lblTitle").textContent=D.label;$("#lblSub").textContent=D.sub;$("#qrTitle").textContent=D.label+" öffnen";
+$("#foot").textContent=D.footer;
+applyBig();renderStats();
+let start=0;while(start<N&&P.done.includes(start))start++;
+setTab(start<N?start:"fin");
+window.__LR={D,get P(){return P},S,setTab,qById};
+})();
+</script>
+</body>
+</html>

@@ -69,6 +69,10 @@ Informatik 5 | Informatik 5
 Informatik 5/Digitale_Mission_001_final.html | Digitale Mission 001 final
 Informatik 5/iserv-trainer_5.html | iserv-trainer 5
 Informatik 5/wissensdetektiv.html | wissensdetektiv
+Informatik 5/Digitale Grundlagen/Lernreise - Textverarbeitung Basis.html | Lernreise – Textverarbeitung (Basis)
+Informatik 5/Digitale Grundlagen/Lernreise - Textverarbeitung Plus.html | Lernreise – Textverarbeitung (Plus)
+Informatik 5/Digitale Grundlagen/Lernreise - Dateien im Explorer.html | Lernreise – Dateien im Explorer
+Informatik 5/Digitale Grundlagen/Lernreise - Browser und Internet.html | Lernreise – Browser und Internet
 
 # --- Forensik ---
 Forensik | Forensik
