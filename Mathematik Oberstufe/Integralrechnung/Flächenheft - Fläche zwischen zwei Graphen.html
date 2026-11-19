@@ -670,7 +670,10 @@ function startHeft(CFG){
   $("#qrBtn").onclick=()=>{try{const q=qrcode(0,"M");q.addData(PAGE);q.make();$("#qrBox").innerHTML=q.createSvgTag({cellSize:6,margin:2,scalable:true})}catch(e){$("#qrBox").textContent="QR-Code konnte nicht erzeugt werden."}$("#qrUrl").textContent=PAGE;$("#qrOverlay").classList.remove("hidden")};
   $("#qrClose").onclick=()=>$("#qrOverlay").classList.add("hidden");
   document.addEventListener("keydown",e=>{if(e.key==="Escape"){$("#qrOverlay").classList.add("hidden");$("#overlay").classList.add("hidden");$("#lockOverlay").classList.add("hidden")}});
-  if(CFG.pdf){const a=$("#pdfBtn");a.href=CFG.pdf;a.classList.remove("hidden")}
+  if(CFG.pdf){const a=$("#pdfBtn");a.classList.remove("hidden");a.removeAttribute("download");a.href="#";a.textContent="📥 Goodnotes-Hefte";
+    a.onclick=ev=>{ev.preventDefault();let o=$("#pdfOverlay");if(!o){o=document.createElement("div");o.className="overlay";o.id="pdfOverlay";
+      o.innerHTML='<div class="modal" role="dialog" aria-modal="true"><h2>📥 Goodnotes-Hefte</h2><p class="hint">Laden Sie das Heft herunter und öffnen Sie es in Goodnotes. Jede Seite ist eine Aufgabe. Die Knöpfe „Hilfen“, „Online prüfen“ und „Musterlösung“ öffnen sich im Internet.</p><div class="choices">'+CFG.pdf.map(p=>'<a class="btn" style="text-decoration:none" href="'+p[1]+'" download>'+p[0]+"</a>").join("")+'</div><div class="actions"><button class="btn main" id="pdfClose">Schließen</button></div></div>';
+      document.body.appendChild(o);o.querySelector("#pdfClose").onclick=()=>o.classList.add("hidden");o.addEventListener("click",x=>{if(x.target===o)o.classList.add("hidden")})}o.classList.remove("hidden")}}
 
   renderStats();
   /* Sprungmarke aus QR-Code (z. B. #beweis-faktor) */
@@ -956,7 +959,7 @@ const ownForm='<p class="pmini">Leere Felder zählen als 0.</p>'+["f","g"].map(n
   '<div class="row">Intervall (freiwillig): von <input class="fin s" id="oa" inputmode="decimal"> bis <input class="fin s" id="ob" inputmode="decimal"></div>';
 
 window.FL={buildEin,buildWerk,buildRech,analyse,pairGraph,wGraph,EIN_AB,SPECIAL};
-if(document.getElementById("tabs"))startHeft({key:"flaechenheft-v1",pdf:"https://hubi-bot.github.io/Frau-Huber/flaeche-goodnotes.pdf",
+if(document.getElementById("tabs"))startHeft({key:"flaechenheft-v1",pdf:[["Heft 1: Einstieg (3 Seiten)","https://hubi-bot.github.io/Frau-Huber/flaeche-heft1.pdf"],["Heft 2: Strategie-Werkstatt (4 Seiten)","https://hubi-bot.github.io/Frau-Huber/flaeche-heft2.pdf"],["Heft 3: Strategieplanung und Vertiefung (6 Seiten)","https://hubi-bot.github.io/Frau-Huber/flaeche-goodnotes.pdf"]],
   route(h){h=h.toLowerCase();let m;
     if((m=h.match(/^einstieg-([abc])$/)))return{kind:"ein",spec:Object.assign({l:1},EIN_AB[m[1]])};
     if(h==="einstieg")return{kind:"ein",level:1};

@@ -1,0 +1,969 @@
+<!DOCTYPE html><html lang="de"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Flächenheft – Hilfen</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;700&family=Patrick+Hand&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<style>:root{
+  --paper:#fdfcf7; --desk:#e9eef3; --karo:#cfdcec; --text:#25303f; --muted:#5b6677; --ink:#1c3fa0;
+  --red:#cf2f2a; --green:#1d8248; --hl:#fff09a; --focus:#e6eeff; --pink:#d6267f;
+  --c1:#2f7fc4; --c2:#16877a; --c3:#8352bf; --c4:#e0592a; --rev:#a8791a; --tab:var(--c1);
+  --fA:#1c3fa0; --fB:#c2417e; --fill1:rgba(47,127,196,.28); --fill2:rgba(214,38,127,.25); --fill3:rgba(29,130,72,.28); --fillr:rgba(224,89,42,.22);
+  --hand:"Patrick Hand","Comic Sans MS","Segoe Print",cursive;
+  --ui:"Lexend",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --paper:#1c2232; --desk:#121620; --karo:#2e3a55; --text:#e7ebf3; --muted:#a4aec3; --ink:#93b6ff;
+    --red:#ff6b64; --green:#55d492; --hl:#5a5120; --focus:#26335a; --pink:#ff6fb5;
+    --c1:#5aa9ec; --c2:#3cc7b3; --c3:#ab85e8; --c4:#ff7a4d; --rev:#e0ae45;
+    --fA:#93b6ff; --fB:#ff6fb5; --fill1:rgba(90,169,236,.32); --fill2:rgba(255,111,181,.28); --fill3:rgba(85,212,146,.28); --fillr:rgba(255,122,77,.25);
+  }
+}
+*{box-sizing:border-box}
+html{height:100%}
+body{margin:0;min-height:100%;background:var(--desk);color:var(--text);font-family:var(--ui);font-size:16px;line-height:1.5;overflow-x:hidden}
+button,input,select{font-family:inherit;font-size:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--tab);outline-offset:2px}
+.hidden{display:none!important}
+main{max-width:880px;margin:0 auto;padding:18px 14px 48px}
+.katex{font-size:1.08em}
+
+/* Heft-Umschlag */
+.cover{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap}
+.brand{display:flex;align-items:flex-start;gap:12px}
+.label{background:var(--paper);border:2px solid var(--text);border-radius:6px;padding:8px 18px 6px;transform:rotate(-1.2deg);box-shadow:3px 3px 0 var(--text)}
+.label h1{font-family:var(--hand);font-weight:400;font-size:44px;line-height:1;margin:0;color:var(--ink)}
+.label p{margin:0;font-size:13px;color:var(--muted)}
+.coverright{display:flex;flex-direction:column;align-items:flex-end;gap:8px;margin-left:auto;flex:1 1 280px}
+.stats{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.stat{background:var(--paper);border-radius:999px;padding:3px 11px;font-size:12.5px;border:1px solid var(--karo)}
+.stat b{font-weight:700}
+.levels{display:flex;gap:6px;align-items:center;font-size:13px;font-weight:700}
+.levels button{border:2px solid var(--text);background:var(--paper);border-radius:999px;min-width:34px;padding:2px 10px;font-weight:700;box-shadow:2px 2px 0 var(--text)}
+.levels button[aria-pressed="true"]{background:var(--tab);border-color:var(--tab);color:#fff}
+.qrbtn{flex:none;width:30px;height:30px;display:grid;place-items:center;border:2px solid var(--text);border-radius:7px;background:var(--paper);color:var(--text);box-shadow:2px 2px 0 var(--text);padding:0}
+.qrbtn:active{transform:translate(2px,2px);box-shadow:none}
+
+/* Register-Reiter */
+.tabs{display:flex;gap:6px;margin:22px 0 0 10px;position:relative;z-index:1;flex-wrap:wrap;align-items:flex-end}
+.tab{border:none;border-radius:12px 12px 0 0;padding:10px 13px 12px;font-weight:700;font-size:15px;white-space:nowrap;color:#fff;opacity:.55;transform:translateY(6px);transition:transform .15s,opacity .15s}
+.tab[aria-selected="true"]{opacity:1;transform:none}
+.tab .badge{display:inline-block;min-width:22px;padding:0 6px;margin-left:6px;border-radius:999px;background:rgba(255,255,255,.3);font-size:13px;text-align:center}
+.tab .sm{display:none}
+
+/* Heftseite */
+.sheet{position:relative;background:var(--paper);border-radius:4px 14px 14px 14px;border-top:6px solid var(--tab);padding:18px 16px 20px;box-shadow:0 2px 0 var(--karo),0 10px 30px rgba(20,30,50,.08);
+  background-image:linear-gradient(var(--karo) 1px,transparent 1px),linear-gradient(90deg,var(--karo) 1px,transparent 1px);background-size:22px 22px;background-position:-1px -1px}
+.sheet::before{content:"";position:absolute;top:0;bottom:0;left:44px;width:2px;background:color-mix(in srgb,var(--red) 45%,transparent);pointer-events:none}
+.inner{position:relative;padding-left:40px}
+.revinfo{font-size:14px;color:var(--muted);background:var(--paper);padding:2px 8px;border-radius:6px;width:fit-content;margin-bottom:6px}
+.taskline{display:flex;gap:10px;align-items:baseline;flex-wrap:wrap;background:var(--paper);padding:6px 12px;border-radius:10px;width:fit-content;max-width:100%;margin-bottom:8px}
+.taskline .tl{font-family:var(--hand);font-size:24px;color:var(--muted)}
+.taskline .tt{font-size:16px;line-height:1.7}
+.lvltag{font-size:12px;font-weight:700;color:#fff;background:var(--tab);border-radius:999px;padding:1px 9px;white-space:nowrap}
+.phases{list-style:none;display:flex;gap:6px;padding:0;margin:4px 0 8px;flex-wrap:wrap}
+.phases li{background:var(--paper);border:1.5px solid var(--karo);border-radius:999px;padding:3px 12px;font-size:13px;color:var(--muted)}
+.phases li.now{border-color:var(--tab);color:var(--text);font-weight:700;box-shadow:inset 0 0 0 1px var(--tab)}
+.phases li.done{color:var(--green);border-color:var(--green)}
+.phases li.done::before{content:"✓ "}
+
+.workgrid{display:grid;grid-template-columns:minmax(0,1fr);gap:12px}
+.workgrid.withfig{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+@media (max-width:760px){.workgrid.withfig{grid-template-columns:minmax(0,1fr)}.fig{order:-1;position:static}}
+.fig{background:var(--paper);border:2px solid var(--karo);border-radius:12px;padding:6px;align-self:start;position:sticky;top:8px}
+.fig svg{display:block;width:100%;height:auto;touch-action:manipulation}
+.fig .cap{font-size:12.5px;color:var(--muted);padding:2px 6px 4px;line-height:1.35}
+.legend{display:flex;gap:10px;flex-wrap:wrap;font-size:12.5px;padding:0 6px 4px}
+.legend span{display:inline-flex;align-items:center;gap:5px}
+.legend i{display:inline-block;width:16px;height:10px;border-radius:3px}
+
+.steps{display:flex;flex-direction:column;gap:10px;min-width:0}
+.stepblk{background:var(--paper);border:2px solid var(--karo);border-radius:12px;padding:10px 12px;min-width:0}
+.stepblk.now{border-color:var(--tab);box-shadow:3px 3px 0 color-mix(in srgb,var(--tab) 35%,transparent)}
+.stepblk.done{border-color:color-mix(in srgb,var(--green) 55%,transparent)}
+.stepblk h3{margin:0 0 6px;font-size:14px;color:var(--muted);font-weight:700;letter-spacing:.02em}
+.stepblk.now h3{color:var(--tab)}
+.stepblk.done h3{color:var(--green)}
+.stepblk.done h3::before{content:"✓ "}
+.stepblk p{margin:4px 0}
+.stepblk .q{margin:2px 0 8px}
+.row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:6px 0}
+.row .lab{min-width:0}
+.fin{width:6.2em;height:1.75em;font-family:var(--hand);font-size:22px;line-height:1;text-align:center;color:var(--ink);-webkit-text-fill-color:var(--ink);background:color-mix(in srgb,var(--paper) 88%,transparent);border:2px solid var(--karo);border-radius:8px;padding:0 4px;caret-color:var(--ink)}
+.fin.s{width:3.6em}
+.fin:focus{outline:none;border-color:var(--ink);background:var(--focus)}
+.fin:disabled,.sel:disabled{opacity:1;cursor:default}
+.fin.ok,.sel.ok{border-color:var(--green);color:var(--green);-webkit-text-fill-color:var(--green)}
+.fin.bad,.sel.bad{border-color:var(--red);color:var(--red);-webkit-text-fill-color:var(--red);background:color-mix(in srgb,var(--red) 11%,transparent);box-shadow:0 0 0 1px var(--red)}
+.sel{font-size:14px;border:2px solid var(--karo);border-radius:8px;background:var(--paper);color:var(--ink);padding:4px 6px;max-width:100%}
+.choices{display:flex;flex-direction:column;gap:6px;margin:6px 0}
+.choice{display:flex;align-items:center;gap:10px;text-align:left;border:2px solid var(--karo);border-radius:10px;background:var(--paper);padding:7px 10px;font-size:15px;color:var(--text)}
+.choice[aria-pressed="true"]{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink);background:var(--focus)}
+.choice.ok{border-color:var(--green);box-shadow:inset 0 0 0 1px var(--green)}
+.choice.bad{border-color:var(--red);box-shadow:inset 0 0 0 1px var(--red);background:color-mix(in srgb,var(--red) 9%,transparent)}
+.choice .dot{flex:none;width:18px;height:18px;border-radius:50%;border:2px solid var(--muted)}
+.choice[aria-pressed="true"] .dot{border-color:var(--ink);background:radial-gradient(var(--ink) 45%,transparent 50%)}
+.choice.multi .dot{border-radius:4px}
+.choice.multi[aria-pressed="true"] .dot{background:var(--ink)}
+.choices.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
+.signs{display:inline-flex;gap:4px}
+.signs button{width:38px;height:34px;border:2px solid var(--text);border-radius:8px;background:var(--paper);font-family:var(--hand);font-size:24px;line-height:1;padding:0;box-shadow:2px 2px 0 var(--text)}
+.signs button[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+.signs.ok button[aria-pressed="true"]{background:var(--green);border-color:var(--green)}
+.signs.bad button[aria-pressed="true"]{background:var(--red);border-color:var(--red)}
+.slider{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:6px 0}
+.slider input[type=range]{flex:1 1 180px;accent-color:var(--tab)}
+.slider .val{font-family:var(--hand);font-size:24px;color:var(--ink);min-width:3em}
+
+/* Beweis-Puzzle */
+.proof{list-style:none;margin:6px 0;padding:0;display:flex;flex-direction:column;gap:6px;min-height:44px;border:2px dashed var(--karo);border-radius:10px;padding:6px}
+.proof:empty::after{content:"Tippen Sie unten auf die Schnipsel – in der richtigen Reihenfolge.";color:var(--muted);font-size:13px;padding:6px}
+.pline{display:flex;align-items:center;gap:8px;flex-wrap:wrap;background:var(--paper);border:2px solid var(--karo);border-radius:10px;padding:5px 10px;min-height:42px;text-align:left;width:100%;color:var(--text)}
+.pline .nr{font-family:var(--hand);font-size:20px;color:var(--muted);min-width:1.3em}
+.pline.fixed{border-style:solid;background:color-mix(in srgb,var(--karo) 25%,var(--paper))}
+.pline.ok{border-color:var(--green)}
+.pline.bad{border-color:var(--red);background:color-mix(in srgb,var(--red) 9%,transparent)}
+.pline .why{margin-left:auto}
+.pool{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 2px}
+.chip{border:2px solid var(--text);border-radius:10px;background:var(--paper);padding:6px 12px;box-shadow:2px 2px 0 var(--text);color:var(--text);min-height:42px;max-width:100%;overflow-x:auto}
+.chip:active{transform:translate(2px,2px);box-shadow:none}
+.pool .hint0{font-size:13px;color:var(--muted)}
+.pmini{font-size:13px;color:var(--muted);margin:2px 0}
+.cmp{display:grid;grid-template-columns:1fr 1fr;gap:6px 14px;margin-top:6px}
+.cmp>div{background:var(--paper);border:1.5px solid var(--karo);border-radius:8px;padding:6px 8px;overflow-x:auto}
+.cmp h4{margin:0 0 4px;font-size:13px;color:var(--muted)}
+@media (max-width:560px){.cmp{grid-template-columns:1fr}}
+
+/* Hilfe & Rückmeldung */
+.note{background:var(--paper);border:2px solid var(--karo);border-radius:12px;padding:12px 14px;margin:10px 0 10px;max-width:68ch}
+.note:empty{display:none}
+.note p{margin:0}
+.note ul{margin:6px 0 0;padding-left:20px}
+.note li{margin:5px 0}
+.note.good{border-color:var(--green)}
+.note.good>p>strong:first-child{color:var(--green)}
+.note.bad{border-color:var(--red)}
+.note.bad>p>strong:first-child{color:var(--red)}
+.hintbox{background:color-mix(in srgb,var(--hl) 55%,var(--paper));border:2px dashed var(--rev);border-radius:12px;padding:10px 14px;margin:8px 0;max-width:68ch}
+.hintbox h4{margin:0 0 6px;font-size:14px;color:var(--rev)}
+.hintbox .hl{margin:6px 0;padding-top:6px;border-top:1px dashed color-mix(in srgb,var(--rev) 50%,transparent)}
+.hintbox .hl:first-of-type{border-top:none;padding-top:0}
+.hintbox .hn{font-weight:700;color:var(--rev);margin-right:6px}
+
+.actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.actions.more{margin-top:14px;padding-top:12px;border-top:2px dashed var(--karo)}
+.btn{border:2px solid var(--text);background:var(--paper);border-radius:10px;padding:8px 14px;font-weight:500;font-size:15px;box-shadow:2px 2px 0 var(--text);transition:transform .06s,box-shadow .06s;color:var(--text)}
+.btn:active{transform:translate(2px,2px);box-shadow:0 0 0 var(--text)}
+.btn.main{background:var(--tab);border-color:var(--tab);color:#fff;font-weight:700;box-shadow:2px 2px 0 var(--text)}
+.btn.help{border-color:var(--rev);color:var(--rev);box-shadow:2px 2px 0 var(--rev)}
+.btn:disabled{opacity:.4;cursor:default}
+.settings{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;font-size:13px}
+.tog{font-size:12.5px;line-height:1.3;border:2px dashed var(--karo);border-radius:999px;background:var(--paper);padding:3px 10px;color:var(--muted)}
+.tog[aria-pressed="true"]{border:2px solid var(--ink);color:var(--ink);font-weight:700}
+
+.stamp{position:absolute;right:4%;top:6px;transform:rotate(-14deg);border:4px double var(--red);color:var(--red);font-family:var(--hand);font-size:40px;padding:0 16px;border-radius:10px;background:color-mix(in srgb,var(--paper) 80%,transparent);pointer-events:none;animation:stamp .4s cubic-bezier(.2,1.8,.4,1);z-index:3}
+@keyframes stamp{from{transform:rotate(-14deg) scale(2.2);opacity:0}to{transform:rotate(-14deg) scale(1);opacity:1}}
+
+/* Merkkasten / Musterbeispiel */
+.merk{background:var(--paper);border:2px solid var(--text);border-radius:12px;box-shadow:3px 3px 0 var(--text);padding:12px 14px;margin:0 0 14px}
+.merk h2{font-family:var(--hand);font-weight:400;font-size:28px;margin:0 0 4px;color:var(--ink)}
+.merk ol{margin:6px 0;padding-left:22px}
+.merk li{margin:3px 0}
+.mb{display:grid;grid-template-columns:auto 1fr 1fr;gap:4px 12px;align-items:center;margin-top:8px;overflow-x:auto}
+.mb .h{font-size:12.5px;font-weight:700;color:var(--muted);border-bottom:2px solid var(--karo)}
+.mb .c{padding:3px 0}
+.mb .n{font-size:12.5px;color:var(--rev);font-weight:700}
+@media (max-width:560px){.mb{grid-template-columns:1fr}.mb .h{display:none}.mb .n{margin-top:8px}}
+
+/* Musterlösung */
+.solution{margin-top:18px}
+.solution h2{font-family:var(--hand);font-weight:400;font-size:32px;margin:0;color:var(--ink);background:var(--paper);width:fit-content;padding:0 8px;border-radius:6px}
+.sollines{display:flex;flex-direction:column;gap:6px;margin:8px 0}
+.sollines .sl{background:var(--paper);border-radius:8px;padding:5px 10px;width:fit-content;max-width:100%;overflow-x:auto}
+.sollines .sl.hl{background:var(--hl)}
+.soltext{background:var(--paper);border-left:4px solid var(--tab);padding:10px 14px;border-radius:0 10px 10px 0;min-height:56px;max-width:68ch;line-height:1.7}
+.solfig{max-width:440px;margin-top:8px;background:var(--paper);border-radius:10px;padding:4px}
+.solfig svg{display:block;width:100%;height:auto}
+.solnav{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:10px}
+.solnav .count{font-size:14px;color:var(--muted);background:var(--paper);padding:2px 8px;border-radius:6px}
+
+/* Fenster */
+.overlay{position:fixed;inset:0;background:rgba(15,20,35,.5);display:grid;place-items:center;padding:16px;z-index:20}
+.modal{background:var(--paper);border:2px solid var(--text);border-radius:14px;box-shadow:5px 5px 0 var(--text);padding:20px;max-width:520px;width:100%;max-height:100%;overflow:auto}
+.modal h2{font-family:var(--hand);font-weight:400;font-size:32px;margin:0 0 4px;color:var(--ink)}
+.modal .hint{margin:0 0 12px;font-size:14px;color:var(--muted)}
+.modal .err{color:var(--red);min-height:22px;font-size:14px;margin:10px 0 4px}
+.modal .actions{justify-content:flex-end;margin-top:8px}
+.modal .row input{width:4.2em;height:1.6em;font-size:20px}
+.modal.qrmodal{max-width:none;width:auto;text-align:center;display:flex;flex-direction:column;align-items:center;gap:12px}
+.qrbox{background:#fff;padding:12px;border-radius:10px;border:2px solid var(--karo);line-height:0}
+.qrbox svg,.qrbox img{display:block;width:min(calc(100vw - 100px),calc(100vh - 250px),420px);height:auto;min-width:160px}
+.qrurl{font-size:13px;color:var(--muted);margin:0;max-width:420px;overflow-wrap:anywhere;user-select:all}
+
+/* Graph */
+.g-grid{stroke:var(--karo);stroke-width:1}
+.g-ax{stroke:var(--text);stroke-width:1.6}
+.g-tick{font-family:var(--ui);font-size:11px;fill:var(--muted)}
+.g-f{fill:none;stroke:var(--fA);stroke-width:3}
+.g-g{fill:none;stroke:var(--fB);stroke-width:3}
+.g-h{fill:none;stroke:var(--green);stroke-width:2.5;stroke-dasharray:7 5}
+.g-c{fill:none;stroke:var(--red);stroke-width:2.5}
+.g-ghost{fill:none;stroke:var(--muted);stroke-width:1.5;stroke-dasharray:4 4;opacity:.7}
+.g-fill1{fill:var(--fill1)} .g-fill2{fill:var(--fill2)} .g-fill3{fill:var(--fill3)} .g-fillr{fill:var(--fillr)}
+.g-hatch{fill:url(#hatch)}
+.g-rect{fill:none;stroke:var(--c4);stroke-width:2.5;stroke-dasharray:6 4}
+.g-lbl{font-family:var(--hand);font-size:22px;fill:var(--text);paint-order:stroke;stroke:var(--paper);stroke-width:4px}
+.g-lf{fill:var(--fA)} .g-lg{fill:var(--fB)}
+.g-pt{fill:var(--paper);stroke:var(--text);stroke-width:2.5}
+.g-focus{stroke:var(--ink);stroke-width:2.5;stroke-dasharray:none}
+
+@media (max-width:560px){
+  .inner{padding-left:22px}
+  .sheet{padding-left:8px;padding-right:8px}
+  .sheet::before{left:24px}
+  .label h1{font-size:34px}
+  .fin{font-size:20px;width:5.4em}
+  .tab{padding:8px 9px 10px;font-size:14px}
+  .tab .lg{display:none} .tab .sm{display:inline}
+  .tabs{margin-left:2px;gap:3px}
+}
+@media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
+
+.txt{width:100%;font-family:var(--hand);font-size:21px;line-height:1.35;color:var(--ink);background:color-mix(in srgb,var(--paper) 88%,transparent);border:2px solid var(--karo);border-radius:8px;padding:6px 10px;resize:vertical}
+.txt:focus{outline:none;border-color:var(--ink);background:var(--focus)}
+.pdfbtn{align-self:center;text-decoration:none;font-size:14px;padding:6px 12px;white-space:nowrap}
+.rows .row{gap:6px}
+.rows .sel{font-size:16px}
+.g-outline{fill:none}
+
+main{max-width:640px}
+.sheet .inner{padding-left:34px}
+.label.hl{display:inline-block;margin-bottom:14px}
+.hhead{display:flex;flex-direction:column;gap:4px;margin-bottom:6px}.hhead .lvltag{width:fit-content}
+.htit{font-family:var(--hand);font-weight:400;font-size:32px;margin:0;color:var(--ink);background:var(--paper);width:fit-content;padding:0 6px;border-radius:6px}
+.hfigw{position:static;max-width:420px;margin:6px 0}
+.chipb{border:none;background:none;padding:0;font:inherit;color:inherit}
+.hlink{display:inline-block;margin:4px 4px 4px 0;text-decoration:none}
+a.btn{text-decoration:none;display:inline-block}
+</style></head><body><main><section class="sheet"><div class="inner" id="hroot"></div></section></main>
+<div class="overlay hidden" id="lockOverlay"><div class="modal" role="dialog" aria-modal="true" aria-labelledby="lockTitle"><h2 id="lockTitle">🔒 Musterlösung</h2>
+<p class="hint">Die Musterlösung ist gesperrt. Ihre Lehrkraft gibt den Code frei, wenn es so weit ist.</p>
+<div class="row"><label for="lockIn">Code:</label><input class="fin" id="lockIn" type="password" inputmode="numeric" autocomplete="off" maxlength="8"></div>
+<div class="err" id="lockErr"></div><div class="actions"><button class="btn" id="lockCancel">Abbrechen</button><button class="btn main" id="lockOk">Öffnen</button></div></div></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script>/* ===== Heft-Engine (gemeinsam für beide Lernumgebungen) ===== */
+"use strict";
+const $=s=>document.querySelector(s);
+const $$=(s,r)=>Array.from((r||document).querySelectorAll(s));
+const rnd=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const escA=s=>String(s).replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;");
+const store={get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+
+/* ---- Formeln ---- */
+const K=t=>'<span class="k" data-t="'+escA(t)+'"></span>';
+function renderK(root){
+  $$(".k:not([data-r])",root||document).forEach(el=>{el.setAttribute("data-r","1");
+    if(window.katex){try{katex.render(el.getAttribute("data-t"),el,{throwOnError:false,displayMode:el.classList.contains("kd")});return}catch(e){}}
+    el.textContent=el.getAttribute("data-t").replace(/\\,/g," ").replace(/\\cdot/g,"·").replace(/\\int_\{?([^}\s]*)\}?\^\{?([^}\s]*)\}?/g,"∫[$1;$2] ").replace(/\\[a-z]+/g,"").replace(/[{}]/g,"");
+  });
+}
+
+/* ---- Zahlen ---- */
+function parseNum(s){
+  s=String(s==null?"":s).trim().replace(/\s+/g,"").replace(/[−–]/g,"-").replace(/,/g,".");
+  if(!s)return null;
+  let m=s.match(/^([+-]?)(\d+(?:\.\d+)?)\/(\d+(?:\.\d+)?)$/);
+  if(m){const d=+m[3];if(!d)return NaN;return(m[1]==="-"?-1:1)*(+m[2])/d}
+  if(/^[+-]?(\d+\.?\d*|\.\d+)$/.test(s))return +s;
+  return NaN;
+}
+const TOL=e=>Math.max(0.006,Math.abs(e)*2e-4);
+function near(v,e,tol){return v!=null&&!isNaN(v)&&Math.abs(v-e)<=(tol==null?TOL(e):tol)}
+function toFrac(v,maxD){maxD=maxD||96;for(let d=1;d<=maxD;d++){const n=Math.round(v*d);if(Math.abs(n/d-v)<1e-9)return[n,d]}return null}
+function dec(v,dp){dp=dp==null?2:dp;const r=Math.round(v*Math.pow(10,dp))/Math.pow(10,dp);return(Object.is(r,-0)?0:r).toString().replace(".",",").replace("-","−")}
+function fmt(v,dp){const f=toFrac(v);if(f){if(f[1]===1)return String(f[0]);return(f[0]<0?"-":"")+"\\frac{"+Math.abs(f[0])+"}{"+f[1]+"}"}return"\\approx "+(v<0?"-":"")+dec(Math.abs(v),dp==null?2:dp).replace("−","").replace(",","{,}")}
+function fmtT(v){const f=toFrac(v);if(f){if(f[1]===1)return String(f[0]).replace("-","−");return(f[0]<0?"−":"")+Math.abs(f[0])+"/"+f[1]}return"≈ "+dec(v)}
+function fmtD(v){const f=toFrac(v,48);if(f&&f[1]!==1)return fmt(v)+(Math.abs(v-Math.round(v*100)/100)>1e-9?"\\approx ":"=")+dec(v).replace("−","-").replace(",","{,}");return fmt(v)}
+
+/* ---- Polynome: c[0]+c[1]x+c[2]x^2+... ---- */
+const P={
+  ev:(c,x)=>c.reduce((s,a,i)=>s+a*Math.pow(x,i),0),
+  add:(a,b)=>{const n=Math.max(a.length,b.length),r=[];for(let i=0;i<n;i++)r.push((a[i]||0)+(b[i]||0));return P.trim(r)},
+  sub:(a,b)=>P.add(a,b.map(x=>-x)),
+  scale:(a,k)=>P.trim(a.map(x=>x*k)),
+  mul:(a,b)=>{const r=new Array(a.length+b.length-1).fill(0);a.forEach((x,i)=>b.forEach((y,j)=>r[i+j]+=x*y));return P.trim(r)},
+  int:c=>[0].concat(c.map((a,i)=>a/(i+1))),
+  der:c=>c.slice(1).map((a,i)=>a*(i+1)),
+  integ:(c,a,b)=>{const F=P.int(c);return P.ev(F,b)-P.ev(F,a)},
+  trim:c=>{c=c.map(x=>Math.abs(x)<1e-12?0:x);while(c.length>1&&c[c.length-1]===0)c.pop();return c},
+  deg:c=>P.trim(c).length-1,
+  fromRoots:(rs,s)=>rs.reduce((p,r)=>P.mul(p,[-r,1]),[s]),
+  tex:(c,v)=>{v=v||"x";c=P.trim(c);let s="";for(let i=c.length-1;i>=0;i--){const a=c[i];if(!a)continue;const f=toFrac(Math.abs(a));
+      let co=f?(f[1]===1?String(f[0]):"\\frac{"+f[0]+"}{"+f[1]+"}"):dec(Math.abs(a)).replace(",","{,}");
+      if(i>0&&Math.abs(a)===1)co="";
+      const t=co+(i===0?"":(co&&!f?"\\cdot ":"")+v+(i>1?"^{"+i+"}":""));
+      s+=(a<0?(s?"-":"-"):(s?"+":""))+t}
+    return s||"0"},
+  roots:(c,lo,hi)=>{ /* reelle Nullstellen numerisch */
+    c=P.trim(c);lo=lo==null?-60:lo;hi=hi==null?60:hi;const n=4000,r=[],f=x=>P.ev(c,x),d=P.der(c);
+    let px=lo,pv=f(lo);
+    const push=x=>{if(!r.some(y=>Math.abs(y-x)<1e-6))r.push(x)};
+    for(let i=1;i<=n;i++){const x=lo+(hi-lo)*i/n,v=f(x);
+      if(pv===0)push(px);
+      else if(pv*v<0){let a=px,b=x;for(let k=0;k<80;k++){const m=(a+b)/2;if(f(a)*f(m)<=0)b=m;else a=m}push((a+b)/2)}
+      px=x;pv=v}
+    if(pv===0)push(px);
+    /* doppelte Nullstellen: über Ableitung */
+    P.trim(d).length>1&&P.rootsSimple(d,lo,hi).forEach(x=>{if(Math.abs(f(x))<1e-9)push(x)});
+    return r.map(x=>{const q=Math.round(x*1e6)/1e6;return Math.abs(q-Math.round(q))<1e-7?Math.round(q):q}).sort((a,b)=>a-b);
+  },
+  rootsSimple:(c,lo,hi)=>{const n=4000,r=[],f=x=>P.ev(c,x);let px=lo,pv=f(lo);
+    for(let i=1;i<=n;i++){const x=lo+(hi-lo)*i/n,v=f(x);if(pv===0)r.push(px);else if(pv*v<0){let a=px,b=x;for(let k=0;k<80;k++){const m=(a+b)/2;if(f(a)*f(m)<=0)b=m;else a=m}r.push((a+b)/2)}px=x;pv=v}return r}
+};
+
+/* ---- Graph (SVG) ---- */
+function plot(o){
+  const W=o.w||440,Hh=o.h||360,pad={l:30,r:12,t:12,b:24};
+  const X=x=>pad.l+(x-o.x0)/(o.x1-o.x0)*(W-pad.l-pad.r), Y=y=>pad.t+(o.y1-y)/(o.y1-o.y0)*(Hh-pad.t-pad.b);
+  let s='<svg viewBox="0 0 '+W+" "+Hh+'" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="'+escA(o.aria||"Graph")+'">';
+  s+='<defs><pattern id="hatch" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="8" height="8" fill="var(--fillr)"/><line x1="0" y1="0" x2="0" y2="8" stroke="var(--c4)" stroke-width="2"/></pattern><clipPath id="clipg"><rect x="'+pad.l+'" y="'+pad.t+'" width="'+(W-pad.l-pad.r)+'" height="'+(Hh-pad.t-pad.b)+'"/></clipPath></defs>';
+  const st=o.step||1,sty=o.stepy||st;
+  for(let x=Math.ceil(o.x0/st)*st;x<=o.x1+1e-9;x+=st)s+='<line class="g-grid" x1="'+X(x)+'" x2="'+X(x)+'" y1="'+pad.t+'" y2="'+(Hh-pad.b)+'"/>';
+  for(let y=Math.ceil(o.y0/sty)*sty;y<=o.y1+1e-9;y+=sty)s+='<line class="g-grid" y1="'+Y(y)+'" y2="'+Y(y)+'" x1="'+pad.l+'" x2="'+(W-pad.r)+'"/>';
+  s+='<g clip-path="url(#clipg)">';
+  const samp=(f,a,b,n)=>{n=n||160;const p=[];for(let i=0;i<=n;i++){const x=a+(b-a)*i/n;p.push([x,f(x)])}return p};
+  (o.fills||[]).forEach(F=>{const up=samp(F.top,F.a,F.b),dn=samp(F.bot,F.a,F.b).reverse();
+    s+='<path class="'+F.cls+'" d="M'+up.concat(dn).map(p=>X(p[0]).toFixed(1)+","+Y(Math.max(o.y0-50,Math.min(o.y1+50,p[1]))).toFixed(1)).join("L")+'Z"'+(F.stroke?' stroke="'+F.stroke+'" stroke-width="2.5"':"")+'/>'});
+  (o.rects||[]).forEach(R=>{s+='<rect class="'+R.cls+'" x="'+X(R.a)+'" y="'+Y(R.top)+'" width="'+(X(R.b)-X(R.a))+'" height="'+(Y(R.bot)-Y(R.top))+'"/>'});
+  s+="</g>";
+  s+='<line class="g-ax" x1="'+pad.l+'" x2="'+(W-pad.r)+'" y1="'+Y(0)+'" y2="'+Y(0)+'"/>';
+  if(o.x0<=0&&o.x1>=0)s+='<line class="g-ax" y1="'+pad.t+'" y2="'+(Hh-pad.b)+'" x1="'+X(0)+'" x2="'+X(0)+'"/>';
+  const lx=o.lstep||st,ly=o.lstepy||sty;
+  for(let x=Math.ceil(o.x0/lx)*lx;x<=o.x1+1e-9;x+=lx)if(Math.abs(x)>1e-9)s+='<text class="g-tick" x="'+X(x)+'" y="'+Math.min(Hh-6,Math.max(pad.t+12,Y(0)+14))+'" text-anchor="middle">'+dec(x,2)+"</text>";
+  for(let y=Math.ceil(o.y0/ly)*ly;y<=o.y1+1e-9;y+=ly)if(Math.abs(y)>1e-9)s+='<text class="g-tick" x="'+(o.x0<=0&&o.x1>=0?X(0)-5:pad.l-4)+'" y="'+(Y(y)+4)+'" text-anchor="end">'+dec(y,2)+"</text>";
+  s+='<g clip-path="url(#clipg)">';
+  (o.vlines||[]).forEach(v=>{s+='<line class="'+(v.cls||"g-ghost")+'" x1="'+X(v.x)+'" x2="'+X(v.x)+'" y1="'+Y(v.y0==null?o.y0:v.y0)+'" y2="'+Y(v.y1==null?o.y1:v.y1)+'"/>'});
+  (o.fns||[]).forEach(F=>{const a=F.a==null?o.x0:F.a,b=F.b==null?o.x1:F.b,p=samp(F.f,a,b,300);
+    s+='<path class="'+F.cls+'" d="M'+p.map(q=>X(q[0]).toFixed(1)+","+Y(Math.max(o.y0-50,Math.min(o.y1+50,q[1]))).toFixed(1)).join("L")+'"/>'});
+  s+="</g>";
+  (o.pts||[]).forEach(p=>{s+='<circle class="g-pt" cx="'+X(p.x)+'" cy="'+Y(p.y)+'" r="5"/>'});
+  (o.labels||[]).forEach(L=>{s+='<text class="g-lbl '+(L.cls||"")+'" x="'+X(L.x)+'" y="'+Y(L.y)+'" text-anchor="'+(L.anchor||"middle")+'">'+L.t+"</text>"});
+  return s+"</svg>";
+}
+
+/* ---- Bausteine für Schritte ---- */
+/* Zahlen-Schritt: fields [{k,lab(html),val,tol,w}] */
+function numFields(fields){return fields.map(f=>'<div class="row"><span class="lab">'+f.lab+'</span><input class="fin'+(f.w?" s":"")+'" data-k="'+f.k+'" inputmode="decimal" autocomplete="off" aria-label="'+escA(f.aria||f.k)+'"'+(f.focus?' data-focus="'+f.focus+'"':"")+'>'+(f.after||"")+"</div>").join("")}
+function readVals(box){const v={};$$("input.fin",box).forEach(i=>v[i.dataset.k]=parseNum(i.value));return v}
+function readRaw(box){const v={};$$("input.fin",box).forEach(i=>v[i.dataset.k]=i.value.trim());return v}
+/* Standard-Prüfung für Zahlenfelder */
+function checkNums(box,fields,extra){
+  const v=readVals(box),marks={},msgs=[];let empty=0;
+  fields.forEach(f=>{const x=v[f.k];
+    if(x==null){empty++;return}
+    if(isNaN(x)){marks[f.k]=false;msgs.push("„"+(f.name||f.k)+"“: Das ist keine Zahl. Schreiben Sie z. B. 2,5 oder 7/3.");return}
+    const ok=f.check?f.check(x,v):near(x,f.val,f.tol);marks[f.k]=ok;
+    if(!ok){const m=(f.why&&f.why(x,v))||(f.tol==null&&Math.abs(x-f.val)<0.06?"„"+(f.name||f.k)+"“: Fast! Runden Sie auf zwei Nachkommastellen oder schreiben Sie das Ergebnis als Bruch.":"„"+(f.name||f.k)+"“ stimmt noch nicht.");msgs.push(m)}});
+  if(extra)extra(v,marks,msgs);
+  const ok=!empty&&fields.every(f=>marks[f.k]);
+  if(empty&&!msgs.length)msgs.push("Es sind noch Felder leer.");
+  else if(empty)msgs.push("Außerdem sind noch Felder leer.");
+  const partial=empty>0&&Object.keys(marks).every(k=>marks[k]);
+  return{ok,marks,msgs,empty:empty===fields.length,partial};
+}
+/* Auswahl (eine richtige oder mehrere) */
+function choiceHTML(opts,multi,grid){return'<div class="choices'+(grid?" grid2":"")+'">'+opts.map((o,i)=>'<button type="button" class="choice'+(multi?" multi":"")+'" data-i="'+i+'" aria-pressed="false"><span class="dot"></span><span>'+o+"</span></button>").join("")+"</div>"}
+function bindChoices(box,multi,onChange){$$(".choice",box).forEach(b=>b.addEventListener("click",()=>{if(b.disabled)return;
+  if(!multi)$$(".choice",box).forEach(x=>{if(b.closest(".choices")===x.closest(".choices"))x.setAttribute("aria-pressed","false")});
+  b.setAttribute("aria-pressed",multi&&b.getAttribute("aria-pressed")==="true"?"false":"true");$$(".choice",box).forEach(x=>x.classList.remove("ok","bad"));onChange&&onChange()}))}
+function chosen(box){return $$(".choice",box).filter(b=>b.getAttribute("aria-pressed")==="true").map(b=>+b.dataset.i)}
+/* Ordnen-Schritt (Beweisschnipsel) */
+function orderStep(o){ /* o: {name,intro,first(tex),lines:[tex],dis:[{t,why}],reasons?:..., hints} */
+  return{name:o.name||"Ordnen",TO:o.lines.length,
+    render(box,ctx){
+      const all=o.lines.map((t,i)=>({t,i})).concat((o.dis||[]).map((d,j)=>({t:d.t,i:"d"+j})));
+      ctx._pool=shuffle(all);ctx._placed=[];
+      box.innerHTML=(o.intro?'<p class="q">'+o.intro+"</p>":"")+'<ol class="proof"></ol><div class="pmini">Schnipsel (antippen zum Einfügen, im Beweis antippen zum Zurücklegen):</div><div class="pool"></div>'+(o.dis&&o.dis.length?'<div class="pmini">⚠️ Achtung: Nicht alle Schnipsel sind richtig!</div>':"");
+      const draw=()=>{
+        const pr=$(".proof",box),pl=$(".pool",box);
+        pr.innerHTML=(o.first?'<li class="pline fixed"><span class="nr">1</span>'+K(o.first)+"</li>":"")+ctx._placed.map((p,j)=>'<li><button type="button" class="pline" data-j="'+j+'"><span class="nr">'+(j+(o.first?2:1))+"</span>"+K(p.t)+"</button></li>").join("");
+        pl.innerHTML=ctx._pool.filter(p=>!ctx._placed.includes(p)).map(p=>'<button type="button" class="chip" data-i="'+p.i+'">'+K(p.t)+"</button>").join("")||'<span class="hint0">Alle Schnipsel sind verbaut.</span>';
+        renderK(box);
+        $$(".chip",box).forEach(b=>b.onclick=()=>{if(box.classList.contains("locked"))return;ctx._placed.push(ctx._pool.find(p=>String(p.i)===b.dataset.i));draw()});
+        $$(".proof button.pline",box).forEach(b=>b.onclick=()=>{if(box.classList.contains("locked"))return;ctx._placed.splice(+b.dataset.j,1);draw()});
+      };ctx._draw=draw;draw();
+    },
+    check(box,ctx){
+      const P_=ctx._placed,msgs=[];let ok=true;
+      if(!P_.length)return{ok:false,msgs:["Legen Sie zuerst Schnipsel in den Beweis."],empty:true};
+      const lis=$$(".proof button.pline",box);
+      P_.forEach((p,j)=>{const good=p.i===j;lis[j].classList.add(good?"ok":"bad");if(!good)ok=false;
+        if(typeof p.i==="string"){const d=o.dis[+p.i.slice(1)];msgs.push("Zeile "+(j+(o.first?2:1))+" ist ein Störschnipsel: "+d.why)}
+        else if(!good)msgs.push("Zeile "+(j+(o.first?2:1))+" steht an der falschen Stelle. Fragen Sie sich: Folgt sie direkt aus der Zeile davor?")});
+      if(P_.length<o.lines.length&&!P_.some((p,j)=>p.i!==j)){ok=false;msgs.push("Bis hierhin stimmt alles – aber der Beweis ist noch nicht fertig. Er endet erst mit der rechten Seite der Behauptung.");return{ok:false,msgs,partial:true}}
+      else if(P_.length<o.lines.length){ok=false}
+      if(P_.length>o.lines.length&&!msgs.length)ok=false;
+      return{ok,msgs};
+    },
+    reset(box,ctx){$$(".pline",box).forEach(l=>l.classList.remove("ok","bad"))},
+    hints:o.hints,
+    reveal(box,ctx){ /* nächsten richtigen Schnipsel einsetzen */
+      let j=0;while(j<ctx._placed.length&&ctx._placed[j].i===j)j++;
+      ctx._placed=ctx._placed.slice(0,j);ctx._placed.push(ctx._pool.find(p=>p.i===j));ctx._draw();
+    }};
+}
+/* Begründen-Schritt */
+function reasonStep(o){ /* o:{first,lines,ok:[[opt...]],opts:[..]} */
+  return{name:o.name||"Begründen",TR:o.ok,
+    render(box){
+      box.innerHTML='<p class="q">'+(o.intro||"Warum gilt jedes Gleichheitszeichen? Wählen Sie zu jeder Zeile die passende Begründung.")+'</p><ol class="proof">'+
+        (o.first?'<li class="pline fixed"><span class="nr">1</span>'+K(o.first)+"</li>":"")+
+        o.lines.map((t,j)=>'<li class="pline"><span class="nr">'+(j+2)+"</span>"+K(t)+'<select class="sel why" data-j="'+j+'" aria-label="Begründung für Zeile '+(j+2)+'"><option value="">– Begründung wählen –</option>'+o.opts.map((x,i)=>'<option value="'+i+'">'+x+"</option>").join("")+"</select></li>").join("")+"</ol>";
+      renderK(box);
+    },
+    check(box){const msgs=[];let ok=true,empty=0;
+      $$("select.why",box).forEach(s=>{s.classList.remove("ok","bad");const j=+s.dataset.j;if(s.value===""){empty++;ok=false;return}
+        const good=o.ok[j].includes(+s.value);s.classList.add(good?"ok":"bad");if(!good){ok=false;msgs.push("Zeile "+(j+2)+": "+(o.tips&&o.tips[j]||"Vergleichen Sie genau: Was ist anders als in der Zeile davor?"))}});
+      if(empty)msgs.push(empty===o.lines.length?"Wählen Sie zu jeder Zeile eine Begründung.":"Bei "+empty+" Zeile(n) fehlt noch die Begründung.");
+      return{ok,msgs,empty:empty===o.lines.length,partial:empty>0&&!$$("select.why.bad",box).length}},
+    hints:o.hints};
+}
+
+/* Freitext-Schritt (wird nicht automatisch bewertet) */
+function textStep(o){return{name:o.name||"In Worten",TX:true,
+  render(box){box.innerHTML='<p class="q">'+o.q+'</p><textarea class="txt" rows="4" aria-label="'+escA(o.name||"Antwort")+'" placeholder="'+escA(o.ph||"Schreiben Sie hier in ganzen Sätzen …")+'"></textarea>';renderK(box)},
+  check(box){const t=(box.querySelector("textarea").value||"").trim();if(t.length<(o.min||20))return{ok:false,empty:true,msgs:[t?"Schreiben Sie etwas ausführlicher – in ganzen Sätzen.":"Schreiben Sie Ihre Antwort in das Feld."]};
+    return{ok:true,good:o.good||"Danke! Vergleichen Sie Ihre Formulierung mit einer Nachbarin oder einem Nachbarn."}},
+  hints:o.hints||[]}}
+
+/* ===== Engine ===== */
+const ENG={};
+function startHeft(CFG){
+  const KINDS=CFG.kinds,KD={};KINDS.forEach(k=>KD[k.id]=k);
+  const S=store.get(CFG.key,{})||{};S.stats=S.stats||{};S.rev=S.rev||[];S.level=S.level||{};
+  KINDS.forEach(k=>{S.stats[k.id]=S.stats[k.id]||[0,0];if(k.levels&&!S.level[k.id])S.level[k.id]=1});
+  const save=()=>store.set(CFG.key,S);ENG.S=S;
+  let tab=KINDS[0].id,cur=null,revIdx=0,solI=0;
+
+  /* Reiter */
+  const tabs=$("#tabs");
+  tabs.innerHTML=KINDS.map(k=>'<button class="tab" role="tab" data-kind="'+k.id+'" style="background:'+k.color+'" title="'+escA(k.name)+'"><span class="lg">'+k.icon+" "+k.name+'</span><span class="sm">'+k.icon+" "+(k.short||"")+"</span></button>").join("")+
+    '<button class="tab" role="tab" data-kind="rev" style="background:var(--rev)" title="Fehler-Training">🔁<span class="lg"> Fehler-Training</span><span class="badge" id="revBadge">0</span></button>';
+  $$(".tab",tabs).forEach(b=>b.onclick=()=>{setTab(b.dataset.kind);newTask()});
+
+  function color(){const k=tab==="rev"?null:KD[tab];document.documentElement.style.setProperty("--tab",k?k.color:"var(--rev)")}
+  function renderStats(){
+    $("#stats").innerHTML=KINDS.map(k=>'<span class="stat">'+k.icon+" "+(k.short||k.name)+": <b>"+S.stats[k.id][0]+"</b> gelöst"+(S.stats[k.id][0]?", "+S.stats[k.id][1]+" auf Anhieb":"")+"</span>").join("");
+    $("#revBadge").textContent=S.rev.length;
+  }
+  function renderLevels(){
+    const k=KD[tab],el=$("#levels");
+    if(!k||!k.levels){el.classList.add("hidden");return}
+    el.classList.remove("hidden");
+    el.innerHTML="<span>"+(k.levels.label||"Stufe")+"</span>"+k.levels.names.map((n,i)=>'<button type="button" data-l="'+(i+1)+'" title="'+escA(k.levels.titles[i])+'" aria-pressed="'+(S.level[k.id]===i+1)+'">'+n+"</button>").join("");
+    $$("button",el).forEach(b=>b.onclick=()=>{S.level[k.id]=+b.dataset.l;save();renderLevels();newTask()});
+  }
+  function setTab(t){tab=t;$$(".tab",tabs).forEach(b=>b.setAttribute("aria-selected",b.dataset.kind===t));color();renderLevels();
+    $("#ownBtn").disabled=!(KD[t]&&KD[t].own);$("#ownBtn").title=KD[t]&&KD[t].own?"":"Eigene Aufgaben gibt es im Reiter „"+(KINDS.find(k=>k.own)||{name:""}).name+"“.";
+    $("#extra").innerHTML="";const k=KD[t];if(k&&k.extra){$("#extra").innerHTML=k.extra();renderK($("#extra"));k.extraBind&&k.extraBind($("#extra"))}
+  }
+
+  /* Aufgabe laden */
+  function load(kind,spec,isRev){
+    const k=KD[kind];const task=k.build(spec);
+    cur={kind,spec,task,i:0,err:false,sol:false,done:false,rev:!!isRev,ctx:task.ctx||{},hint:{}};
+    $("#stamp").classList.add("hidden");$("#solution").classList.add("hidden");$("#note").innerHTML="";$("#note").className="note";$("#hintbox").classList.add("hidden");
+    $("#taskline").innerHTML='<span class="tl">Aufgabe</span><span class="tt">'+task.title+"</span>"+(task.tag?'<span class="lvltag">'+task.tag+"</span>":"");
+    $("#steps").innerHTML=task.steps.map((s,i)=>'<div class="stepblk'+(i?" hidden":" now")+'" data-i="'+i+'"><h3>Schritt '+(i+1)+": "+s.name+'</h3><div class="body"></div></div>').join("");
+    task.steps.forEach((s,i)=>{const b=$$(".stepblk .body")[i];s.render(b,cur.ctx);bindBox(b)});
+    $("#revInfo").classList.toggle("hidden",!isRev);
+    if(isRev)$("#revInfo").textContent="Fehler-Aufgabe "+(revIdx+1)+" von "+S.rev.length;
+    $("#workgrid").classList.toggle("withfig",!!task.graph);$("#fig").classList.toggle("hidden",!task.graph);
+    renderK($("#taskline"));renderK($("#steps"));
+    phases();redraw();
+    $("#checkBtn").classList.remove("hidden");$("#helpBtn").classList.remove("hidden");$("#nextBtn").classList.add("hidden");
+    task.steps[0].enter&&task.steps[0].enter(curBox(),cur.ctx);
+  }
+  function bindBox(b){
+    $$("input.fin",b).forEach(inp=>{
+      inp.addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();check()}});
+      inp.addEventListener("input",()=>{inp.classList.remove("ok","bad")});
+      inp.addEventListener("focus",()=>{if(inp.dataset.focus){cur.focus=inp.dataset.focus;redraw()}});
+      inp.addEventListener("blur",()=>{if(cur.focus){cur.focus=null;setTimeout(redraw,0)}});
+    });
+  }
+  function curBox(){return $$(".stepblk .body")[cur.i]}
+  function phases(){$("#phases").innerHTML=cur.task.steps.map((s,i)=>'<li class="'+(i<cur.i||cur.done?"done":i===cur.i?"now":"")+'">'+(i+1)+" "+s.name+"</li>").join("")}
+  function redraw(){if(!cur||!cur.task.graph)return;const g=cur.task.graph(cur.ctx,cur.done?cur.task.steps.length:cur.i,cur.focus);$("#fig").innerHTML=g;renderK($("#fig"))}
+  ENG.redraw=redraw;ENG.check=()=>check();
+
+  function newTask(){
+    if(tab==="rev"){
+      if(!S.rev.length){cur=null;$("#taskline").innerHTML='<span class="tl">Fehler-Training</span><span class="tt">Hier ist gerade nichts zu tun – Sie haben keine offenen Fehler-Aufgaben. 🎉 Wenn beim Prüfen etwas nicht stimmt, landet die Aufgabe hier, damit Sie sie später nochmal üben können.</span>';
+        $("#steps").innerHTML="";$("#phases").innerHTML="";$("#note").innerHTML="";$("#fig").classList.add("hidden");$("#workgrid").classList.remove("withfig");$("#revInfo").classList.add("hidden");
+        $("#checkBtn").classList.add("hidden");$("#helpBtn").classList.add("hidden");$("#nextBtn").classList.add("hidden");$("#hintbox").classList.add("hidden");$("#solution").classList.add("hidden");$("#stamp").classList.add("hidden");return}
+      revIdx=Math.min(revIdx,S.rev.length-1);const r=S.rev[revIdx];color();load(r.kind,r.spec,true);
+      document.documentElement.style.setProperty("--tab","var(--rev)");return}
+    const k=KD[tab];load(tab,k.gen(S.level[tab]||1));
+  }
+  function addRev(){if(cur.rev||cur.inRev)return;const key=JSON.stringify({kind:cur.kind,spec:cur.spec});if(!S.rev.some(r=>JSON.stringify(r)===key)){S.rev.push({kind:cur.kind,spec:cur.spec});save();renderStats()}cur.inRev=true}
+
+  function check(){
+    if(!cur||cur.done)return;
+    const st=cur.task.steps[cur.i],box=curBox();
+    st.reset&&st.reset(box,cur.ctx);
+    const r=st.check(box,cur.ctx);
+    if(r.marks)Object.keys(r.marks).forEach(k=>{const el=box.querySelector('[data-k="'+k+'"]');if(el){el.classList.remove("ok","bad");el.classList.add(r.marks[k]?"ok":"bad")}});
+    const note=$("#note");
+    if(r.ok){
+      note.className="note good";note.innerHTML="<p><strong>Richtig!</strong> "+(r.good||(cur.i<cur.task.steps.length-1?"Weiter mit Schritt "+(cur.i+2)+".":""))+"</p>";renderK(note);
+      lock(cur.i);cur.i++;$("#hintbox").classList.add("hidden");
+      if(cur.i>=cur.task.steps.length)finish();
+      else{const nb=$$(".stepblk")[cur.i];nb.classList.remove("hidden");nb.classList.add("now");const ns=cur.task.steps[cur.i];ns.enter&&ns.enter(curBox(),cur.ctx);
+        phases();redraw();const inp=nb.querySelector("input.fin");if(inp&&window.innerWidth>700)inp.focus({preventScroll:true});nb.scrollIntoView({block:"nearest",behavior:"smooth"})}
+    }else{
+      if(!r.empty&&!r.partial){cur.err=true;addRev()}
+      note.className="note "+(r.partial?"good":"bad");note.innerHTML="<p><strong>"+(r.empty?"Noch nicht fertig.":r.partial?"Bis hierhin richtig!":"Noch nicht ganz.")+"</strong> "+(r.empty||r.partial?"":"Schauen Sie sich die rot markierten Stellen an:")+"</p>"+(r.msgs&&r.msgs.length?"<ul>"+r.msgs.map(m=>"<li>"+m+"</li>").join("")+"</ul>":"");
+      renderK(note);
+    }
+  }
+  function lock(i){const b=$$(".stepblk")[i];b.classList.remove("now");b.classList.add("done");b.querySelector(".body").classList.add("locked");
+    $$("input,select,textarea,.choice,.signs button,input[type=range]",b).forEach(x=>x.disabled=true)}
+  function finish(){
+    cur.done=true;phases();redraw();
+    const s=$("#stamp");s.textContent=pick(["Prima!","Super!","Klasse!","Spitze!","Toll!"]);s.classList.remove("hidden");
+    if(!cur.counted){cur.counted=true;S.stats[cur.kind][0]++;if(!cur.err&&!cur.sol)S.stats[cur.kind][1]++}
+    let extra="";
+    if(cur.rev&&!cur.err){const key=JSON.stringify({kind:cur.kind,spec:cur.spec});S.rev=S.rev.filter(r=>JSON.stringify(r)!==key);extra=" Diese Aufgabe ist jetzt aus dem Fehler-Training gelöscht."}
+    else if(cur.rev)revIdx++;
+    save();renderStats();
+    const note=$("#note");note.className="note good";note.innerHTML="<p><strong>Geschafft!</strong> "+(cur.task.finalMsg||"Alle Schritte sind richtig.")+extra+"</p>";renderK(note);
+    $("#checkBtn").classList.add("hidden");$("#helpBtn").classList.add("hidden");$("#nextBtn").classList.remove("hidden");
+  }
+  /* Hilfen */
+  function help(){
+    if(!cur||cur.done)return;const st=cur.task.steps[cur.i];
+    const hs=typeof st.hints==="function"?st.hints(cur.ctx):(st.hints||[]);
+    const n=(cur.hint[cur.i]||0)+1;cur.hint[cur.i]=Math.min(n,hs.length+(st.reveal?1:0));cur.ctx.hintLvl=cur.hint[cur.i];redraw();
+    const hb=$("#hintbox");hb.classList.remove("hidden");
+    const shown=hs.slice(0,cur.hint[cur.i]);
+    let h="<h4>💡 Gestufte Hilfe zu Schritt "+(cur.i+1)+" ("+Math.min(cur.hint[cur.i],hs.length)+" von "+hs.length+")</h4>"+shown.map((x,i)=>'<div class="hl"><span class="hn">Hilfe '+(i+1)+":</span>"+x+"</div>").join("");
+    if(cur.hint[cur.i]>hs.length&&st.reveal){st.reveal(curBox(),cur.ctx);h+='<div class="hl"><span class="hn">Hilfe '+(hs.length+1)+":</span>Der nächste richtige Schnipsel wurde für Sie eingesetzt.</div>"}
+    const more=cur.hint[cur.i]<hs.length||(st.reveal&&cur.hint[cur.i]<=hs.length);
+    h+='<div class="actions" style="margin-top:6px">'+(more?'<button class="btn help" id="hintMore">Nächste Hilfe</button>':'<span class="pmini">Mehr Hilfen gibt es zu diesem Schritt nicht. Schauen Sie sonst in die Musterlösung.</span>')+"</div>";
+    hb.innerHTML=h;renderK(hb);const m=$("#hintMore");if(m)m.onclick=help;
+    hb.scrollIntoView({block:"nearest",behavior:"smooth"});
+  }
+  /* Musterlösung */
+  const hc=s=>{let h=0x811c9dc5;for(const c of s){h^=c.charCodeAt(0);h=Math.imul(h,16777619)>>>0}return h};
+  let unlocked=false;
+  function askCode(){$("#lockErr").textContent="";$("#lockIn").value="";$("#lockOverlay").classList.remove("hidden");setTimeout(()=>$("#lockIn").focus(),50)}
+  $("#lockOk").onclick=()=>{if(hc("fh-musterloesung:"+$("#lockIn").value.trim())===3322625695){unlocked=true;$("#lockOverlay").classList.add("hidden");showSol()}else{$("#lockErr").textContent="Der Code stimmt nicht. Die Musterlösung gibt es bei Ihrer Lehrkraft."}};
+  $("#lockIn").addEventListener("keydown",e=>{if(e.key==="Enter")$("#lockOk").click()});
+  $("#lockCancel").onclick=()=>$("#lockOverlay").classList.add("hidden");
+  function showSol(){if(!cur)return;if(!unlocked){askCode();return}cur.sol=true;solI=0;$("#solution").classList.remove("hidden");drawSol();$("#solution").scrollIntoView({behavior:"smooth",block:"start"})}
+  function drawSol(){const L=cur.task.solution;
+    $("#solLines").innerHTML=L.slice(0,solI+1).filter(x=>x.l).map((x,i,a)=>'<div class="sl'+(i===a.length-1&&L[solI].l?" hl":"")+'">'+x.l+"</div>").join("");
+    $("#solText").innerHTML=L[solI].t||"";
+    const fg=$("#solFig");if(L[solI].fig){fg.innerHTML=L[solI].fig();fg.classList.remove("hidden")}else fg.classList.add("hidden");
+    $("#solCount").textContent="Schritt "+(solI+1)+" von "+L.length;$("#solPrev").disabled=solI===0;$("#solNext").disabled=solI===L.length-1;
+    renderK($("#solution"))}
+  $("#solBtn").onclick=showSol;$("#solPrev").onclick=()=>{solI=Math.max(0,solI-1);drawSol()};$("#solNext").onclick=()=>{solI=Math.min(cur.task.solution.length-1,solI+1);drawSol()};
+  $("#solClose").onclick=()=>$("#solution").classList.add("hidden");
+  $("#checkBtn").onclick=check;$("#helpBtn").onclick=help;
+  $("#nextBtn").onclick=()=>newTask();$("#newBtn").onclick=()=>newTask();
+  $("#resetBtn").onclick=()=>{if(cur)load(cur.kind,cur.spec,cur.rev)};
+  /* Eigene Aufgabe */
+  $("#ownBtn").onclick=()=>{const k=KD[tab];if(!k||!k.own)return;$("#ownBody").innerHTML=k.own.html;$("#ownHint").innerHTML=k.own.hint||"";$("#ownErr").textContent="";$("#overlay").classList.remove("hidden");renderK($("#overlay"));const f=$("#ownBody input");f&&f.focus()};
+  $("#ownCancel").onclick=()=>$("#overlay").classList.add("hidden");
+  $("#ownOk").onclick=()=>{const k=KD[tab];const r=k.own.parse($("#ownBody"));if(r.err){$("#ownErr").textContent=r.err;return}$("#overlay").classList.add("hidden");load(tab,r.spec)};
+  /* QR */
+  const PAGE=location.origin+location.pathname;
+  $("#qrBtn").onclick=()=>{try{const q=qrcode(0,"M");q.addData(PAGE);q.make();$("#qrBox").innerHTML=q.createSvgTag({cellSize:6,margin:2,scalable:true})}catch(e){$("#qrBox").textContent="QR-Code konnte nicht erzeugt werden."}$("#qrUrl").textContent=PAGE;$("#qrOverlay").classList.remove("hidden")};
+  $("#qrClose").onclick=()=>$("#qrOverlay").classList.add("hidden");
+  document.addEventListener("keydown",e=>{if(e.key==="Escape"){$("#qrOverlay").classList.add("hidden");$("#overlay").classList.add("hidden");$("#lockOverlay").classList.add("hidden")}});
+  if(CFG.pdf){const a=$("#pdfBtn");a.classList.remove("hidden");a.removeAttribute("download");a.href="#";a.textContent="📥 Goodnotes-Hefte";
+    a.onclick=ev=>{ev.preventDefault();let o=$("#pdfOverlay");if(!o){o=document.createElement("div");o.className="overlay";o.id="pdfOverlay";
+      o.innerHTML='<div class="modal" role="dialog" aria-modal="true"><h2>📥 Goodnotes-Hefte</h2><p class="hint">Laden Sie das Heft herunter und öffnen Sie es in Goodnotes. Jede Seite ist eine Aufgabe. Die Knöpfe „Hilfen“, „Online prüfen“ und „Musterlösung“ öffnen sich im Internet.</p><div class="choices">'+CFG.pdf.map(p=>'<a class="btn" style="text-decoration:none" href="'+p[1]+'" download>'+p[0]+"</a>").join("")+'</div><div class="actions"><button class="btn main" id="pdfClose">Schließen</button></div></div>';
+      document.body.appendChild(o);o.querySelector("#pdfClose").onclick=()=>o.classList.add("hidden");o.addEventListener("click",x=>{if(x.target===o)o.classList.add("hidden")})}o.classList.remove("hidden")}}
+
+  renderStats();
+  /* Sprungmarke aus QR-Code (z. B. #beweis-faktor) */
+  const h=decodeURIComponent(location.hash.slice(1));const r=h&&CFG.route?CFG.route(h):null;
+  if(r){setTab(r.kind);if(r.level){S.level[r.kind]=r.level;renderLevels()}load(r.kind,r.spec||KD[r.kind].gen(S.level[r.kind]||1));if(r.help)setTimeout(help,300)}
+  else{setTab(tab);newTask()}
+  ENG.load=load;ENG.cur=()=>cur;ENG.S=S;ENG._unlock=()=>{unlocked=true};
+}
+</script><script>/* ===== Flächenheft: Fläche zwischen zwei Graphen ===== */
+(function(){
+const I=(a,b,f)=>"\\int_{"+a+"}^{"+b+"}"+f+"\\,dx";
+const n2=v=>{const f=toFrac(v,12);if(f)return f[1]===1?String(f[0]):fmt(v);return dec(v).replace("−","-").replace(",","{,}")};
+const T=c=>P.tex(c);
+const abs=Math.abs;
+
+/* ---------- gemeinsames Zeichnen ---------- */
+function win(fs,xa,xb,extraY){
+  let lo=Infinity,hi=-Infinity;for(let i=0;i<=200;i++){const x=xa+(xb-xa)*i/200;fs.forEach(f=>{const y=f(x);if(isFinite(y)){lo=Math.min(lo,y);hi=Math.max(hi,y)}})}
+  (extraY||[]).forEach(y=>{lo=Math.min(lo,y);hi=Math.max(hi,y)});
+  lo=Math.max(lo,-14);hi=Math.min(hi,16);lo=Math.min(lo,-1);hi=Math.max(hi,1);
+  const y0=Math.floor(lo-0.6),y1=Math.ceil(hi+0.6),xr=xb-xa,yr=y1-y0;
+  return{x0:xa,x1:xb,y0,y1,step:xr>14?2:1,stepy:yr>16?2:1,lstep:xr>14?2:1,lstepy:yr>16?2:yr>9?1:1,h:Math.round(Math.min(480,Math.max(260,440*yr/xr)))};
+}
+
+/* ================= 1) Einstieg: Rechteck minus Fläche ================= */
+const EIN_AB={a:{f:[0,-0.5,0,0.5],c:3,x1:2,z:1,ab:"a"},b:{f:[0,0,3,-1],c:4,x1:2,z:0,ab:"b"},c:{f:[1,0,1],c:3,x1:Math.SQRT2,z:0,ab:"c"}};
+function genEin(l){
+  for(let k=0;k<400;k++){let f,x1,z=0;
+    if(l===1){const a=pick([0.25,0.5,1,2]),d=pick([0,1,2]);x1=pick([1,2,3,4]);f=[d,0,a]}
+    else if(l===2){if(Math.random()<.5){const s=pick([0.5,1]);f=[0,0,3*s,-s];x1=2}else{const a=pick([0.125,0.25,0.5]),b=pick([0,0.5,1]);x1=pick([2,3,4]);f=[0,b,0,a]}}
+    else{const r=pick([1,2]),s=pick([0.125,0.25,0.5]);f=[0,-s*r*r,0,s];z=r;x1=r+pick([1,2])}
+    const c=P.ev(f,x1);if(c>1&&c<=10&&(l<3?Number.isInteger(c):Math.abs(c*4-Math.round(c*4))<1e-9))return{f,c,x1,z,l}}
+  return Object.assign({l},EIN_AB.a);
+}
+function buildEin(s){
+  const F=x=>P.ev(P.int(s.f),x),under=F(s.x1)-F(s.z),rect=s.c*s.x1,A=rect-under,ff=x=>P.ev(s.f,x),tol=0.012;
+  const x1T=s.x1===Math.SQRT2?"\\sqrt{2}":n2(s.x1),cT=n2(s.c);
+  const graph=(ctx,stage,focus)=>{const w=win([ff],-1.2,Math.max(2.6,s.x1+1),[s.c,-0.6]);w.y0=Math.min(w.y0,-1);w.y1=Math.max(s.c+1,Math.min(w.y1,s.c+2));
+    const hl=stage===0?(ctx.hintLvl||0):9,showRect=hl>=2,showHatch=hl>=3||focus==="u";
+    const o=Object.assign(w,{fns:[{f:ff,cls:"g-f"},{f:()=>s.c,cls:"g-c"}],fills:[],rects:[],labels:[{x:s.x1+0.35,y:Math.min(w.y1-0.6,ff(s.x1+0.35))+0.2,t:"f",cls:"g-lf",anchor:"start"},{x:w.x0+0.15,y:s.c+0.25,t:"g",anchor:"start"}],aria:"Graph von f und der Geraden g mit der gesuchten Fläche"});
+    if(s.z>0)o.fns.push({f:()=>0,cls:"g-c",a:0,b:s.z});
+    o.fills.push({top:()=>s.c,bot:x=>Math.max(ff(x),0),a:0,b:s.x1,cls:"g-fill1"});
+    if(showRect)o.rects.push({a:0,b:s.x1,top:s.c,bot:0,cls:"g-rect"});
+    if(showHatch)o.fills.push({top:x=>Math.max(ff(x),0),bot:()=>0,a:s.z,b:s.x1,cls:"g-hatch"});
+    o.labels.push({x:s.x1/2,y:s.c/2+0.3,t:"A"});
+    return plot(o)+'<div class="legend"><span><i style="background:var(--fill1)"></i>gesuchte Fläche A</span>'+(showRect?'<span><i style="border:2px dashed var(--c4)"></i>Rechteck</span>':"")+(showHatch?'<span><i style="background:var(--fillr)"></i>Fläche unter f</span>':"")+"</div>"};
+  const steps=[
+   {name:"Entdecken",T:[{k:"A",val:A}],render(box){box.innerHTML='<p class="q">Die gefärbte Fläche liegt zwischen dem Graphen von f und der Geraden g – nicht an der x-Achse. Entwickeln Sie selbst eine Strategie und berechnen Sie A. Ihren Rechenweg notieren Sie im Heft.</p>'+
+      numFields([{k:"A",lab:"Flächeninhalt A = "}])+'<p class="pmini" style="margin-top:10px">Zur Kontrolle (freiwillig) – ein Integral, das Sie unterwegs berechnet haben:</p><div class="row">'+K("\\int")+'<span style="display:inline-flex;flex-direction:column;gap:2px"><input class="fin s" data-k="io" inputmode="decimal" aria-label="obere Grenze" data-focus="u"><input class="fin s" data-k="iu" inputmode="decimal" aria-label="untere Grenze" data-focus="u"></span>'+K("f(x)\\,dx=")+'<input class="fin" data-k="iv" inputmode="decimal" aria-label="Wert des Integrals"></div><p class="pmini">Wenn Sie nicht weiterkommen: 💡 Hilfe. Mit jeder Hilfe zeigt das Bild etwas mehr.</p>';renderK(box)},
+    check(box){const v=readVals(box),marks={},msgs=[];let ok=true;
+      const opt=["iu","io","iv"].filter(k=>v[k]!=null);
+      if(v.A==null&&!opt.length)return{ok:false,empty:true,msgs:["Tragen Sie Ihr Ergebnis für A ein."]};
+      if(opt.length){if(opt.length<3||opt.some(k=>isNaN(v[k]))){msgs.push("Für die Kontrolle brauche ich beide Grenzen und den Wert.");opt.forEach(k=>marks[k]=false);ok=false}
+        else{const iv=F(v.io)-F(v.iu),g=near(v.iv,iv,tol);["iu","io","iv"].forEach(k=>marks[k]=g);
+          if(g)msgs.push("Ihr Integral ist richtig berechnet.");else{ok=false;msgs.push(near(v.iv,-iv,tol)?"Beim Integral ist das Vorzeichen vertauscht: F(obere Grenze) − F(untere Grenze).":"Ihr Integral stimmt noch nicht. Prüfen Sie die Stammfunktion und das Einsetzen.")}}}
+      if(v.A==null){return{ok:false,marks,msgs:msgs.concat(["Jetzt fehlt noch A."]),partial:Object.values(marks).every(x=>x)}}
+      if(isNaN(v.A)){marks.A=false;return{ok:false,marks,msgs:["A: Das ist keine Zahl."]}}
+      const a=v.A,good=near(a,A,tol);marks.A=good;
+      if(!good){ok=false;msgs.push(near(a,rect+under,tol)?"Sie haben zwei Flächen addiert. Die gefärbte Fläche ist aber kleiner als das Ganze.":
+        near(a,under,tol)?"Das ist die Fläche zwischen dem Graphen von f und der x-Achse – also gerade der Teil, der NICHT gefärbt ist.":
+        s.z>0&&near(a,rect-(F(s.x1)-F(0)),tol)?"Fast! Zwischen 0 und "+dec(s.z)+" liegt der Graph von f unter der x-Achse. Dieses Stück zählt im Integral negativ – es gehört aber gar nicht zum Rechteck. Wo sollte Ihr Integral beginnen?":
+        near(a,-A,tol)?"Ein Flächeninhalt ist nie negativ. Was haben Sie wovon abgezogen?":
+        near(a,rect,tol)?"Diese Fläche ist zu groß – ein Teil davon gehört nicht zur gefärbten Fläche.":
+        "A stimmt noch nicht. Nutzen Sie die Hilfen – das Bild zeigt mit jeder Hilfe mehr.")}
+      return{ok,marks,msgs:ok?[]:msgs}},
+    hints:["Welche Flächen können Sie schon berechnen? Rechtecke – und Flächen zwischen einem Graphen und der x-Achse.",
+      "Ergänzen Sie die gefärbte Fläche zu einer Fläche, die Sie kennen. Im Bild ist jetzt ein Rechteck eingezeichnet. Es ist genau die Fläche unter der Geraden g.",
+      "Das Rechteck besteht aus zwei Teilen: der gefärbten Fläche A und der schraffierten Fläche unter dem Graphen von f."+(s.z>0?" Achtung: Die schraffierte Fläche beginnt erst bei der Nullstelle x = "+dec(s.z)+".":""),
+      "A = Rechteckfläche − Fläche unter f. Das Rechteck ist "+(s.x1===Math.SQRT2?"√2 (Lösung von f(x) = 3)":dec(s.x1))+" breit und "+dec(s.c)+" hoch."],
+    good:"Super – Sie haben die Fläche selbst geknackt! Jetzt schreiben Sie Ihre Idee mit Integralen auf."},
+   {name:"Mit Integralen schreiben",T:[{k:"a1",val:0},{k:"b1",val:s.x1},{k:"a2",val:s.z},{k:"b2",val:s.x1}],render(box){
+      const lim=(o,u)=>'<span style="display:inline-flex;flex-direction:column;gap:2px;vertical-align:middle">'+'<input class="fin s" data-k="'+o+'" inputmode="decimal" aria-label="obere Grenze">'+'<input class="fin s" data-k="'+u+'" inputmode="decimal" aria-label="untere Grenze"></span>';
+      box.innerHTML='<p class="q">Die Rechteckfläche ist die Fläche unter der Geraden '+K("g(x)="+cT)+". Schreiben Sie Ihre Rechnung mit zwei Integralen – welche Grenzen gehören dazu?</p><div class=\"row\">"+K("A=\\int")+lim("b1","a1")+K("g(x)\\,dx-\\int")+lim("b2","a2")+K("f(x)\\,dx")+"</div>";renderK(box)},
+    check(box){const r=checkNums(box,[{k:"a1",name:"untere Grenze bei g",val:0,tol},{k:"b1",name:"obere Grenze bei g",val:s.x1,tol},{k:"a2",name:"untere Grenze bei f",val:s.z,tol,why:x=>s.z>0&&near(x,0,tol)?"Bei f beginnt die abzuziehende Fläche erst an der Nullstelle "+dec(s.z)+".":null},{k:"b2",name:"obere Grenze bei f",val:s.x1,tol}]);
+      if(r.ok)r.good=s.z>0?"Richtig. Hier haben die beiden Integrale verschiedene Grenzen, weil f zwischen 0 und "+dec(s.z)+" unter der x-Achse liegt.":"Beide Integrale haben dieselben Grenzen! Mit der Differenzregel wird daraus ein Integral: "+K("A=\\int_0^{"+x1T+"}\\big(g(x)-f(x)\\big)\\,dx")+" – oben minus unten.";return r},
+    hints:["Die Grenzen lesen Sie im Bild ab: Wo beginnt und wo endet das Rechteck?","Die Fläche unter f, die Sie abziehen, liegt innerhalb des Rechtecks und oberhalb der x-Achse."+(s.z>0?" Sie beginnt bei der Nullstelle von f.":"")]},
+   textStep({name:"In Worten",q:"Beschreiben Sie Ihre Strategie in ein bis zwei Sätzen: Wie berechnet man eine Fläche, die oben von der Geraden g und unten vom Graphen von f begrenzt wird?",hints:["Benutzen Sie die Wörter „Rechteck“ bzw. „Fläche unter g“ und „Fläche unter f“."],good:"Prima. Behalten Sie Ihre Idee im Kopf – in der Strategie-Werkstatt brauchen Sie sie für zwei krumme Graphen."})];
+  const sol=[{l:K("A=\\int_0^{"+x1T+"}g(x)\\,dx-\\int_{"+n2(s.z)+"}^{"+x1T+"}f(x)\\,dx"),t:"Strategie: Das Rechteck (Fläche unter g) minus die Fläche unter f.",fig:()=>graph({},1)},
+    {l:K("\\int_0^{"+x1T+"}g(x)\\,dx="+x1T+"\\cdot "+cT+(s.x1===Math.SQRT2?"\\approx "+dec(rect).replace(",","{,}"):"="+n2(rect))),t:"Die Fläche unter der Geraden g ist ein Rechteck: Breite mal Höhe."},
+    {l:K("\\int_{"+n2(s.z)+"}^{"+x1T+"}\\Big("+T(s.f)+"\\Big)dx=\\Big["+T(P.int(s.f))+"\\Big]_{"+n2(s.z)+"}^{"+x1T+"}"+fmtD(under).replace(/^/,"=")),t:s.z>0?"Erst ab der Nullstelle "+dec(s.z)+" liegt der Graph oberhalb der x-Achse.":"Fläche unter dem Graphen von f mit dem Hauptsatz."},
+    {l:K("A="+(s.x1===Math.SQRT2?dec(rect).replace(",","{,}"):n2(rect))+"-"+(toFrac(under,48)?fmt(under):dec(under).replace(",","{,}"))+(toFrac(A,48)?"="+fmt(A):"")+"\\approx "+dec(A).replace(",","{,}")),t:"Abziehen – fertig. In Worten: Fläche unter der oberen Begrenzung minus Fläche unter der unteren Begrenzung."}];
+  return{title:"Berechnen Sie den Inhalt der gefärbten Fläche. "+K("f(x)="+T(s.f)+"\\qquad g(x)="+cT),tag:s.ab?"AB 18 "+s.ab+")":"Stufe "+s.l,steps,solution:sol,graph};
+}
+
+/* ================= 2) Strategie-Werkstatt (AB 19, Gruppen A/B/C) ================= */
+const Fw=[0,2,-0.25],Gw=[0,-1.25,0.25],fw=x=>P.ev(Fw,x),gw=x=>P.ev(Gw,x),Iw=(c,a,b)=>P.integ(c,a,b);
+const W1=Iw(Fw,0,6.5),W2=Iw(Gw,0,5),W3=Iw(Gw,5,6.5),WA=Iw(P.sub(Fw,Gw),0,6.5);
+const FG="f(x)=-\\tfrac{1}{4}x^2+2x\\quad g(x)=\\tfrac{1}{4}x^2-\\tfrac{5}{4}x";
+const S65="6{,}5";
+function wGraph(ctx,stage,focus,mode){
+  const d=mode==="C"?(ctx.d||0):0,F=x=>fw(x)+d,G=x=>gw(x)+d;
+  const o={x0:-1,x1:9,y0:-3,y1:mode==="C"?8:6,step:1,h:mode==="C"?400:330,fns:[],fills:[],labels:[],aria:"Graphen von f und g mit eingeschlossener Fläche"};
+  const z=()=>0;
+  if(mode==="C"&&d){o.fns.push({f:fw,cls:"g-ghost"},{f:gw,cls:"g-ghost"})}
+  const parts={I1:{top:F,bot:z,a:0,b:6.5,cls:"g-fill1"},I2:{top:z,bot:G,a:0,b:5,cls:"g-fill2"},I3:{top:G,bot:z,a:5,b:6.5,cls:"g-fill3"}};
+  if(mode==="B"&&ctx.rows){ctx.rows.forEach(r=>{const fn=r.fn==="f"?F:G,a=Math.min(r.u,r.o),b=Math.max(r.u,r.o);o.fills.push({top:x=>Math.max(fn(x),0),bot:x=>Math.min(fn(x),0),a,b,cls:r.s==="-"?"g-fill2":"g-fill1"})});
+    o.fills.push({top:F,bot:G,a:0,b:6.5,cls:"g-outline",stroke:"var(--text)"})}
+  else if(focus&&parts[focus])o.fills.push(parts[focus]);
+  else if(mode==="A"&&stage===1){o.fills.push(parts.I1,parts.I2,parts.I3);o.labels.push({x:3,y:2.2,t:"A₁"},{x:2.6,y:-0.8,t:"A₂"},{x:5.9,y:0.45,t:"A₃"})}
+  else o.fills.push({top:F,bot:G,a:0,b:6.5,cls:"g-fill1"});
+  if(stage>=2&&mode==="A")o.fns.push({f:x=>fw(x)-gw(x),cls:"g-h",a:0,b:6.5});
+  o.fns.push({f:F,cls:"g-f"},{f:G,cls:"g-g"});
+  o.labels.push({x:7.6,y:F(7.6)+0.5,t:"f"+(d?"+"+dec(d):""),cls:"g-lf"},{x:7.9,y:G(7.9)-0.5,t:"g"+(d?"+"+dec(d):""),cls:"g-lg"});
+  if(stage>=2&&mode==="A")o.labels.push({x:4.6,y:fw(4.6)-gw(4.6)+0.5,t:"f − g",cls:""});
+  let cap=mode==="C"?'<div class="cap">Verschiebung d = '+dec(d)+" &nbsp;·&nbsp; Flächeninhalt bleibt: A ≈ "+dec(WA)+"</div>":"";
+  if(stage>=2&&mode==="A")cap='<div class="cap">Grün gestrichelt: Graph der Differenzfunktion f − g. Die Fläche unter ihm ist genauso groß wie die gefärbte Fläche!</div>';
+  if(mode==="B")cap='<div class="cap">Blau: wird addiert, rosa: wird abgezogen. Schwarz umrandet: die gesuchte Fläche.</div>';
+  return plot(o)+cap;
+}
+const CAND=[{k:"f065",f:"f",a:0,b:6.5},{k:"f08",f:"f",a:0,b:8},{k:"g05",f:"g",a:0,b:5},{k:"g565",f:"g",a:5,b:6.5},{k:"g065",f:"g",a:0,b:6.5},{k:"g58",f:"g",a:5,b:8}];
+const cT=c=>I(n2(c.a).replace(".","{,}"),String(c.b).replace(".","{,}"),c.f+"(x)");
+function generalOrder(mode){
+  if(mode==="C")return orderStep({name:"Allgemein zeigen",intro:"Zeigen Sie allgemein (mit f und g statt der Funktionsterme), was hinter dem Verschieben steckt. Ordnen Sie:",
+    first:"A="+I(0,S65,"\\big(f(x)+d\\big)")+"-"+I(0,S65,"\\big(g(x)+d\\big)"),
+    lines:["="+I(0,S65,"\\Big(\\big(f(x)+d\\big)-\\big(g(x)+d\\big)\\Big)"),"="+I(0,S65,"\\big(f(x)+d-g(x)-d\\big)"),"="+I(0,S65,"\\big(f(x)-g(x)\\big)")],
+    dis:[{t:"="+I(0,S65,"\\big(f(x)+d-g(x)+d\\big)"),why:"Das Minus vor der Klammer dreht auch das Vorzeichen von d: −(g(x) + d) = −g(x) − d."},{t:"="+I(0,S65,"\\big(f(x)-g(x)+2d\\big)"),why:"+d und −d heben sich auf – es bleibt kein d übrig."}],
+    hints:["Benutzen Sie die Differenzregel aus dem Integralheft: zwei Integrale mit gleichen Grenzen → ein Integral.","Klammer auflösen: Das Minus dreht alle Vorzeichen in der Klammer.","Was passiert mit +d und −d?"]});
+  return orderStep({name:"Allgemein zeigen",intro:"Zeigen Sie mit den Rechenregeln für Integrale, dass Ihr Term dasselbe ist wie das Integral der Differenzfunktion. Schreiben Sie f und g statt der Funktionsterme. Ordnen Sie:",
+    first:"A="+I(0,S65,"f(x)")+"-"+I(0,5,"g(x)")+"-"+I(5,S65,"g(x)"),
+    lines:["="+I(0,S65,"f(x)")+"-\\Big("+I(0,5,"g(x)")+"+"+I(5,S65,"g(x)")+"\\Big)","="+I(0,S65,"f(x)")+"-"+I(0,S65,"g(x)"),"="+I(0,S65,"\\big(f(x)-g(x)\\big)")],
+    dis:[{t:"="+I(0,S65,"f(x)")+"-\\Big("+I(0,5,"g(x)")+"-"+I(5,S65,"g(x)")+"\\Big)",why:"Klammer prüfen: −a − b = −(a + b). In der Klammer steht ein Plus."},{t:"="+I(0,S65,"\\big(f(x)+g(x)\\big)"),why:"Zwischen den Integralen steht ein Minus – also auch im Integranden: f(x) − g(x)."}],
+    hints:["Ziel ist "+K(I(0,S65,"\\big(f(x)-g(x)\\big)"))+". Dafür brauchen Sie zwei Integrale mit gleichen Grenzen.","Klammern Sie das Minus vor den beiden g-Integralen aus.","In der Klammer stehen zwei aneinandergrenzende Intervalle (0 bis 5 und 5 bis 6,5) – fügen Sie sie zusammen. Dann Differenzregel."]});
+}
+function buildWerk(s){
+  const m=s.w,steps=[],tol=0.012;
+  const signRow=(k,lab)=>'<div class="row"><span class="signs" data-k="'+k+'"><button type="button" data-v="+" aria-pressed="false">+</button><button type="button" data-v="-" aria-pressed="false">−</button></span>'+lab+"</div>";
+  const bindSigns=(box,ctx,on)=>$$(".signs",box).forEach(g=>$$("button",g).forEach(b=>b.onclick=()=>{if(b.disabled)return;$$("button",g).forEach(x=>x.setAttribute("aria-pressed",x===b?"true":"false"));g.classList.remove("ok","bad");on&&on()}));
+  const sgn=(box,k)=>{const b=box.querySelector('.signs[data-k="'+k+'"] button[aria-pressed="true"]');return b?b.dataset.v:null};
+  if(m==="A"){
+    steps.push({name:"Integrale berechnen",T:[{k:"I1",val:W1},{k:"I2",val:W2},{k:"I3",val:W3}],render(box){box.innerHTML='<p class="q">Berechnen Sie die Integrale (mit GTR erlaubt). Tippen Sie in ein Feld – im Bild sehen Sie, welche Fläche dazugehört.</p>'+
+      numFields([{k:"I1",lab:K(I(0,S65,"f(x)")+"="),focus:"I1"},{k:"I2",lab:K(I(0,5,"g(x)")+"="),focus:"I2"},{k:"I3",lab:K(I(5,S65,"g(x)")+"="),focus:"I3"}])+'<p class="pmini">Auf zwei Nachkommastellen runden.</p>';renderK(box)},
+      check(box){return checkNums(box,[{k:"I1",name:"∫ f von 0 bis 6,5",val:W1,tol},{k:"I2",name:"∫ g von 0 bis 5",val:W2,tol,why:x=>near(x,-W2,tol)?"Das Integral ist hier negativ, weil der Graph von g unter der x-Achse liegt. Tragen Sie es mit Vorzeichen ein.":null},{k:"I3",name:"∫ g von 5 bis 6,5",val:W3,tol}])},
+      hints:["GTR: fnInt(Funktion, x, untere Grenze, obere Grenze) bzw. ∫-Taste. Oder per Hand mit dem Hauptsatz.","Stammfunktionen: "+K("F(x)=-\\tfrac{1}{12}x^3+x^2")+", "+K("G(x)=\\tfrac{1}{12}x^3-\\tfrac{5}{8}x^2"),"Ein Integral darf negativ sein – nämlich dann, wenn der Graph unter der x-Achse liegt."]});
+    steps.push({name:"Fläche zusammensetzen",T:[{k:"A",val:WA}],
+      render(box){box.innerHTML='<p class="q">Im Bild sehen Sie die Teilflächen A₁, A₂ und A₃. Wie setzt sich die gefärbte Fläche aus Ihren drei Integralen zusammen? Notieren Sie den Term im Heft und berechnen Sie A.</p>'+numFields([{k:"A",lab:"A = "}]);renderK(box)},
+      check(box){return checkNums(box,[{k:"A",name:"A",val:WA,tol,why:x=>near(x,W1+W2+W3,tol)?"Sie haben alle drei Integrale addiert. Schauen Sie ins Bild: Gehört A₃ zur gefärbten Fläche? Und welches Vorzeichen hat das Integral über A₂?":
+        near(x,W1+W2-W3,tol)?"Das Integral über A₂ ist negativ, weil g dort unter der x-Achse liegt. Sie wollen die Fläche A₂ aber dazuzählen …":
+        near(x,W1-W2+W3,tol)?"A₂ ist richtig dazugekommen. Aber A₃ ist in A₁ enthalten und gehört nicht zur gefärbten Fläche.":near(x,W1,tol)?"Das ist nur A₁. Der Teil unter der x-Achse fehlt noch, und A₃ ist zu viel.":null}])},
+      hints:["Schauen Sie ins Bild: Welche Teilflächen gehören zur gefärbten Fläche, welche ist zu viel?","A = A₁ + A₂ − A₃.","A₂ liegt unter der x-Achse: Das Integral "+K("\\int_0^5 g(x)\\,dx")+" ist negativ. Also ist "+K("A_2=-\\int_0^5 g(x)\\,dx")+"."]});
+    steps.push({name:"Differenzfunktion",T:[{k:"d2",val:-0.5},{k:"d1",val:3.25},{k:"D",val:WA}],render(box){box.innerHTML='<p class="q">Bilden Sie die Differenzfunktion und integrieren Sie sie:</p><div class="row">'+K("f(x)-g(x)=")+'<input class="fin s" data-k="d2" inputmode="decimal" aria-label="Zahl vor x²">'+K("x^2+")+'<input class="fin s" data-k="d1" inputmode="decimal" aria-label="Zahl vor x">'+K("x")+"</div>"+numFields([{k:"D",lab:K(I(0,S65,"\\big(f(x)-g(x)\\big)")+"=")}]);renderK(box)},
+      check(box){const r=checkNums(box,[{k:"d2",name:"vor x²",val:-0.5,tol:0.001,why:x=>near(x,0,0.001)?"−¼x² − ¼x² ergibt nicht 0: Das Minus vor g dreht das Vorzeichen.":null},{k:"d1",name:"vor x",val:3.25,tol:0.001,why:x=>near(x,0.75,0.001)?"2x − (−5/4 x) = 2x + 5/4 x. Minus mal Minus!":null},{k:"D",name:"Integral",val:WA,tol}]);if(r.ok)r.good="Gleiches Ergebnis wie in Schritt 2! Zufall? Im nächsten Schritt zeigen Sie, dass das immer so ist.";return r},
+      hints:["Klammern setzen: "+K("f(x)-g(x)=\\big(-\\tfrac14x^2+2x\\big)-\\big(\\tfrac14x^2-\\tfrac54x\\big)"),"Das Minus vor der Klammer dreht beide Vorzeichen in der Klammer. Brüche als Dezimalzahl sind erlaubt (−0,5)."]});
+    steps.push(generalOrder("A"));
+  }else if(m==="B"){
+    steps.push({name:"Teilflächen finden",TS:(box,ctx)=>{[["+","f",0,"6,5"],["-","g",0,5],["-","g",5,"6,5"]].forEach((r,i)=>{const R=box.querySelectorAll(".rows .row")[i];R.querySelector(".sg").value=r[0];R.querySelector(".fn").value=r[1];R.querySelector('[data-k="u'+i+'"]').value=r[2];R.querySelector('[data-k="o'+i+'"]').value=r[3]});ctx._read()},
+      render(box,ctx){ctx.rows=[];box.innerHTML='<p class="q">Zerlegen Sie die gefärbte Fläche geschickt in Teilflächen, die jeweils nur zwischen <b>einem</b> Graphen und der x-Achse liegen. Stellen Sie dazu Integrale zusammen. Das Bild zeigt sofort, welche Fläche Ihr Integral beschreibt.</p><div class="rows">'+
+        [0,1,2,3].map(i=>'<div class="row"><select class="sel sg" aria-label="Vorzeichen"><option value="+">+</option><option value="-">−</option></select>'+K("\\int")+'<span style="display:inline-flex;flex-direction:column;gap:2px"><input class="fin s" data-k="o'+i+'" inputmode="decimal" aria-label="obere Grenze"><input class="fin s" data-k="u'+i+'" inputmode="decimal" aria-label="untere Grenze"></span><select class="sel fn" aria-label="Funktion"><option value="">–</option><option value="f">f(x)</option><option value="g">g(x)</option></select>'+K("dx")+"</div>").join("")+'</div><p class="pmini">Leere Zeilen werden ignoriert. Brauchen Sie weniger Integrale, lassen Sie Zeilen frei.</p>';renderK(box);
+        ctx._read=()=>{ctx.rows=$$(".rows .row",box).map((R,i)=>({s:R.querySelector(".sg").value,fn:R.querySelector(".fn").value,u:parseNum(R.querySelector('[data-k="u'+i+'"]').value),o:parseNum(R.querySelector('[data-k="o'+i+'"]').value)})).filter(r=>r.fn&&r.u!=null&&r.o!=null&&!isNaN(r.u)&&!isNaN(r.o));ENG.redraw()};
+        $$("select,input",box).forEach(el=>el.addEventListener("input",ctx._read));$$("select",box).forEach(el=>el.addEventListener("change",ctx._read))},
+      check(box,ctx){ctx._read();const R=ctx.rows;if(!R.length)return{ok:false,empty:true,msgs:["Stellen Sie mindestens ein Integral zusammen: Vorzeichen, Grenzen und Funktion."]};
+        const val=rs=>rs.reduce((t,r)=>t+(r.s==="-"?-1:1)*Iw(r.fn==="f"?Fw:Gw,r.u,r.o),0),v=val(R),ok=near(v,WA,0.03),msgs=[];
+        if(!ok){if(R.some(r=>Math.max(r.u,r.o)>6.5+1e-6))msgs.push("Die gefärbte Fläche endet bei x = 6,5 – dort schneiden sich f und g.");
+          if(near(val(R.map(r=>r.fn==="g"?Object.assign({},r,{s:r.s==="-"?"+":"-"}):r)),WA,0.03))msgs.push("Die Teilflächen stimmen – aber die Vorzeichen bei den g-Integralen nicht. Ein Integral über eine Fläche unter der x-Achse ist negativ.");
+          if(!R.some(r=>r.fn==="f"))msgs.push("Die obere Begrenzung ist der Graph von f – ohne ein Integral über f geht es nicht.");
+          if(!msgs.length)msgs.push("Vergleichen Sie im Bild: Blau wird addiert, rosa abgezogen. Ist am Ende genau die schwarz umrandete Fläche übrig – und nichts doppelt oder zu viel?")}
+        $$("select,input.fin",box).forEach(el=>{el.classList.remove("ok","bad");if(el.closest(".row").querySelector(".fn").value)el.classList.add(ok?"ok":"bad")});
+        return{ok,msgs}},
+      hints:["Die gefärbte Fläche reicht von x = 0 bis x = 6,5. Oben begrenzt sie der Graph von f, unten der Graph von g.","Fangen Sie mit der Fläche zwischen f und der x-Achse an. Was fehlt dann noch, was ist zu viel?","Unterhalb der x-Achse (von 0 bis 5) fehlt die Fläche zwischen x-Achse und g. Von 5 bis 6,5 ist die Fläche zwischen g und x-Achse zu viel.","Ein Integral über eine Fläche unter der x-Achse ist negativ. Abziehen macht es positiv."]});
+    steps.push({name:"Flächeninhalt",T:[{k:"A",val:WA}],render(box){box.innerHTML='<p class="q">Berechnen Sie die Integrale (GTR erlaubt) und damit den Flächeninhalt A.</p>'+numFields([{k:"A",lab:"A = "}])},
+      check(box){return checkNums(box,[{k:"A",name:"A",val:WA,tol,why:x=>near(x,W1+W2-W3,tol)?"Achten Sie aufs Vorzeichen: ∫₀⁵ g(x) dx ist negativ und muss abgezogen werden.":null}])},
+      hints:["Werte: "+K(I(0,S65,"f")+"\\approx "+dec(W1).replace(",","{,}"))+", "+K(I(0,5,"g")+"\\approx "+dec(W2).replace(",","{,}"))+", "+K(I(5,S65,"g")+"\\approx "+dec(W3).replace(",","{,}"))]});
+    steps.push(generalOrder("B"));
+    steps.push(textStep({name:"Was fällt auf?",q:"Was fällt Ihnen an Ihrem vereinfachten Term auf? Was bedeutet das für die Berechnung solcher Flächen?",hints:["Schauen Sie auf die letzte Zeile Ihres Beweises: Welche Funktion steht im Integral?","Vergleichen Sie mit Schritt 2: Muss man überhaupt zerlegen?"],good:"Notieren Sie Ihre Entdeckung – im Vergleich mit den anderen Gruppen brauchen Sie sie."}));
+  }else{
+    steps.push({name:"Verschieben",TS:(box,ctx)=>{const r=box.querySelector("input[type=range]");r.value="2";r.dispatchEvent(new Event("input"));box.querySelector("textarea").value="Die ganze Fläche liegt dann über der x-Achse."},
+      render(box,ctx){ctx.d=0;box.innerHTML='<p class="q">Verschieben Sie beide Graphen um d nach oben, bis die ganze gefärbte Fläche oberhalb der x-Achse liegt.</p><div class="slider"><label for="dsl">d =</label><input id="dsl" type="range" min="0" max="4" step="0.25" value="0"><span class="val" id="dval">0</span></div>'+
+        '<p class="q">Erläutern Sie kurz: Welchen Vorteil hat diese Verschiebung?</p><textarea class="txt" rows="3" aria-label="Vorteil" placeholder="Durch die Verschiebung …"></textarea>';
+        const r=$("#dsl",box);r.oninput=()=>{ctx.d=+r.value;$("#dval",box).textContent=dec(ctx.d);ENG.redraw()}},
+      check(box,ctx){const msgs=[];let ok=true;if(ctx.d<1.5625-1e-9){ok=false;msgs.push(ctx.d?"Bei x ≈ 2,5 liegt noch ein Stück der Fläche unter der x-Achse. Schieben Sie weiter.":"Bewegen Sie den Regler.")}
+        const t=(box.querySelector("textarea").value||"").trim();if(t.length<15){ok=false;msgs.push("Erläutern Sie noch den Vorteil in einem Satz.")}
+        if(ok&&ctx.d!==2)return{ok,msgs,good:"Gut! Im Material wird mit d = 2 gerechnet – Ihr d = "+dec(ctx.d)+" funktioniert genauso."};return{ok,msgs}},
+      hints:["Der tiefste Punkt der Fläche liegt auf dem Graphen von g bei x = 2,5: g(2,5) ≈ −1,56.","Jedes d ab etwa 1,6 reicht. Das Material nimmt d = 2.","Zum Vorteil: Erinnern Sie sich an den Einstieg mit dem Rechteck. Wann konnten Sie einfach „große Fläche minus kleine Fläche“ rechnen?"]});
+    steps.push({name:"Berechnen",TS:(box,ctx)=>{const d=ctx.d;box.querySelector('[data-k="IF"]').value=dec(W1+6.5*d);box.querySelector('[data-k="IG"]').value=dec(Iw(Gw,0,6.5)+6.5*d);box.querySelector('[data-k="A"]').value=dec(WA)},
+      render(box,ctx){box.innerHTML='<div class="dyn"></div>'},
+      enter(box,ctx){const d=dec(ctx.d).replace(",","{,}");box.querySelector(".dyn").innerHTML='<p class="q">Berechnen Sie mit den verschobenen Funktionen (GTR erlaubt):</p>'+numFields([{k:"IF",lab:K(I(0,S65,"\\big(f(x)+"+d+"\\big)")+"=")},{k:"IG",lab:K(I(0,S65,"\\big(g(x)+"+d+"\\big)")+"=")},{k:"A",lab:"A = "}]);renderK(box);
+        $$("input.fin",box).forEach(i=>i.addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();ENG.check()}}))},
+      check(box,ctx){const d=ctx.d;return checkNums(box,[{k:"IF",name:"∫(f+d)",val:W1+6.5*d,tol},{k:"IG",name:"∫(g+d)",val:Iw(Gw,0,6.5)+6.5*d,tol},{k:"A",name:"A",val:WA,tol}])},
+      hints:["A = Fläche unter f + d minus Fläche unter g + d.","Kontrolle: Es muss dasselbe A herauskommen wie bei den anderen Gruppen (≈ 22,89)."]});
+    steps.push(generalOrder("C"));
+  }
+  const sol=m==="C"?[{l:K("A="+I(0,S65,"(f(x)+2)")+"-"+I(0,S65,"(g(x)+2)")),t:"Mit d = 2 liegt die Fläche komplett oberhalb der x-Achse. Dann gilt: große Fläche minus kleine Fläche.",fig:()=>wGraph({d:2},0,null,"C")},
+      {l:K("\\approx "+dec(W1+13).replace(",","{,}")+"-"+dec(Iw(Gw,0,6.5)+13).replace(",","{,}")+"\\approx "+dec(WA).replace(",","{,}")),t:"Ausrechnen mit dem GTR."},
+      {l:K("="+I(0,S65,"\\big(f(x)+2-g(x)-2\\big)")+"="+I(0,S65,"\\big(f(x)-g(x)\\big)")),t:"Allgemein: Die Verschiebung hebt sich auf. Übrig bleibt das Integral der Differenzfunktion."}]
+    :[{l:K("A=A_1+A_2-A_3="+I(0,S65,"f")+"-"+I(0,5,"g")+"-"+I(5,S65,"g")),t:"A₂ liegt unter der x-Achse, deshalb ist ∫₀⁵ g negativ und wird abgezogen. A₃ ist in A₁ zu viel enthalten.",fig:()=>wGraph({},1,null,"A")},
+      {l:K("\\approx "+dec(W1).replace(",","{,}")+"-(-"+dec(-W2).replace(",","{,}")+")-"+dec(W3).replace(",","{,}")+"\\approx "+dec(WA).replace(",","{,}")),t:"Werte mit dem GTR."},
+      {l:K("="+I(0,S65,"f")+"-\\Big("+I(0,5,"g")+"+"+I(5,S65,"g")+"\\Big)"),t:"Minus ausklammern."},{l:K("="+I(0,S65,"f")+"-"+I(0,S65,"g")+"="+I(0,S65,"(f-g)")),t:"Intervalle zusammenfügen, dann Differenzregel: Es bleibt das Integral der Differenzfunktion."}];
+  return{title:"Berechnen Sie den Flächeninhalt der gefärbten Fläche zwischen "+K(FG),tag:"Weg "+m+(m==="C"?": Verschieben":m==="A"?": Zerlegen (geführt)":": Zerlegen (offen)"),steps,solution:sol,
+    graph:(ctx,stage,focus)=>wGraph(ctx,m==="A"&&stage>=3?2:(m==="A"&&stage===1)?1:stage,focus,m),
+    finalMsg:"Egal welcher Weg: Am Ende steht "+K("A=\\int_a^b\\big(f(x)-g(x)\\big)\\,dx")+". Vergleichen Sie mit den anderen Gruppen!"};
+}
+
+/* ================= Paare f, g für „sehen“ und „berechnen“ ================= */
+const SPECIAL={ab20:{f:[0,2,-0.25],g:[0,9,-3,0.25],l:3,name:"AB 20"},vertiefung:{f:[0,2,-0.25],g:[0,-1.25,0.25],ab:[0,8],l:2,name:"Vertiefung [0; 8]"},hausaufgabe:{f:[14,-8,1],g:[-6,6,-1],ab:[2,5],l:1,name:"Hausaufgabe"}};
+function okWin(f,g,a,b){for(let i=0;i<=40;i++){const x=a+(b-a)*i/40;if(abs(P.ev(f,x))>12||abs(P.ev(g,x))>12)return false}return true}
+function genPair(l){
+  for(let k=0;k<2000;k++){
+    const g=[rnd(-3,3),pick([-2,-1,0,1,2]),pick([-0.5,-0.25,0,0.25,0.5])];
+    if(l===1){const p=rnd(-3,3),q=p+pick([2,3,4]),s=pick([-1,-0.5,0.5,1]);const f=P.add(g,P.fromRoots([p,q],s));if(abs(f[2]||0)<1e-9||!okWin(f,g,p-1,q+1))continue;return{f,g,l}}
+    if(l===2){const p=rnd(-2,4),q=p+pick([-5,-4,4,5]),s=pick([-1,-0.5,0.5,1]),a=p-pick([1,2]),b=p+pick([1,2]);if(q>a-0.5&&q<b+0.5)continue;const f=P.add(g,P.fromRoots([p,q],s));if(!okWin(f,g,a-1,b+1)||abs(f[2]||0)<1e-9)continue;return{f,g,ab:[a,b],l}}
+    const p=rnd(-3,1),q=p+pick([1,2,3]),r=q+pick([1,2,3]),s=pick([-1,-0.5,-0.25,0.25,0.5,1]);const f=P.add(g,P.fromRoots([p,q,r],s));if(!okWin(f,g,p-1,r+1))continue;return{f,g,l}}
+  return SPECIAL.ab20;
+}
+function analyse(s){const d=P.sub(s.f,s.g),rts=P.roots(d);let pts;
+  if(s.ab)pts=[s.ab[0]].concat(rts.filter(x=>x>s.ab[0]+1e-9&&x<s.ab[1]-1e-9)).concat([s.ab[1]]);else pts=rts;
+  const parts=[];for(let i=0;i+1<pts.length;i++){const v=P.integ(d,pts[i],pts[i+1]);parts.push({a:pts[i],b:pts[i+1],v})}
+  return{d,rts,pts,parts,A:parts.reduce((t,p)=>t+abs(p.v),0)}}
+function pairGraph(s,an,stage,focus,opts){
+  const ff=x=>P.ev(s.f,x),gg=x=>P.ev(s.g,x),xa=Math.floor(an.pts[0]-1),xb=Math.ceil(an.pts[an.pts.length-1]+1);
+  const o=Object.assign(win([ff,gg],an.pts[0]-0.3,an.pts[an.pts.length-1]+0.3),{x0:xa,x1:xb},{fns:[],fills:[],labels:[],pts:[],vlines:[],aria:"Graphen von f und g"});
+  an.parts.forEach((p,i)=>{const fTop=ff((p.a+p.b)/2)>=gg((p.a+p.b)/2);const cls=stage>=2?(i%2?"g-fill2":"g-fill1"):"g-fill1";
+    o.fills.push({top:fTop?ff:gg,bot:fTop?gg:ff,a:p.a,b:p.b,cls:focus==="p"+i?"g-fill3":cls});
+    if(stage>=2){const xm=(p.a+p.b)/2;o.labels.push({x:xm,y:(ff(xm)+gg(xm))/2,t:(fTop?"f":"g")+" oben"})}});
+  if(s.ab)o.vlines.push({x:s.ab[0],cls:"g-ghost"},{x:s.ab[1],cls:"g-ghost"});
+  o.fns.push({f:ff,cls:"g-f"},{f:gg,cls:"g-g"});
+  if(stage>=1||(opts&&opts.showPts))an.rts.filter(x=>x>=xa&&x<=xb).forEach(x=>{o.pts.push({x,y:ff(x)})});
+  const lx=xb-0.4;o.labels.push({x:lx,y:Math.max(o.y0+0.6,Math.min(o.y1-0.4,ff(lx)))+(ff(lx)>gg(lx)?0.5:-0.5),t:"f",cls:"g-lf"},{x:lx,y:Math.max(o.y0+0.6,Math.min(o.y1-0.4,gg(lx)))+(gg(lx)>=ff(lx)?0.5:-0.5),t:"g",cls:"g-lg"});
+  if(opts&&opts.ptLabels)an.pts.forEach(x=>o.labels.push({x,y:o.y0+0.4,t:"x = "+dec(x)}));
+  return plot(o);
+}
+
+/* ================= 3) Flächen sehen ================= */
+function buildSehen(s){
+  const an=analyse(s),P_=an.pts.map(x=>n2(x)),opts=[];let right;
+  const D="\\big(f(x)-g(x)\\big)",Dg="\\big(g(x)-f(x)\\big)";
+  if(an.parts.length===1){const p=an.parts[0],fTop=p.v>0,[a,b]=[P_[0],P_[1]];
+    opts.push({t:I(a,b,fTop?D:Dg),ok:1},{t:I(a,b,fTop?Dg:D),why:"Oben minus unten! So kommt eine negative Zahl heraus."},{t:I(a,b,"f(x)"),why:"Das ist die Fläche zwischen f und der x-Achse, nicht zwischen den Graphen."},{t:I(n2(an.pts[0]-1),n2(an.pts[1]+1),fTop?D:Dg),why:"Die Grenzen sind die Schnittstellen der Graphen."})}
+  else if(s.ab){const [p0,p1]=an.parts,o0=p0.v>0?D:Dg,o1=p1.v>0?D:Dg;
+    opts.push({t:I(P_[0],P_[1],o0)+"+"+I(P_[1],P_[2],o1),ok:1},{t:I(P_[0],P_[2],D),why:"Bei x = "+dec(an.pts[1])+" kreuzen sich die Graphen. Über die Schnittstelle hinweg heben sich Teile auf."},{t:I(P_[0],P_[1],o0)+"+"+I(P_[1],P_[2],o0),why:"Im zweiten Abschnitt liegt der andere Graph oben – das zweite Integral wäre negativ."},{t:"\\left|"+I(P_[0],P_[2],D)+"\\right|",why:"Der Betrag hilft nicht: Innen heben sich die Teile trotzdem auf."})}
+  else{opts.push({t:"\\left|"+I(P_[0],P_[1],D)+"\\right|+\\left|"+I(P_[1],P_[2],D)+"\\right|",ok:1},{t:I(P_[0],P_[2],D),why:"Über die mittlere Schnittstelle hinweg heben sich positive und negative Teile auf."},{t:"\\left|"+I(P_[0],P_[2],D)+"\\right|",why:"Der Betrag kommt zu spät: Innen haben sich die Teile schon aufgehoben."},{t:I(P_[0],P_[1],D)+"+"+I(P_[1],P_[2],D),why:"Ein Teilintegral ist negativ (dort liegt g oben). Ohne Betrag wird es abgezogen statt addiert."})}
+  const order=shuffle(opts.map((o,i)=>i));right=order.indexOf(0);
+  const st={name:"Term wählen",TC:[right],render(box){box.innerHTML='<p class="q">Mit welchem Term berechnen Sie den Inhalt der gefärbten Fläche? Die Schnittstellen sind im Bild markiert.</p>'+choiceHTML(order.map(i=>K(opts[i].t)));bindChoices(box);renderK(box)},
+    check(box){const c=chosen(box);if(!c.length)return{ok:false,empty:true,msgs:["Wählen Sie einen Term."]};const o=opts[order[c[0]]],ok=!!o.ok;$$(".choice",box).forEach(b=>{if(b.getAttribute("aria-pressed")==="true")b.classList.add(ok?"ok":"bad")});return{ok,msgs:ok?[]:[o.why]}},
+    hints:["Wo liegen die Grenzen? An den Schnittstellen"+(s.ab?" bzw. am Rand des Intervalls":"")+".","Welcher Graph liegt oben? Integriert wird „oben minus unten“ – oder man nimmt Beträge.","Kreuzen sich die Graphen innerhalb der Fläche, muss man dort teilen."]};
+  return{title:"Welcher Term liefert den Flächeninhalt? "+K("f(x)="+T(s.f)+"\\quad g(x)="+T(s.g)),tag:s.name||"Stufe "+s.l,steps:[st],
+    solution:[{l:K("A="+opts[0].t),t:an.parts.length>1?"Die Graphen kreuzen sich – also abschnittsweise integrieren.":"Von Schnittstelle zu Schnittstelle, oben minus unten.",fig:()=>pairGraph(s,an,2,null,{ptLabels:1})},{l:K("A"+fmtD(an.A).replace(/^/,"=")),t:"Ausgerechnet."}],
+    graph:(ctx,stage)=>pairGraph(s,an,stage>=1?2:0,null,{showPts:1,ptLabels:1})};
+}
+
+/* ================= 4) Flächen berechnen ================= */
+function buildRech(s){
+  const an=analyse(s),d=an.d,deg=P.deg(d),tol=s.own?0.012:0.006,steps=[];
+  steps.push({name:"Schnittstellen",T:an.rts.map((x,i)=>({k:"x"+i,val:x})),render(box){box.innerHTML='<p class="q">Berechnen Sie die Schnittstellen von f und g'+(s.ab?" (alle, auch außerhalb des Intervalls)":"")+". Reihenfolge egal.</p>"+'<div class="row">'+an.rts.map((x,i)=>'<span class="lab">'+K("x_"+(i+1)+"=")+'</span><input class="fin s" data-k="x'+i+'" inputmode="decimal" aria-label="Schnittstelle '+(i+1)+'">').join(" ")+"</div>";renderK(box)},
+    check(box){const v=readVals(box),ks=an.rts.map((x,i)=>"x"+i),vals=ks.map(k=>v[k]);if(vals.every(x=>x==null))return{ok:false,empty:true,msgs:["Tragen Sie die Schnittstellen ein."]};
+      const marks={},used=[],msgs=[];ks.forEach(k=>{const x=v[k];if(x==null||isNaN(x)){marks[k]=false;return}const j=an.rts.findIndex((r,ji)=>!used.includes(ji)&&near(x,r,tol));if(j>=0){used.push(j);marks[k]=true}else marks[k]=false});
+      if(ks.some(k=>!marks[k]))msgs.push(vals.some(x=>x==null)?"Es fehlen noch Schnittstellen.":"Mindestens eine Schnittstelle stimmt nicht. Prüfen Sie durch Einsetzen: f(x) und g(x) müssen gleich sein.");
+      return{ok:ks.every(k=>marks[k]),marks,msgs,partial:vals.some(x=>x==null)&&ks.every(k=>marks[k]||v[k]==null)}},
+    hints:["Setzen Sie f(x) = g(x) und bringen Sie alles auf eine Seite: f(x) − g(x) = 0.",deg===2?"Das ist eine quadratische Gleichung: durch den Faktor vor x² teilen, dann pq-Formel.":"Kubische Gleichung: Kommt x in jedem Glied vor, x ausklammern. Sonst eine Nullstelle raten (oft ganzzahlig) oder den GTR benutzen.","Im Bild sehen Sie ungefähr, wo sich die Graphen schneiden. Prüfen Sie Ihre Werte durch Einsetzen."]});
+  const cf=[];for(let i=deg;i>=0;i--)cf.push(i);
+  steps.push({name:"Differenzfunktion",T:cf.map(i=>({k:"c"+i,val:d[i]||0})),render(box){box.innerHTML='<p class="q">Bilden Sie die Differenzfunktion '+K("d(x)=f(x)-g(x)")+":</p><div class=\"row\">"+K("d(x)=")+cf.map((i,j)=>(j?K("+"):"")+'<input class="fin s" data-k="c'+i+'" inputmode="decimal" aria-label="Zahl vor x hoch '+i+'">'+(i?K("x"+(i>1?"^{"+i+"}":"")):"")).join(" ")+'</div><p class="pmini">Minus zählt mit (z. B. −0,5). Fehlt ein Glied, tragen Sie 0 ein.</p>';renderK(box)},
+    check(box,ctx){const v=readVals(box);if(cf.every(i=>v["c"+i]==null))return{ok:false,empty:true,msgs:["Tragen Sie die Zahlen ein."]};
+      const pos=cf.every(i=>near(v["c"+i],d[i]||0,0.001)),neg=cf.every(i=>near(v["c"+i],-(d[i]||0),0.001));
+      if(pos||neg){ctx.sign=pos?1:-1;const m={};cf.forEach(i=>m["c"+i]=true);return{ok:true,marks:m,good:neg?"Sie haben g − f gebildet. Das geht auch – die Teilintegrale haben dann das umgekehrte Vorzeichen.":""}}
+      const m={},msgs=[];cf.forEach(i=>m["c"+i]=v["c"+i]!=null&&near(v["c"+i],d[i]||0,0.001));
+      cf.forEach(i=>{const x=v["c"+i];if(x!=null&&!m["c"+i]&&near(x,(s.f[i]||0)+(s.g[i]||0),0.001)&&(s.g[i]||0))msgs.push("Vor "+(i?"x"+(i>1?"^"+i:""):"der Zahl")+": Sie haben addiert. Das Minus vor g(x) dreht jedes Vorzeichen von g.")});
+      if(!msgs.length)msgs.push("Ziehen Sie Glied für Glied ab: (Zahl vor x² bei f) − (Zahl vor x² bei g) usw.");
+      return{ok:false,marks:m,msgs,partial:cf.some(i=>v["c"+i]==null)&&cf.every(i=>v["c"+i]==null||m["c"+i])}},
+    hints:["Klammern setzen: "+K("d(x)=\\big("+T(s.f)+"\\big)-\\big("+T(s.g)+"\\big)"),"Das Minus vor der Klammer dreht jedes Vorzeichen von g.","Kontrolle: An Ihren Schnittstellen aus Schritt 1 muss d(x) = 0 sein."]});
+  steps.push({name:"Teilintegrale",TS:(box,ctx)=>an.parts.forEach((p,i)=>box.querySelector('[data-k="p'+i+'"]').value=dec(p.v*(ctx.sign||1),4)),
+    render(box){box.innerHTML='<p class="q">Integrieren Sie die Differenzfunktion abschnittsweise – von Grenze zu Grenze. Ein negatives Ergebnis ist erlaubt.</p>'+numFields(an.parts.map((p,i)=>({k:"p"+i,focus:"p"+i,lab:K("\\int_{"+n2(p.a)+"}^{"+n2(p.b)+"}d(x)\\,dx=")})))+'<p class="pmini">Auf zwei Nachkommastellen oder als Bruch.</p>';renderK(box)},
+    check(box,ctx){const sg=ctx.sign||1,tot=P.integ(d,an.pts[0],an.pts[an.pts.length-1])*sg;
+      return checkNums(box,an.parts.map((p,i)=>({k:"p"+i,name:"Abschnitt "+(i+1),val:p.v*sg,tol,why:x=>near(x,-p.v*sg,tol)?"Der Betrag stimmt, aber das Vorzeichen nicht. In diesem Abschnitt liegt "+(p.v>0?"f":"g")+" oben – das Integral von "+(sg>0?"f − g":"g − f")+" ist dann "+(p.v*sg>0?"positiv":"negativ")+". Den Betrag nehmen Sie erst im nächsten Schritt.":an.parts.length>1&&near(x,tot,tol)?"Das ist das Integral über den ganzen Bereich. Sie müssen an der Schnittstelle teilen!":null})))},
+    hints:["Integrieren Sie nie über eine Schnittstelle hinweg – sonst heben sich Flächenteile auf.","Stammfunktion: "+K("D(x)="+T(P.int(d))),"Ein negatives Teilintegral bedeutet: In diesem Abschnitt liegt g oben."]});
+  steps.push({name:"Gesamtfläche",T:[{k:"A",val:an.A}],render(box){box.innerHTML=numFields([{k:"A",lab:"Flächeninhalt A = "}])},
+    check(box){const sum=an.parts.reduce((t,p)=>t+p.v,0);return checkNums(box,[{k:"A",name:"A",val:an.A,tol,why:x=>an.parts.length>1&&(near(x,sum,tol)||near(x,-sum,tol)||near(x,abs(sum),tol))?"Sie haben die Teilintegrale einfach addiert. Flächeninhalte sind nie negativ: Nehmen Sie von jedem Teilintegral den Betrag und addieren Sie dann.":near(x,-an.A,tol)?"Ein Flächeninhalt ist immer positiv.":null}])},
+    hints:["Flächeninhalte sind nie negativ.","A = |erstes Teilintegral| + |zweites Teilintegral| + …"]});
+  const intLines=an.parts.map(p=>"\\int_{"+n2(p.a)+"}^{"+n2(p.b)+"}d(x)\\,dx"+fmtD(p.v).replace(/^/,"="));
+  const sol=[{l:K("f(x)=g(x)\\;\\Leftrightarrow\\;"+T(d)+"=0"),t:"Schnittstellen: Gleichsetzen und alles auf eine Seite bringen."},
+    {l:K(an.rts.map((x,i)=>"x_"+(i+1)+"="+n2(x)).join(",\\;")),t:"Lösungen der Gleichung"+(s.ab?". Für die Fläche zählen nur die Schnittstellen im Intervall ["+dec(s.ab[0])+"; "+dec(s.ab[1])+"] – plus die Intervallgrenzen.":"."),fig:()=>pairGraph(s,an,1,null,{ptLabels:1})},
+    {l:K("d(x)=f(x)-g(x)="+T(d)),t:"Differenzfunktion."},
+    {l:K("D(x)="+T(P.int(d))),t:"Stammfunktion der Differenzfunktion."}]
+    .concat(intLines.map((l,i)=>({l:K(l),t:"Abschnitt "+(i+1)+": "+(an.parts[i].v>0?"f liegt oben, das Integral ist positiv.":"g liegt oben, das Integral ist negativ."),fig:i===0?()=>pairGraph(s,an,2,"p"+i,{ptLabels:1}):null})))
+    .concat([{l:K("A="+an.parts.map(p=>"\\left|"+fmt(p.v)+"\\right|").join("+")+fmtD(an.A).replace(/^/,"=")),t:"Beträge addieren. Probe mit dem GTR: fnInt(abs(f(x) − g(x)), x, "+dec(an.pts[0])+", "+dec(an.pts[an.pts.length-1])+")."}]);
+  return{title:"Berechnen Sie den Inhalt der Fläche, die die Graphen von f und g "+(s.ab?"über dem Intervall ["+dec(s.ab[0])+"; "+dec(s.ab[1])+"] ":"")+"einschließen. "+K("f(x)="+T(s.f)+"\\quad g(x)="+T(s.g)),tag:s.name||(s.own?"eigene Aufgabe":"Stufe "+s.l),steps,solution:sol,
+    graph:(ctx,stage,focus)=>pairGraph(s,an,stage>=2?2:stage>=1?1:0,focus),finalMsg:"Strategie erfolgreich angewendet: Schnittstellen → Differenzfunktion → abschnittsweise integrieren → Beträge addieren."};
+}
+
+const STRAT='<details class="merk"><summary><b>🗺️ Strategie: Fläche zwischen zwei Graphen</b> <span class="pmini">(erst selbst überlegen – dann öffnen)</span></summary><ol>'+
+  "<li><b>Skizze</b> machen: Welche Fläche ist gemeint? Wo kreuzen sich die Graphen?</li><li><b>Schnittstellen</b> berechnen: "+K("f(x)=g(x)")+".</li><li><b>Differenzfunktion</b> bilden: "+K("d(x)=f(x)-g(x)")+".</li><li><b>Abschnittsweise integrieren</b> – von Schnittstelle zu Schnittstelle, nie darüber hinweg.</li><li><b>Beträge addieren:</b> "+K("A=\\left|\\int_{x_1}^{x_2}d(x)\\,dx\\right|+\\left|\\int_{x_2}^{x_3}d(x)\\,dx\\right|+\\dots")+"</li></ol></details>";
+const ownForm='<p class="pmini">Leere Felder zählen als 0.</p>'+["f","g"].map(n=>'<div class="row">'+K(n+"(x)=")+["3","2","1","0"].map(i=>'<input class="fin s" id="o'+n+i+'" inputmode="decimal" aria-label="'+n+': Zahl vor x hoch '+i+'">'+(i==="0"?"":K("x"+(i==="1"?"":"^"+i))+"+")).join(" ")+"</div>").join("")+
+  '<div class="row">Intervall (freiwillig): von <input class="fin s" id="oa" inputmode="decimal"> bis <input class="fin s" id="ob" inputmode="decimal"></div>';
+
+window.FL={buildEin,buildWerk,buildRech,analyse,pairGraph,wGraph,EIN_AB,SPECIAL};
+if(document.getElementById("tabs"))startHeft({key:"flaechenheft-v1",pdf:[["Heft 1: Einstieg (3 Seiten)","https://hubi-bot.github.io/Frau-Huber/flaeche-heft1.pdf"],["Heft 2: Strategie-Werkstatt (4 Seiten)","https://hubi-bot.github.io/Frau-Huber/flaeche-heft2.pdf"],["Heft 3: Strategieplanung und Vertiefung (6 Seiten)","https://hubi-bot.github.io/Frau-Huber/flaeche-goodnotes.pdf"]],
+  route(h){h=h.toLowerCase();let m;
+    if((m=h.match(/^einstieg-([abc])$/)))return{kind:"ein",spec:Object.assign({l:1},EIN_AB[m[1]])};
+    if(h==="einstieg")return{kind:"ein",level:1};
+    if((m=h.match(/^weg-([abc])$/)))return{kind:"werk",level:"abc".indexOf(m[1])+1,spec:{w:m[1].toUpperCase()}};
+    if(SPECIAL[h])return{kind:"rech",spec:SPECIAL[h]};
+    if((m=h.match(/^fg=([-\d.,]+);([-\d.,]+)(?:;([-\d.]+),([-\d.]+))?$/))){const f=m[1].split(",").map(Number),g=m[2].split(",").map(Number);if(f.concat(g).some(isNaN))return null;const s={f,g,l:0,name:"aus dem Goodnotes-Heft"};if(m[3]!=null)s.ab=[+m[3],+m[4]];return{kind:"rech",spec:s}}
+    if((m=h.match(/^flaeche-([123])$/)))return{kind:"rech",level:+m[1]};
+    if((m=h.match(/^sehen(?:-([123]))?$/)))return{kind:"rech",level:+(m[1]||1)};
+    return null},
+  kinds:[
+   {id:"ein",name:"Einstieg",short:"Einstieg",icon:"▭",color:"var(--c4)",levels:{label:"Stufe",names:["1","2","3"],titles:["Parabeln","Kubische Funktionen","Graph teilweise unter der x-Achse"]},gen:genEin,build:buildEin},
+   {id:"werk",name:"Strategie-Werkstatt",short:"Werkstatt",icon:"🧭",color:"var(--c1)",levels:{label:"Weg",names:["A","B","C"],titles:["Zerlegen – geführt","Zerlegen – offen","Verschieben entlang der y-Achse"]},gen:l=>({w:"ABC"[l-1]}),build:buildWerk},
+   {id:"rech",name:"Flächen berechnen",short:"Berechnen",icon:"📐",color:"var(--c2)",levels:{label:"Stufe",names:["1","2","3"],titles:["Eine eingeschlossene Fläche","Intervall mit Schnittstelle","Kubisch: zwei Flächen"]},gen:genPair,build:buildRech,
+    own:{hint:"Tippen Sie f und g aus dem Buch ab (bis x³). Ohne Intervall wird die eingeschlossene Fläche berechnet.",html:ownForm,
+     parse(){const rd=n=>["0","1","2","3"].map(i=>parseNum($("#o"+n+i).value)).map(x=>x==null?0:x);const f=rd("f"),g=rd("g");if(f.concat(g).some(isNaN))return{err:"Bitte nur Zahlen eingeben, z. B. −0,25 oder 1/4."};
+      const a=parseNum($("#oa").value),b=parseNum($("#ob").value);let ab=null;
+      if(a!=null||b!=null){if(a==null||b==null||isNaN(a)||isNaN(b))return{err:"Für ein Intervall brauchen Sie beide Grenzen."};if(b<=a)return{err:"Die obere Grenze muss größer sein als die untere."};ab=[a,b]}
+      const d=P.sub(f,g);if(!P.trim(d).some(x=>x))return{err:"f und g sind gleich – da gibt es keine Fläche."};
+      const s={f:P.trim(f),g:P.trim(g),own:1,l:0};if(ab)s.ab=ab;const an=analyse(s);
+      if(P.deg(d)<1||an.rts.length===0&&!ab)return{err:"Die Graphen schneiden sich nicht. Geben Sie ein Intervall an."};
+      if(!ab&&an.rts.length<2)return{err:"Die Graphen schließen keine Fläche ein (nur eine Schnittstelle). Geben Sie ein Intervall an."};
+      if(an.rts.some(x=>abs(x)>50))return{err:"Die Schnittstellen liegen sehr weit draußen – das passt nicht ins Heft."};
+      return{spec:s}}}}
+  ]});
+})();
+</script><script>/* ===== Aufgabenkatalog der Goodnotes-Hefte (gemeinsam für PDF und Hilfe-Fenster) ===== */
+(function(){
+const FL=window.FL,LU="https://hubi-bot.github.io/Frau-Huber/flaeche-graphen",HI="https://hubi-bot.github.io/Frau-Huber/flaeche-hilfen";
+const FGt=K("f(x)=-\\tfrac14x^2+2x")+" und "+K("g(x)=\\tfrac14x^2-\\tfrac54x");
+const intro="<p>Die Abbildung zeigt die Graphen von "+FGt+". Gesucht ist der Inhalt A der gefärbten Fläche. Die Graphen schneiden sich bei x = 0 und x = 6,5.</p>";
+const C=[];
+/* Heft 1 */
+["a","b","c"].forEach(k=>{const s=Object.assign({l:1},FL.EIN_AB[k]);
+  C.push({id:"ein-"+k,heft:1,tit:"Aufgabe "+k+")",online:LU+"#einstieg-"+k,build:()=>FL.buildEin(s),
+    fig:t=>t.graph({hintLvl:0},0),
+    text:t=>"<p>"+t.title.replace("Berechnen Sie den Inhalt der gefärbten Fläche. ","")+"</p><p><b>(1)</b> Berechnen Sie den Inhalt A der gefärbten Fläche. Entwickeln Sie dafür selbst eine Strategie.</p><p><b>(2)</b> Schreiben Sie Ihre Rechnung mit zwei Integralen auf: Welche Grenzen gehören zu g, welche zu f?</p><p><b>(3)</b> Beschreiben Sie Ihre Strategie in ein bis zwei Sätzen.</p>"})});
+/* Heft 2 */
+const W={A:["Weg A: Zerlegen (geführt)","<p><b>a)</b> Berechnen Sie (GTR erlaubt) "+K("\\int_0^{6{,}5}f(x)\\,dx")+", "+K("\\int_0^5g(x)\\,dx")+" und "+K("\\int_5^{6{,}5}g(x)\\,dx")+" und färben Sie die zugehörigen Flächen ein.</p><p><b>b)</b> Berechnen Sie A mithilfe dieser Integrale. Bilden Sie dann "+K("f(x)-g(x)")+", berechnen Sie "+K("\\int_0^{6{,}5}\\big(f(x)-g(x)\\big)dx")+" und vergleichen Sie.</p><p><b>c)</b> Zeigen Sie mit den Rechenregeln für Integrale allgemein, dass beide Ergebnisse übereinstimmen müssen.</p>"],
+  B:["Weg B: Zerlegen (offen)","<p><b>a)</b> Zerlegen Sie die gefärbte Fläche geschickt in Teilflächen, die jeweils nur zwischen <b>einem</b> Graphen und der x-Achse liegen. Zeichnen Sie die Teilflächen ein.</p><p><b>b)</b> Bestimmen Sie die Inhalte der Teilflächen (GTR erlaubt) und damit A.</p><p><b>c)</b> Vereinfachen Sie Ihren Term für A mit den Rechenregeln für Integrale. Was fällt Ihnen auf?</p>"],
+  C:["Weg C: Verschieben","<p><b>a)</b> Beide Graphen werden um 2 nach oben verschoben (kleines Bild). Erläutern Sie den Vorteil.</p><p><b>b)</b> Berechnen Sie mit "+K("f(x)+2")+" und "+K("g(x)+2")+" den Flächeninhalt A.</p><p><b>c)</b> Prüfen Sie allgemein, welchen Einfluss eine Verschiebung um eine Konstante d auf die Berechnung von A hat.</p>"]};
+["A","B","C"].forEach(w=>C.push({id:"weg-"+w.toLowerCase(),heft:2,tit:W[w][0],online:LU+"#weg-"+w.toLowerCase(),build:()=>FL.buildWerk({w}),
+  fig:()=>FL.wGraph({},0,null,w==="C"?"C":"A")+(w==="C"?'<div class="cap">verschoben um 2:</div>'+FL.wGraph({d:2},0,null,"C"):""),text:()=>intro+W[w][1]}));
+const tableHTML=(cols,rows,h)=>'<table class="ptab"><tr>'+cols.map(c=>"<th>"+c+"</th>").join("")+"</tr>"+rows.map(r=>"<tr><th>"+r+"</th>"+cols.slice(1).map(()=>'<td style="height:'+h+'"></td>').join("")+"</tr>").join("")+"</table>";
+C.push({id:"vergleich",heft:2,tit:"Ergebnisse vergleichen",online:null,
+  build:()=>({title:"Ergebnisse der Gruppen vergleichen",steps:[{name:"Vergleichen",hints:["Schauen Sie bei jeder Gruppe auf die <b>letzte Zeile</b> der allgemeinen Rechnung (Teil c). Was steht dort im Integral?","Alle drei Wege enden beim selben Integral – nur der Weg dorthin ist verschieden lang.","Für den Merksatz: Integriert wird „oberer Graph minus unterer Graph“ – egal, wo die Fläche liegt."]}],
+    solution:[{l:K("A=\\int_a^b\\big(f(x)-g(x)\\big)\\,dx"),t:"Liegt f im Intervall [a; b] oberhalb von g, gilt diese Formel – auch wenn die Fläche ganz oder teilweise unter der x-Achse liegt. Zerlegen und Verschieben führen beide auf das Integral der Differenzfunktion; es ist der kürzeste Weg."}]}),
+  text:()=>"<p>Stellen Sie sich die Ergebnisse der Gruppen gegenseitig vor und füllen Sie die Tabelle aus. Ergänzen Sie dann den Merksatz.</p>"+tableHTML(["","Zerlegen (Weg A/B)","Verschieben (Weg C)"],["So sind wir vorgegangen","Flächeninhalt A","Term allgemein vereinfacht","Aufwand / Vorteile"],"17mm")+'<div class="merkp"><b>Merke:</b> Liegt der Graph von f im Intervall [a; b] oberhalb des Graphen von g, dann gilt – egal, ob die Fläche ober- oder unterhalb der x-Achse liegt:<div class="gapline">A = </div></div>'});
+/* Heft 3 */
+const S=FL.SPECIAL,pair=(id,tit,s,h,extra)=>C.push({id,heft:3,tit,online:LU+h,build:()=>FL.buildRech(s),fig:()=>FL.pairGraph(s,FL.analyse(s),0,null),text:t=>"<p>"+t.title+"</p>"+(extra||"")});
+pair("ab20","a) Fläche berechnen",S.ab20,"#ab20","<p>Planen Sie, bevor Sie rechnen: Wo schneiden sich die Graphen? Wie viele Teilflächen gibt es? Welcher Graph liegt wo oben?</p>");
+C.push({id:"strategie",heft:3,tit:"b) Strategie formulieren",online:null,
+  build:()=>({title:"Strategie formulieren",steps:[{name:"Strategie",hints:["Gehen Sie Ihre Rechnung aus a) noch einmal durch: Was haben Sie zuerst berechnet, was danach?","Ihre Schritte drehen sich um vier Stichworte: Schnittstellen – Differenzfunktion – Abschnitte – Beträge. Bringen Sie sie in die richtige Reihenfolge.","Worauf muss man achten? Über eine Schnittstelle hinweg darf man nicht integrieren – sonst heben sich Flächenteile auf."]}],
+    solution:[{l:"1. Schnittstellen berechnen: "+K("f(x)=g(x)"),t:""},{l:"2. Differenzfunktion bilden: "+K("d(x)=f(x)-g(x)"),t:""},{l:"3. Von Schnittstelle zu Schnittstelle integrieren",t:"Nie über eine Schnittstelle hinweg – dort wechselt der obere Graph."},{l:"4. Beträge der Teilintegrale addieren",t:"Flächeninhalte sind nie negativ."}]}),
+  text:()=>"<p>Formulieren Sie eine Strategie, wie man allgemein den Inhalt der Fläche zwischen den Graphen zweier Funktionen berechnen kann.</p>"+tableHTML(["Schritt","Was ist zu tun?","Worauf muss ich achten?"],["1","2","3","4","5"],"20mm")});
+pair("hausaufgabe","c) Strategie testen",S.hausaufgabe,"#hausaufgabe","<p>Skizzieren Sie zuerst die Graphen. Testen Sie damit Ihre Strategie aus b).</p>");
+pair("vertiefung","Vertiefung: Intervall [0; 8]",S.vertiefung,"#vertiefung","<p>Das ist die Fläche aus der Strategie-Werkstatt – jetzt aber bis x = 8. Was ändert sich?</p>");
+pair("ueb1","Übung 1",{f:[4,3,-1],g:[1,1],l:1},"#fg=4,3,-1;1,1");
+pair("ueb2","Übung 2",{f:[0,5,-3,0.5],g:[0,1],l:3},"#fg=0,5,-3,0.5;0,1");
+window.CAT={C,HI,LU,HEFTE:{1:"Einstieg",2:"Strategie-Werkstatt",3:"Strategieplanung und Vertiefung"}};
+})();
+</script><script>/* ===== Hilfe-Fenster zu den Goodnotes-Heften ===== */
+(function(){
+const {C,HEFTE}=window.CAT,root=document.getElementById("hroot");
+const hc=s=>{let h=0x811c9dc5;for(const c of s){h^=c.charCodeAt(0);h=Math.imul(h,16777619)>>>0}return h};
+let unlocked=false;
+function index(){root.innerHTML='<div class="label hl"><h1>Hilfen</h1><p>zu den Goodnotes-Heften · Flächenheft</p></div>'+
+  [1,2,3].map(n=>'<div class="stepblk"><h3>Heft '+n+": "+HEFTE[n]+"</h3>"+C.filter(e=>e.heft===n).map(e=>'<a class="btn hlink" href="#'+e.id+'">'+e.tit+"</a>").join(" ")+"</div>").join("")}
+function show(id,wantSol){
+  const e=C.find(x=>x.id===id);if(!e){index();return}
+  const t=e.build(),ctx={hintLvl:0};let si=0;const lvl=t.steps.map(()=>0);
+  document.documentElement.style.setProperty("--tab",["","var(--c4)","var(--c1)","var(--c2)"][e.heft]);
+  function draw(){
+    const st=t.steps[si],hs=typeof st.hints==="function"?st.hints({}):(st.hints||[]);ctx.hintLvl=lvl[si];
+    let h='<div class="hhead"><span class="lvltag">Heft '+e.heft+" · "+HEFTE[e.heft]+'</span><h2 class="htit">'+e.tit+"</h2></div>";
+    if(t.steps.length>1)h+='<ol class="phases">'+t.steps.map((s,i)=>'<li class="'+(i===si?"now":"")+'"><button class="chipb" data-s="'+i+'">'+(i+1)+" "+s.name+"</button></li>").join("")+"</ol>";
+    if(t.graph)h+='<div class="fig hfigw">'+t.graph(ctx,si,null)+"</div>";
+    h+='<div class="hintbox" aria-live="polite"><h4>💡 Gestufte Hilfen'+(t.steps.length>1?" zu Schritt "+(si+1)+" „"+st.name+"“":"")+" ("+lvl[si]+" von "+hs.length+")</h4>"+
+      (lvl[si]?hs.slice(0,lvl[si]).map((x,i)=>'<div class="hl"><span class="hn">Hilfe '+(i+1)+":</span>"+x+"</div>").join(""):'<p class="pmini">Versuchen Sie es zuerst allein. Öffnen Sie dann immer nur die nächste Hilfe.</p>')+
+      '<div class="actions" style="margin-top:6px">'+(lvl[si]<hs.length?'<button class="btn help" id="more">💡 Hilfe '+(lvl[si]+1)+" zeigen</button>":'<span class="pmini">Mehr Hilfen gibt es zu diesem Schritt nicht.</span>')+"</div></div>";
+    h+='<div class="actions">'+(e.online?'<a class="btn main" href="'+e.online+'">✓ Online prüfen</a>':"")+'<button class="btn" id="solb">🔒 Musterlösung</button><a class="btn" href="#">Alle Aufgaben</a></div><div id="solx"></div>';
+    root.innerHTML=h;renderK(root);
+    $$(".chipb",root).forEach(b=>b.onclick=()=>{si=+b.dataset.s;draw()});
+    const m=$("#more");if(m)m.onclick=()=>{lvl[si]++;draw()};
+    $("#solb").onclick=()=>unlocked?sol():ask();
+  }
+  function sol(){$("#solx").innerHTML='<div class="solution"><h2>Musterlösung</h2><div class="sollines">'+t.solution.map(x=>(x.l?'<div class="sl">'+x.l+"</div>":"")+(x.t?'<div class="soltext" style="margin-bottom:6px">'+x.t+"</div>":"")+(x.fig?'<div class="solfig">'+x.fig()+"</div>":"")).join("")+"</div></div>";renderK($("#solx"));$("#solx").scrollIntoView({behavior:"smooth"})}
+  function ask(){$("#lockErr").textContent="";$("#lockIn").value="";$("#lockOverlay").classList.remove("hidden");setTimeout(()=>$("#lockIn").focus(),50);
+    $("#lockOk").onclick=()=>{if(hc("fh-musterloesung:"+$("#lockIn").value.trim())===3322625695){unlocked=true;$("#lockOverlay").classList.add("hidden");sol()}else $("#lockErr").textContent="Der Code stimmt nicht. Die Musterlösung gibt es bei Ihrer Lehrkraft."}}
+  $("#lockIn").onkeydown=ev=>{if(ev.key==="Enter")$("#lockOk").click()};$("#lockCancel").onclick=()=>$("#lockOverlay").classList.add("hidden");
+  draw();if(wantSol)ask();
+}
+function route(){const h=decodeURIComponent(location.hash.slice(1));if(!h){index();return}const [id,f]=h.split("!");show(id,f==="l");window.scrollTo(0,0)}
+window.addEventListener("hashchange",route);route();window.__ready=true;
+})();
+</script></body></html>
