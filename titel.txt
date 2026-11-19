@@ -66,9 +66,9 @@ Chemie Oberstufe/Redoxreaktionen/Lernumgebung_Redox.html | Lernumgebung Redox
 
 # --- Informatik 5 ---
 Informatik 5 | Informatik 5
-Informatik 5/Digitale_Mission_001_final.html | Digitale Mission 001 final
-Informatik 5/iserv-trainer_5.html | iserv-trainer 5
-Informatik 5/wissensdetektiv.html | wissensdetektiv
+Informatik 5/Digitale_Mission_001_final.html | Lernumgebung - Dateiverwaltung auf IServ
+Informatik 5/iserv-trainer_5.html | Lernumgebung - IServ und E-Mail Trainer
+Informatik 5/wissensdetektiv.html | Lernumgebung - Recherche
 Informatik 5/Digitale Grundlagen/Lernreise - Textverarbeitung Basis.html | Lernreise – Textverarbeitung (Basis)
 Informatik 5/Digitale Grundlagen/Lernreise - Textverarbeitung Plus.html | Lernreise – Textverarbeitung (Plus)
 Informatik 5/Digitale Grundlagen/Lernreise - Dateien im Explorer.html | Lernreise – Dateien im Explorer
