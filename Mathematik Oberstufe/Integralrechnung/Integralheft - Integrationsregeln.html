@@ -537,13 +537,13 @@ function startHeft(CFG){
   /* Reiter */
   const tabs=$("#tabs");
   tabs.innerHTML=KINDS.map(k=>'<button class="tab" role="tab" data-kind="'+k.id+'" style="background:'+k.color+'" title="'+escA(k.name)+'"><span class="lg">'+k.icon+" "+k.name+'</span><span class="sm">'+k.icon+" "+(k.short||"")+"</span></button>").join("")+
-    '<button class="tab" role="tab" data-kind="rev" style="background:var(--rev)" title="Fehler-Training">🔁<span class="lg"> Fehler-Training</span><span class="badge" id="revBadge">0</span></button>';
+    (CFG.noRev?"":'<button class="tab" role="tab" data-kind="rev" style="background:var(--rev)" title="Fehler-Training">🔁<span class="lg"> Fehler-Training</span><span class="badge" id="revBadge">0</span></button>');
   $$(".tab",tabs).forEach(b=>b.onclick=()=>{setTab(b.dataset.kind);newTask()});
 
   function color(){const k=tab==="rev"?null:KD[tab];document.documentElement.style.setProperty("--tab",k?k.color:"var(--rev)")}
   function renderStats(){
     $("#stats").innerHTML=KINDS.map(k=>'<span class="stat">'+k.icon+" "+(k.short||k.name)+": <b>"+S.stats[k.id][0]+"</b> gelöst"+(S.stats[k.id][0]?", "+S.stats[k.id][1]+" auf Anhieb":"")+"</span>").join("");
-    $("#revBadge").textContent=S.rev.length;
+    if($("#revBadge"))$("#revBadge").textContent=S.rev.length;
   }
   function renderLevels(){
     const k=KD[tab],el=$("#levels");
@@ -572,6 +572,7 @@ function startHeft(CFG){
     phases();redraw();
     $("#checkBtn").classList.remove("hidden");$("#helpBtn").classList.remove("hidden");$("#nextBtn").classList.add("hidden");
     task.steps[0].enter&&task.steps[0].enter(curBox(),cur.ctx);
+    if(typeof solLbl==="function")solLbl();
   }
   function bindBox(b){
     $$("input.fin",b).forEach(inp=>{
@@ -595,7 +596,7 @@ function startHeft(CFG){
       document.documentElement.style.setProperty("--tab","var(--rev)");return}
     const k=KD[tab];load(tab,k.gen(S.level[tab]||1));
   }
-  function addRev(){if(cur.rev||cur.inRev)return;const key=JSON.stringify({kind:cur.kind,spec:cur.spec});if(!S.rev.some(r=>JSON.stringify(r)===key)){S.rev.push({kind:cur.kind,spec:cur.spec});save();renderStats()}cur.inRev=true}
+  function addRev(){if(CFG.noRev||cur.rev||cur.inRev)return;const key=JSON.stringify({kind:cur.kind,spec:cur.spec});if(!S.rev.some(r=>JSON.stringify(r)===key)){S.rev.push({kind:cur.kind,spec:cur.spec});save();renderStats()}cur.inRev=true}
 
   function check(){
     if(!cur||cur.done)return;
@@ -650,17 +651,23 @@ function startHeft(CFG){
   $("#lockOk").onclick=()=>{if(hc("fh-musterloesung:"+$("#lockIn").value.trim())===3322625695){unlocked=true;$("#lockOverlay").classList.add("hidden");showSol()}else{$("#lockErr").textContent="Der Code stimmt nicht. Die Musterlösung gibt es bei Ihrer Lehrkraft."}};
   $("#lockIn").addEventListener("keydown",e=>{if(e.key==="Enter")$("#lockOk").click()});
   $("#lockCancel").onclick=()=>$("#lockOverlay").classList.add("hidden");
-  function showSol(){if(!cur)return;if(!unlocked){askCode();return}cur.sol=true;solI=0;$("#solution").classList.remove("hidden");drawSol();$("#solution").scrollIntoView({behavior:"smooth",block:"start"})}
+  function showSol(){if(!cur)return;if(!unlocked&&!(KD[cur.kind]&&KD[cur.kind].freeSol)){askCode();return}cur.sol=true;solI=0;$("#solution").classList.remove("hidden");drawSol();$("#solution").scrollIntoView({behavior:"smooth",block:"start"})}
   function drawSol(){const L=cur.task.solution;
     $("#solLines").innerHTML=L.slice(0,solI+1).filter(x=>x.l).map((x,i,a)=>'<div class="sl'+(i===a.length-1&&L[solI].l?" hl":"")+'">'+x.l+"</div>").join("");
     $("#solText").innerHTML=L[solI].t||"";
     const fg=$("#solFig");if(L[solI].fig){fg.innerHTML=L[solI].fig();fg.classList.remove("hidden")}else fg.classList.add("hidden");
     $("#solCount").textContent="Schritt "+(solI+1)+" von "+L.length;$("#solPrev").disabled=solI===0;$("#solNext").disabled=solI===L.length-1;
     renderK($("#solution"))}
-  $("#solBtn").onclick=showSol;$("#solPrev").onclick=()=>{solI=Math.max(0,solI-1);drawSol()};$("#solNext").onclick=()=>{solI=Math.min(cur.task.solution.length-1,solI+1);drawSol()};
+  $("#solBtn").onclick=showSol;
+  const solLbl=()=>{const k=cur&&KD[cur.kind];$("#solBtn").textContent=(k&&k.freeSol?"👀":"🔒")+" Musterlösung"};$("#solPrev").onclick=()=>{solI=Math.max(0,solI-1);drawSol()};$("#solNext").onclick=()=>{solI=Math.min(cur.task.solution.length-1,solI+1);drawSol()};
   $("#solClose").onclick=()=>$("#solution").classList.add("hidden");
   $("#checkBtn").onclick=check;$("#helpBtn").onclick=help;
-  $("#nextBtn").onclick=()=>newTask();$("#newBtn").onclick=()=>newTask();
+  function goNext(){const k=KD[tab];
+    if(k&&k.nextLevel){const n=k.levels.names.length,l=S.level[k.id]||1;
+      if(l<n){S.level[k.id]=l+1;save();renderLevels();newTask();return}
+      if(k.nextLevel!==true&&KD[k.nextLevel]){setTab(k.nextLevel);newTask();window.scrollTo({top:0,behavior:"smooth"});return}}
+    newTask()}
+  $("#nextBtn").onclick=goNext;$("#newBtn").onclick=goNext;
   $("#resetBtn").onclick=()=>{if(cur)load(cur.kind,cur.spec,cur.rev)};
   /* Eigene Aufgabe */
   $("#ownBtn").onclick=()=>{const k=KD[tab];if(!k||!k.own)return;$("#ownBody").innerHTML=k.own.html;$("#ownHint").innerHTML=k.own.hint||"";$("#ownErr").textContent="";$("#overlay").classList.remove("hidden");renderK($("#overlay"));const f=$("#ownBody input");f&&f.focus()};
@@ -702,11 +709,13 @@ const RULES={
  null:{name:"Gleiche Grenzen",claim:I("a","a","f(x)")+"=0",
    first:I("a","a","f(x)"),lines:["=F(a)-F(a)","=0"],ok:[[H],[WEG]],
    tips:["Hier verschwindet das Integralzeichen.","F(a) − F(a) ergibt …?"],
+   help:["Start: "+K(I("a","a","f(x)"))+" – untere und obere Grenze sind beide a.","Hauptsatz: F(obere Grenze) − F(untere Grenze). Beide Grenzen sind a.","F(a) − F(a) = ?"],
    dis:[{t:"=F(a)\\cdot F(a)",why:"Der Hauptsatz liefert eine Differenz F(b) − F(a), kein Produkt."},{t:"=F(a)",why:"Von F(a) wird F(a) abgezogen – es bleibt nichts übrig."}],
    conc:s=>({fields:[{k:"Fa",name:"F("+s.a+")",lab:"Stammfunktion: "+K("F(x)="+FT(s.f))+" &nbsp; "+K("F("+s.a+")="),val:Fv(s.f,s.a)},{k:"L",name:"Integral",lab:K(I(s.a,s.a,fT(s.f))+"="),val:0}],
      lines:[I(s.a,s.a,fT(s.f)),"=F("+s.a+")-F("+s.a+")="+num(Fv(s.f,s.a))+"-"+pnum(Fv(s.f,s.a)),"=0"],Fs:["Stammfunktion: "+K("F(x)="+FT(s.f))],ins:K(I(s.a,s.a,fT(s.f))+"=F("+s.a+")-F("+s.a+")")})},
  faktor:{name:"Faktorregel",claim:I("a","b","k\\cdot f(x)")+"=k\\cdot"+I("a","b","f(x)"),
    first:I("a","b","k\\cdot f(x)"),lines:["=k\\cdot F(b)-k\\cdot F(a)","=k\\cdot\\big(F(b)-F(a)\\big)","=k\\cdot"+I("a","b","f(x)")],ok:[[H],[AK],[RW]],
+   help:["k ist eine feste Zahl, z. B. 3. Sie bleibt beim Integrieren einfach stehen: Eine Stammfunktion von k·f(x) ist k·F(x).","Hauptsatz: "+K(I("a","b","k\\cdot f(x)")+"=k\\cdot F(b)-k\\cdot F(a)"),"Beide Summanden haben den Faktor k. Klammern Sie k aus: k·F(b) − k·F(a) = k·(F(b) − F(a)).","In der Klammer steht F(b) − F(a). Das ist wieder ein Integral: "+K(I("a","b","f(x)"))],
    tips:["Das Integralzeichen ist verschwunden. Eine Stammfunktion von k·f ist k·F.","Vergleichen Sie: Das k steht jetzt nur noch einmal vor einer Klammer.","Das Integralzeichen taucht wieder auf."],
    dis:[{t:"=k\\cdot F(b)-F(a)",why:"Eine Stammfunktion von k·f ist k·F – der Faktor k gehört auch zu F(a)."},{t:"=k\\cdot\\big(F(b)+F(a)\\big)",why:"Beim Ausklammern bleibt das Minuszeichen stehen: k·F(b) − k·F(a) = k·(F(b) − F(a))."}],
    conc:s=>{const kf={c:s.k*s.f.c,n:s.f.n},L=Iv(kf,s.a,s.b),In=Iv(s.f,s.a,s.b),Fb=Fv(s.f,s.b),Fa=Fv(s.f,s.a);
@@ -718,6 +727,7 @@ const RULES={
        ins:K(I(s.a,s.b,fT(s.f))+"=F("+s.b+")-F("+s.a+")="+num(Fb)+"-"+pnum(Fa))}}},
  summe:{name:"Summenregel",claim:I("a","b","\\big(f(x)+g(x)\\big)")+"="+I("a","b","f(x)")+"+"+I("a","b","g(x)"),
    first:I("a","b","\\big(f(x)+g(x)\\big)"),lines:["=F(b)+G(b)-\\big(F(a)+G(a)\\big)","=F(b)+G(b)-F(a)-G(a)","=F(b)-F(a)+G(b)-G(a)","="+I("a","b","f(x)")+"+"+I("a","b","g(x)")],ok:[[H],[KL],[US],[RW]],
+   help:["Eine Stammfunktion von f(x) + g(x) ist F(x) + G(x).","Hauptsatz: F(b) + G(b) − (F(a) + G(a)).","Klammer auflösen: Das Minus vor der Klammer gilt für beide: −F(a) − G(a).","Umsortieren: F(b) − F(a) zusammen und G(b) − G(a) zusammen. Beides ist wieder ein Integral."],
    tips:["Das Integralzeichen ist verschwunden. Eine Stammfunktion von f + g ist F + G.","Die Klammern sind weg – achten Sie auf das Minus vor der zweiten Klammer.","Gleiche Terme, andere Reihenfolge.","Die Integralzeichen tauchen wieder auf."],
    dis:[{t:"=F(b)+G(b)-F(a)+G(a)",why:"Ein Minus vor der Klammer ändert ALLE Vorzeichen in der Klammer: −(F(a) + G(a)) = −F(a) − G(a)."},{t:"=F(b)\\cdot G(b)-F(a)\\cdot G(a)",why:"Eine Stammfunktion von f + g ist F + G, nicht F · G."}],
    conc:s=>sumConc(s,1)},
@@ -761,7 +771,7 @@ function genBeweis(lvl,r){
 }
 /* Puzzle-Freischaltung durch die Lehrkraft (nur Prüfwert, kein Klartext) */
 const hcP=t=>{let h=0x811c9dc5;for(const c of t){h^=c.charCodeAt(0);h=Math.imul(h,16777619)>>>0}return h};
-const PUZ_H=3205587755;
+const PUZ_H={null:146525607,faktor:475367187,summe:3057223655}; /* Stufe 1, 2, 3 */
 const puzFrei=r=>!!(store.get("integralheft-puzzle-frei",{})[r]);
 const setPuzFrei=r=>{const o=store.get("integralheft-puzzle-frei",{});o[r]=true;store.set("integralheft-puzzle-frei",o)};
 const reasonHints=R=>["Vergleichen Sie jede Zeile mit der Zeile direkt davor: Was hat sich verändert?",
@@ -769,17 +779,17 @@ const reasonHints=R=>["Vergleichen Sie jede Zeile mit der Zeile direkt davor: Wa
   "Zeile 2: „"+OPTS[R.ok[0][0]]+"“"+(R.ok.length>1?" · Zeile 3: „"+OPTS[R.ok[1][0]]+"“":"")+"."];
 
 function buildBeweis(s){
-  const R=RULES[s.r],steps=[],H3=["Start: linke Seite. Ziel: rechte Seite.","Erster Schritt: Hauptsatz. Aus jedem Integral wird F(obere Grenze) − F(untere Grenze).","Schauen Sie ins Musterbeispiel oben – gleicher Aufbau."];
+  const R=RULES[s.r],steps=[],H3=R.help;
   steps.push({name:"Notieren",
     render(box){box.innerHTML='<p class="q">Zeigen Sie: '+K(R.claim)+'</p><p>Schreiben Sie den Beweis zuerst in Ihre Unterlagen.</p><label class="row" style="cursor:pointer"><input type="checkbox" class="notiert" style="width:22px;height:22px"> Ich habe meinen Beweis notiert.</label>';renderK(box)},
     check(box){return $(".notiert",box).checked?{ok:true,good:puzFrei(s.r)?"Überprüfen Sie jetzt mit dem Puzzle.":"Jetzt schaltet Ihre Lehrkraft den Puzzle-Beweis frei."}:{ok:false,empty:true,msgs:["Notieren Sie zuerst Ihren Beweis und setzen Sie dann den Haken."]}},
     hints:H3});
   if(!puzFrei(s.r))steps.push({name:"Freischalten",
     render(box){box.innerHTML='<p class="q">🔒 Ihre Lehrkraft schaltet den Puzzle-Beweis zum Überprüfen frei.</p><div class="row"><label>Code:</label><input class="fin s pcode" type="password" inputmode="numeric" autocomplete="off" maxlength="8" aria-label="Code der Lehrkraft"></div>'},
-    check(box){const v=$(".pcode",box).value.trim();if(hcP("integralheft-puzzle:"+v)===PUZ_H){setPuzFrei(s.r);return{ok:true,good:"Freigeschaltet."}}
+    check(box){const v=$(".pcode",box).value.trim();if(hcP("integralheft-puzzle:"+v)===PUZ_H[s.r]){setPuzFrei(s.r);return{ok:true,good:"Freigeschaltet."}}
       return{ok:false,empty:true,msgs:[v?"Der Code stimmt nicht.":"Bitte den Code eingeben."]}},
     hints:["Den Code hat Ihre Lehrkraft."]});
-  steps.push(orderStep({name:"Puzzle-Beweis",intro:"Überprüfen Sie Ihren Beweis: Ordnen Sie die Schnipsel.",first:R.first,lines:R.lines,dis:[],hints:H3}));
+  steps.push(orderStep({name:"Puzzle-Beweis",intro:"Überprüfen Sie Ihren Beweis: Ordnen Sie die Schnipsel.",first:R.first,lines:R.lines,dis:R.dis,hints:H3}));
   const sol=[{l:K(R.first),t:"Start: linke Seite."}];
   R.lines.forEach((ln,j)=>sol.push({l:K(ln),t:"<b>"+OPTS[R.ok[Math.min(j,R.ok.length-1)][0]]+".</b>"}));
   sol.push({t:"Rechte Seite erreicht. ∎"});
@@ -790,8 +800,8 @@ function buildBeweis(s){
 const RULECH=["Summenregel","Faktorregel","Intervalle zusammenfügen"];
 function randPoly(deg,lo,hi){const c=[];for(let i=0;i<=deg;i++)c.push(rnd(lo,hi));if(!c[deg])c[deg]=1;return c}
 const FIX=[{t:"sum",a:1,b:5,p:[0,-6,1],q:[0,4]},{t:"faktor",a:1,b:2,k:1.2,inner:[0,-2,0,1]},{t:"grenzen",a:3,b:4,m:3.7,f:{c:1,n:-2}}];
+const genPlenum=l=>Object.assign({lvl:1,fix:l-1},FIX[l-1]);
 function genRegeln(lvl){
-  {const i=store.get("integralheft-fix",0);if(i<FIX.length){store.set("integralheft-fix",i+1);return Object.assign({lvl,fix:i},FIX[i])}}
   const t=pick(["sum","sum","faktor","grenzen"]),deg=lvl===1?2:3;
   const a=lvl===3?rnd(-2,1):rnd(0,2),b=a+rnd(1,3);
   if(t==="sum"){for(;;){const r=randPoly(deg,-4,4),q=randPoly(deg,-6,6);q[deg]=0;const k=rnd(0,deg-1);r[k]=0;if(!q[k])q[k]=pick([-5,-3,3,4,6]);const p=P.sub(r,q);
@@ -867,25 +877,33 @@ function buildRegeln(s){
     steps.push(resultStep(val,F(s.b),F(s.a)));
     sol=[{l:title.replace("Berechnen Sie: ",""),t:"Ein Integral – direkt mit dem Hauptsatz."},{l:K("=\\Big["+P.tex(P.int(s.p))+"\\Big]_{"+num(s.a)+"}^{"+num(s.b)+"}"),t:"Stammfunktion bilden."},{l:K("="+fmt(F(s.b))+"-"+(F(s.a)<0?"("+fmt(F(s.a))+")":fmt(F(s.a)))),t:"Einsetzen."},{l:K("="+fmtD(val)),t:"Ausrechnen."}];
   }
-  let h1b;
   if(s.t!=="own"){ /* Regel erkennen, dann Regel abbilden und selbst lösen */
-    let rule,h1,F,pre="";
+    let rule,F,pre="",H=[];
+    const ein=(Fb,Fa)=>"Einsetzen: "+K((pre?pre+"\\big(":"")+fmt(Fb)+"-"+(Fa<0?"\\left("+fmt(Fa)+"\\right)":fmt(Fa))+(pre?"\\big)":""));
     if(s.t==="sum"){const r=P.add(s.p,s.q);F=x=>P.ev(P.int(r),x);
       rule=K("\\int_a^b f(x)\\,dx+\\int_a^b g(x)\\,dx=\\int_a^b\\big(f(x)+g(x)\\big)\\,dx");
-      h1="Zu einem Integral zusammenfassen: "+K("="+I(s.a,s.b,"\\big("+P.tex(r)+"\\big)"));h1b=K("F(x)="+P.tex(P.int(r)))}
+      H=["Die Grenzen sind gleich. Verbinden Sie die beiden Funktionsterme mit einem <b>+</b> zu einem Integral: "+K("="+I(s.a,s.b,"\\Big(\\big("+P.tex(s.p)+"\\big)+\\big("+P.tex(s.q)+"\\big)\\Big)")),
+        "Lassen Sie die Klammern weg und rechnen Sie Glieder mit gleicher Potenz zusammen: x² zu x², x zu x, Zahl zu Zahl.",
+        K("f(x)+g(x)="+P.tex(r))+", also "+K("="+I(s.a,s.b,"\\big("+P.tex(r)+"\\big)")),
+        "Stammfunktion: "+K("F(x)="+P.tex(P.int(r)))]}
     else if(s.t==="faktor"){F=x=>P.ev(P.int(s.inner),x);pre=num(s.k)+"\\cdot";
       rule=K("\\int_a^b k\\cdot f(x)\\,dx=k\\cdot\\int_a^b f(x)\\,dx");
-      h1="Faktor vor das Integral ziehen: "+K("="+num(s.k)+"\\cdot"+I(s.a,s.b,"\\big("+P.tex(s.inner)+"\\big)"));h1b=K("F(x)="+P.tex(P.int(s.inner)))}
+      H=["Hier ist "+K("k="+num(s.k))+" – eine feste Zahl. Sie darf vor das Integral: "+K("="+num(s.k)+"\\cdot"+I(s.a,s.b,"\\big("+P.tex(s.inner)+"\\big)")),
+        "Rechnen Sie zuerst das Integral <b>ohne</b> "+K(num(s.k))+" aus. Die Zahl "+K(num(s.k))+" wartet draußen.",
+        "Stammfunktion von "+K(P.tex(s.inner))+": "+K("F(x)="+P.tex(P.int(s.inner))),
+        "Zum Schluss mit "+K(num(s.k))+" malnehmen."]}
     else{F=x=>Fv(s.f,x);
       rule=K("\\int_a^b f(x)\\,dx+\\int_b^c f(x)\\,dx=\\int_a^c f(x)\\,dx");
-      h1="Zu einem Integral zusammenfügen: "+K("="+I(num(s.a),num(s.b),fT(s.f)));h1b=(s.f.n<0?K("\\frac{1}{x^2}=x^{-2}")+" &nbsp; ":"")+K("F(x)="+FT(s.f))}
+      H=["Das erste Integral endet bei "+K(num(s.m))+", das zweite beginnt dort. Fügen Sie zusammen: "+K("="+I(num(s.a),num(s.b),fT(s.f))),
+        ...(s.f.n<0?["Schreiben Sie den Funktionsterm als Potenz: "+K("\\frac{1}{x^2}=x^{-2}")]:[]),
+        "Stammfunktion: "+K("F(x)="+FT(s.f))]}
     const Fb=F(s.b),Fa=F(s.a),st=resultStep(val,s.t==="faktor"?s.k*Fb:Fb,s.t==="faktor"?s.k*Fa:Fa,s.t==="faktor"?(x=>near(x,Fb-Fa)?"Jetzt fehlt nur noch der Faktor "+num(s.k)+".":null):null),r0=st.render;
     st.name="Selbst lösen";
     st.render=box=>{r0(box);box.insertAdjacentHTML("afterbegin",'<div class="merk" style="margin:0 0 10px"><b>Regel:</b> '+rule+'</div><p class="q">Lösen Sie die Aufgabe selbst in Ihren Unterlagen und geben Sie das Ergebnis ein.</p>');renderK(box)};
-    st.hints=[h1,"Stammfunktion: "+h1b,"Einsetzen: "+K((pre?pre+"\\big(":"")+fmt(Fb)+"-"+(Fa<0?"\\left("+fmt(Fa)+"\\right)":fmt(Fa))+(pre?"\\big)":""))];
+    st.hints=H.concat([ein(Fb,Fa)]);
     steps.length=1;steps.push(st);
   }
-  return{title,tag:s.t==="own"?"eigene Aufgabe":"Stufe "+s.lvl,steps,solution:sol};
+  return{title,tag:s.t==="own"?"eigene Aufgabe":s.fix!=null?"Aufgabe "+"abc"[s.fix]:"Stufe "+s.lvl,steps,solution:sol};
 }
 
 /* ---------- Musterbeispiel (aus AB 12) ---------- */
@@ -895,16 +913,19 @@ const MB='<details class="merk" id="mbox"><summary><b>📖 Musterbeispiel</b> <s
  '<div class="mb mb2"><span class="h"></span><span class="h">Durch den Hauptsatz folgt:</span>'+
  [["",I("a","b","f(x)")+"+"+I("b","c","f(x)")],["Hauptsatz","=F(b)-F(a)+F(c)-F(b)"],["F(b) hebt sich auf","=-F(a)+F(c)"],["umsortieren","=F(c)-F(a)"],["Hauptsatz rückwärts","="+I("a","c","f(x)")]].map(r=>'<span class="n">'+r[0]+'</span><span class="c">'+K(r[1])+"</span>").join("")+"</div></details>";
 
-startHeft({key:"integralheft-v1",
+startHeft({key:"integralheft-v1",noRev:true,
   route(h){h=h.toLowerCase();const m=h.match(/^beweis-(null|faktor|summe)(?:-(\d))?$/);
     if(m){const sp=genBeweis(1,m[1]);return{kind:"beweis",level:sp.lvl,spec:sp}}
     if(h==="regeln")return{kind:"regeln"};return null},
   kinds:[
-   {id:"beweis",name:"Beweise",short:"Beweise",icon:"🧩",color:"var(--c1)",
+   {id:"beweis",name:"Beweise",short:"Beweise",icon:"🧩",color:"var(--c1)",nextLevel:"regeln",
     levels:{label:"Stufe",names:["1","2","3"],titles:["a) Gleiche Grenzen","b) Faktorregel","c) Summenregel"]},
     gen:l=>genBeweis(l),build:buildBeweis,
     extra:()=>MB,extraBind:el=>{const d=$("#mbox",el);if(d&&!ENG.S.stats.beweis[0])d.open=true;d.addEventListener("toggle",()=>renderK(d))}},
-   {id:"regeln",name:"Regeln anwenden",short:"Anwenden",icon:"🧮",color:"var(--c2)",
+   {id:"regeln",name:"Regeln anwenden",short:"Anwenden",icon:"🧮",color:"var(--c2)",nextLevel:"uebung",
+    levels:{label:"Aufgabe",names:["a","b","c"],titles:["a) Summenregel","b) Faktorregel","c) Intervalle zusammenfügen"]},
+    gen:genPlenum,build:buildRegeln},
+   {id:"uebung",name:"Übungen",short:"Üben",icon:"🏋️",color:"var(--c3)",freeSol:true,
     levels:{label:"Stufe",names:["1","2","3"],titles:["Quadratische Funktionen","Bis x³ und Dezimalfaktoren","Auch negative Grenzen und 1/x²"]},
     gen:genRegeln,build:buildRegeln,
     own:{hint:"Tippen Sie ein Integral aus dem Buch ab: "+K("\\int_a^b (a_3x^3+a_2x^2+a_1x+a_0)\\,dx")+". Leere Felder zählen als 0.",
