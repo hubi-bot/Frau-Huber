@@ -754,31 +754,36 @@ function sumConc(s,sg){const op=sg>0?"+":"-",fg=s.f,gg=s.g,If=Iv(fg,s.a,s.b),Ig=
     lines,Fs:["Stammfunktion von "+K("f(x)="+fT(fg))+": "+K("F(x)="+FT(fg)),"Stammfunktion von "+K("g(x)="+fT(gg))+": "+K("G(x)="+FT(gg))],
     ins:K(I(s.a,s.b,fT(fg))+"=F("+s.b+")-F("+s.a+")="+num(Fb)+"-"+pnum(Fa))}}
 
-const ORDER=["null","faktor","summe"];
-const randF=()=>{const n=rnd(1,3);return{c:(n+1)*pick([1,1,2]),n}};
+const ORDER=["null","faktor","summe"]; /* Stufe 1 = a), Stufe 2 = b), Stufe 3 = c) */
 function genBeweis(lvl,r){
-  if(!r){let i=store.get("integralheft-seq",0);r=ORDER[i%ORDER.length];store.set("integralheft-seq",i+1)}
-  const a=rnd(0,2),b=a+rnd(1,2);
-  const s={r,lvl,a,b,f:randF(),k:pick([2,3,4,5])};
-  if(r==="summe"||r==="diff"){let g;do{g=randF()}while(g.n===s.f.n);s.g=g}
-  if(r==="add"){s.m=s.b;s.b=s.m+rnd(1,2)}
-  if(r==="null"){s.a=rnd(1,3)}
-  return s;
+  r=r||ORDER[Math.min(Math.max(lvl||1,1),3)-1];
+  return{r,lvl:ORDER.indexOf(r)+1};
 }
+/* Puzzle-Freischaltung durch die Lehrkraft (nur Prüfwert, kein Klartext) */
+const hcP=t=>{let h=0x811c9dc5;for(const c of t){h^=c.charCodeAt(0);h=Math.imul(h,16777619)>>>0}return h};
+const PUZ_H=3205587755;
+const puzFrei=r=>!!(store.get("integralheft-puzzle-frei",{})[r]);
+const setPuzFrei=r=>{const o=store.get("integralheft-puzzle-frei",{});o[r]=true;store.set("integralheft-puzzle-frei",o)};
 const reasonHints=R=>["Vergleichen Sie jede Zeile mit der Zeile direkt davor: Was hat sich verändert?",
   "Merkhilfe: ∫ verschwindet → Hauptsatz. ∫ taucht wieder auf → Hauptsatz rückwärts. Klammer verschwindet → Klammer auflösen. Etwas steht neu vor einer Klammer → ausklammern.",
   "Zeile 2: „"+OPTS[R.ok[0][0]]+"“"+(R.ok.length>1?" · Zeile 3: „"+OPTS[R.ok[1][0]]+"“":"")+"."];
 
 function buildBeweis(s){
-  const R=RULES[s.r],steps=[],withDis=s.lvl>=2,withReason=s.lvl>=3;
-  steps.push(orderStep({name:"Beweis ordnen",intro:"Zeigen Sie: "+K(R.claim)+"<br>Ordnen Sie die Schnipsel.",
-    first:R.first,lines:R.lines,dis:withDis?R.dis:[],
-    hints:["Start: linke Seite. Ziel: rechte Seite.","Erster Schritt: Hauptsatz. Aus jedem Integral wird F(obere Grenze) − F(untere Grenze).","Schauen Sie ins Musterbeispiel oben – gleicher Aufbau."]}));
-  if(withReason)steps.push(reasonStep({first:R.first,lines:R.lines,opts:OPTS,ok:R.ok,tips:R.tips,hints:reasonHints(R)}));
+  const R=RULES[s.r],steps=[],H3=["Start: linke Seite. Ziel: rechte Seite.","Erster Schritt: Hauptsatz. Aus jedem Integral wird F(obere Grenze) − F(untere Grenze).","Schauen Sie ins Musterbeispiel oben – gleicher Aufbau."];
+  steps.push({name:"Notieren",
+    render(box){box.innerHTML='<p class="q">Zeigen Sie: '+K(R.claim)+'</p><p>Schreiben Sie den Beweis zuerst in Ihre Unterlagen.</p><label class="row" style="cursor:pointer"><input type="checkbox" class="notiert" style="width:22px;height:22px"> Ich habe meinen Beweis notiert.</label>';renderK(box)},
+    check(box){return $(".notiert",box).checked?{ok:true,good:puzFrei(s.r)?"Überprüfen Sie jetzt mit dem Puzzle.":"Jetzt schaltet Ihre Lehrkraft den Puzzle-Beweis frei."}:{ok:false,empty:true,msgs:["Notieren Sie zuerst Ihren Beweis und setzen Sie dann den Haken."]}},
+    hints:H3});
+  if(!puzFrei(s.r))steps.push({name:"Freischalten",
+    render(box){box.innerHTML='<p class="q">🔒 Ihre Lehrkraft schaltet den Puzzle-Beweis zum Überprüfen frei.</p><div class="row"><label>Code:</label><input class="fin s pcode" type="password" inputmode="numeric" autocomplete="off" maxlength="8" aria-label="Code der Lehrkraft"></div>'},
+    check(box){const v=$(".pcode",box).value.trim();if(hcP("integralheft-puzzle:"+v)===PUZ_H){setPuzFrei(s.r);return{ok:true,good:"Freigeschaltet."}}
+      return{ok:false,empty:true,msgs:[v?"Der Code stimmt nicht.":"Bitte den Code eingeben."]}},
+    hints:["Den Code hat Ihre Lehrkraft."]});
+  steps.push(orderStep({name:"Puzzle-Beweis",intro:"Überprüfen Sie Ihren Beweis: Ordnen Sie die Schnipsel.",first:R.first,lines:R.lines,dis:[],hints:H3}));
   const sol=[{l:K(R.first),t:"Start: linke Seite."}];
   R.lines.forEach((ln,j)=>sol.push({l:K(ln),t:"<b>"+OPTS[R.ok[Math.min(j,R.ok.length-1)][0]]+".</b>"}));
   sol.push({t:"Rechte Seite erreicht. ∎"});
-  return{title:"Beweisen Sie: "+K(R.claim),tag:R.name+" · Stufe "+s.lvl,steps,solution:sol,finalMsg:"Beweis fertig. Diese Regel dürfen Sie ab jetzt benutzen."};
+  return{title:"Beweisen Sie: "+K(R.claim),tag:["a)","b)","c)"][s.lvl-1]+" "+R.name,steps,solution:sol,finalMsg:"Ihr Beweis ist überprüft. Diese Regel dürfen Sie ab jetzt benutzen."};
 }
 
 /* ---------- Regeln anwenden ---------- */
@@ -874,11 +879,11 @@ const MB='<details class="merk" id="mbox"><summary><b>📖 Musterbeispiel</b> <s
 
 startHeft({key:"integralheft-v1",
   route(h){h=h.toLowerCase();const m=h.match(/^beweis-(null|faktor|summe)(?:-(\d))?$/);
-    if(m){const l=m[2]?+m[2]:1;return{kind:"beweis",level:l,spec:genBeweis(l,m[1])}}
+    if(m){const sp=genBeweis(1,m[1]);return{kind:"beweis",level:sp.lvl,spec:sp}}
     if(h==="regeln")return{kind:"regeln"};return null},
   kinds:[
    {id:"beweis",name:"Beweise",short:"Beweise",icon:"🧩",color:"var(--c1)",
-    levels:{label:"Stufe",names:["1","2","3"],titles:["Schnipsel ordnen","Mit Störschnipseln","Mit Störschnipseln und Begründungen"]},
+    levels:{label:"Stufe",names:["1","2","3"],titles:["a) Gleiche Grenzen","b) Faktorregel","c) Summenregel"]},
     gen:l=>genBeweis(l),build:buildBeweis,
     extra:()=>MB,extraBind:el=>{const d=$("#mbox",el);if(d&&!ENG.S.stats.beweis[0])d.open=true;d.addEventListener("toggle",()=>renderK(d))}},
    {id:"regeln",name:"Regeln anwenden",short:"Anwenden",icon:"🧮",color:"var(--c2)",
