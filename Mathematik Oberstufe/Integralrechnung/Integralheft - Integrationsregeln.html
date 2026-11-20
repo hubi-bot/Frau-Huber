@@ -867,6 +867,24 @@ function buildRegeln(s){
     steps.push(resultStep(val,F(s.b),F(s.a)));
     sol=[{l:title.replace("Berechnen Sie: ",""),t:"Ein Integral – direkt mit dem Hauptsatz."},{l:K("=\\Big["+P.tex(P.int(s.p))+"\\Big]_{"+num(s.a)+"}^{"+num(s.b)+"}"),t:"Stammfunktion bilden."},{l:K("="+fmt(F(s.b))+"-"+(F(s.a)<0?"("+fmt(F(s.a))+")":fmt(F(s.a)))),t:"Einsetzen."},{l:K("="+fmtD(val)),t:"Ausrechnen."}];
   }
+  let h1b;
+  if(s.t!=="own"){ /* Regel erkennen, dann Regel abbilden und selbst lösen */
+    let rule,h1,F,pre="";
+    if(s.t==="sum"){const r=P.add(s.p,s.q);F=x=>P.ev(P.int(r),x);
+      rule=K("\\int_a^b f(x)\\,dx+\\int_a^b g(x)\\,dx=\\int_a^b\\big(f(x)+g(x)\\big)\\,dx");
+      h1="Zu einem Integral zusammenfassen: "+K("="+I(s.a,s.b,"\\big("+P.tex(r)+"\\big)"));h1b=K("F(x)="+P.tex(P.int(r)))}
+    else if(s.t==="faktor"){F=x=>P.ev(P.int(s.inner),x);pre=num(s.k)+"\\cdot";
+      rule=K("\\int_a^b k\\cdot f(x)\\,dx=k\\cdot\\int_a^b f(x)\\,dx");
+      h1="Faktor vor das Integral ziehen: "+K("="+num(s.k)+"\\cdot"+I(s.a,s.b,"\\big("+P.tex(s.inner)+"\\big)"));h1b=K("F(x)="+P.tex(P.int(s.inner)))}
+    else{F=x=>Fv(s.f,x);
+      rule=K("\\int_a^b f(x)\\,dx+\\int_b^c f(x)\\,dx=\\int_a^c f(x)\\,dx");
+      h1="Zu einem Integral zusammenfügen: "+K("="+I(num(s.a),num(s.b),fT(s.f)));h1b=(s.f.n<0?K("\\frac{1}{x^2}=x^{-2}")+" &nbsp; ":"")+K("F(x)="+FT(s.f))}
+    const Fb=F(s.b),Fa=F(s.a),st=resultStep(val,s.t==="faktor"?s.k*Fb:Fb,s.t==="faktor"?s.k*Fa:Fa,s.t==="faktor"?(x=>near(x,Fb-Fa)?"Jetzt fehlt nur noch der Faktor "+num(s.k)+".":null):null),r0=st.render;
+    st.name="Selbst lösen";
+    st.render=box=>{r0(box);box.insertAdjacentHTML("afterbegin",'<div class="merk" style="margin:0 0 10px"><b>Regel:</b> '+rule+'</div><p class="q">Lösen Sie die Aufgabe selbst in Ihren Unterlagen und geben Sie das Ergebnis ein.</p>');renderK(box)};
+    st.hints=[h1,"Stammfunktion: "+h1b,"Einsetzen: "+K((pre?pre+"\\big(":"")+fmt(Fb)+"-"+(Fa<0?"\\left("+fmt(Fa)+"\\right)":fmt(Fa))+(pre?"\\big)":""))];
+    steps.length=1;steps.push(st);
+  }
   return{title,tag:s.t==="own"?"eigene Aufgabe":"Stufe "+s.lvl,steps,solution:sol};
 }
 
