@@ -851,7 +851,7 @@ function buildRegeln(s){
       check:fCheck(F,x=>P.ev(r,x),s.a,s.b),hints:["Potenzregel rückwärts: Aus "+K("x^n")+" wird "+K("\\frac{1}{n+1}x^{n+1}")+".",K("F(x)="+P.tex(P.int(r)))]});
     steps.push(resultStep(val,F(s.b),F(s.a)));
     sol=[{l:title.replace("Berechnen Sie ohne GTR: ",""),t:"Beide Integrale haben dieselben Grenzen. Also hilft die Summenregel."},{l:K("="+I(s.a,s.b,"\\big("+P.tex(r)+"\\big)")),t:"Die Integranden werden addiert. Dabei fällt etwas weg – die Rechnung wird kürzer."},
-      {l:K(evalLine(P.tex(P.int(r)),s.a,s.b)),t:stammT(P.tex(P.int(r)))},{l:K("="+fmt(F(s.b))+"-"+(F(s.a)<0?"("+fmt(F(s.a))+")":fmt(F(s.a)))),t:"Grenzen einsetzen: F(obere) − F(untere)."},{l:K("="+fmtD(val)),t:"Ausrechnen."}];
+      {l:K(evalLine(P.tex(P.int(r)),s.a,s.b)),t:stammT(P.tex(P.int(r)))},{l:K("=\\Big["+fmt(F(s.b))+"\\Big]-\\Big["+fmt(F(s.a))+"\\Big]"),t:"Klammern ausrechnen."},{l:K("="+fmtD(val)),t:"Ausrechnen."}];
   }else if(s.t==="faktor"){const F=x=>P.ev(P.int(s.inner),x),In=F(s.b)-F(s.a);val=s.k*In;const kt=num(s.k);
     title="Berechnen Sie ohne GTR: "+K(I(s.a,s.b,kt+"\\cdot\\big("+P.tex(s.inner)+"\\big)"));
     steps.push(ruleStep(1));
@@ -862,7 +862,7 @@ function buildRegeln(s){
       hints:["Faktorregel: "+K("\\int_a^b k\\cdot f(x)\\,dx=k\\cdot\\int_a^b f(x)\\,dx")+". Der Faktor wartet draußen.",K("F(x)="+P.tex(P.int(s.inner)))]});
     steps.push(resultStep(val,s.k*F(s.b),s.k*F(s.a),x=>near(x,In)?"Jetzt fehlt nur noch der Faktor "+kt+".":null));
     sol=[{l:title.replace("Berechnen Sie ohne GTR: ",""),t:"Ein Zahlenfaktor steht vor dem Funktionsterm: Faktorregel."},{l:K("="+kt+"\\cdot"+I(s.a,s.b,"\\big("+P.tex(s.inner)+"\\big)")),t:"Den Faktor vor das Integral ziehen."},
-      {l:K(evalLine(P.tex(P.int(s.inner)),s.a,s.b,kt+"\\cdot")),t:stammT(P.tex(P.int(s.inner)))},{l:K("="+kt+"\\cdot\\big("+fmt(F(s.b))+"-"+(F(s.a)<0?"("+fmt(F(s.a))+")":fmt(F(s.a)))+"\\big)="+kt+"\\cdot "+(In<0?"("+fmt(In)+")":fmt(In))),t:"Grenzen einsetzen."},{l:K("="+fmtD(val)),t:"Mit dem Faktor multiplizieren."}];
+      {l:K(evalLine(P.tex(P.int(s.inner)),s.a,s.b,kt+"\\cdot")),t:stammT(P.tex(P.int(s.inner)))},{l:K("="+kt+"\\cdot\\Big(\\Big["+fmt(F(s.b))+"\\Big]-\\Big["+fmt(F(s.a))+"\\Big]\\Big)"),t:"Klammern ausrechnen."},{l:K("="+kt+"\\cdot "+(In<0?"\\left("+fmt(In)+"\\right)":fmt(In))),t:"Subtrahieren."},{l:K("="+fmtD(val)),t:"Mit dem Faktor multiplizieren."}];
   }else if(s.t==="grenzen"){const f=s.f,F=x=>Fv(f,x);val=F(s.b)-F(s.a);
     title="Berechnen Sie ohne GTR: "+K(I(num(s.a),num(s.m),fT(f))+"+"+I(num(s.m),num(s.b),fT(f)));
     steps.push(ruleStep(2));
@@ -873,29 +873,29 @@ function buildRegeln(s){
       check:fCheck(F,x=>fv(f,x),s.a,s.b),hints:[f.n<0?"Schreiben Sie "+K("\\frac{1}{x^2}=x^{-2}")+". Potenzregel rückwärts: "+K("x^{-2}\\to\\frac{x^{-1}}{-1}=-\\frac{1}{x}")+".":"Potenzregel rückwärts: "+K("x^n\\to\\frac{1}{n+1}x^{n+1}")+".",K("F(x)="+FT(f))]});
     steps.push(resultStep(val,F(s.b),F(s.a)));
     sol=[{l:title.replace("Berechnen Sie ohne GTR: ",""),t:"Die Intervalle schließen bei "+num(s.m)+" aneinander an. Mit "+num(s.m)+" zu rechnen wäre mühsam – also zusammenfügen."},{l:K("="+I(num(s.a),num(s.b),fT(f))),t:"Die Nahtstelle "+num(s.m)+" fällt weg."},
-      {l:K(evalLine(FT(f),s.a,s.b)),t:(f.n<0?"Umschreiben: "+K("\\frac{1}{x^2}=x^{-2}")+". ":"")+stammT(FT(f))},{l:K("="+fmt(F(s.b))+"-"+(F(s.a)<0?"\\left("+fmt(F(s.a))+"\\right)":fmt(F(s.a)))),t:"Grenzen einsetzen."},{l:K("="+fmtD(val)),t:"Ausrechnen."}];
+      {l:K(evalLine(FT(f),s.a,s.b)),t:(f.n<0?"Umschreiben: "+K("\\frac{1}{x^2}=x^{-2}")+". ":"")+stammT(FT(f))},{l:K("=\\Big["+fmt(F(s.b))+"\\Big]-\\Big["+fmt(F(s.a))+"\\Big]"),t:"Klammern ausrechnen."},{l:K("="+fmtD(val)),t:"Ausrechnen."}];
   }else{ /* eigene Aufgabe */
     const F=x=>P.ev(P.int(s.p),x);val=F(s.b)-F(s.a);title="Berechnen Sie: "+K(I(num(s.a),num(s.b),"\\big("+P.tex(s.p)+"\\big)"));
     steps.push({name:"Stammfunktion einsetzen",T:[{k:"Fb",val:F(s.b)},{k:"Fa",val:F(s.a)}],render(box){box.innerHTML=numFields(FBox(s.p,s.a,s.b))},check:fCheck(F,x=>P.ev(s.p,x),s.a,s.b),hints:[K("F(x)="+P.tex(P.int(s.p)))]});
     steps.push(resultStep(val,F(s.b),F(s.a)));
-    sol=[{l:title.replace("Berechnen Sie: ",""),t:"Ein Integral – direkt mit dem Hauptsatz."},{l:K(evalLine(P.tex(P.int(s.p)),s.a,s.b)),t:stammT(P.tex(P.int(s.p)))},{l:K("="+fmt(F(s.b))+"-"+(F(s.a)<0?"("+fmt(F(s.a))+")":fmt(F(s.a)))),t:"Einsetzen."},{l:K("="+fmtD(val)),t:"Ausrechnen."}];
+    sol=[{l:title.replace("Berechnen Sie: ",""),t:"Ein Integral – direkt mit dem Hauptsatz."},{l:K(evalLine(P.tex(P.int(s.p)),s.a,s.b)),t:stammT(P.tex(P.int(s.p)))},{l:K("=\\Big["+fmt(F(s.b))+"\\Big]-\\Big["+fmt(F(s.a))+"\\Big]"),t:"Klammern ausrechnen."},{l:K("="+fmtD(val)),t:"Ausrechnen."}];
   }
   if(s.t!=="own"){ /* Regel erkennen, dann Regel abbilden und selbst lösen */
-    let rule,F,pre="",H=[];
-    const ein=(Fb,Fa)=>"Einsetzen: "+K((pre?pre+"\\big(":"")+fmt(Fb)+"-"+(Fa<0?"\\left("+fmt(Fa)+"\\right)":fmt(Fa))+(pre?"\\big)":""));
-    if(s.t==="sum"){const r=P.add(s.p,s.q);F=x=>P.ev(P.int(r),x);
+    let rule,F,pre="",H=[],Ft;
+    const ein=(Fb,Fa,Ft)=>["Grenzen in die Stammfunktion einsetzen: "+K(evalLine(Ft,s.a,s.b,pre).slice(1)),"Klammern ausrechnen: "+K("="+(pre?pre+"\\Big(":"")+"\\Big["+fmt(Fb)+"\\Big]-\\Big["+fmt(Fa)+"\\Big]"+(pre?"\\Big)":""))];
+    if(s.t==="sum"){const r=P.add(s.p,s.q);F=x=>P.ev(P.int(r),x);Ft=P.tex(P.int(r));
       rule=K("\\int_a^b f(x)\\,dx+\\int_a^b g(x)\\,dx=\\int_a^b\\big(f(x)+g(x)\\big)\\,dx");
       H=["Die Grenzen sind gleich. Verbinden Sie die beiden Funktionsterme mit einem <b>+</b> zu einem Integral: "+K("="+I(s.a,s.b,"\\Big(\\big("+P.tex(s.p)+"\\big)+\\big("+P.tex(s.q)+"\\big)\\Big)")),
         "Lassen Sie die Klammern weg und rechnen Sie Glieder mit gleicher Potenz zusammen: x² zu x², x zu x, Zahl zu Zahl.",
         K("f(x)+g(x)="+P.tex(r))+", also "+K("="+I(s.a,s.b,"\\big("+P.tex(r)+"\\big)")),
         "Stammfunktion: "+K("F(x)="+P.tex(P.int(r)))]}
-    else if(s.t==="faktor"){F=x=>P.ev(P.int(s.inner),x);pre=num(s.k)+"\\cdot";
+    else if(s.t==="faktor"){F=x=>P.ev(P.int(s.inner),x);Ft=P.tex(P.int(s.inner));pre=num(s.k)+"\\cdot";
       rule=K("\\int_a^b k\\cdot f(x)\\,dx=k\\cdot\\int_a^b f(x)\\,dx");
       H=["Hier ist "+K("k="+num(s.k))+" – eine feste Zahl. Sie darf vor das Integral: "+K("="+num(s.k)+"\\cdot"+I(s.a,s.b,"\\big("+P.tex(s.inner)+"\\big)")),
         "Rechnen Sie zuerst das Integral <b>ohne</b> "+K(num(s.k))+" aus. Die Zahl "+K(num(s.k))+" wartet draußen.",
         "Stammfunktion von "+K(P.tex(s.inner))+": "+K("F(x)="+P.tex(P.int(s.inner))),
         "Zum Schluss mit "+K(num(s.k))+" malnehmen."]}
-    else{F=x=>Fv(s.f,x);
+    else{F=x=>Fv(s.f,x);Ft=FT(s.f);
       rule=K("\\int_a^b f(x)\\,dx+\\int_b^c f(x)\\,dx=\\int_a^c f(x)\\,dx");
       H=["Das erste Integral endet bei "+K(num(s.m))+", das zweite beginnt dort. Fügen Sie zusammen: "+K("="+I(num(s.a),num(s.b),fT(s.f))),
         ...(s.f.n<0?["Schreiben Sie den Funktionsterm als Potenz: "+K("\\frac{1}{x^2}=x^{-2}")]:[]),
@@ -903,7 +903,7 @@ function buildRegeln(s){
     const Fb=F(s.b),Fa=F(s.a),st=resultStep(val,s.t==="faktor"?s.k*Fb:Fb,s.t==="faktor"?s.k*Fa:Fa,s.t==="faktor"?(x=>near(x,Fb-Fa)?"Jetzt fehlt nur noch der Faktor "+num(s.k)+".":null):null),r0=st.render;
     st.name="Selbst lösen";
     st.render=box=>{r0(box);box.insertAdjacentHTML("afterbegin",'<div class="merk" style="margin:0 0 10px"><b>Regel:</b> '+rule+'</div><p class="q">Lösen Sie die Aufgabe selbst in Ihren Unterlagen und geben Sie das Ergebnis ein.</p>');renderK(box)};
-    st.hints=H.concat([ein(Fb,Fa)]);
+    st.hints=s.t==="faktor"?H.slice(0,-1).concat(ein(Fb,Fa,Ft),H.slice(-1)):H.concat(ein(Fb,Fa,Ft));
     steps.length=1;steps.push(st);
   }
   return{title,tag:s.t==="own"?"eigene Aufgabe":s.fix!=null?"Aufgabe "+"abc"[s.fix]:"Stufe "+s.lvl,steps,solution:sol};
