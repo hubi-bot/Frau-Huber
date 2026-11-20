@@ -602,6 +602,7 @@ function startHeft(CFG){
 const I=(a,b,f)=>"\\int_{"+a+"}^{"+b+"}"+f+"\\,dx";
 const n2=v=>{const f=toFrac(v,12);if(f)return f[1]===1?String(f[0]):fmt(v);return dec(v).replace("−","-").replace(",","{,}")};
 const T=c=>P.tex(c);
+const subXT=(tex,vt)=>tex.replace(/([0-9}])?x/g,(m,pre)=>(pre?pre+"\\cdot ":"")+(/^-|\\sqrt|\\frac|\{,\}/.test(vt)?"\\left("+vt+"\\right)":vt)); /* F(b)-F(a)=[..]-[..] */
 const abs=Math.abs;
 
 /* ---------- gemeinsames Zeichnen ---------- */
@@ -668,7 +669,7 @@ function buildEin(s){
    textStep({name:"In Worten",q:"Beschreiben Sie Ihre Strategie in ein bis zwei Sätzen: Wie berechnet man eine Fläche, die oben von der Geraden g und unten vom Graphen von f begrenzt wird?",hints:["Benutzen Sie die Wörter „Rechteck“ bzw. „Fläche unter g“ und „Fläche unter f“."],good:"Prima. Behalten Sie Ihre Idee im Kopf – in der Strategie-Werkstatt brauchen Sie sie für zwei krumme Graphen."})];
   const sol=[{l:K("A=\\int_0^{"+x1T+"}g(x)\\,dx-\\int_{"+n2(s.z)+"}^{"+x1T+"}f(x)\\,dx"),t:"Strategie: Das Rechteck (Fläche unter g) minus die Fläche unter f.",fig:()=>graph({},1)},
     {l:K("\\int_0^{"+x1T+"}g(x)\\,dx="+x1T+"\\cdot "+cT+(s.x1===Math.SQRT2?"\\approx "+dec(rect).replace(",","{,}"):"="+n2(rect))),t:"Die Fläche unter der Geraden g ist ein Rechteck: Breite mal Höhe."},
-    {l:K("\\int_{"+n2(s.z)+"}^{"+x1T+"}\\Big("+T(s.f)+"\\Big)dx=\\Big["+T(P.int(s.f))+"\\Big]_{"+n2(s.z)+"}^{"+x1T+"}"+fmtD(under).replace(/^/,"=")),t:s.z>0?"Erst ab der Nullstelle "+dec(s.z)+" liegt der Graph oberhalb der x-Achse.":"Fläche unter dem Graphen von f mit dem Hauptsatz."},
+    {l:K("\\int_{"+n2(s.z)+"}^{"+x1T+"}\\Big("+T(s.f)+"\\Big)dx=F("+x1T+")-F("+n2(s.z)+")=\\Big["+subXT(T(P.int(s.f)),x1T)+"\\Big]-\\Big["+subXT(T(P.int(s.f)),n2(s.z))+"\\Big]"+fmtD(under).replace(/^/,"=")),t:s.z>0?"Erst ab der Nullstelle "+dec(s.z)+" liegt der Graph oberhalb der x-Achse.":"Fläche unter dem Graphen von f mit dem Hauptsatz."},
     {l:K("A="+(s.x1===Math.SQRT2?dec(rect).replace(",","{,}"):n2(rect))+"-"+(toFrac(under,48)?fmt(under):dec(under).replace(",","{,}"))+(toFrac(A,48)?"="+fmt(A):"")+"\\approx "+dec(A).replace(",","{,}")),t:"Abziehen – fertig. In Worten: Fläche unter der oberen Begrenzung minus Fläche unter der unteren Begrenzung."}];
   return{title:"Berechnen Sie den Inhalt der gefärbten Fläche. "+K("f(x)="+T(s.f)+"\\qquad g(x)="+cT),tag:s.ab?"AB 18 "+s.ab+")":"Stufe "+s.l,steps,solution:sol,graph};
 }
