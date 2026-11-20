@@ -38,6 +38,7 @@ flaeche-hilfen | Mathematik Oberstufe/Integralrechnung/Flächenheft - Hilfen.htm
 flaeche-heft1 | Mathematik Oberstufe/Integralrechnung/Flächenheft 1 - Einstieg (Goodnotes).pdf
 flaeche-heft2 | Mathematik Oberstufe/Integralrechnung/Flächenheft 2 - Strategie-Werkstatt (Goodnotes).pdf
 flaeche-goodnotes | Mathematik Oberstufe/Integralrechnung/Flächenheft 3 - Strategieplanung und Vertiefung (Goodnotes).pdf
+flaeche-download | Mathematik Oberstufe/Integralrechnung/Flächenheft - Goodnotes-Hefte herunterladen.html
 
 # Chemie
 siede-uebersicht | Chemie Klasse 10/Siedetemperatur und Wechselwirkungen/Uebersicht_Siedetemperatur_und_WW.html

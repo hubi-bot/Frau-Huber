@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Flächenheft – Goodnotes-Hefte herunterladen</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;600;700&family=Patrick+Hand&display=swap" rel="stylesheet">
+<style>
+:root{--paper:#fdfcf7;--desk:#e9eef3;--karo:#cfdcec;--text:#25303f;--muted:#5b6677;--ink:#1c3fa0;--red:#cf2f2a;--acc:#2f7fc4;
+  --hand:"Patrick Hand","Comic Sans MS",cursive;--ui:"Lexend",system-ui,-apple-system,"Segoe UI",sans-serif}
+@media (prefers-color-scheme:dark){:root{--paper:#1c2232;--desk:#121620;--karo:#2e3a55;--text:#e7ebf3;--muted:#a4aec3;--ink:#93b6ff;--red:#ff6b64;--acc:#5aa9ec}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--desk);color:var(--text);font-family:var(--ui);line-height:1.5;overflow-x:hidden}
+main{max-width:720px;margin:0 auto;padding:18px 12px 40px}
+.top{display:flex;align-items:flex-start;gap:12px;margin-bottom:18px}
+.qrbtn{flex:none;width:32px;height:32px;display:grid;place-items:center;border:2px solid var(--text);border-radius:8px;background:var(--paper);color:var(--text);box-shadow:2px 2px 0 var(--text);cursor:pointer;padding:0}
+.label{background:var(--paper);border:2px solid var(--text);border-radius:6px;padding:8px 18px 6px;transform:rotate(-1.2deg);box-shadow:3px 3px 0 var(--text)}
+.label h1{font-family:var(--hand);font-weight:400;font-size:38px;line-height:1;margin:0;color:var(--ink)}
+.label p{margin:2px 0 0;font-size:13px;color:var(--muted)}
+.sheet{position:relative;background:var(--paper);border-radius:14px;border-top:6px solid var(--acc);padding:18px 16px 20px 56px;
+  background-image:linear-gradient(var(--karo) 1px,transparent 1px),linear-gradient(90deg,var(--karo) 1px,transparent 1px);background-size:22px 22px}
+.sheet::before{content:"";position:absolute;top:0;bottom:0;left:40px;width:2px;background:color-mix(in srgb,var(--red) 45%,transparent)}
+.card{background:var(--paper);border:2px solid var(--karo);border-radius:12px;padding:12px 14px;margin:0 0 12px}
+.card h2{font-family:var(--hand);font-weight:400;font-size:26px;margin:0 0 8px;color:var(--ink)}
+.btn{display:inline-block;text-decoration:none;color:#fff;background:var(--acc);border:2px solid var(--text);border-radius:10px;padding:9px 14px;font-weight:700;box-shadow:2px 2px 0 var(--text)}
+.btn:active{transform:translate(2px,2px);box-shadow:none}
+@media (prefers-color-scheme:dark){.btn{color:#141824}}
+ol{margin:0;padding-left:22px}li{margin:4px 0}
+.hint{background:#fff09a;color:#25303f;border-radius:10px;padding:9px 12px;margin:0 0 12px}
+.ov{position:fixed;inset:0;background:rgba(15,20,35,.55);display:grid;place-items:center;padding:16px}
+.ov[hidden]{display:none}
+.mod{background:var(--paper);border:2px solid var(--text);border-radius:14px;box-shadow:5px 5px 0 var(--text);padding:18px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:10px}
+.qrbox{background:#fff;padding:10px;border-radius:10px;line-height:0}
+.qrbox svg{width:min(calc(100vw - 90px),calc(100vh - 220px),420px);height:auto}
+.url{font-size:13px;color:var(--muted);margin:0;overflow-wrap:anywhere;max-width:420px}
+@media (max-width:520px){.sheet{padding-left:34px}.sheet::before{left:22px}}
+</style>
+</head>
+<body>
+<main>
+  <div class="top">
+    <button class="qrbtn" id="qrBtn" type="button" title="QR-Code zu dieser Seite" aria-label="QR-Code zu dieser Seite zeigen"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M3 3h8v8H3zm2 2v4h4V5zm8-2h8v8h-8zm2 2v4h4V5zM3 13h8v8H3zm2 2v4h4v-4zm8-2h2v2h-2zm2 2h2v2h-2zm2-2h2v2h-2zm2 2h2v2h-2zm-6 2h2v2h-2zm4 0h2v2h-2zm-2 2h2v2h-2zm4 0h2v2h-2z"/></svg></button>
+    <div class="label"><h1>Flächenheft</h1><p>Goodnotes-Hefte herunterladen</p></div>
+  </div>
+  <section class="sheet">
+    <div class="card">
+      <h2>So kommt das Heft in Goodnotes</h2>
+      <ol>
+        <li>Unten auf das Heft tippen. Das PDF öffnet sich.</li>
+        <li>Auf das Teilen-Symbol tippen (Quadrat mit Pfeil nach oben).</li>
+        <li><b>Goodnotes</b> wählen und das Heft in Ihren Ordner importieren.</li>
+      </ol>
+    </div>
+    <p class="hint">💡 Hilfe-Knöpfe im Heft: mit dem Finger <b>gedrückt halten</b> und „Link öffnen“ wählen.</p>
+    <div class="card"><h2>Heft 1 – Einstieg</h2><a class="btn" href="Fl%C3%A4chenheft%201%20-%20Einstieg%20(Goodnotes).pdf" download>📥 Heft 1 herunterladen</a></div>
+    <div class="card"><h2>Heft 2 – Strategie-Werkstatt</h2><a class="btn" href="Fl%C3%A4chenheft%202%20-%20Strategie-Werkstatt%20(Goodnotes).pdf" download>📥 Heft 2 herunterladen</a></div>
+    <div class="card"><h2>Heft 3 – Strategieplanung und Vertiefung</h2><a class="btn" href="Fl%C3%A4chenheft%203%20-%20Strategieplanung%20und%20Vertiefung%20(Goodnotes).pdf" download>📥 Heft 3 herunterladen</a></div>
+  </section>
+</main>
+<div class="ov" id="ov" hidden><div class="mod" role="dialog" aria-modal="true" aria-label="QR-Code"><div class="qrbox" id="qrBox"></div><p class="url" id="qrUrl"></p><button class="btn" id="qrClose" type="button">Schließen</button></div></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
+<script>
+(function(){
+  var U=location.origin+location.pathname,o=document.getElementById("ov"),b=document.getElementById("qrBtn");
+  b.onclick=function(){try{var q=qrcode(0,"M");q.addData(U);q.make();document.getElementById("qrBox").innerHTML=q.createSvgTag({cellSize:8,margin:2,scalable:true})}catch(e){document.getElementById("qrBox").textContent="QR-Code konnte nicht geladen werden."}
+    document.getElementById("qrUrl").textContent=U;o.hidden=false;document.getElementById("qrClose").focus()};
+  document.getElementById("qrClose").onclick=function(){o.hidden=true;b.focus()};
+  o.onclick=function(e){if(e.target===o){o.hidden=true}};
+  document.addEventListener("keydown",function(e){if(e.key==="Escape")o.hidden=true});
+})();
+</script>
+</body>
+</html>
