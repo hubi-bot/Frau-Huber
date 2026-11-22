@@ -269,6 +269,8 @@ const store={
 };
 const KEY="huber-lernreise-"+D.key;
 try{localStorage.removeItem(KEY)}catch(e){} /* alten, dauerhaft gespeicherten Stand entfernen */
+/* Nur beim Neuladen (oder Zurück-Taste) den Stand behalten. Jedes neue Öffnen – Link, QR-Code, Adresse eingetippt – beginnt von vorn. */
+try{const nv=(performance.getEntriesByType("navigation")[0]||{}).type;if(nv!=="reload"&&nv!=="back_forward")sessionStorage.removeItem(KEY)}catch(e){}
 const N=D.stations.length;
 const STAMPS=["Prima!","Super!","Klasse!","Spitze!","Toll!"];
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
