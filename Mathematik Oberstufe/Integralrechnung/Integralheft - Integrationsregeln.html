@@ -915,8 +915,8 @@ function buildRegeln(s){
       hints:[H[0],H[1],H[2],"Grenzen einsetzen: "+K(evalLine(Ft,s.a,s.b).slice(1)),"Klammern ausrechnen: "+K("=\\Big["+fmt(Fb)+"\\Big]-\\Big["+fmt(Fa)+"\\Big]")]};}
     else{app=steps[1];app.name="Regel anwenden";const r1=app.render;app.render=box=>{r1(box);box.insertAdjacentHTML("afterbegin",intro);renderK(box);$$("details",box).forEach(d=>d.addEventListener("toggle",()=>renderK(d)))}}
     st.render=box=>{r0(box);box.insertAdjacentHTML("afterbegin",'<p class="q">Rechnen Sie in Ihren Unterlagen weiter: <b>zuerst die Stammfunktion F(x) angeben</b>, dann Grenzen einsetzen. Geben Sie das Ergebnis ein.</p>');renderK(box)};
-    if(s.t==="faktor")st.hints=["Rechnen Sie Ihr Integral ohne Faktor mal "+K(num(s.k))+"."];
-    steps.length=1;steps.push(app,st);
+    if(s.t==="faktor")st.render=box=>{r0(box);box.insertAdjacentHTML("afterbegin",intro.slice(0,intro.indexOf('<p class="q">Nutzen'))+'<p class="q">Nutzen Sie die Regel! Rechnen Sie in Ihren Unterlagen: Faktor vor das Integral, <b>zuerst die Stammfunktion F(x) angeben</b>, dann Grenzen einsetzen und mit dem Faktor malnehmen. Geben Sie nur das Endergebnis ein.</p>');renderK(box);$$("details",box).forEach(d=>d.addEventListener("toggle",()=>renderK(d)))};
+    steps.length=1;if(s.t==="faktor")steps.push(st);else steps.push(app,st);
   }
   return{title,tag:s.t==="own"?"eigene Aufgabe":s.fix!=null?"Aufgabe "+"abc"[s.fix]:"Stufe "+s.lvl,steps,solution:sol};
 }
