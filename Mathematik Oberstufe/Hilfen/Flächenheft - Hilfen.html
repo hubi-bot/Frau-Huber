@@ -904,11 +904,10 @@ const FL=window.FL,LU="https://hubi-bot.github.io/Frau-Huber/flaeche-graphen",HI
 const FGt=K("f(x)=-\\tfrac14x^2+2x")+" und "+K("g(x)=\\tfrac14x^2-\\tfrac54x");
 const intro="<p>Die Abbildung zeigt die Graphen von "+FGt+". Gesucht ist der Inhalt A der gefärbten Fläche. Die Graphen schneiden sich bei x = 0 und x = 6,5.</p>";
 const C=[];
-/* Heft 1 */
-["a","b","c"].forEach(k=>{const s=Object.assign({l:1},FL.EIN_AB[k]);
-  C.push({id:"ein-"+k,heft:1,tit:"Aufgabe "+k+")",online:LU+"#einstieg-"+k,build:()=>FL.buildEin(s),
-    fig:t=>t.graph({hintLvl:0},0),
-    text:t=>"<p>"+t.title.replace("Berechnen Sie den Inhalt der gefärbten Fläche. ","")+"</p><p><b>(1)</b> Berechnen Sie den Inhalt A der gefärbten Fläche. Entwickeln Sie dafür selbst eine Strategie.</p><p><b>(2)</b> Schreiben Sie Ihre Rechnung mit zwei Integralen auf: Welche Grenzen gehören zu g, welche zu f?</p><p><b>(3)</b> Beschreiben Sie Ihre Strategie in ein bis zwei Sätzen.</p>"})});
+/* Heft 1: nur Hilfen, keine Musterlösung, kein Online-Prüfen */
+const EINH=["Eine <b>waagerechte Gerade</b> hat die Gleichung "+K("g(x)=c")+". Die Zahl c lesen Sie dort ab, wo die Gerade die y-Achse schneidet. Beispiel: Schneidet sie die y-Achse bei 5, gilt "+K("g(x)=5")+". Die x-Achse selbst ist "+K("y=0")+".",
+  "Ein Integral liefert die Fläche zwischen <b>einem</b> Graphen und der x-Achse. Färben Sie in Gedanken die Fläche unter der roten Geraden und die Fläche unter dem Graphen von f. Wie bekommen Sie daraus die gefärbte Fläche?"];
+["a","b","c"].forEach(k=>C.push({id:"ein-"+k,heft:1,tit:"Aufgabe "+k+")",online:null,noSol:true,build:()=>({title:"Aufgabe "+k+")",steps:[{name:"Hilfe",hints:EINH}],solution:[]})}));
 /* Heft 2 */
 const W={A:["Weg A: Zerlegen (geführt)","<p><b>a)</b> Berechnen Sie (GTR erlaubt) "+K("\\int_0^{6{,}5}f(x)\\,dx")+", "+K("\\int_0^5g(x)\\,dx")+" und "+K("\\int_5^{6{,}5}g(x)\\,dx")+" und färben Sie die zugehörigen Flächen ein.</p><p><b>b)</b> Berechnen Sie A mithilfe dieser Integrale. Bilden Sie dann "+K("f(x)-g(x)")+", berechnen Sie "+K("\\int_0^{6{,}5}\\big(f(x)-g(x)\\big)dx")+" und vergleichen Sie.</p><p><b>c)</b> Zeigen Sie mit den Rechenregeln für Integrale allgemein, dass beide Ergebnisse übereinstimmen müssen.</p>"],
   B:["Weg B: Zerlegen (offen)","<p><b>a)</b> Zerlegen Sie die gefärbte Fläche geschickt in Teilflächen, die jeweils nur zwischen <b>einem</b> Graphen und der x-Achse liegen. Zeichnen Sie die Teilflächen ein.</p><p><b>b)</b> Bestimmen Sie die Inhalte der Teilflächen (GTR erlaubt) und damit A.</p><p><b>c)</b> Vereinfachen Sie Ihren Term für A mit den Rechenregeln für Integrale. Was fällt Ihnen auf?</p>"],
@@ -952,17 +951,17 @@ function show(id,wantSol){
     h+='<div class="hintbox" aria-live="polite"><h4>💡 Gestufte Hilfen'+(t.steps.length>1?" zu Schritt "+(si+1)+" „"+st.name+"“":"")+" ("+lvl[si]+" von "+hs.length+")</h4>"+
       (lvl[si]?hs.slice(0,lvl[si]).map((x,i)=>'<div class="hl"><span class="hn">Hilfe '+(i+1)+":</span>"+x+"</div>").join(""):'<p class="pmini">Versuchen Sie es zuerst allein. Öffnen Sie dann immer nur die nächste Hilfe.</p>')+
       '<div class="actions" style="margin-top:6px">'+(lvl[si]<hs.length?'<button class="btn help" id="more">💡 Hilfe '+(lvl[si]+1)+" zeigen</button>":'<span class="pmini">Mehr Hilfen gibt es zu diesem Schritt nicht.</span>')+"</div></div>";
-    h+='<div class="actions">'+(e.online?'<a class="btn main" href="'+e.online+'">✓ Online prüfen</a>':"")+'<button class="btn" id="solb">🔒 Musterlösung</button><a class="btn" href="#">Alle Aufgaben</a></div><div id="solx"></div>';
+    h+='<div class="actions">'+(e.online?'<a class="btn main" href="'+e.online+'">✓ Online prüfen</a>':"")+''+(e.noSol?'':'<button class="btn" id="solb">🔒 Musterlösung</button>')+'<a class="btn" href="#">Alle Aufgaben</a></div><div id="solx"></div>';
     root.innerHTML=h;renderK(root);
     $$(".chipb",root).forEach(b=>b.onclick=()=>{si=+b.dataset.s;draw()});
     const m=$("#more");if(m)m.onclick=()=>{lvl[si]++;draw()};
-    $("#solb").onclick=()=>unlocked?sol():ask();
+    if($("#solb"))$("#solb").onclick=()=>unlocked?sol():ask();
   }
   function sol(){$("#solx").innerHTML='<div class="solution"><h2>Musterlösung</h2><div class="sollines">'+t.solution.map(x=>(x.l?'<div class="sl">'+x.l+"</div>":"")+(x.t?'<div class="soltext" style="margin-bottom:6px">'+x.t+"</div>":"")+(x.fig?'<div class="solfig">'+x.fig()+"</div>":"")).join("")+"</div></div>";renderK($("#solx"));$("#solx").scrollIntoView({behavior:"smooth"})}
   function ask(){$("#lockErr").textContent="";$("#lockIn").value="";$("#lockOverlay").classList.remove("hidden");setTimeout(()=>$("#lockIn").focus(),50);
     $("#lockOk").onclick=()=>{if(hc("fh-musterloesung:"+$("#lockIn").value.trim())===3322625695){unlocked=true;$("#lockOverlay").classList.add("hidden");sol()}else $("#lockErr").textContent="Der Code stimmt nicht. Die Musterlösung gibt es bei Ihrer Lehrkraft."}}
   $("#lockIn").onkeydown=ev=>{if(ev.key==="Enter")$("#lockOk").click()};$("#lockCancel").onclick=()=>$("#lockOverlay").classList.add("hidden");
-  draw();if(wantSol)ask();
+  draw();if(wantSol&&!e.noSol)ask();
 }
 function route(){const h=decodeURIComponent(location.hash.slice(1));if(!h){index();return}const [id,f]=h.split("!");show(id,f==="l");window.scrollTo(0,0)}
 window.addEventListener("hashchange",route);route();window.__ready=true;
