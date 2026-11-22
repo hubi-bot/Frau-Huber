@@ -417,7 +417,7 @@ uebersicht = f"""<!DOCTYPE html>
 <body>
   <div class="container" style="max-width: 1100px">
     <header class="text-center mb-4 position-relative">
-      <a class="btn btn-sm btn-outline-primary position-absolute top-0 end-0" href="codes.html" title="Alle Codes der Materialien (mit Passwort)">🔑 Codes</a>
+      <a class="btn btn-sm btn-outline-primary position-absolute top-0 end-0" href="https://hubi-bot.github.io/Frau-Huber/uebersicht-x4brac/codes.html" title="Alle Codes der Materialien (mit Passwort)">🔑 Codes</a>
       <h1 class="display-6 fw-bold">📚 <span class="edit" data-key="Seitentitel">{html.escape(SEITENTITEL)}</span></h1>
       <p class="lead text-muted"><span class="edit" data-key="Untertitel">{html.escape(UNTERTITEL)}</span></p>
       <button type="button" class="btn btn-sm btn-outline-secondary" id="bearbeiten">✏️ Überschriften bearbeiten</button>
