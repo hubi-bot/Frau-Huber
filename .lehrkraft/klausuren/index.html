@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="de"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="robots" content="noindex, nofollow">
+<title>Klausuren</title>
+<style>
+:root{--grund:#121620;--papier:#1c2232;--linie:#2e3a55;--schrift:#e7ebf3;--leise:#a4aec3;--pink:#ff6fb5;--pinkk:#d6267f}
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;background:var(--grund);color:var(--schrift);background-image:linear-gradient(rgba(46,58,85,.35) 1px,transparent 1px),linear-gradient(90deg,rgba(46,58,85,.35) 1px,transparent 1px);background-size:22px 22px;padding:24px 12px}
+.wrap{max-width:900px;margin:0 auto}h1{margin:0 0 4px;font-size:1.7rem}p.sub{color:var(--leise);margin:0 0 18px}
+.card{background:var(--papier);border-top:4px solid var(--pinkk);border-radius:10px;padding:18px;box-shadow:0 4px 14px rgba(0,0,0,.35);margin-bottom:16px}
+input,button{font:inherit;padding:8px 10px;border-radius:8px;border:1px solid var(--linie);background:#161b29;color:var(--schrift)}
+button{background:var(--pinkk);border-color:var(--pinkk);color:#fff;font-weight:700;cursor:pointer}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.m{color:var(--leise);font-size:.9rem;display:flex;gap:6px;align-items:center}
+h2{font-size:1.05rem;color:var(--pink);margin:18px 0 6px;border-bottom:2px solid var(--pinkk);padding-bottom:4px}
+.e{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:8px 0;border-bottom:1px solid var(--linie)}
+.e small{color:var(--leise)}.e button{padding:6px 12px;font-size:.9rem}
+.err{color:#ff8a84;min-height:1.2em}.leer{color:var(--leise)}
+a{color:var(--pink)}
+</style></head><body><div class="wrap">
+<h1>📝 Klausuren</h1><p class="sub">Nur für Lehrkräfte. <a href="../uebersicht-x4brac/">Zur Übersicht</a></p>
+<div class="card" id="login"><form id="f" class="row"><label for="pw">Passwort:</label><input type="password" id="pw" autocomplete="current-password" autofocus>
+<label class="m"><input type="checkbox" id="merk"> Auf diesem Gerät merken</label><button>Öffnen</button></form><p class="err" id="err" aria-live="polite"></p></div>
+<div class="card" id="out" hidden><div class="row"><input type="search" id="q" placeholder="Suchen, z. B. Mathematik, 12 …" aria-label="Klausuren durchsuchen" style="flex:1"><button type="button" id="ab">Abmelden</button></div><div id="liste"></div></div>
+</div>
+<script>
+const $=id=>document.getElementById(id),b=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0)),esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+let KEY=null,L=[];
+async function auf(pw){const d=await (await fetch("daten.json",{cache:"no-store"})).json();
+ const k0=await crypto.subtle.importKey("raw",new TextEncoder().encode(pw),"PBKDF2",false,["deriveKey"]);
+ KEY=await crypto.subtle.deriveKey({name:"PBKDF2",salt:b(d.salt),iterations:250000,hash:"SHA-256"},k0,{name:"AES-GCM",length:256},false,["decrypt"]);
+ return JSON.parse(new TextDecoder().decode(await crypto.subtle.decrypt({name:"AES-GCM",iv:b(d.iv)},KEY,b(d.ct))))}
+const KL=k=>/^\d+$/.test(k)?"Klasse "+k:k;
+function zeigen(){const q=$("q").value.trim().toLowerCase();const R=L.filter(e=>!q||[e.fach,e.kl,e.titel,e.name].join(" ").toLowerCase().includes(q))
+ .sort((x,y)=>x.fach.localeCompare(y.fach,"de")||(parseInt(x.kl)||99)-(parseInt(y.kl)||99)||x.titel.localeCompare(y.titel,"de",{numeric:true}));
+ let h="",g="";R.forEach(e=>{const k=(e.fach||"Ohne Fach")+(e.kl?" · "+KL(e.kl):"");if(k!==g){h+="<h2>"+esc(k)+"</h2>";g=k}
+  h+='<div class="e"><div>'+esc(e.titel)+'<br><small>'+esc(e.name)+(e.datum?" · "+esc(e.datum):"")+'</small></div><button type="button" data-id="'+e.id+'">Öffnen</button></div>'});
+ $("liste").innerHTML=h||'<p class="leer">'+(L.length?"Nichts gefunden.":"Noch keine Klausuren abgelegt. Schick Claude deine Klausuren, dann werden sie hier verschlüsselt abgelegt.")+"</p>";
+ document.querySelectorAll("#liste button").forEach(x=>x.onclick=()=>oeffnen(L.find(e=>e.id===x.dataset.id),x))}
+async function oeffnen(e,knopf){knopf.textContent="…";const w=e.mime==="application/pdf"?window.open("","_blank"):null;try{const r=await fetch("dateien/"+e.id+".bin");const roh=await crypto.subtle.decrypt({name:"AES-GCM",iv:b(e.iv)},KEY,new Uint8Array(await r.arrayBuffer()));
+ const url=URL.createObjectURL(new Blob([roh],{type:e.mime}));if(w)w.location.href=url;else{const a=document.createElement("a");a.href=url;a.download=e.name;document.body.appendChild(a);a.click();a.remove()}setTimeout(()=>URL.revokeObjectURL(url),60000)}
+ catch(x){if(w)w.close();alert("Die Datei konnte nicht geöffnet werden.")}knopf.textContent="Öffnen"}
+async function los(pw,merken){try{L=await auf(pw)}catch(x){$("err").textContent="Das Passwort stimmt nicht.";try{localStorage.removeItem("kl-pw")}catch(y){}return}
+ try{sessionStorage.setItem("kl-pw",pw);if(merken)localStorage.setItem("kl-pw",pw)}catch(y){}
+ $("login").hidden=true;$("out").hidden=false;zeigen()}
+$("f").onsubmit=e=>{e.preventDefault();los($("pw").value,$("merk").checked)};$("q").oninput=zeigen;
+$("ab").onclick=()=>{try{localStorage.removeItem("kl-pw");sessionStorage.removeItem("kl-pw")}catch(x){}location.reload()};
+let g="";try{g=localStorage.getItem("kl-pw")||sessionStorage.getItem("kl-pw")||""}catch(x){}if(g)los(g,false);
+</script></body></html>
