@@ -960,7 +960,7 @@ const {C,HEFTE}=window.CAT,root=document.getElementById("hroot");
 const hc=s=>{let h=0x811c9dc5;for(const c of s){h^=c.charCodeAt(0);h=Math.imul(h,16777619)>>>0}return h};
 const UNL={};
 function index(){root.innerHTML='<div class="label hl"><h1>Hilfen</h1><p>zu den Goodnotes-Heften · Flächenheft</p></div>'+
-  [1,2,3].map(n=>'<div class="stepblk"><h3>Heft '+n+": "+HEFTE[n]+"</h3>"+C.filter(e=>e.heft===n).map(e=>'<a class="btn hlink" href="#'+e.id+'">'+e.tit+"</a>").join(" ")+"</div>").join("")}
+  [1].map(n=>'<div class="stepblk"><h3>Heft '+n+": "+HEFTE[n]+"</h3>"+C.filter(e=>e.heft===n).map(e=>'<a class="btn hlink" href="#'+e.id+'">'+e.tit+"</a>").join(" ")+"</div>").join("")}
 function show(id,wantSol){
   const e=C.find(x=>x.id===id);if(!e){index();return}
   const t=e.build(),ctx={hintLvl:0};let si=0;const lvl=t.steps.map(()=>0);
@@ -973,7 +973,7 @@ function show(id,wantSol){
     h+='<div class="hintbox" aria-live="polite"><h4>💡 Gestufte Hilfen'+(t.steps.length>1?" zu Schritt "+(si+1)+" „"+st.name+"“":"")+" ("+lvl[si]+" von "+hs.length+")</h4>"+
       (lvl[si]?hs.slice(0,lvl[si]).map((x,i)=>'<div class="hl"><span class="hn">Hilfe '+(i+1)+":</span>"+x+"</div>").join(""):'<p class="pmini">Versuchen Sie es zuerst allein. Öffnen Sie dann immer nur die nächste Hilfe.</p>')+
       '<div class="actions" style="margin-top:6px">'+(lvl[si]<hs.length?'<button class="btn help" id="more">💡 Hilfe '+(lvl[si]+1)+" zeigen</button>":'<span class="pmini">Mehr Hilfen gibt es zu diesem Schritt nicht.</span>')+"</div></div>";
-    h+='<div class="actions">'+(e.online?'<a class="btn main" href="'+e.online+'">✓ Online prüfen</a>':"")+'<button class="btn" id="solb">🔒 Musterlösung</button><a class="btn" href="#">Alle Aufgaben</a></div><div id="solx"></div>';
+    h+='<div class="actions">'+(e.online?'<a class="btn main" href="'+e.online+'">✓ Online prüfen</a>':"")+'<button class="btn" id="solb">🔒 Musterlösung</button>'+(e.heft===1?'':'<a class="btn" href="#">Alle Aufgaben</a>')+'</div><div id="solx"></div>';
     root.innerHTML=h;renderK(root);
     $$(".chipb",root).forEach(b=>b.onclick=()=>{si=+b.dataset.s;draw()});
     const m=$("#more");if(m)m.onclick=()=>{lvl[si]++;draw()};
