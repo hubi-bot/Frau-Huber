@@ -939,7 +939,9 @@ const UL2=a=>'<ul style="margin:4px 0 0;padding-left:20px">'+a.map(x=>'<li style
 const HB=(t,a)=>"<b>"+t+"</b>"+UL2(a);
 const In=(a,b,fx)=>"\\int_{"+a+"}^{"+b+"}"+fx+"\\,dx";
 const F65=In(0,"6{,}5","f(x)"),G05=In(0,5,"g(x)"),G565=In(5,"6{,}5","g(x)"),G065=In(0,"6{,}5","g(x)");
-const REG=HB("Diese Regeln brauchen Sie",[K("\\int_a^b f(x)\\,dx+\\int_b^c f(x)\\,dx=\\int_a^c f(x)\\,dx")+" (Intervalle zusammenfügen)",K("\\int_a^b f(x)\\,dx+\\int_a^b g(x)\\,dx=\\int_a^b\\big(f(x)+g(x)\\big)\\,dx")+" (Summenregel)",K("k\\cdot\\int_a^b f(x)\\,dx=\\int_a^b k\\cdot f(x)\\,dx")+" (Faktorregel – auch für k = −1)"]);
+const RIV=K("\\int_a^b f(x)\\,dx+\\int_b^c f(x)\\,dx=\\int_a^c f(x)\\,dx")+" (Intervalle zusammenfügen)";
+const RSD=K("\\int_a^b f(x)\\,dx\\pm\\int_a^b g(x)\\,dx=\\int_a^b\\big(f(x)\\pm g(x)\\big)\\,dx")+" (Summen- und Differenzregel)";
+const REG=HB("Diese Regeln brauchen Sie",[RIV,RSD]);
 const A2=2197/96,H2=(id,tit,hints,extra)=>C.push(Object.assign({id,heft:2,tit,online:null,build:()=>({title:tit,steps:[{name:"Hilfe",hints}],solution:[]})},extra||{}));
 H2("zer-a","Gruppe A · a) Teilflächen",[
   HB("Wo liegen die Graphen?",["Wo liegt der Graph von f(x) über der x-Achse?","Wo liegt der Graph von g(x) unter der x-Achse?","Wo schneidet der Graph von g(x) die x-Achse? → "+K("g(x)=0")+" lösen"]),
@@ -950,7 +952,7 @@ H2("zer-b","Gruppe A · b) Flächeninhalt",[
   HB("So dokumentieren",["Für jede Teilfläche: Integral aufschreiben und Wert notieren","Am Ende: "+K("A="+F65+"-"+G05+"-"+G565+"=\\ldots")])],
   {chk:{v:A2,tol:.01,tips:[[19.365,"Das ist nur die Fläche unter dem Graphen von f(x). Es fehlen noch die Teilflächen mit g(x)."],[14.156,"Das Integral von 0 bis 5 ist negativ. Für die Fläche gehört ein Minus davor."],[24.573,"Ziehen Sie noch das Stück unter dem Graphen von g(x) zwischen 5 und 6,5 ab."],[12.469,"Das Integral von 0 bis 5 ist negativ. Für die Fläche gehört ein Minus davor."]]}});
 H2("zer-c","Gruppe A · c) Rechenregeln",[REG,
-  HB("Vorgehen",["Betragsstriche zuerst durch ein Minus ersetzen","Die beiden Integrale über g(x) zusammenbringen: Minus ausklammern, dann Intervalle zusammenfügen","Dann: "+K("-\\int_a^b g(x)\\,dx=\\int_a^b\\big(-g(x)\\big)\\,dx")+" und Summenregel"]),
+  HB("Vorgehen",["Betragsstriche zuerst durch ein Minus ersetzen","Die beiden Integrale über g(x) zusammenbringen: Minus ausklammern, dann Intervalle zusammenfügen","Zum Schluss die Differenzregel: zwei Integrale mit gleichen Grenzen → ein Integral"]),
   HB("Was fällt auf?",["Am Ende bleibt ein <b>einziges</b> Integral übrig.","Welcher Term steht darin? Was müssen Sie also nur noch integrieren?"])]);
 H2("ver-a","Gruppe B · a) Vorteil",[HB("Schauen Sie genau hin",["Wo liegen die verschobenen Graphen zwischen x = 0 und x = 6,5?","Liegt jetzt alles <b>über</b> der x-Achse?","Brauchen Sie dann noch Nullstellen oder Teilflächen unter der x-Achse?"])]);
 H2("ver-b","Gruppe B · b) Flächeninhalt",[
@@ -960,9 +962,9 @@ H2("ver-b","Gruppe B · b) Flächeninhalt",[
 H2("ver-c","Gruppe B · c) Verschieben um d",[
   HB("Allgemein mit d",["Ersetzen Sie die 2 durch d","Summenregel: "+K("\\int_a^b\\big(f(x)+d\\big)\\,dx=\\int_a^b f(x)\\,dx+\\int_a^b d\\,dx"),K("\\int_a^b d\\,dx")+" ist ein Rechteck: "+K("d\\cdot(b-a)")]),
   HB("Weiter",["Schreiben Sie A mit d auf","Was passiert mit "+K("d\\cdot(b-a)")+", wenn Sie die beiden Integrale voneinander abziehen?"])]);
-H2("ver-d","Gruppe B · d) Ein Integral",[REG,
-  HB("Vorgehen",["Schreiben Sie das Minus als Faktor −1: "+K("-\\int_a^b g(x)\\,dx=\\int_a^b\\big(-g(x)\\big)\\,dx"),"Jetzt haben Sie zwei Integrale mit gleichen Grenzen → Summenregel"]),
-  HB("Fast fertig",["Es bleibt "+K("\\int_a^b\\big(\\ldots\\big)\\,dx")+". Was steht in der Klammer?"])]);
+H2("ver-d","Gruppe B · d) Ein Integral",[
+  HB("Diese Regel brauchen Sie",[RSD,"Sie gilt für <b>Plus und Minus</b>."]),
+  HB("Anwenden",["Haben beide Integrale dieselben Grenzen?","Dann dürfen Sie beide Funktionsterme in <b>ein</b> Integral schreiben – das Minus bleibt dazwischen.","Klammer nicht vergessen: "+K("\\int_a^b\\big(\\ldots-\\ldots\\big)\\,dx")])]);
 const L=(l,t)=>({l:l?K(l):"",t:t||""});
 C.push({id:"zer",heft:2,tit:"Gruppe A: Zerlegen",online:null,build:()=>({title:"Gruppe A",steps:[{name:"Musterlösung",hints:[]}],solution:[
   L("g(x)=0:\\quad\\tfrac14x^2-\\tfrac54x=0\\quad\\Rightarrow\\quad x\\,\\big(\\tfrac14x-\\tfrac54\\big)=0\\quad\\Rightarrow\\quad x=0\\text{ oder }x=5","a) Nullstellen von g(x). Bei x = 5 wechselt der Graph von g(x) von unterhalb nach oberhalb der x-Achse."),
@@ -973,8 +975,7 @@ C.push({id:"zer",heft:2,tit:"Gruppe A: Zerlegen",online:null,build:()=>({title:"
   L("A\\approx19{,}365+5{,}208-1{,}688\\approx22{,}89","Der Flächeninhalt beträgt etwa 22,89 FE."),
   L("A="+F65+"-\\Big("+G05+"+"+G565+"\\Big)","c) Minus ausklammern"),
   L("="+F65+"-"+G065,"Intervalle zusammenfügen"),
-  L("="+F65+"+"+In(0,"6{,}5","\\big(-g(x)\\big)"),"Faktorregel mit k = −1"),
-  L("="+In(0,"6{,}5","\\big(f(x)-g(x)\\big)"),"Summenregel. Es fällt auf: Man muss nur f(x) − g(x) integrieren – ein einziges Integral, ohne Nullstellen und Teilflächen.")]})});
+  L("="+In(0,"6{,}5","\\big(f(x)-g(x)\\big)"),"Differenzregel. Es fällt auf: Man muss nur f(x) − g(x) integrieren – ein einziges Integral, ohne Nullstellen und Teilflächen.")]})});
 C.push({id:"ver",heft:2,tit:"Gruppe B: Verschieben",online:null,build:()=>({title:"Gruppe B",steps:[{name:"Musterlösung",hints:[]}],solution:[
   L("","a) Nach dem Verschieben liegen beide Graphen zwischen 0 und 6,5 ganz über der x-Achse. Man braucht keine Nullstellen und keine Teilflächen unter der x-Achse."),
   L("A="+In(0,"6{,}5","\\big(f(x)+2\\big)")+"-"+In(0,"6{,}5","\\big(g(x)+2\\big)"),"b) Fläche unter f(x) + 2 minus Fläche unter g(x) + 2 (GTR)."),
@@ -983,8 +984,7 @@ C.push({id:"ver",heft:2,tit:"Gruppe B: Verschieben",online:null,build:()=>({titl
   L("="+In("a","b","f(x)")+"+"+In("a","b","d")+"-"+In("a","b","g(x)")+"-"+In("a","b","d"),"Summenregel"),
   L("="+In("a","b","f(x)")+"+d\\,(b-a)-"+In("a","b","g(x)")+"-d\\,(b-a)",K("\\int_a^b d\\,dx")+" ist ein Rechteck mit dem Inhalt d · (b − a)."),
   L("="+In("a","b","f(x)")+"-"+In("a","b","g(x)"),"d fällt weg: Das Verschieben ändert A nicht."),
-  L("="+In("a","b","f(x)")+"+"+In("a","b","\\big(-g(x)\\big)"),"d) Faktorregel mit k = −1"),
-  L("="+In("a","b","\\big(f(x)-g(x)\\big)"),"Summenregel. Man muss also nur f(x) − g(x) integrieren.")]})});
+  L("="+In("a","b","\\big(f(x)-g(x)\\big)"),"d) Differenzregel. Man muss also nur f(x) − g(x) integrieren.")]})});
 const tableHTML=(cols,rows,h)=>'<table class="ptab"><tr>'+cols.map(c=>"<th>"+c+"</th>").join("")+"</tr>"+rows.map(r=>"<tr><th>"+r+"</th>"+cols.slice(1).map(()=>'<td style="height:'+h+'"></td>').join("")+"</tr>").join("")+"</table>";
 C.push({id:"vergleich",heft:2,tit:"Ergebnisse vergleichen",online:null,
   build:()=>({title:"Ergebnisse der Gruppen vergleichen",steps:[{name:"Vergleichen",hints:["Schauen Sie bei jeder Gruppe auf die <b>letzte Zeile</b> der allgemeinen Rechnung (Teil c). Was steht dort im Integral?","Alle drei Wege enden beim selben Integral – nur der Weg dorthin ist verschieden lang.","Für den Merksatz: Integriert wird „oberer Graph minus unterer Graph“ – egal, wo die Fläche liegt."]}],
