@@ -802,7 +802,7 @@ const evalLine=(Ftex,a,b,pre)=>"="+(pre||"")+(pre?"\\big(":"")+"F("+num(b)+")-F(
 const stammT=Ftex=>"Stammfunktion "+K("F(x)="+Ftex)+" bilden. Dann F(obere Grenze) − F(untere Grenze).";
 const RULECH=["Summenregel","Faktorregel","Intervalle zusammenfügen"];
 function randPoly(deg,lo,hi){const c=[];for(let i=0;i<=deg;i++)c.push(rnd(lo,hi));if(!c[deg])c[deg]=1;return c}
-const FIX=[{t:"sum",a:1,b:4,p:[3,-4,1],q:[-3,4]},{t:"faktor",a:1,b:2,k:1.2,inner:[0,-2,0,1]},{t:"grenzen",a:1,b:3,m:1.7,f:{c:3,n:2}}];
+const FIX=[{t:"grenzen",a:1,b:3,m:1.7,f:{c:3,n:2}},{t:"faktor",a:1,b:2,k:1.2,inner:[0,-2,0,1]},{t:"sum",a:1,b:4,p:[3,-4,1],q:[-3,4]}];
 const genPlenum=l=>Object.assign({lvl:1,fix:l-1},FIX[l-1]);
 function genRegeln(lvl){
   const t=pick(["sum","sum","faktor","grenzen"]),deg=lvl===1?2:3;
@@ -938,7 +938,7 @@ startHeft({key:"integralheft-v1",noRev:true,
     gen:l=>genBeweis(l),build:buildBeweis,
     extra:()=>MB,extraBind:el=>{const d=$("#mbox",el);if(d&&!ENG.S.stats.beweis[0])d.open=true;d.addEventListener("toggle",()=>renderK(d))}},
    {id:"regeln",name:"Regeln anwenden",short:"Anwenden",icon:"🧮",color:"var(--c2)",nextLevel:"uebung",
-    levels:{label:"Aufgabe",names:["a","b","c"],titles:["a) Summenregel","b) Faktorregel","c) Intervalle zusammenfügen"]},
+    levels:{label:"Aufgabe",names:["a","b","c"],titles:["a) Intervalle zusammenfügen","b) Faktorregel","c) Summenregel"]},
     gen:genPlenum,build:buildRegeln},
    {id:"uebung",name:"Übungen",short:"Üben",icon:"🏋️",color:"var(--c3)",freeSol:true,
     levels:{label:"Stufe",names:["1","2","3"],titles:["Quadratische Funktionen","Bis x³ und Dezimalfaktoren","Auch negative Grenzen und 1/x²"]},
