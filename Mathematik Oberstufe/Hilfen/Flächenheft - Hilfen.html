@@ -909,27 +909,30 @@ const EINF={"a": "<div style=\"display:flex;gap:10px;align-items:center;margin:8
 const UL=a=>'<ul style="margin:4px 0 0;padding-left:20px">'+a.map(x=>'<li style="margin:3px 0">'+x+"</li>").join("")+"</ul>";
 const EINH=k=>["<b>Waagerechte Gerade</b>"+UL(["Gleichung: "+K("g(x)=c"),"c = dort, wo die Gerade die y-Achse schneidet","Beispiel: schneidet bei 5 → "+K("g(x)=5"),"Die x-Achse ist "+K("y=0")]),
   "<b>Strategie</b>"+UL(["Ein Integral = Fläche zwischen <b>einem</b> Graphen und der x-Achse","Welche Fläche liegt unter der roten Geraden?","Welche Fläche liegt unter dem Graphen von f?","Wie ergibt sich daraus die gefärbte Fläche?"]),
-  "<b>Flächen abziehen</b>"+EINF[k]+UL(["Fläche unter der Geraden <b>minus</b> Fläche unter f","Jede Fläche mit einem eigenen Integral berechnen","Welche Grenzen gehören jeweils dazu?"].concat(k==="b"?["Die Fläche unter f beginnt erst dort, wo f die x-Achse schneidet."]:[]))+
+  "<b>Flächen abziehen</b>"+EINF[k]+UL(["Fläche unter der Geraden <b>minus</b> Fläche unter f","Fläche unter der Geraden: ein Rechteck → Länge · Breite","Fläche unter f: mit einem Integral","Welche Grenzen gehören dazu?"].concat(k==="b"?["Die Fläche unter f beginnt erst dort, wo f die x-Achse schneidet."]:[]))+
    (k==="c"?'<div class="merk" style="margin-top:8px;border-color:#cf2f2a;box-shadow:3px 3px 0 #cf2f2a"><b>⚠️ Achtung:</b>'+UL(["Den Schnittpunkt von Gerade und Graph kann man <b>nicht genau ablesen</b>.","Berechnen Sie ihn: "+K("f(x)=3")])+'</div>':"")];
 const EINS={
- a:[{l:K("A=\\int_0^2 4\\,dx-\\int_0^2\\big(-x^3+3x^2\\big)\\,dx"),t:"Fläche unter der Geraden g(x) = 4 minus Fläche unter f. Bei x = 2 berührt f die Gerade."},
-    {l:K("G(x)=4x,\\quad F(x)=-\\tfrac14x^4+x^3"),t:"Zuerst die Stammfunktionen angeben."},
-    {l:K("\\int_0^2 4\\,dx=G(2)-G(0)=\\big[4\\cdot2\\big]-\\big[4\\cdot0\\big]")},{l:K("=8-0=8")},
+ a:[{l:K("A=A_{\\text{Rechteck}}-\\int_0^2\\big(-x^3+3x^2\\big)\\,dx"),t:"Rechteck unter der Geraden g(x) = 4 minus Fläche unter f. Bei x = 2 berührt f die Gerade."},
+    {l:K("A_{\\text{Rechteck}}=2\\cdot4=8"),t:"Das Rechteck ist 2 breit und 4 hoch – Länge mal Breite, kein Integral nötig."},
+    {l:K("F(x)=-\\tfrac14x^4+x^3"),t:"Zuerst die Stammfunktion angeben."},
     {l:K("\\int_0^2 f(x)\\,dx=F(2)-F(0)=\\big[-\\tfrac14\\cdot2^4+2^3\\big]-\\big[-\\tfrac14\\cdot0^4+0^3\\big]")},{l:K("=4-0=4")},
     {l:K("A=8-4=4"),t:"Der Flächeninhalt beträgt 4 FE."}],
  b:[{l:K("\\tfrac12x^3-\\tfrac12x=0\\quad\\Rightarrow\\quad \\tfrac12x\\,(x^2-1)=0\\quad\\Rightarrow\\quad x=1"),t:"Nullstelle von f (für x > 0). Zwischen 0 und 1 liegt f unter der x-Achse – dort begrenzt die x-Achse die Fläche."},
-    {l:K("A=\\int_0^2 3\\,dx-\\int_1^2\\big(\\tfrac12x^3-\\tfrac12x\\big)\\,dx"),t:"Fläche unter der Geraden g(x) = 3 minus Fläche unter f ab der Nullstelle."},
-    {l:K("G(x)=3x,\\quad F(x)=\\tfrac18x^4-\\tfrac14x^2"),t:"Zuerst die Stammfunktionen angeben."},
-    {l:K("\\int_0^2 3\\,dx=G(2)-G(0)=\\big[3\\cdot2\\big]-\\big[3\\cdot0\\big]")},{l:K("=6-0=6")},
+    {l:K("A=A_{\\text{Rechteck}}-\\int_1^2\\big(\\tfrac12x^3-\\tfrac12x\\big)\\,dx"),t:"Rechteck unter der Geraden g(x) = 3 minus Fläche unter f ab der Nullstelle."},
+    {l:K("A_{\\text{Rechteck}}=2\\cdot3=6"),t:"Das Rechteck ist 2 breit und 3 hoch – Länge mal Breite."},
+    {l:K("F(x)=\\tfrac18x^4-\\tfrac14x^2"),t:"Zuerst die Stammfunktion angeben."},
     {l:K("\\int_1^2 f(x)\\,dx=F(2)-F(1)=\\big[\\tfrac18\\cdot2^4-\\tfrac14\\cdot2^2\\big]-\\big[\\tfrac18\\cdot1^4-\\tfrac14\\cdot1^2\\big]")},{l:K("=1-\\big(-\\tfrac18\\big)=\\tfrac98")},
     {l:K("A=6-\\tfrac98=\\tfrac{39}{8}=4{,}875"),t:"Der Flächeninhalt beträgt 4,875 FE."}],
  c:[{l:K("x^2+1=3\\quad\\Rightarrow\\quad x^2=2\\quad\\Rightarrow\\quad x=\\sqrt2\\approx1{,}41"),t:"⚠️ Schnittstelle von f und g(x) = 3 (für x > 0). Sie lässt sich nicht genau ablesen."},
-    {l:K("A=\\int_0^{\\sqrt2}3\\,dx-\\int_0^{\\sqrt2}\\big(x^2+1\\big)\\,dx"),t:"Fläche unter der Geraden minus Fläche unter f."},
-    {l:K("G(x)=3x,\\quad F(x)=\\tfrac13x^3+x"),t:"Zuerst die Stammfunktionen angeben."},
-    {l:K("\\int_0^{\\sqrt2}3\\,dx=G(\\sqrt2)-G(0)=\\big[3\\cdot\\sqrt2\\big]-\\big[3\\cdot0\\big]")},{l:K("=3\\sqrt2-0\\approx4{,}24")},
+    {l:K("A=A_{\\text{Rechteck}}-\\int_0^{\\sqrt2}\\big(x^2+1\\big)\\,dx"),t:"Rechteck unter der Geraden minus Fläche unter f."},
+    {l:K("A_{\\text{Rechteck}}=\\sqrt2\\cdot3=3\\sqrt2\\approx4{,}24"),t:"Das Rechteck ist √2 breit und 3 hoch – Länge mal Breite."},
+    {l:K("F(x)=\\tfrac13x^3+x"),t:"Zuerst die Stammfunktion angeben."},
     {l:K("\\int_0^{\\sqrt2}f(x)\\,dx=F(\\sqrt2)-F(0)=\\big[\\tfrac13\\cdot(\\sqrt2)^3+\\sqrt2\\big]-\\big[\\tfrac13\\cdot0^3+0\\big]")},{l:K("=\\tfrac53\\sqrt2-0\\approx2{,}36")},
     {l:K("A=3\\sqrt2-\\tfrac53\\sqrt2=\\tfrac43\\sqrt2\\approx1{,}89"),t:"Der Flächeninhalt beträgt etwa 1,89 FE."}]};
-["a","b","c"].forEach(k=>C.push({id:"ein-"+k,heft:1,tit:"Aufgabe "+k+")"+(k==="c"?" ⭐":""),online:null,solP:"fh1-musterloesung:",solH:210890249,build:()=>({title:"Aufgabe "+k+")",steps:[{name:"Hilfe",hints:EINH(k)}],solution:EINS[k]})}));
+const EINC={a:{v:4,tips:[[8,"Das ist nur das Rechteck. Ziehen Sie noch die Fläche unter f ab."],[-4,"Vorzeichen prüfen: Rechteck minus Fläche unter f."]]},
+ b:{v:39/8,tips:[[5,"Sie haben die Fläche unter f von 0 bis 2 abgezogen. Zwischen 0 und 1 liegt f unter der x-Achse – dort gehört nichts abgezogen. Starten Sie bei der Nullstelle."],[6,"Das ist nur das Rechteck. Ziehen Sie noch die Fläche unter f ab."],[9/8,"Das ist nur die Fläche unter f. Gesucht ist Rechteck minus diese Fläche."]]},
+ c:{v:4*Math.SQRT2/3,tol:.006,tips:[[1.875,"Fast! Sie haben die Schnittstelle wohl abgelesen (1,5). Berechnen Sie sie genau: f(x) = 3."],[5/3,"Haben Sie x = 1 als Grenze genommen? Berechnen Sie die Schnittstelle: f(x) = 3."]]}};
+["a","b","c"].forEach(k=>C.push({id:"ein-"+k,heft:1,tit:"Aufgabe "+k+")"+(k==="c"?" ⭐":""),online:null,chk:EINC[k],solP:"fh1-musterloesung:",solH:210890249,build:()=>({title:"Aufgabe "+k+")",steps:[{name:"Hilfe",hints:EINH(k)}],solution:EINS[k]})}));
 /* Heft 2 */
 const W={A:["Weg A: Zerlegen (geführt)","<p><b>a)</b> Berechnen Sie (GTR erlaubt) "+K("\\int_0^{6{,}5}f(x)\\,dx")+", "+K("\\int_0^5g(x)\\,dx")+" und "+K("\\int_5^{6{,}5}g(x)\\,dx")+" und färben Sie die zugehörigen Flächen ein.</p><p><b>b)</b> Berechnen Sie A mithilfe dieser Integrale. Bilden Sie dann "+K("f(x)-g(x)")+", berechnen Sie "+K("\\int_0^{6{,}5}\\big(f(x)-g(x)\\big)dx")+" und vergleichen Sie.</p><p><b>c)</b> Zeigen Sie mit den Rechenregeln für Integrale allgemein, dass beide Ergebnisse übereinstimmen müssen.</p>"],
   B:["Weg B: Zerlegen (offen)","<p><b>a)</b> Zerlegen Sie die gefärbte Fläche geschickt in Teilflächen, die jeweils nur zwischen <b>einem</b> Graphen und der x-Achse liegen. Zeichnen Sie die Teilflächen ein.</p><p><b>b)</b> Bestimmen Sie die Inhalte der Teilflächen (GTR erlaubt) und damit A.</p><p><b>c)</b> Vereinfachen Sie Ihren Term für A mit den Rechenregeln für Integrale. Was fällt Ihnen auf?</p>"],
@@ -961,6 +964,19 @@ const hc=s=>{let h=0x811c9dc5;for(const c of s){h^=c.charCodeAt(0);h=Math.imul(h
 const UNL={};
 function index(){root.innerHTML='<div class="label hl"><h1>Hilfen</h1><p>zu den Goodnotes-Heften · Flächenheft</p></div>'+
   [1].map(n=>'<div class="stepblk"><h3>Heft '+n+": "+HEFTE[n]+"</h3>"+C.filter(e=>e.heft===n).map(e=>'<a class="btn hlink" href="#'+e.id+'">'+e.tit+"</a>").join(" ")+"</div>").join("")}
+function showCheck(id){
+  const e=C.find(x=>x.id===id);if(!e||!e.chk){index();return}const c=e.chk;
+  document.documentElement.style.setProperty("--tab",["","var(--c4)","var(--c1)","var(--c2)"][e.heft]);
+  root.innerHTML='<div class="hhead"><span class="lvltag">Heft '+e.heft+" · "+HEFTE[e.heft]+'</span><h2 class="htit">'+e.tit+' – Ergebnis prüfen</h2></div>'+
+    '<p>Geben Sie Ihren Flächeninhalt ein – als Bruch oder als Dezimalzahl (auf zwei Stellen gerundet).</p><div class="row"><label for="ein">A =</label><input class="fin" id="ein" inputmode="decimal" autocomplete="off" style="width:9em"><span>FE</span><button class="btn main" id="chk">✓ Prüfen</button></div><div id="fb" aria-live="polite" style="margin-top:12px"></div>';
+  const go=()=>{const v=parseNum($("#ein").value),fb=$("#fb");
+    if(v==null){fb.innerHTML='<div class="merk">Bitte zuerst eine Zahl eingeben.</div>';return}
+    if(isNaN(v)){fb.innerHTML='<div class="merk">Das ist keine Zahl. Schreiben Sie z. B. 4,5 oder 9/2.</div>';return}
+    if(Math.abs(v-c.v)<=(c.tol||.006)){fb.innerHTML='<div class="merk" style="border-color:var(--green);box-shadow:3px 3px 0 var(--green)"><b style="color:var(--green)">✓ Richtig!</b> Prima – Ihr Ergebnis stimmt.</div>';return}
+    const t=(c.tips||[]).find(x=>Math.abs(v-x[0])<=.006);
+    fb.innerHTML='<div class="merk" style="border-color:var(--red);box-shadow:3px 3px 0 var(--red)"><b style="color:var(--red)">Noch nicht richtig.</b> '+(t?t[1]:"Prüfen Sie Ihre Rechnung. Die 💡 Hilfen im Heft können helfen.")+"</div>"};
+  $("#chk").onclick=go;$("#ein").onkeydown=ev=>{if(ev.key==="Enter")go()};
+}
 function show(id,wantSol){
   const e=C.find(x=>x.id===id);if(!e){index();return}
   const t=e.build(),ctx={hintLvl:0};let si=0;const lvl=t.steps.map(()=>0);
@@ -985,7 +1001,7 @@ function show(id,wantSol){
   $("#lockIn").onkeydown=ev=>{if(ev.key==="Enter")$("#lockOk").click()};$("#lockCancel").onclick=()=>$("#lockOverlay").classList.add("hidden");
   draw();if(wantSol)(UNL[e.solH||0]?sol():ask());
 }
-function route(){const h=decodeURIComponent(location.hash.slice(1));if(!h){index();return}const [id,f]=h.split("!");show(id,f==="l");window.scrollTo(0,0)}
+function route(){const h=decodeURIComponent(location.hash.slice(1));if(!h){index();return}const [id,f]=h.split("!");if(f==="p")showCheck(id);else show(id,f==="l");window.scrollTo(0,0)}
 window.addEventListener("hashchange",route);route();window.__ready=true;
 })();
 </script></body></html>
