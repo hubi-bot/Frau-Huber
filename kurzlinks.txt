@@ -36,7 +36,7 @@ integralregeln | Mathematik Oberstufe/Integralrechnung/Integralheft - Integratio
 flaeche-graphen | Mathematik Oberstufe/Integralrechnung/Flächenheft - Fläche zwischen zwei Graphen.html
 flaeche-hilfen | Mathematik Oberstufe/Hilfen/Flächenheft - Hilfen.html
 flaeche-heft1 | Mathematik Oberstufe/Integralrechnung/Flächenheft 1 - Einstieg (Goodnotes).pdf
-flaeche-heft2 | Mathematik Oberstufe/Integralrechnung/Flächenheft 2 - Strategie-Werkstatt (Goodnotes).pdf
+flaeche-heft2 | Mathematik Oberstufe/Integralrechnung/Flächenheft 2 - Strategieentwicklung (Goodnotes).pdf
 flaeche-goodnotes | Mathematik Oberstufe/Integralrechnung/Flächenheft 3 - Strategieplanung und Vertiefung (Goodnotes).pdf
 flaeche-download | Mathematik Oberstufe/Integralrechnung/Flächenheft - Goodnotes-Hefte herunterladen.html
 
@@ -69,3 +69,4 @@ wissensdetektiv | Informatik 5/wissensdetektiv.html
 # Chemie 6
 kohl-detektiv | Chemie Klasse 6/Säuren und Laugen/Kohl-Detektiv – Rotkraut oder Blaukraut.html
 kohl-chat | Chemie Klasse 6/Säuren und Laugen/Chat – Rotkraut oder Blaukraut.html
+flaeche-gefuehrt | Mathematik Oberstufe/Integralrechnung/Flächenheft 2 - Zerlegen geführt.html

@@ -42,7 +42,8 @@ Mathematik Oberstufe/Integralrechnung/Integralheft - Integrationsregeln.html | I
 Mathematik Oberstufe/Integralrechnung/Flächenheft - Fläche zwischen zwei Graphen.html | Flächenheft – Fläche zwischen zwei Graphen
 Mathematik Oberstufe/Hilfen/Flächenheft - Hilfen.html | Flächenheft – Hilfen zu den Goodnotes-Heften
 Mathematik Oberstufe/Integralrechnung/Flächenheft 1 - Einstieg (Goodnotes).pdf | Flächenheft 1 – Einstieg (Goodnotes)
-Mathematik Oberstufe/Integralrechnung/Flächenheft 2 - Strategie-Werkstatt (Goodnotes).pdf | Flächenheft 2 – Strategie-Werkstatt (Goodnotes)
+Mathematik Oberstufe/Integralrechnung/Flächenheft 2 - Strategieentwicklung (Goodnotes).pdf | Flächenheft 2 – Strategieentwicklung (Goodnotes)
+Mathematik Oberstufe/Integralrechnung/Flächenheft 2 - Zerlegen geführt.html | Flächenheft 2 – Zerlegen (geführt)
 Mathematik Oberstufe/Integralrechnung/Flächenheft 3 - Strategieplanung und Vertiefung (Goodnotes).pdf | Flächenheft 3 – Strategieplanung und Vertiefung (Goodnotes)
 Mathematik Oberstufe/Integralrechnung/Flächenheft - Goodnotes-Hefte herunterladen.html | Flächenheft – Goodnotes-Hefte herunterladen
 
