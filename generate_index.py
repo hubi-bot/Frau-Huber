@@ -417,6 +417,7 @@ uebersicht = f"""<!DOCTYPE html>
 <body>
   <div class="container" style="max-width: 1100px">
     <header class="text-center mb-4 position-relative">
+      <button type="button" class="btn btn-sm btn-outline-primary position-absolute top-0 start-0 qr" data-url="https://hubi-bot.github.io/Frau-Huber/{UEBERSICHT}/" data-titel="Diese Übersicht (fürs iPad)" title="QR-Code zu dieser Übersicht">📱 QR</button>
       <a class="btn btn-sm btn-outline-primary position-absolute top-0 end-0" href="https://hubi-bot.github.io/Frau-Huber/uebersicht-x4brac/codes.html" title="Alle Codes der Materialien (mit Passwort)">🔑 Codes</a>
       <h1 class="display-6 fw-bold">📚 <span class="edit" data-key="Seitentitel">{html.escape(SEITENTITEL)}</span></h1>
       <p class="lead text-muted"><span class="edit" data-key="Untertitel">{html.escape(UNTERTITEL)}</span></p>
@@ -700,6 +701,64 @@ startseite = f"""<!DOCTYPE html>
 </html>
 """
 
+
+# ---------- Übersicht mit Passwort schützen ----------
+# Die Übersicht wird verschlüsselt veröffentlicht. Zum Entschlüsseln braucht man das Passwort:
+# Es entsperrt den privaten Schlüssel in .lehrkraft/schluessel.json (dort nur verschlüsselt gespeichert).
+def uebersicht_verschluesseln(inhalt):
+    pfad = os.path.join(".lehrkraft", "schluessel.json")
+    if not os.path.isfile(pfad):
+        return inhalt
+    try:
+        from cryptography.hazmat.primitives.ciphers.aead import AESGCM
+    except ImportError:
+        import subprocess, sys
+        subprocess.check_call([sys.executable, "-m", "pip", "install", "--quiet", "cryptography"])
+        from cryptography.hazmat.primitives.ciphers.aead import AESGCM
+    from cryptography.hazmat.primitives import serialization, hashes
+    from cryptography.hazmat.primitives.asymmetric import padding
+    import base64
+    with open(pfad, encoding="utf-8") as f:
+        sch = json.load(f)
+    oeffentlich = serialization.load_der_public_key(base64.b64decode(sch["pub"]))
+    k = os.urandom(32)
+    iv = os.urandom(12)
+    geheim = AESGCM(k).encrypt(iv, inhalt.encode("utf-8"), None)
+    ek = oeffentlich.encrypt(k, padding.OAEP(mgf=padding.MGF1(algorithm=hashes.SHA256()), algorithm=hashes.SHA256(), label=None))
+    b = lambda x: base64.b64encode(x).decode()
+    daten = json.dumps({"salt": sch["salt"], "iv": sch["iv"], "priv": sch["priv"], "ek": b(ek), "iv2": b(iv), "ct": b(geheim)})
+    return LOGIN_SEITE.replace("__DATEN__", daten)
+
+LOGIN_SEITE = """<!DOCTYPE html>
+<html lang="de"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="robots" content="noindex, nofollow">
+<title>Übersicht – Anmeldung</title>
+<style>
+body{margin:0;min-height:100vh;display:grid;place-items:center;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;background:#121620;color:#e7ebf3;
+background-image:linear-gradient(rgba(46,58,85,.35) 1px,transparent 1px),linear-gradient(90deg,rgba(46,58,85,.35) 1px,transparent 1px);background-size:22px 22px}
+form{background:#1c2232;border-top:4px solid #d6267f;border-radius:12px;padding:24px;box-shadow:0 4px 14px rgba(0,0,0,.35);width:min(92vw,360px)}
+h1{font-size:1.3rem;margin:0 0 14px}input[type=password]{width:100%;box-sizing:border-box;font:inherit;padding:10px;border-radius:8px;border:1px solid #2e3a55;background:#161b29;color:#e7ebf3;margin-bottom:10px}
+button{width:100%;font:inherit;font-weight:700;padding:10px;border-radius:8px;border:none;background:#d6267f;color:#fff;cursor:pointer}
+label.m{display:flex;gap:8px;align-items:center;font-size:.9rem;color:#a4aec3;margin-bottom:12px}p.e{color:#ff8a84;min-height:1.2em;margin:10px 0 0}
+</style></head><body>
+<form id="f"><h1>🔒 Übersicht</h1><input type="password" id="pw" placeholder="Passwort" autocomplete="current-password" autofocus aria-label="Passwort">
+<label class="m"><input type="checkbox" id="merk"> Auf diesem Gerät merken</label><button>Öffnen</button><p class="e" id="e" aria-live="polite"></p></form>
+<script>
+const D=__DATEN__;const b=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
+async function auf(pw){const k0=await crypto.subtle.importKey("raw",new TextEncoder().encode(pw),"PBKDF2",false,["deriveKey"]);
+ const w=await crypto.subtle.deriveKey({name:"PBKDF2",salt:b(D.salt),iterations:250000,hash:"SHA-256"},k0,{name:"AES-GCM",length:256},false,["decrypt"]);
+ const priv=await crypto.subtle.decrypt({name:"AES-GCM",iv:b(D.iv)},w,b(D.priv));
+ const rk=await crypto.subtle.importKey("pkcs8",priv,{name:"RSA-OAEP",hash:"SHA-256"},false,["decrypt"]);
+ const k=await crypto.subtle.decrypt({name:"RSA-OAEP"},rk,b(D.ek));
+ const ak=await crypto.subtle.importKey("raw",k,"AES-GCM",false,["decrypt"]);
+ return new TextDecoder().decode(await crypto.subtle.decrypt({name:"AES-GCM",iv:b(D.iv2)},ak,b(D.ct)))}
+async function los(pw,merken){let h;try{h=await auf(pw)}catch(x){document.getElementById("e").textContent="Das Passwort stimmt nicht.";try{localStorage.removeItem("ue-pw")}catch(y){}return}
+ try{sessionStorage.setItem("ue-pw",pw);if(merken)localStorage.setItem("ue-pw",pw)}catch(y){}
+ document.open();document.write(h);document.close()}
+document.getElementById("f").onsubmit=e=>{e.preventDefault();los(document.getElementById("pw").value,document.getElementById("merk").checked)};
+let g="";try{g=localStorage.getItem("ue-pw")||sessionStorage.getItem("ue-pw")||""}catch(x){}
+if(g)los(g,false);
+</script></body></html>"""
+
 # ---------- Seite zusammenbauen ----------
 shutil.rmtree(AUSGABE, ignore_errors=True)
 os.makedirs(os.path.join(AUSGABE, UEBERSICHT))
@@ -707,7 +766,7 @@ os.makedirs(os.path.join(AUSGABE, UEBERSICHT))
 with open(os.path.join(AUSGABE, "index.html"), "w", encoding="utf-8") as f:
     f.write(startseite)
 with open(os.path.join(AUSGABE, UEBERSICHT, "index.html"), "w", encoding="utf-8") as f:
-    f.write(uebersicht)
+    f.write(uebersicht_verschluesseln(uebersicht))
 # Codes-Dokument für Lehrkräfte (verschlüsselt, Passwort nötig) liegt neben der Übersicht.
 if os.path.isfile(os.path.join(".lehrkraft", "codes.html")):
     shutil.copyfile(os.path.join(".lehrkraft", "codes.html"), os.path.join(AUSGABE, UEBERSICHT, "codes.html"))
