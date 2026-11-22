@@ -416,7 +416,8 @@ uebersicht = f"""<!DOCTYPE html>
 </head>
 <body>
   <div class="container" style="max-width: 1100px">
-    <header class="text-center mb-4">
+    <header class="text-center mb-4 position-relative">
+      <a class="btn btn-sm btn-outline-primary position-absolute top-0 end-0" href="codes.html" title="Alle Codes der Materialien (mit Passwort)">🔑 Codes</a>
       <h1 class="display-6 fw-bold">📚 <span class="edit" data-key="Seitentitel">{html.escape(SEITENTITEL)}</span></h1>
       <p class="lead text-muted"><span class="edit" data-key="Untertitel">{html.escape(UNTERTITEL)}</span></p>
       <button type="button" class="btn btn-sm btn-outline-secondary" id="bearbeiten">✏️ Überschriften bearbeiten</button>
@@ -707,6 +708,9 @@ with open(os.path.join(AUSGABE, "index.html"), "w", encoding="utf-8") as f:
     f.write(startseite)
 with open(os.path.join(AUSGABE, UEBERSICHT, "index.html"), "w", encoding="utf-8") as f:
     f.write(uebersicht)
+# Codes-Dokument für Lehrkräfte (verschlüsselt, Passwort nötig) liegt neben der Übersicht.
+if os.path.isfile(os.path.join(".lehrkraft", "codes.html")):
+    shutil.copyfile(os.path.join(".lehrkraft", "codes.html"), os.path.join(AUSGABE, UEBERSICHT, "codes.html"))
 
 # Lose Dateien im Hauptordner bleiben unter ihrer bisherigen Adresse erreichbar.
 for name in os.listdir("."):
