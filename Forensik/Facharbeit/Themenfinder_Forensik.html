@@ -1,0 +1,1256 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Themenfinder – Facharbeit Forensik</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;700&family=Patrick+Hand&family=JetBrains+Mono:wght@500;700&display=swap">
+<style>
+/* Aufmachung wie Zitierheft und Lerntrainer: Heft mit Registerreitern, eine Heftseite, Blättern mit Zurück/Weiter. Immer dunkel. */
+:root{--desk:#121620;--paper:#232a3b;--sheet:#1c2232;--karo:#2b364f;--ink:#e7ebf3;--muted:#a4aec3;--line:#344058;--grid:#263047;
+--accent:#93b6ff;--accent-soft:#26335a;--marker:#f2c230;--marker-ink:#1a1a1a;--marker-soft:#2e2710;--ok:#55d492;--ok-soft:#133022;--bad:#ff6b64;--bad-soft:#3a1916;--warn:#f2c46b;--warn-soft:#30260e;
+--c1:#5aa9ec;--c2:#ff7a4d;--c3:#ab85e8;--c5:#55d492;--c6:#e0ae45;--c7:#f06292;--pink:#ff6fb5;--tab:var(--c1);
+--hand:"Patrick Hand","Comic Sans MS",cursive;--f-body:"Lexend",system-ui,-apple-system,"Segoe UI",sans-serif;--f-mono:"JetBrains Mono",ui-monospace,Menlo,monospace;--r:12px;color-scheme:dark}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;overflow-wrap:break-word;hyphens:auto;background:var(--desk);color:var(--ink);font-family:var(--f-body);font-size:16.5px;line-height:1.55;padding:env(safe-area-inset-top,0px) env(safe-area-inset-right,0px) env(safe-area-inset-bottom,0px) env(safe-area-inset-left,0px);overflow-x:clip}
+h1,h2,h3,h4{font-family:var(--f-body);margin:0;line-height:1.25;text-wrap:balance}
+h3{font-size:1.08rem}p{margin:0}a{color:var(--accent)}
+button,input,select,textarea{font:inherit;color:inherit}button{cursor:pointer}
+:focus-visible{outline:3px solid var(--tab);outline-offset:2px}
+main.book{max-width:980px;margin:0 auto;padding:18px 14px 48px}
+.cover{display:flex;justify-content:space-between;align-items:flex-end;gap:14px;flex-wrap:wrap}
+.label{background:var(--sheet);border:2px solid var(--ink);border-radius:6px;padding:8px 18px 6px;transform:rotate(-1.2deg);box-shadow:3px 3px 0 var(--ink)}
+.label h1{font-family:var(--hand);font-weight:400;font-size:44px;line-height:1;color:var(--accent)}
+.label p{font-size:13px;color:var(--muted)}
+.coverside{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.stat{background:var(--sheet);border-radius:999px;padding:4px 12px;font-size:13px;border:1px solid var(--karo)}
+.smallbtn{border:2px solid var(--ink);background:var(--sheet);border-radius:10px;padding:5px 12px;font-size:14px;font-weight:500;box-shadow:2px 2px 0 var(--ink);min-height:36px}
+.smallbtn:active{transform:translate(2px,2px);box-shadow:none}
+.tabs{display:flex;gap:5px;margin:22px 0 0 8px;position:relative;z-index:1;overflow-x:auto;scrollbar-width:none;padding-top:6px}
+.tabs::-webkit-scrollbar{display:none}
+.rtab{flex:none;border:none;border-radius:12px 12px 0 0;padding:8px 12px 10px;font-weight:700;font-size:13.5px;color:#10131b;opacity:.55;transform:translateY(6px);transition:transform .15s,opacity .15s;white-space:nowrap}
+.rtab .n{font-family:var(--hand);font-size:21px;line-height:0;margin-right:5px;vertical-align:-1px}
+.rtab[aria-selected=true]{opacity:1;transform:none}.rtab:hover{opacity:.9}
+.sheet{position:relative;background:var(--sheet);border-radius:4px 14px 14px 14px;border-top:6px solid var(--tab);padding:20px 18px 18px;box-shadow:0 2px 0 var(--karo),0 10px 30px rgba(0,0,0,.3);background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:22px 22px;background-position:-1px -1px;min-height:560px;display:flex;flex-direction:column}
+.sheet::before{content:"";position:absolute;top:0;bottom:0;left:44px;width:2px;background:color-mix(in srgb,var(--bad) 40%,transparent);pointer-events:none}
+.inner{position:relative;padding-left:40px;display:flex;flex-direction:column;gap:14px;flex:1;min-width:0}
+.chap{font-size:12.5px;font-weight:700;color:var(--tab);text-transform:uppercase;letter-spacing:.06em;background:var(--sheet);width:fit-content;padding:0 6px;border-radius:4px}
+.ptitle{font-family:var(--hand);font-weight:400;font-size:36px;line-height:1.05;background:var(--sheet);width:fit-content;max-width:100%;padding:0 8px;border-radius:6px}
+.pbody{display:grid;gap:14px;align-content:start}.pbody>*{min-width:0}
+.say{font-size:1.08rem;background:var(--sheet);padding:6px 10px;border-radius:8px;max-width:66ch}
+.pager{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:auto;padding-top:18px}
+.dots{display:flex;gap:6px;align-items:center;margin:0 auto;background:var(--sheet);padding:4px 8px;border-radius:99px}
+.dot{width:12px;height:12px;border-radius:50%;border:2px solid var(--tab);background:var(--sheet);padding:0}
+.dot.on{background:var(--tab)}
+.pcount{font-size:13px;color:var(--muted);background:var(--sheet);padding:2px 8px;border-radius:6px}
+.btn{font-weight:500;border-radius:10px;padding:9px 16px;border:2px solid var(--ink);background:var(--sheet);box-shadow:2px 2px 0 var(--ink);transition:transform .06s,box-shadow .06s;min-height:44px}
+.btn:active{transform:translate(2px,2px);box-shadow:none}
+.btn.main{background:var(--tab);border-color:var(--tab);color:#10131b;font-weight:700}
+.btn.small{padding:6px 12px;font-size:.9rem;min-height:38px}
+.btn.danger{background:var(--bad);border-color:var(--bad);color:#10131b}
+.btn:disabled{opacity:.4;cursor:default}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.hint-line{font-size:13px;color:var(--muted);margin:10px 0 0 4px}
+.card{background:var(--sheet);border:1px solid var(--line);border-radius:var(--r);padding:16px 18px;display:grid;gap:8px;align-content:start;max-width:80ch;min-width:0}
+.card.info{border:0;border-left:5px solid var(--accent);background:var(--accent-soft)}
+.card.rule{border:2px solid var(--ink)}
+.card.rule>h3::before{content:"Merke · ";color:var(--pink)}
+.card.warncard{border:0;border-left:5px solid var(--marker);background:var(--marker-soft)}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.grid2 .card,.grid3 .card{max-width:none}
+.small{font-size:.88rem;color:var(--muted)}
+.tag{display:inline-block;font-family:var(--f-mono);font-size:.72rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding:2px 8px;border-radius:6px;background:var(--accent-soft);color:var(--accent);justify-self:start}
+.tag.y{background:var(--marker);color:var(--marker-ink)}.tag.g{background:var(--ok-soft);color:var(--ok)}.tag.p{background:#3a1a2d;color:var(--pink)}
+.list{margin:0;padding-left:22px;display:grid;gap:6px}
+/* Erkenntnisweg */
+.weg{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));background:var(--sheet);border-radius:10px;padding:10px 6px}
+.st{position:relative;padding-right:6px}
+.st i{display:block;height:7px;background:var(--pink);margin:12px 0 10px}
+.st:first-child i{border-radius:4px 0 0 4px}.st:last-child i{border-radius:0 4px 4px 0}
+.st i::after{content:"";position:absolute;top:6px;left:0;width:19px;height:19px;border-radius:50%;background:var(--sheet);border:5px solid var(--pink)}
+.st.exp i{background:var(--c1)}.st.exp i::after{border-color:var(--c1)}
+.st b{display:block;font-size:14px;line-height:1.2}.st small{display:block;color:var(--muted);font-size:12.5px;line-height:1.3;margin-top:3px}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:13px;color:var(--muted)}
+.legend span::before{content:"";display:inline-block;width:14px;height:6px;border-radius:3px;margin-right:6px;vertical-align:middle;background:var(--pink)}.legend span.e::before{background:var(--c1)}
+/* Aufgaben */
+.task{border:1px solid var(--line);background:var(--sheet);border-radius:var(--r);padding:14px 16px;display:grid;gap:10px;max-width:80ch}
+.task.solved{border-color:var(--ok)}
+.task-no{font-family:var(--f-mono);font-size:.75rem;font-weight:700;color:var(--marker-ink);background:var(--marker);border-radius:6px;padding:1px 8px;margin-right:8px}
+.task.solved .task-no{background:var(--ok)}
+.opts{display:grid;gap:8px}
+.opt{display:block;text-align:left;padding:9px 12px;border:1.5px solid var(--line);border-radius:10px;background:var(--paper);width:100%;min-height:44px}
+.opt:hover{border-color:var(--accent)}
+.opt.right{border-color:var(--ok);background:var(--ok-soft)}.opt.wrong{border-color:var(--bad);background:var(--bad-soft)}
+.opt .why{display:block;font-size:.88rem;margin-top:4px}
+/* Auswahl-Chips */
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{position:relative}
+.chip input{position:absolute;opacity:0;inset:0;margin:0;cursor:pointer}
+.chip span{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:8px 14px;border:1.5px solid var(--line);border-radius:22px;background:var(--paper);font-size:15px;cursor:pointer}
+.chip span i{width:10px;height:10px;border-radius:50%;flex:none}
+.chip input:checked+span{border-color:var(--tab);background:color-mix(in srgb,var(--tab) 22%,var(--sheet));font-weight:500}
+.chip.no input:checked+span{border-color:var(--bad);background:var(--bad-soft)}
+.chip input:focus-visible+span{outline:3px solid var(--tab);outline-offset:2px}
+.qh{font-weight:700;font-size:1.02rem;background:var(--sheet);width:fit-content;padding:0 6px;border-radius:4px}
+/* Formular */
+input[type=text],input[type=search],input[type=number],select,textarea{font-size:16px;padding:9px 11px;border:1.5px solid var(--line);border-radius:8px;background:var(--paper);color:var(--ink);width:100%}
+textarea{min-height:80px;resize:vertical}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--tab);border-color:var(--tab)}
+label.f{display:block;font-weight:500;margin-bottom:4px}
+label.f small{display:block;font-weight:400;color:var(--muted);font-size:.86rem}
+.field{background:var(--sheet);border-radius:10px;padding:4px 0}
+.filters{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1.5fr) minmax(0,1fr) minmax(0,1fr);gap:8px}
+/* Themenkarten */
+.idea{background:var(--sheet);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px;display:grid;gap:8px;position:relative;min-width:0}
+.idea.focus{border:2px solid var(--pink)}
+.idea h3{padding-right:46px;line-height:1.3}
+.meta{display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-size:13px;color:var(--muted)}
+.pill{display:inline-flex;align-items:center;gap:6px;font-weight:500;color:var(--ink)}
+.pill i{width:10px;height:10px;border-radius:50%}
+.lv{color:var(--pink);letter-spacing:2px}
+.why{font-size:.9rem;background:var(--ok-soft);border-radius:8px;padding:5px 10px}
+.star{position:absolute;top:8px;right:8px;width:44px;height:44px;border:0;background:transparent;color:var(--muted);font-size:24px;padding:0}
+.star[aria-pressed=true]{color:var(--marker)}
+details summary{cursor:pointer;font-weight:500;color:var(--accent);min-height:36px;display:flex;align-items:center}
+dl.facts{display:grid;grid-template-columns:10.5em minmax(0,1fr);gap:6px 14px;margin:8px 0;font-size:.94rem}
+dl.facts dt{color:var(--muted);font-weight:500}dl.facts dd{margin:0}
+.opac{display:flex;flex-wrap:wrap;gap:6px}
+.opac a{font-size:.88rem;border:1.5px solid var(--line);border-radius:16px;padding:5px 11px;text-decoration:none;background:var(--paper)}
+.opac a:hover{border-color:var(--accent)}
+.empty{padding:22px;text-align:center;color:var(--muted);border:1.5px dashed var(--line);border-radius:12px;background:var(--sheet)}
+/* Archiv */
+.arch h3{display:flex;align-items:center;gap:10px;margin:18px 0 4px;padding:4px 8px;border-bottom:3px solid var(--c);background:var(--sheet);border-radius:6px 6px 0 0}
+.arch h3 i{width:12px;height:12px;border-radius:50%;background:var(--c)}
+.arch h3 small{font-weight:400;color:var(--muted);font-size:.85rem}
+.arch ul{list-style:none;margin:0;padding:0;background:var(--sheet)}
+.arch li{display:grid;grid-template-columns:44px 3.2em minmax(0,1fr) auto;gap:8px;align-items:center;padding:5px 6px;border-bottom:1px solid var(--line);font-size:.94rem}
+.arch .y{color:var(--muted);font-family:var(--f-mono);font-size:.85rem}
+.arch .art{font-size:.78rem;color:var(--muted);border:1px solid var(--line);border-radius:6px;padding:1px 6px}
+.heart{width:40px;height:40px;border:1.5px solid var(--line);background:var(--paper);color:var(--muted);border-radius:50%;font-size:17px;padding:0}
+.heart[aria-pressed=true]{background:var(--pink);border-color:var(--pink);color:#10131b}
+/* Check */
+.meter{height:12px;border-radius:99px;background:var(--line);overflow:hidden}
+.meter i{display:block;height:100%;background:var(--ok);transition:width .3s}
+.checks{list-style:none;margin:0;padding:0;background:var(--sheet);border-radius:10px}
+.checks li{display:grid;grid-template-columns:28px minmax(0,1fr);gap:6px;padding:7px 8px;border-bottom:1px solid var(--line);font-size:.95rem}
+.checks li b{font-size:1.05rem}.checks li.y b{color:var(--ok)}.checks li.n b{color:var(--muted)}
+.checks label{display:contents;cursor:pointer}
+.checks input{width:20px;height:20px;margin:2px 0 0;accent-color:var(--ok)}
+.w{color:var(--warn);font-weight:500}
+pre.sb{white-space:pre-wrap;font-family:var(--f-body);font-size:.92rem;background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:14px;margin:0;max-height:420px;overflow:auto}
+.toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--desk);padding:10px 18px;border-radius:10px;font-weight:700;opacity:0;pointer-events:none;transition:opacity .2s;z-index:20}
+.toast.on{opacity:1}
+.cheat{position:fixed;inset:0;background:rgba(0,0,0,.6);display:grid;place-items:center;z-index:30;padding:16px}
+.cheat-in{background:var(--sheet);border:2px solid var(--ink);border-radius:14px;padding:20px;display:grid;gap:12px;max-width:420px}
+@media(max-width:760px){.weg{grid-template-columns:repeat(4,minmax(0,1fr));row-gap:14px}.filters{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}}
+@media(max-width:560px){.sheet::before{left:22px}.inner{padding-left:16px}.sheet{padding:16px 10px}.ptitle{font-size:30px}.label h1{font-size:36px}.weg{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.filters{grid-template-columns:minmax(0,1fr)}dl.facts{grid-template-columns:minmax(0,1fr)}dl.facts dt{margin-top:4px}.arch li{grid-template-columns:44px minmax(0,1fr)}.arch .y{grid-column:2;grid-row:2}.arch .tt{grid-column:2;grid-row:1}.arch .art{display:none}.dots{order:3;width:100%;justify-content:center;background:none}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<main class="book">
+<header class="cover">
+<div class="label"><h1>Themenfinder</h1><p>Seminarfach Forensik · Dein Facharbeitsthema finden</p></div>
+<div class="coverside"><span class="stat" id="stat"></span><button type="button" class="smallbtn" id="resetBtn" title="Alle Eingaben löschen">↺</button></div>
+</header>
+<nav class="tabs" role="tablist" aria-label="Kapitel" id="tabs"></nav>
+<section class="sheet" aria-live="polite"><div class="inner" id="page"></div></section>
+<p class="hint-line">Blättere mit „Weiter“. Alle Kapitel sind offen. Deine Auswahl und deine Eingaben werden auf diesem Gerät gespeichert.</p>
+</main>
+<div class="cheat" id="resetBox" hidden role="dialog" aria-modal="true" aria-labelledby="resetTitle"><div class="cheat-in"><h2 id="resetTitle">Neu beginnen?</h2><p>Deine Interessen, Favoriten und alle Eingaben in der Themenwerkstatt werden auf diesem Gerät gelöscht.</p><div class="row"><button type="button" class="btn danger" id="resetYes">Alles löschen</button><button type="button" class="btn" id="resetNo">Abbrechen</button></div></div></div>
+<div class="toast" id="toast" role="status"></div>
+<script>
+const CATS={
+ball:{n:"Ballistik & Verletzungsmuster",c:"#d0202e"},
+ento:{n:"Entomologie & Leichenveränderungen",c:"#6b8e23"},
+dakt:{n:"Daktyloskopie & Formspuren",c:"#7a4fd6"},
+dna:{n:"DNA & biologische Spuren",c:"#0a8a7a"},
+blut:{n:"Blutspuranalyse",c:"#a3122b"},
+tox:{n:"Forensische Toxikologie",c:"#c77700"},
+mat:{n:"Material-, Faser- & Bodenspuren",c:"#8a5a2b"},
+spur:{n:"Tatortarbeit & Spurensicherung",c:"#2457ff"},
+ident:{n:"Identifizierung & Rechtsmedizin",c:"#4a6470"},
+dok:{n:"Urkunden & Dokumente",c:"#9c6b00"},
+it:{n:"IT- & Medienforensik",c:"#0077b6"},
+aus:{n:"Aussage- & Rechtspsychologie",c:"#c2185b"},
+psy:{n:"Kriminalpsychologie & Täterprofile",c:"#6d4c41"},
+fall:{n:"Kriminalfälle, Kriminologie & Rechtsgeschichte",c:"#555b66"}
+};
+/* Archiv: y=Jahr, k=Kategorie, a=Art (E=experimentell, L=Literatur, S=empirische Studie) */
+const ARCHIV=[
+["2022","Vom Geschoss zum Täter – die Bedeutung der Ballistik bei der Täterfindung","ball","L"],
+["2022","Die Zurückverfolgung eines Geschosses zu seinem Ursprung","ball","L"],
+["2024","Die Auswirkung von Schusswaffen auf unterschiedliche Materialien: Eine experimentelle Untersuchung zur ballistischen Wirkung von Projektilen auf verschiedene Oberflächen","ball","E"],
+["2024","Experimentelle Untersuchung der Auswirkungen von unterschiedlichen Munitionsarten auf Zielobjekte: Eine Analyse von ballistischen Eigenschaften und Schadensmustern","ball","E"],
+["2024","Analyse von Schnittwunden durch unterschiedliche Messer: Eine experimentelle Untersuchung zur Bewertung der Verletzungsmuster","ball","E"],
+["2025","Treibspiegelgeschosse – der unsichtbare Weg zum Ziel?","ball","L"],
+["2025","Tödliche Nähe oder rettende Distanz – wie beeinflusst die Distanz die Wirkung von Feuerwaffen?","ball","E"],
+["2025","Wundballistik: Einfluss unterschiedlicher Umweltfaktoren auf die Charakteristik von Stichverletzungen","ball","E"],
+["2025","Schmauchspuranalyse – Eine experimentelle Untersuchung der Beständigkeit von Schmauchspuren in Abhängigkeit von Material und Zeit","ball","E"],
+["2026","Der Einfluss der Schussdistanz auf das Verletzungsbild von Schusswunden – forensisch-wundballistische Analyse charakteristischer Merkmale","ball","E"],
+["2022","Forensische Entomologie – mit Insekten Verbrechen aufklären","ento","L"],
+["2022","Verwesung für die Wissenschaft: Untersuchung äußerer Einflüsse auf die Verwesung anhand eines Schweinekadavers","ento","E"],
+["2024","Untersuchung des Verwesungsprozesses von Leichen in Gewässern mit unterschiedlichem Salzgehalt: Eine praktische Analyse zur Bestimmung des Einflusses auf die Zersetzung und forensische Relevanz","ento","E"],
+["2024","Der Einfluss der Temperatur auf die Entwicklung von Goldfliegen (Lucilia sericata) auf Leichen: Eine experimentelle Untersuchung zur forensischen Entomologie","ento","E"],
+["2025","Experimentelle Untersuchung der Todeszeitermittlung: Ein Vergleich verschiedener Todesumstände und deren Einfluss auf die Rekonstruktion des Todeszeitpunktes","ento","E"],
+["2025","Eine experimentelle Untersuchung zur Unterscheidung des Verwesungsprozesses in verschiedenen Gewässern","ento","E"],
+["2026","Der Einfluss veränderter Schweinegewebezustände auf die Entwicklung von Fliegenlarven der Familie Calliphoridae – Eine experimentelle Untersuchung an einem tierischen Modell","ento","E"],
+["2025","Daktyloskopie: Evaluation verschiedener Verfahren in Abhängigkeit von der Spurenlage","dakt","E"],
+["2025","Daktyloskopie – Experimentelle Untersuchung von Techniken zur Nachbildung und Manipulation von Fingerabdrücken","dakt","E"],
+["2026","Vergleichende Untersuchung der Aussagekraft forensischer Schuhspurensicherung mittels Gipsabformung auf unterschiedlichen Untergründen","dakt","E"],
+["2026","Forensische Untersuchung von Einbruchspuren: Wie unterscheiden sich die Einbruchspuren verschiedener Hebelwerkzeuge an Holzoberflächen?","dakt","E"],
+["2024","Ein Vergleich verschiedener Methoden zur DNA-Analyse","dna","L"],
+["2026","Einfluss von Umweltfaktoren auf die Ausfällbarkeit pflanzlicher DNA und die Folge für die forensische Untersuchung – ein Modellversuch zur forensischen Spurendegradation","dna","E"],
+["2022","Blut am Tatort – von der Spur zum Täter","blut","L"],
+["2024","Ein theoretischer Vergleich von Nachweisverfahren für Blutspuren","blut","L"],
+["2024","Die Untersuchung der Entfernung von Blutflecken für das bloße Auge: Evaluierung verschiedener Methoden zur Reinigung","blut","E"],
+["2025","Die Spuren des Blutes – kann ein Mörder die Wahrheit am Tatort für immer vertuschen? Eine Evaluierung verschiedener Methoden","blut","E"],
+["2025","Blutspurmusteranalyse: Eine Untersuchung der Einflussfaktoren auf Form, Größe und Verteilung von Blutspuren zur Tathergangrekonstruktion","blut","E"],
+["2026","Nachweisbarkeit von Blutspuren mit Luminol unter erhöhter Temperaturexposition – ein experimenteller Modellversuch zur forensischen Untersuchung von Brandtatorten","blut","E"],
+["2022","Der perfekte Mord – historisch forensische Betrachtung am Beispiel von Giftmorden","tox","L"],
+["2024","Inwiefern hat der Anstieg von neuen psychoaktiven Substanzen Einfluss auf die forensische Toxikologie?","tox","L"],
+["2025","Kreuzreaktionen und ihre Auswirkungen auf die forensische Toxikologie: Eine experimentelle Untersuchung von LSD, Cannabis und anderen Substanzen auf die Verlässlichkeit toxikologischer Tests","tox","E"],
+["2025","Giftpflanzen – Extraktion ihrer Gifte und Wirkungsweise auf Organismen sowie Nachweismethoden in der forensischen Toxikologie","tox","E"],
+["2026","Einfluss ausgewählter Störfaktoren auf die forensische Aussagekraft von Immunoassay-Schnelltests – ein Modellexperiment in Analogie zu KO-Tropfen-Nachweisen","tox","E"],
+["2026","Heroinmetabolismus in der forensischen Toxikologie: Instabile Metabolite als Herausforderung für den analytischen Nachweis anhand eines experimentellen Modells","tox","E"],
+["2026","Vergleichende Untersuchung des Einflusses unterschiedlicher Textilien und Kleidungskonfigurationen auf Fasertransfer und Eindringtiefe / Fasertransfer von Textilien auf Schweinegewebe nach ballistischer Einwirkung","mat","E"],
+["2026","Sekundäre Spurübertragung bei Stichverletzungen – Bedeutung von Textilfasern in der forensischen Rekonstruktion","mat","E"],
+["2026","Forensische Textil- und Faseranalyse im kriminalistischen Kontext: lichtmikroskopische und farbvergleichende Verfahren","mat","E"],
+["2026","Übertragung forensischer Spuren: Ihre Bedeutung für die Täterzuordnung und Risiken von Fehlinterpretation am Beispiel von Kontaktspuren","spur","L"],
+["2026","Experimentelle Untersuchung zur Geruchserkennung bei Hunden nach gezieltem Training – Bedeutung für den polizeilichen Spürhundeinsatz","spur","E"],
+["2023","Sexualstraftaten – wie wird ein Sexualverbrechen aufgeklärt?","spur","L"],
+["2025","Untersuchung der forensischen Auswirkungen von Brandbeschleunigern: Wie sie die Identifikation von Gewebeproben und die Erkennung von Wunden beeinträchtigen","ident","E"],
+["2022","Identifizierung unbekannter Toter – wie identifiziert man Brandopfer?","ident","L"],
+["2022","Virtopsy – eine moderne Alternative zur Autopsie?","ident","L"],
+["2024","Grenzen der Identifikation von Toten anhand ihrer Schädel","ident","L"],
+["2026","Einfluss thermischer Einwirkung auf die Erkennbarkeit von Tätowierungen – eine experimentelle Untersuchung zur forensischen Opferidentifikation","ident","E"],
+["2025","Handschriften unter der Lupe – Ein Vergleich von Analyseverfahren und Strategien zur Aufdeckung von Fälschungen","dok","E"],
+["2025","Vergleich der Technologien und Verfahren zur Falschgelderkennung: Wirksamkeit, Herausforderungen und zukünftige Entwicklungen","dok","L"],
+["2023","Cybercrime – Verbrechensaufklärung im Internet","it","L"],
+["2025","IT-Forensik: Entwicklung und Vergleich verschiedener Verschlüsselungsmethoden","it","E"],
+["2026","Von der Videoaufnahme zur Personenzuordnung – Grenzen und Risiken der Gesichtserkennung im polizeilichen Kontext","it","L"],
+["2023","Mimikresonanzen – kann das kleinste Zucken zum Täter führen?","aus","L"],
+["2026","Untersuchung der Bedeutung von Suggestivfragen für die Aussagezuverlässigkeit von Zeug:innen – eine empirische Befragungsstudie im strafrechtlichen Kontext","aus","S"],
+["2026","Verlässlichkeit kindlicher Zeug:innenaussagen im forensischen Kontext – eine experimentelle Untersuchung","aus","S"],
+["2026","Zusammenhang zwischen dem Dark-Factor-Persönlichkeitsprofil und Strafmaßentscheidungen in simulierten Straffällen","aus","S"],
+["2024","Der Einsatz von Hypnose als Behandlungsmöglichkeit in der forensischen Psychologie: Eine kritische Untersuchung","aus","L"],
+["2022","Hybristophilie – inwiefern ist es eine Krankheit?","psy","L"],
+["2022","Hybristophilie – was reizt Frauen am Bösen?","psy","L"],
+["2022","Aus der Sicht eines Serienmörders – Sorgen, Motive und Gedanken am Beispiel von Jürgen Bartsch","psy","L"],
+["2022","Im Kopf eines Mörders – forensisch neurologische Betrachtung","psy","L"],
+["2022","Wenn Kinder zu Straftätern werden","psy","L"],
+["2022","Im Eifer des Gefechts – die Psychologie hinter Kriegsverbrechen","psy","L"],
+["2022","Suizide aus forensisch-psychiatrischer Sicht","psy","L"],
+["2022","Wie Frauen morden – Motive, Vorgehensweisen und Opfer","psy","L"],
+["2022","Die Darstellung von Serienmördern am Beispiel von Elisabeth Báthory","psy","L"],
+["2023","Eine geschlechtsspezifische Betrachtung des Mordes – warum töten Frauen anders als Männer?","psy","L"],
+["2023","Schizophrenie – Trotz Mord unschuldig?","psy","L"],
+["2023","Serienmörder – Wie sie denken und handeln am Beispiel von Ted Bundy","psy","L"],
+["2023","Rechtfertigt eine psychische Erkrankung einen Mord?","psy","L"],
+["2023","Fritz Honka: Was bewegte den Serienmörder aus Hamburg zu seinen Taten?","psy","L"],
+["2023","Intime Femizide – Was treibt Männer zum Beziehungsmord?","psy","L"],
+["2023","Jürgen Bartsch","psy","L"],
+["2023","Mordmotive von Männern und Frauen – ein Vergleich","psy","L"],
+["2024","Neurophysiologische Auswirkungen von Kopfverletzungen auf das Strafverhalten: Eine Untersuchung am Beispiel des Profifootballspielers Aaron Hernandez","psy","L"],
+["2024","Die psychopathischen Handlungen und Verhaltensweisen von Jeffrey Dahmer im Hinblick auf seine Kindheitserfahrungen","psy","L"],
+["2024","Die Auswirkungen eines Kindheitstraumas auf das Strafverhalten eines Erwachsenen: Eine Fallstudie","psy","L"],
+["2024","Die Auswirkungen von Schizophrenie auf das Tatverhalten eines Mörders: Eine Fallstudie","psy","L"],
+["2024","Jack the Ripper: Eine Untersuchung des Täterprofils und der Motive eines Frauenmörders","psy","L"],
+["2026","Die Dunkle Triade als möglicher Risikoindikator für kriminelles Verhalten","psy","L"],
+["2022","Die letzten Hexenprozesse – zwischen mittelalterlichem Hexenglauben und rechtswissenschaftlicher Moderne","fall","L"],
+["2022","Faszination True Crime – welchen Einfluss haben Krimis auf die Gesellschaft","fall","L"],
+["2022","Der Prozess der Menendez-Brüder: tatsächlich schuldig?","fall","L"],
+["2023","Das Rechtssystem des Mittelalters – Ein Wandel vom Aberglauben zur Justiz","fall","L"],
+["2023","Der perfekte Mord – können Menschen spurlos verschwinden?","fall","L"],
+["2023","Cold Case – ist ein ungelöster Mord ein perfekter Mord?","fall","L"],
+["2023","Clankriminalität – wie gefährlich ist die Mafia (in Deutschland)?","fall","L"],
+["2023","Femizide im Völkermord von Ruanda – warum werden Frauen Opfer von sexualisierter Kriegsgewalt?","fall","L"],
+["2024","Drogensucht als Auslöser für Straftaten: Eine Untersuchung anhand eines Interviews","fall","S"],
+["2024","Lutz Eigendorf: Mord oder Unfall?","fall","L"],
+["2024","David Berkowitz: In den USA sechsmal lebenslänglich – in Deutschland unschuldig?","fall","L"],
+["2024","Der Fall der Eislady: Ein typischer Frauenmord?","fall","L"],
+["2024","Die Optimierung eines Mordes am Fallbeispiel Amanda Knox","fall","L"],
+["2024","„Es war klar, nur einer von uns beiden würde überleben.“ Sichtweise eines Opfers auf den Selbstmord ihres Peinigers","fall","L"],
+["2026","Spurenanalyse und forensische Methoden im Ausland: Der Fall Lars Mittank als Beispiel für komplexe Ermittlungen im Ausland","fall","L"]
+].map((r,i)=>({id:"a"+i,y:r[0],t:r[1],k:r[2],a:r[3]}));
+
+/* Ideenbank: neue Vorschläge. f=Fächer, fl=Hinweise (blut,gewebe,maden,personen,draussen,chemie,feuer,pc,saison,geraet), lv=Anspruch 1-3 */
+const IDEEN=[
+{id:"blut-alter",k:"blut",a:"E",lv:2,f:["Chemie","Biologie","Physik"],fl:["blut"],
+t:"Farbveränderung getrockneter Blutspuren als Hinweis auf ihr Alter – ein Modellversuch mit Smartphone-Farbmessung",
+q:"Wie verändert sich die Farbe getrockneter Blutspuren über die Zeit, und wie stark beschleunigen Licht und Wärme diese Veränderung?",
+uv:"Lagerbedingung (dunkel/Raumtemperatur, Fensterbank mit Tageslicht, Kühlschrank, Heizung ca. 35 °C); Messzeitpunkte 0 h, 1 h, 6 h, 1, 3, 7, 14 Tage",
+av:"Farbwerte (RGB bzw. L*a*b*) aus standardisierten Fotos mit Farbkarte im Bild; Auswertung als Zeitreihe mit Regression",
+kon:"gleiche Tropfengröße (Pipette), gleicher Untergrund, Fotobox mit konstantem Licht, je 3 Tropfen pro Bedingung",
+mat:"Schweineblut vom Schlachthof (mit Gerinnungshemmer), Pipetten, Filterpapier oder Baumwolle, Smartphone, Fotobox aus Karton mit LED, kostenlose Software (z. B. ImageJ)",
+offen:"Dass Hämoglobin zu Met-Hämoglobin und Hemichrom umgewandelt wird, ist bekannt. Wie schnell das unter Alltagsbedingungen passiert und ob eine Handykamera es zuverlässig misst, findest erst du heraus.",
+eigen:"eigenes Mess-Setup, eigene Zeitreihe, Regression der Farbwerte gegen die Zeit",
+sich:"Handschuhe, Blut gekühlt lagern, Entsorgung mit der Lehrkraft absprechen",
+abgr:"Frühere Arbeiten untersuchten Reinigung, Vertuschung, Muster und Luminol nach Hitze. Das Alter einer Spur kam noch nicht vor.",
+opac:["Blutspur Alter","Blutspurenanalyse","Hämoglobin Oxidation","bloodstain age estimation"],
+st:["nur den Untergrund variieren (Fliese, Holz, Baumwolle) statt der Lagerung","zusätzlich prüfen, ob Menschen das Alter per Auge schätzen können (kleine Befragung)"]},
+{id:"blut-fehlalarm",k:"blut",a:"E",lv:2,f:["Chemie","Biologie"],fl:["blut","chemie"],
+t:"Falscher Alarm am Tatort? Falsch-positive Ergebnisse von Blutvortests durch Haushalts- und Lebensmittelstoffe",
+q:"Welche Alltagsstoffe lösen bei Blutvortests ein falsch-positives Ergebnis aus, und lassen sich echte und falsche Treffer voneinander unterscheiden?",
+uv:"Probensubstanz: Blut (Positivkontrolle), Wasser (Negativkontrolle), Rost, Chlorreiniger, Meerrettich- bzw. Kartoffelsaft (pflanzliche Peroxidasen), Kupfermünze, Rotwein, Ketchup; pflanzliche Proben zusätzlich roh und erhitzt",
+av:"Testergebnis (Farbumschlag bzw. Leuchten), Zeit bis zur Reaktion, Intensität auf einer selbst definierten Skala 0–3 mit Fotobeleg",
+kon:"gleiche Probenmenge, gleiche Trocknungszeit, gleicher Untergrund, je 3 Wiederholungen",
+mat:"Blut-Teststreifen (Urinteststreifen mit Blutfeld aus der Apotheke), Luminol bzw. Kastle-Meyer-Reagenz aus der Chemiesammlung, Wasserstoffperoxid 3 %, Haushaltsstoffe",
+offen:"Ob Erhitzen die Fehlreaktion pflanzlicher Peroxidasen abschaltet und ob sich Leuchtdauer oder Reaktionszeit als Unterscheidungsmerkmal eignen, weiß vorher niemand.",
+eigen:"systematischer Vergleich vieler Störstoffe und eigene Kriterien, um Fehlalarme zu erkennen",
+sich:"Luminol und Wasserstoffperoxid nur mit der Lehrkraft, Schutzbrille; Chlorreiniger nie mit Säuren mischen",
+abgr:"2024 wurden Nachweisverfahren nur theoretisch verglichen, 2026 ging es um Luminol nach Hitze. Fehlalarme durch andere Stoffe sind neu.",
+opac:["Blutnachweis Vortest","Luminol","Kastle-Meyer","Peroxidase"],
+st:["nur einen Test (z. B. Teststreifen) dafür mehr Störstoffe","Störstoff und Blut gemischt: Überdeckt Bleiche eine echte Blutspur?"]},
+{id:"blut-trocknung",k:"blut",a:"E",lv:2,f:["Physik","Biologie"],fl:["blut"],
+t:"Wie lange liegt die Spur schon da? Trocknungszeit von Blutstropfen in Abhängigkeit von Untergrund und Luftfeuchtigkeit",
+q:"Wie stark hängt die Trocknungszeit von Blutstropfen von Untergrund und Luftfeuchtigkeit ab, und taugt sie zur Eingrenzung des Tatzeitpunkts?",
+uv:"Luftfeuchtigkeit (offener Raum, Box mit feuchtem Tuch, Box mit Trockenmittel) oder Untergrund (Fliese, lackiertes Holz, Baumwolle)",
+av:"Zeit bis zur vollständigen Trocknung (Foto alle 5 min), Masseverlust auf der Feinwaage als Trocknungskurve",
+kon:"gleiches Tropfenvolumen, gleiche Temperatur (Thermometer/Hygrometer im Bild), je 3 Tropfen",
+mat:"Schweineblut, Mikropipette oder Spritze, Feinwaage (0,01 g), Hygrometer, Kunststoffboxen, Smartphone",
+offen:"Trocknungsmodelle gibt es, wie stark die Zeiten auf echten Untergründen streuen, ist offen.",
+eigen:"eigene Trocknungskurven und Vergleich der Bedingungen",
+sich:"Handschuhe, Hygiene, Entsorgung absprechen",
+abgr:"2025 ging es um Form, Größe und Verteilung (Musteranalyse). Hier ist die Zeit die Messgröße.",
+opac:["Blutspurenanalyse","Blut Trocknung","bloodstain drying time","Tatzeitbestimmung"],
+st:["Tropfengröße als zweite Variable","Rissmuster beim Trocknen fotografieren und auswerten"]},
+{id:"dakt-zeit",k:"dakt",a:"E",lv:1,f:["Chemie","Biologie"],fl:[],
+t:"Wie lange überdauert ein Fingerabdruck? Sichtbarmachung latenter Fingerspuren in Abhängigkeit von Liegezeit und Umgebung",
+q:"Wie verändert sich die Qualität pulvergestützt sichtbar gemachter Fingerspuren mit der Liegezeit, und welche Rolle spielen Wärme und Licht?",
+uv:"Liegezeit (1 h, 1, 3, 7, 14 Tage) und Lagerort (Innenraum, Fensterbank, Heizungsnähe)",
+av:"Qualität nach einer Bewertungsskala 0–4 (z. B. Bandey-Skala) und Zahl erkennbarer Minutien, wenn möglich von zwei Personen blind bewertet",
+kon:"gleiche spendende Person, gleiche Andruckkraft (Küchenwaage), gleicher Untergrund (Glas), gleiches Pulver",
+mat:"Rußpulver oder Grafitpulver, weicher Pinsel, Klebefolie, Glasplatten, Lupe oder Handy-Makroobjektiv",
+offen:"Ob wässrige oder fettige Bestandteile schneller verschwinden und wie stark Wärme den Abbau beschleunigt, ist nicht vorhersehbar.",
+eigen:"eigene Zeitreihe und konsequente Bewertung nach festen Kriterien",
+sich:"Pulver nicht einatmen, Staubmaske",
+abgr:"2025 wurden Verfahren je nach Spurenlage verglichen und Abdrücke nachgebildet. Die Liegezeit als Variable ist neu.",
+opac:["Daktyloskopie","latente Fingerspuren","Fingerabdruck Alterung","fingermark ageing"],
+st:["natürliche vs. „geladene“ (fettreiche) Spuren vergleichen","zwei Pulversorten zusätzlich vergleichen"]},
+{id:"dakt-wasser",k:"dakt",a:"E",lv:2,f:["Chemie"],fl:["chemie"],
+t:"Spuren aus dem Wasser: Lassen sich Fingerabdrücke auf Gegenständen nach Lagerung in Wasser noch sichtbar machen? – Pulververfahren und Cyanacrylat-Bedampfung im Vergleich",
+q:"Wie lange bleiben Fingerspuren auf glatten Gegenständen unter Wasser nachweisbar, und welches Verfahren zeigt sie danach besser?",
+uv:"Lagerzeit im Wasser (0, 1 h, 1 Tag, 3 Tage), Wasserart (Leitungswasser, Salzwasser), Verfahren (Pulver vs. Sekundenkleber-Bedampfung)",
+av:"Qualität nach Bewertungsskala 0–4, Zahl der Minutien",
+kon:"gleiche Spenderperson, Glas- oder Kunststoffträger, Kontrollspur ohne Wasser",
+mat:"Glasflaschen oder Objektträger, Becken, Salz, Rußpulver, Sekundenkleber, Kunststoffbox als Bedampfungskammer, Wärmeplatte",
+offen:"Ob sich die Bedampfung bei nassen Spuren tatsächlich als überlegen erweist, ist offen.",
+eigen:"Versuchsmatrix aus Zeit × Wasserart × Verfahren, eigene Bewertung",
+sich:"Cyanacrylat-Dämpfe reizen Augen und Atemwege: nur im Abzug und mit Lehrkraft",
+abgr:"Wasser als Einflussfaktor auf Fingerspuren wurde bisher nicht untersucht.",
+opac:["Fingerspuren Sichtbarmachung","Cyanacrylat","Daktyloskopie","fingerprints wet surfaces"],
+st:["nur ein Verfahren, dafür feinere Zeitstufen","Fließgewässer simulieren (Pumpe/Rührer)"]},
+{id:"dakt-haende",k:"dakt",a:"E",lv:1,f:["Biologie","Chemie"],fl:["personen"],
+t:"Saubere Hände, schlechte Spuren? Einfluss von Händewaschen, Desinfektion und Handcreme auf die Qualität latenter Fingerspuren",
+q:"Wie verändern Händewaschen, Desinfektion und Handcreme die Qualität latenter Fingerspuren?",
+uv:"Handzustand: unbehandelt, direkt nach Waschen, nach Desinfektion, nach Handcreme, nach Sport",
+av:"Qualität nach Bewertungsskala 0–4 und Zahl der Minutien, blind bewertet von zwei Personen",
+kon:"mehrere Spender:innen (z. B. 5), gleicher Untergrund, gleiches Pulver, gleiche Andruckkraft",
+mat:"Rußpulver, Pinsel, Glasplatten, Klebefolie, Desinfektionsmittel, Handcreme",
+offen:"Handcreme könnte Spuren verbessern (mehr Rückstand) oder verschmieren. Genau das ist offen.",
+eigen:"mehrere Personen, eigene Bewertungsmatrix, statistischer Vergleich",
+sich:"Einverständnis der Spender:innen, Daten anonymisieren",
+abgr:"Bisher ging es um Spurenlage und Fälschung, nicht um Faktoren beim Spurenleger.",
+opac:["latente Fingerspuren","Daktyloskopie","Spurenleger","fingerprint quality"],
+st:["Zeitabstand nach dem Waschen (5, 15, 30, 60 min) als Variable","Untergrund Papier statt Glas"]},
+{id:"dakt-biss",k:"dakt",a:"E",lv:2,f:["Biologie","Physik"],fl:["personen"],
+t:"Bissspuren als Beweismittel? Formstabilität von Bissspuren in Lebensmitteln in Abhängigkeit von Zeit und Temperatur",
+q:"Wie lange bleiben Bissspuren in Lebensmitteln so formstabil, dass sie einem Gebiss zugeordnet werden können?",
+uv:"Lebensmittel (Käse, Apfel, Schokolade) und Zeit (0, 2, 6, 24 h) bei Raumtemperatur bzw. im Kühlschrank",
+av:"Eckzahnabstand und Bogenbreite (Messschieber, Foto mit Maßstab), Abweichung in Prozent vom Referenzabdruck",
+kon:"Referenzabdruck des Gebisses in Knete oder Alginat, gleiche Person, gleiche Bisskraft möglichst ähnlich",
+mat:"Lebensmittel, Messschieber, Knete oder Alginat (Bastelbedarf), Lineal, Smartphone",
+offen:"Ob eine Zuordnung nach Stunden noch gelingt, ist offen. Zusätzlich gilt die Bissspurenanalyse in der Fachwelt als umstritten, was du diskutieren kannst.",
+eigen:"eigene Messreihe und Vergleich mit Referenz, kritische Bewertung einer umstrittenen Methode",
+sich:"nur eigene Bisse oder mit Einverständnis, Lebensmittelhygiene",
+abgr:"Formspuren wurden bei Schuhen und Hebelwerkzeugen untersucht, Bissspuren noch nie.",
+opac:["Bissspuren","forensische Odontologie","Formspuren","bite mark analysis"],
+st:["Zuordnung durch Mitschüler:innen testen (5 Gebisse, wer erkennt wen?)","nur ein Lebensmittel, dafür mehr Zeitstufen"]},
+{id:"dok-eindruck",k:"dok",a:"E",lv:1,f:["Physik","Deutsch"],fl:["personen"],
+t:"Unsichtbar mitgeschrieben: Wie viele Seiten tief lassen sich Eindruckspuren von Handschrift rekonstruieren?",
+q:"Bis zu welcher Blatttiefe lassen sich Eindruckspuren lesbar machen, und welches Verfahren eignet sich besser?",
+uv:"Anzahl der Blätter unter dem Original (1–6), Stiftart (Kugelschreiber, Bleistift, Gelstift); Verfahren (Schräglicht-Foto vs. Grafit-Abrieb)",
+av:"Lesbarkeit: Anteil richtig gelesener Wörter durch unbeteiligte Leser:innen",
+kon:"gleicher Text, gleiche Papiersorte, gleiche schreibende Person, gleiche Unterlage",
+mat:"Schreibblock, Stifte, Taschenlampe oder LED für Schräglicht, Bleistiftmine, Smartphone",
+offen:"Ab welcher Blattzahl die Rekonstruktion scheitert, lässt sich nicht vorhersagen.",
+eigen:"eigene Versuchsmatrix und Lesetest mit mehreren Personen",
+sich:"unbedenklich",
+abgr:"2025 ging es um Handschriftvergleich und Fälschungen, nicht um latente Eindruckspuren.",
+opac:["Urkundenuntersuchung","Eindruckspuren","Kriminaltechnik Schrift","indented writing"],
+st:["Unterlage variieren (Tisch, Block, Zeitschrift)","Bildbearbeitung (Kontrast) als drittes Verfahren"]},
+{id:"dok-tinte",k:"dok",a:"E",lv:2,f:["Chemie"],fl:["chemie"],
+t:"Nachträglich ergänzt? Nachweis von Urkundenmanipulationen durch Papierchromatographie verschiedener Tinten",
+q:"Lassen sich äußerlich gleich aussehende blaue Stifte per Chromatographie sicher unterscheiden, auch wenn die Schrift gealtert ist?",
+uv:"Stiftmarke (6–8 blaue Stifte), Alter der Schrift (frisch, 2 Wochen Fensterlicht), Laufmittel (Wasser, Ethanol, Isopropanol)",
+av:"Rf-Werte und Farbbanden der Chromatogramme, Trefferquote bei Blindzuordnung",
+kon:"gleiche Papiersorte, gleiche Laufstrecke, gleiche Temperatur",
+mat:"Chromatographiepapier oder Filterpapier, Bechergläser, Ethanol, Isopropanol, Lineal",
+offen:"Ob Lichtalterung die Chromatogramme so verändert, dass die Zuordnung scheitert, ist offen.",
+eigen:"eigene Rf-Wert-Tabellen und Blindtest mit einem „gefälschten“ Vertrag",
+sich:"Alkohole sind leicht entzündlich: keine offenen Flammen, lüften",
+abgr:"Die Handschrift-Arbeit 2025 verglich Analyseverfahren der Schrift, nicht die chemische Untersuchung der Tinte.",
+opac:["Urkundenfälschung","Tintenanalyse","Chromatographie","ink analysis forensic"],
+st:["Dünnschichtchromatographie statt Papier, wenn vorhanden","schwarze Stifte statt blaue"]},
+{id:"dok-brand",k:"dok",a:"E",lv:2,f:["Chemie","Physik"],fl:["feuer"],
+t:"Lesbar trotz Feuer? Rekonstruktion von Schrift auf verkohltem Papier in Abhängigkeit von Schreibmittel und Temperatur",
+q:"Welche Schreibmittel bleiben auf verkohltem Papier lesbar, und bis zu welcher Temperatur?",
+uv:"Temperatur im Backofen (200, 250, 275 °C) und Schreibmittel (Bleistift, Kugelschreiber, Laserdruck, Tintenstrahldruck)",
+av:"Anteil lesbarer Wörter unter Schräglicht und auf Fotos mit Kontrastverstärkung",
+kon:"gleiche Papiersorte, gleiche Expositionszeit, Kontrollblatt ohne Hitze",
+mat:"Backofen, Ofenthermometer, Tiegelzange, Papier, Drucker, Glasplatten zum Pressen",
+offen:"Grafit und Toner könnten besser erhalten bleiben als Tinte. Wie gut genau, ist unklar.",
+eigen:"Versuchsmatrix und eigene Lesbarkeitsbewertung",
+sich:"Ofen nur mit Lehrkraft, verkohltes Papier ist brüchig und kann glimmen",
+abgr:"Verbrannte Dokumente kamen in früheren Jahren nicht vor.",
+opac:["Urkundenuntersuchung","verkohlte Dokumente","Brandermittlung","charred documents"],
+st:["Papierart als Variable (Recycling, Hochglanz)","nur zwei Schreibmittel, dafür mehr Temperaturen"]},
+{id:"mat-pollen",k:"mat",a:"E",lv:2,f:["Biologie"],fl:["geraet"],
+t:"Pollen als stille Zeugen: Wie lange haften Pollen an Kleidung? – ein Modellversuch zur forensischen Palynologie",
+q:"Wie lange bleiben Pollen an verschiedenen Textilien haften, und wie stark verringern Ausbürsten und Waschen ihre Zahl?",
+uv:"Behandlung nach dem Kontakt (direkt, nach 1 Tag Tragen, nach Ausbürsten, nach Waschen bei 30 °C/60 °C) und Textil (Baumwolle, Fleece, Jeans)",
+av:"Pollenzahl pro Fläche unter dem Mikroskop (Klebebandabzug), Anteil wiedergefundener Pollenarten",
+kon:"gleiche Pollenquelle, gleiche Kontaktfläche und -zeit, je 3 Proben",
+mat:"Mikroskop, Klebefilm, Objektträger, Pollenquelle (z. B. Lilien vom Floristen), Stoffproben",
+offen:"Ob Fleece Pollen tatsächlich länger hält als glatte Stoffe und ob nach dem Waschen noch genug für eine Zuordnung bleibt, ist offen.",
+eigen:"eigene Zählungen, Vergleich der Textilien, Fotodokumentation unter dem Mikroskop",
+sich:"Allergien beachten",
+abgr:"Faserspuren wurden untersucht, Pollen und Pflanzenspuren noch nie.",
+opac:["forensische Palynologie","Pollenanalyse","Botanik Kriminalistik","forensic palynology"],
+st:["Fundort-Zuordnung: Kann man an Schuhen erkennen, wo jemand war?","Pollen verschiedener Pflanzen vergleichen (Größe, Haftung)"]},
+{id:"mat-boden",k:"mat",a:"E",lv:2,f:["Chemie","Biologie","Erdkunde"],fl:["draussen","chemie"],
+t:"Verrät der Schuh den Tatort? Zuordnung von Bodenspuren anhand einfacher Bodenkennwerte – ein Modellversuch zur forensischen Bodenkunde",
+q:"Lassen sich kleine Bodenspuren an Schuhen mit schulischen Methoden dem richtigen Herkunftsort zuordnen?",
+uv:"Herkunftsort (5 Orte, z. B. Acker, Wald, Sportplatz, Sandkasten, Garten) und Spurmenge (viel/wenig)",
+av:"Farbe (Foto mit Farbkarte), pH-Wert, Korngröße (Siebung/Schlämmprobe), Glühverlust als Humusanteil, Kalknachweis; Trefferquote bei Blindzuordnung",
+kon:"Referenzproben je Ort, gleiche Trocknung, gleiche Analysereihenfolge",
+mat:"Schuhe, Siebe, pH-Meter oder Indikatorpapier, Feinwaage, Tiegel und Brenner, verdünnte Salzsäure",
+offen:"Ob wenige Gramm an der Sohle für eine richtige Zuordnung reichen, weiß niemand vorher.",
+eigen:"eigene Probennahme, Kennwert-Profil pro Ort, Blindtest",
+sich:"Salzsäure nur verdünnt mit Lehrkraft, Glühen im Abzug",
+abgr:"Boden als Spur wurde noch nie untersucht.",
+opac:["forensische Geologie","Bodenkunde","Bodenspuren Kriminalistik","forensic soil"],
+st:["nur zwei Kennwerte, dafür mehr Orte","Wie lange hält die Bodenspur an der Sohle beim Laufen?"]},
+{id:"mat-haar",k:"mat",a:"E",lv:2,f:["Biologie","Chemie"],fl:["personen","geraet"],
+t:"Gefärbt, gebleicht, gechlort: Wie verändern kosmetische Behandlungen die mikroskopischen Merkmale von Haaren? – Grenzen des forensischen Haarvergleichs",
+q:"Wie verändern Blondieren, Tönen, Chlorwasser und Hitze die mikroskopischen Merkmale von Haaren, und gelingt danach noch eine Zuordnung?",
+uv:"Behandlung (unbehandelt, Blondierung, Tönung, Chlorwasser, Glätteisen 200 °C)",
+av:"Durchmesser (Okularmikrometer), Schuppenmuster (Abdruck in Nagellack), Markkanal, Pigmentverteilung; Blindzuordnung durch Mitschüler:innen",
+kon:"Haare derselben Personen vor und nach der Behandlung, mehrere Haare pro Probe",
+mat:"Mikroskop mit Okularmikrometer, klarer Nagellack, Objektträger, Blondiercreme, Tönung, Glätteisen",
+offen:"Ob behandelte Haare noch korrekt zugeordnet werden, ist offen und für Ermittlungen entscheidend.",
+eigen:"eigene Merkmalstabelle, Messreihen, Zuordnungstest",
+sich:"Blondiermittel reizt: Handschuhe; Einverständnis der Haarspender:innen",
+abgr:"Haare als Spurenmaterial wurden bisher nicht untersucht.",
+opac:["Haaranalyse forensisch","Haarvergleich","Haar Mikroskopie","forensic hair examination"],
+st:["Mensch- vs. Tierhaare unterscheiden (Haustiere)","ausgerissen, abgeschnitten oder ausgefallen? (Wurzelmerkmale)"]},
+{id:"mat-glas",k:"mat",a:"E",lv:2,f:["Physik"],fl:[],
+t:"Glassplitter lesen: Lässt sich aus dem Bruchmuster von Glas die Schlagrichtung und die Reihenfolge der Treffer rekonstruieren?",
+q:"Gelten die Lehrbuchregeln zur Glasbruchanalyse (Bruchrichtung, Reihenfolge von Rissen) auch für dünnes Haushaltsglas, und wie hängt das Bruchmuster von der Aufprallenergie ab?",
+uv:"Aufprallenergie (Fallhöhe einer Stahlkugel), Glasart (Objektträger, Bilderrahmenglas), Reihenfolge zweier Treffer",
+av:"Zahl der Radial- und Ringrisse (Regression gegen Energie), Treffsicherheit der Reihenfolge-Regel und der Kantenregel",
+kon:"gleiche Kugel, gleiche Einspannung, Glas in Folie, je 5 Wiederholungen",
+mat:"Stahlkugeln, Fallrohr mit Maßband, Glasplatten aus Bilderrahmen, Klebefolie, Lupe",
+offen:"Ob die Regeln bei dünnem Glas zuverlässig funktionieren, ist offen.",
+eigen:"physikalische Messreihe mit Energieberechnung und Regelprüfung",
+sich:"Schutzbrille, Handschuhe, Glas vorher mit Folie bekleben",
+abgr:"Glas als Spurenträger kam noch nicht vor.",
+opac:["Glasbruch forensisch","Kriminaltechnik Glas","Bruchmechanik","glass fracture analysis"],
+st:["Temperatur des Glases als Variable","Plexiglas als Vergleichsmaterial"]},
+{id:"ball-abpraller",k:"ball",a:"E",lv:2,f:["Physik"],fl:[],
+t:"Querschläger rekonstruieren: Abprallwinkel von Projektilen in Abhängigkeit von Einfallswinkel und Oberfläche – ein ballistischer Modellversuch",
+q:"Wie hängt der Abprallwinkel eines Modellprojektils vom Einfallswinkel und vom Oberflächenmaterial ab?",
+uv:"Einfallswinkel (10°, 20°, 30°, 45°) und Oberfläche (Holz, Fliese, Beton, Metall, Erde); Modellprojektil: Stahlkugel von einer Rampe",
+av:"Abprallwinkel aus Zeitlupenvideo (Handy, 240 fps) und Videoanalyse (z. B. Tracker), Spurlänge; Regression",
+kon:"gleiche Kugel, gleiche Starthöhe, Winkelmesser, je 5 Wiederholungen",
+mat:"Stahlkugel oder Murmel, Rampe aus Holzleiste, Oberflächenproben, Winkelmesser, Smartphone, kostenlose Videoanalyse-Software",
+offen:"Die Literatur sagt, Abprallwinkel seien meist kleiner als Einfallswinkel und stark materialabhängig. Ob das im Modell gilt, prüfst du selbst.",
+eigen:"Videoanalyse, Regression, Übertragung auf Tatortrekonstruktion",
+sich:"keine echte Waffe; nur Modellprojektile",
+abgr:"Frühere Arbeiten untersuchten Distanz, Munition und Materialwirkung, nicht Abpraller.",
+opac:["Ballistik Abpraller","Querschläger","Waffentechnik","ricochet ballistics"],
+st:["Geschwindigkeit als zweite Variable (Rampenhöhe)","Verformung weicher Kugeln (Knete) als Spur"]},
+{id:"ball-gelatine",k:"ball",a:"E",lv:2,f:["Physik","Biologie"],fl:["gewebe"],
+t:"Wie gut ist der Ersatz? Ballistische Gelatine, Seife und Knetmasse als Gewebesimulanzien im Fallgewicht-Modellversuch",
+q:"Welches Ersatzmaterial bildet das Eindringverhalten in Muskelgewebe im Modellversuch am besten nach, und wie stark stört die Temperatur?",
+uv:"Simulanz (Gelatine 10 % bei 4 °C, Gelatine bei Raumtemperatur, Kernseife, Knetmasse; Schweinefleisch als Referenz) und Fallhöhe",
+av:"Eindringtiefe, Kanaldurchmesser, Kanalform; Abweichung zur Fleischreferenz",
+kon:"gleicher Fallkörper (Stahlspitze), gleiche Probengröße, je 3 Wiederholungen",
+mat:"Speisegelatine, Formen, Kühlschrank, Fallrohr, Fallkörper, Messschieber, Schweinefleisch",
+offen:"Ob Gelatine im Schulmaßstab dem Gewebe wirklich am nächsten kommt, ist offen.",
+eigen:"Methodenvergleich mit eigener Bewertung: wichtig für alle späteren Ballistik-Arbeiten",
+sich:"keine Schusswaffen; Fallrohr gegen Umkippen sichern",
+abgr:"Frühere Arbeiten nutzten Simulanzien, prüften aber nicht, wie gut diese sind.",
+opac:["Wundballistik","ballistische Gelatine","Gewebesimulanz","ballistic gelatin"],
+st:["Gelatinekonzentration als einzige Variable","Knochenmodell einbetten"]},
+{id:"ball-stumpf",k:"ball",a:"E",lv:2,f:["Physik","Biologie"],fl:["gewebe"],
+t:"Geformte Verletzungen: Lässt sich das Tatwerkzeug aus Abdrücken stumpfer Gewalt im Modellgewebe zuordnen?",
+q:"Ab welcher Schlagenergie bildet sich die Form eines stumpfen Werkzeugs so deutlich im Modellgewebe ab, dass es zugeordnet werden kann?",
+uv:"Werkzeug (runder Hammerkopf, eckiger Hammerkopf, Schraubenschlüssel, Flaschenboden) und Schlagenergie (Fallhöhe eines Fallgewichts)",
+av:"Form und Maße des Abdrucks auf Schweinehaut bzw. Modelliermasse; Trefferquote bei Blindzuordnung",
+kon:"Fallapparat statt Handschlag (reproduzierbar), gleiche Hautdicke",
+mat:"Schweinebauch mit Schwarte, Fallapparat (Rohr, Gewichte), Werkzeuge, Messschieber",
+offen:"Ab welcher Energie die Form erkennbar wird und welche Werkzeuge verwechselt werden, ist offen.",
+eigen:"Fallapparat bauen, Energie berechnen, Zuordnungstest",
+sich:"Fallapparat sichern, Hygiene beim Fleisch",
+abgr:"Stich- und Schnittwunden wurden untersucht, stumpfe Gewalt nicht.",
+opac:["stumpfe Gewalt Rechtsmedizin","geformte Verletzungen","Tatwerkzeug","patterned injury"],
+st:["Zeit nach dem Schlag: verändert sich der Abdruck?","Kleidung als Zwischenschicht"]},
+{id:"ento-masse",k:"ento",a:"E",lv:2,f:["Biologie"],fl:["maden","gewebe"],
+t:"Wärme aus der Masse: Einfluss der Larvenzahl auf die Temperatur in Madenmassen und die Folgen für die Liegezeitschätzung",
+q:"Ab welcher Larvenzahl erzeugen Fliegenlarven messbar Eigenwärme, und wie verändert das ihre Entwicklungsgeschwindigkeit?",
+uv:"Larvenzahl (10, 50, 100, 200) auf gleicher Fleischmenge",
+av:"Temperatur in der Madenmasse vs. Umgebung (zweimal täglich), Larvenlänge, Tage bis zur Verpuppung",
+kon:"gleiche Fleischmenge, gleicher Raum, Kontrollglas ohne Larven",
+mat:"lebende Maden aus dem Angelbedarf (Calliphora), Hackfleisch, Gläser mit Gaze, Digitalthermometer, Lineal",
+offen:"Wann der Wärmeeffekt einsetzt, ist im Schulmaßstab unklar.",
+eigen:"Messreihe über ca. 2 Wochen, Temperaturkurven, Bezug zur Liegezeitberechnung",
+sich:"Gläser fest verschließen, Geruch: Raum mit Lehrkraft absprechen",
+abgr:"2024 ging es um Umgebungstemperatur, 2026 um Gewebezustand. Die Eigenwärme der Larven ist neu.",
+opac:["forensische Entomologie","Calliphoridae","Madenmasse Temperatur","maggot mass"],
+st:["Fleischart als zweite Variable","Fotodokumentation der Larvenstadien"]},
+{id:"ento-tox",k:"ento",a:"E",lv:2,f:["Biologie","Chemie"],fl:["maden","gewebe"],
+t:"Entomotoxikologie im Modell: Beeinflussen Koffein oder Alkohol im Nährsubstrat die Entwicklung von Schmeißfliegenlarven?",
+q:"Verändern Koffein oder Alkohol im Gewebe die Wachstumsgeschwindigkeit von Fliegenlarven, und würde das eine Liegezeitschätzung verfälschen?",
+uv:"Zusatz im Hackfleisch: keiner, Koffein niedrig/hoch, Ethanol",
+av:"Larvenlänge und -masse täglich, Zeit bis zur Verpuppung, Überlebensrate",
+kon:"gleiche Larvenzahl und Fleischmenge, gleicher Raum, Kontrollgruppe",
+mat:"Maden aus dem Angelbedarf, Hackfleisch, Koffeintabletten, Ethanol, Feinwaage, Gläser mit Gaze",
+offen:"Substanzen können die Entwicklung beschleunigen oder bremsen. Was hier passiert, zeigt erst dein Versuch.",
+eigen:"Wachstumskurven, Regression, Bewertung für die Liegezeitschätzung",
+sich:"Koffeinpulver nicht einnehmen, Gläser verschlossen halten",
+abgr:"Bisher wurden Temperatur und Gewebezustand untersucht, nicht Substanzen im Gewebe.",
+opac:["Entomotoxikologie","forensische Entomologie","Fliegenlarven Entwicklung","entomotoxicology"],
+st:["nur eine Substanz in vier Konzentrationen","Medikament (z. B. Paracetamol) statt Koffein, nach Rücksprache"]},
+{id:"ento-verpackt",k:"ento",a:"E",lv:2,f:["Biologie"],fl:["maden","gewebe","draussen","saison"],
+t:"Eingewickelt und versteckt: Wie verzögern Verpackungen die Besiedlung von Gewebe durch Fliegen?",
+q:"Wie stark verzögern Tuch, Plastikfolie und Teppich die erste Eiablage von Fliegen, und was bedeutet das für die Liegezeitschätzung?",
+uv:"Verpackung: offen, Baumwolltuch, Plastikfolie verklebt, Teppichrest",
+av:"Zeit bis zur ersten Eiablage, Zahl der Eipakete, tägliche Fotos",
+kon:"gleiche Fleischmenge, gleicher Standort, Schutz vor Tieren (Käfig)",
+mat:"Schweinefleisch, Verpackungsmaterial, Drahtkäfig, Thermometer, Kamera",
+offen:"Ob Fliegen Folie überhaupt überwinden und wie lange das dauert, ist offen.",
+eigen:"Freilandversuch mit eigener Protokollierung",
+sich:"Nur von Mai bis September möglich, da Fliegen sonst nicht aktiv sind. Standort mit Schule absprechen.",
+abgr:"Bisher Temperatur, Gewebezustand und Wasser, nicht der Zugang der Fliegen.",
+opac:["forensische Entomologie","Besiedlung Leiche","Liegezeit","wrapped remains insects"],
+st:["vergraben in verschiedenen Tiefen statt Verpackung","Teilverpackung (nur Kopf frei)"]},
+{id:"ento-mumie",k:"ento",a:"E",lv:1,f:["Biologie","Physik"],fl:["gewebe","geruch"],
+t:"Mumifikation statt Fäulnis? Einfluss von Luftfeuchtigkeit und Luftbewegung auf die Austrocknung von Gewebe – ein Modell für Wohnungsleichen",
+q:"Unter welchen Bedingungen trocknet Gewebe aus, statt zu faulen, und wie schnell?",
+uv:"Luftfeuchtigkeit (Trockenmittel, Raumluft, feuchte Box) und Luftbewegung (Ventilator an/aus)",
+av:"Masseverlust in % (Feinwaage, täglich), Farbe, Konsistenz, Geruch; Trocknungskurven",
+kon:"gleiche Gewebestücke, gleiche Temperatur, je 2 Proben",
+mat:"Schweinefleisch in gleichen Stücken, Boxen, Trockenmittel (Silikagel/Salz), Ventilator, Hygrometer, Feinwaage",
+offen:"Wo die Grenze zwischen Austrocknung und Fäulnis liegt, findest du heraus.",
+eigen:"Masseverlust-Kurven und Übertragung auf Fundsituationen in Wohnungen",
+sich:"Boxen verschließen, Geruch beachten, Hygiene",
+abgr:"2022 wurden äußere Einflüsse auf die Verwesung allgemein betrachtet, später Gewässer. Mumifikation ist neu.",
+opac:["Mumifikation Rechtsmedizin","Leichenveränderungen","Fäulnis","mummification"],
+st:["Salz- oder Zuckerbedeckung als Variable","Temperatur als Variable"]},
+{id:"ident-groesse",k:"ident",a:"E",lv:1,f:["Biologie","Mathematik"],fl:["personen"],
+t:"Wie groß war die Person? Überprüfung von Formeln zur Körpergrößenschätzung aus Knochen- und Fußlängen an Jugendlichen",
+q:"Wie genau schätzen gängige Formeln (z. B. Trotter & Gleser) die Körpergröße aus Unterarm-, Schienbein- und Fußlänge, und gelten sie auch für Jugendliche?",
+uv:"Messgröße (Elle, Schienbein, Fußlänge, Handspanne) und Geschlecht",
+av:"Abweichung der geschätzten von der echten Körpergröße; eigene Regressionsgerade im Vergleich zur Literaturformel",
+kon:"standardisierte Messpunkte, gleiche messende Person, Doppelmessung, mind. 30 Personen",
+mat:"Maßband, Messschieber oder Schiebelehre, Messlatte, Tabellenkalkulation",
+offen:"Ob die Formeln (aus Messungen an Erwachsenen) bei Jugendlichen versagen, ist offen.",
+eigen:"eigene Datenerhebung und eigene Regressionsformel",
+sich:"Einverständnis, Daten anonymisieren",
+abgr:"Identifikation wurde über Schädel, Brandopfer und Tattoos betrachtet, nicht über Körpermaße.",
+opac:["Körperhöhe Schätzung","forensische Anthropologie","Trotter Gleser","stature estimation"],
+st:["Fußabdruck und Schrittlänge statt Knochen (Bezug zu Schuhspuren)","nur Fußlänge, dafür größere Stichprobe"]},
+{id:"ident-zaehne",k:"ident",a:"E",lv:2,f:["Biologie","Chemie"],fl:["gewebe","feuer","geraet"],
+t:"Zähne als letzte Zeugen: Wie verändern hohe Temperaturen Zähne? – Modellversuch zur Identifikation von Brandopfern",
+q:"Ab welcher Temperatur verlieren Zähne die Merkmale, die für eine Identifikation wichtig sind?",
+uv:"Temperatur (z. B. 200, 400, 600, 800 °C) bei gleicher Dauer",
+av:"Farbe (Farbwert), Rissbildung, Masseverlust, Schrumpfung (Messschieber)",
+kon:"Zähne gleicher Tierart und Größe, Kontrollzahn ohne Hitze",
+mat:"Schweine- oder Rinderzähne vom Schlachthof, Muffelofen (falls die Schule einen hat; sonst Backofen bis 275 °C), Tiegelzange, Feinwaage",
+offen:"Bei welcher Temperatur Merkmale verloren gehen, zeigt erst der Versuch.",
+eigen:"Messreihe mit Farbskala und Bezug zur Odontologie",
+sich:"Muffelofen nur mit Lehrkraft, Zähne können beim Erhitzen springen: Tiegel abdecken",
+abgr:"2022 Brandopfer (Literatur) und 2026 Tattoos nach Hitze. Zähne wurden nicht experimentell untersucht.",
+opac:["forensische Odontologie","Brandleichen Identifikation","Zähne Hitze","burned teeth"],
+st:["Dauer statt Temperatur variieren","Füllungsmaterial-Modell (z. B. Zement) mit untersuchen"]},
+{id:"ident-diatomeen",k:"ident",a:"E",lv:3,f:["Biologie"],fl:["draussen","geraet"],
+t:"Kieselalgen als Ortsnachweis? Unterscheidung von Gewässern anhand ihrer Diatomeengemeinschaften – ein Modell zum Ertrinkungsnachweis",
+q:"Unterscheiden sich die Kieselalgen verschiedener Gewässer so deutlich, dass eine Probe dem richtigen Gewässer zugeordnet werden kann?",
+uv:"Gewässer (z. B. Teich, Bach, Kanal, Leitungswasser als Kontrolle)",
+av:"Anzahl und Formtypen der Diatomeen unter dem Mikroskop, Trefferquote bei Blindzuordnung",
+kon:"gleiche Probenmenge, gleiche Aufbereitung, gleiche Probenahme-Tiefe",
+mat:"Probenflaschen, Mikroskop, Objektträger, Zentrifuge oder Absetzzeit, Bestimmungshilfe",
+offen:"Ob Laien mit Schulmikroskop zuverlässig zuordnen können, ist offen.",
+eigen:"Probennahme, Zählung, Blindtest",
+sich:"nicht allein ans Gewässer, Handschuhe",
+abgr:"Gewässer kamen nur beim Verwesungsprozess vor, nicht beim Ertrinkungsnachweis.",
+opac:["Diatomeen Ertrinken","Rechtsmedizin Ertrinkungstod","Kieselalgen","diatom test drowning"],
+st:["Jahreszeit oder Wassertiefe als Variable","nur zwei Gewässer, dafür mehr Proben"]},
+{id:"spur-kontamination",k:"spur",a:"E",lv:1,f:["Biologie","Chemie"],fl:["personen"],
+t:"Kontamination durch Ermittelnde: Wie weit verschleppen Handschuhe und Werkzeuge Spurenmaterial? – ein Modellversuch mit fluoreszierendem Pulver",
+q:"Wie stark verbreitet sich Spurenmaterial bei der Spurensicherung über Handschuhe und Werkzeuge, und wie wirksam ist ein Handschuhwechsel?",
+uv:"Arbeitsweise (Handschuhwechsel nach jeder Spur vs. kein Wechsel; Pinsel gereinigt vs. nicht) und Zahl der Kontakte",
+av:"fluoreszierende Partikel unter UV-Licht auf Kontaktflächen (Anzahl bzw. Flächenanteil per Foto)",
+kon:"gleiche Pulvermenge, gleiche Abfolge der Kontakte, Kontrollflächen",
+mat:"UV-fluoreszierendes Pulver, UV-Taschenlampe, Einmalhandschuhe, Pinsel, Gegenstände",
+offen:"Wie viele Kontakte es braucht, bis keine Partikel mehr übertragen werden, ist offen.",
+eigen:"Transferketten selbst planen und auszählen",
+sich:"UV-Lampe nicht in die Augen richten",
+abgr:"2026 Kontaktspuren (Literatur) und Fasertransfer: hier geht es um Verschleppung durch die Ermittelnden selbst.",
+opac:["Spurensicherung Kontamination","Spurenübertragung","Tatortarbeit","DNA transfer contamination"],
+st:["Oberfläche als Variable (glatt, rau, Stoff)","Kette Hand → Hand → Gegenstand (sekundärer und tertiärer Transfer)"]},
+{id:"spur-holz",k:"spur",a:"E",lv:2,f:["Physik","Chemie"],fl:["feuer"],
+t:"Brennt die Zeit ins Holz? Verkohlungstiefe als Hinweis auf die Branddauer – ein Modellversuch zur Brandursachenermittlung",
+q:"Wie zuverlässig lässt sich aus der Verkohlungstiefe von Holz auf die Branddauer schließen, und wie stark stören Holzart und Feuchtigkeit?",
+uv:"Branddauer (1, 2, 4, 6 min mit Gasbrenner in festem Abstand) und Holzart (Fichte, Buche, Spanplatte) oder Holzfeuchte",
+av:"Verkohlungstiefe (Messschieber nach Durchsägen), Abbrandrate in mm/min, Regression und Vergleich mit Literaturwerten",
+kon:"gleicher Abstand und gleiche Flamme, gleiche Holzmaße, je 3 Proben",
+mat:"Holzklötze, Gasbrenner, Stativ, Säge, Messschieber, Stoppuhr, Feuchtemessgerät",
+offen:"Ob die Abbrandrate im Kleinversuch konstant ist und wie stark sie streut, ist offen.",
+eigen:"eigene Abbrandraten und Prüfung einer Faustregel der Brandermittler",
+sich:"nur im Fachraum mit Lehrkraft, Löschmittel bereit, Abzug",
+abgr:"Brandbeschleuniger an Gewebe (2025) und Luminol nach Hitze (2026): der Brandverlauf selbst ist neu.",
+opac:["Brandursachenermittlung","Brandermittlung Holz","Abbrandrate","char depth fire investigation"],
+st:["Vorbehandlung mit Lack oder Brandschutzmittel","Rissmuster der Kohle (Krokodilhaut) auswerten"]},
+{id:"spur-foto",k:"spur",a:"E",lv:1,f:["Physik","Mathematik","Informatik"],fl:["pc"],
+t:"Maßstab und Perspektive: Wie stark verfälscht der Kamerawinkel die Vermessung von Spuren auf Tatortfotos?",
+q:"Wie groß ist der Messfehler bei Längen auf Spurenfotos in Abhängigkeit vom Kamerawinkel, und wie gut korrigiert eine Perspektivkorrektur ihn?",
+uv:"Kamerawinkel (90°, 75°, 60°, 45°), Lage des Maßstabs (neben der Spur vs. entfernt)",
+av:"Abweichung gemessener von echten Längen in % (Bildanalyse), vor und nach Perspektivkorrektur",
+kon:"gleiche Kamera, gleiche Spur (z. B. Schuhabdruck), Stativ, Winkelmesser",
+mat:"Smartphone, Stativ, Maßstab/Lineal, Schuhabdruck, kostenlose Bildanalyse-Software",
+offen:"Ab welchem Winkel der Fehler kritisch wird, ist offen.",
+eigen:"Messreihe, Fehlerrechnung, Prüfung einer Korrekturmethode",
+sich:"unbedenklich",
+abgr:"Fotodokumentation am Tatort wurde nie untersucht.",
+opac:["Tatortfotografie","forensische Fotografie","Spurendokumentation","forensic photography scale"],
+st:["Objektiv (Weitwinkel vs. Normal) als Variable","Handy vs. Spiegelreflexkamera"]},
+{id:"dna-reiniger",k:"dna",a:"E",lv:2,f:["Biologie","Chemie"],fl:["chemie"],
+t:"Spurenbeseitigung mit Haushaltsreinigern: Wie stark verringern Bleiche, Sauerstoffreiniger und Essig die fällbare DNA-Menge? – ein Modellversuch",
+q:"Wie stark vermindern gängige Haushaltsreiniger die Menge fällbarer DNA, und hängt das von der Einwirkzeit ab?",
+uv:"Reiniger (Wasser, Essigreiniger, Spülmittel, Sauerstoffbleiche, Chlorbleiche verdünnt) und Einwirkzeit (5, 30, 60 min)",
+av:"ausgefällte DNA-Menge (Masse nach dem Trocknen auf der Feinwaage bzw. Fotofläche), mit Gelelektrophorese, falls vorhanden",
+kon:"gleiche Ausgangsprobe (z. B. Kiwi oder Zwiebel), gleiche Fällung, Kontrolle ohne Reiniger, je 2 Proben",
+mat:"Obst/Gemüse, Spülmittel, Salz, eiskaltes Ethanol, Reiniger, Feinwaage, Reagenzgläser",
+offen:"Ob Chlorbleiche wirklich alles zerstört und Sauerstoffbleiche schwächer wirkt, ist im Modell offen.",
+eigen:"Quantifizierung über Masse (genauer als reine Sichtprüfung), Zeitreihe",
+sich:"Chlorbleiche nie mit Säure (Essig) mischen! Schutzbrille, lüften",
+abgr:"Eng verwandt mit der DNA-Arbeit 2026 (UV), aber mit anderer Variable (Tatortreinigung) und mengenmäßiger Auswertung. Mit Lehrkraft abklären.",
+opac:["DNA Extraktion","DNA Degradation","Spurenbeseitigung","bleach DNA degradation"],
+st:["Oberfläche, auf der gereinigt wird, als Variable","Speichelprobe statt Pflanzen-DNA (Mundschleimhaut)"]},
+{id:"dna-speichel",k:"dna",a:"E",lv:1,f:["Biologie","Chemie"],fl:["personen"],
+t:"Speichel als Spur: Wie lange lässt sich Speichel an Trinkgefäßen und Briefumschlägen über die Amylase-Aktivität nachweisen?",
+q:"Wie lange bleibt Speichel auf verschiedenen Spurenträgern über seine Amylase nachweisbar?",
+uv:"Spurenträger (Glas, Pappbecher, Briefumschlag, Strohhalm) und Alter (0, 1, 3, 7, 14 Tage)",
+av:"Stärke-Iod-Test: Entfärbungszeit bzw. Farbintensität per Foto-Farbwert",
+kon:"Positivkontrolle frischer Speichel, Negativkontrolle Wasser, gleiche Speichelmenge",
+mat:"Stärkelösung, Iod-Kaliumiodid-Lösung, Reagenzgläser, Wattestäbchen, Stoppuhr, Smartphone",
+offen:"Amylase ist robust. Wie lange sie auf trockenen Oberflächen aktiv bleibt, ist offen.",
+eigen:"eigene Nachweisreihe, Bezug zur DNA-Spurensuche (Speichel als DNA-Quelle)",
+sich:"nur eigener Speichel, Iodlösung färbt: Handschuhe",
+abgr:"Speichel als Spur wurde noch nie untersucht.",
+opac:["Speichelspuren Nachweis","Amylase","biologische Spuren","saliva detection forensic"],
+st:["Lagerbedingung (warm/kalt/feucht) als Variable","Abwischen mit Wasser oder Reiniger als Variable"]},
+{id:"dna-gel",k:"dna",a:"E",lv:3,f:["Biologie"],fl:["geraet"],
+t:"Genetischer Fingerabdruck im Modell: Wie verändert der Abbau von DNA das Bandenmuster in der Gelelektrophorese?",
+q:"Ab welchem Abbaugrad ist ein Bandenmuster nicht mehr auswertbar?",
+uv:"Behandlung der DNA (Hitze 60/80/100 °C, UV-Bestrahlung 0–60 min oder Lagerzeit)",
+av:"Schärfe und Lage der Banden, Schmierspur („Smear“), Fotoauswertung",
+kon:"unbehandelte Kontroll-DNA, gleiche Menge, gleiche Laufzeit",
+mat:"nur möglich, wenn die Schule ein Gelelektrophorese-Set hat (z. B. DNA-Fingerprinting-Kit)",
+offen:"Wo die Grenze der Auswertbarkeit liegt, ist offen.",
+eigen:"eigene Gele, Fotodokumentation, Vergleich mit realen Problemen bei alten Spuren",
+sich:"Färbemittel nach Anleitung, Stromquelle nur mit Lehrkraft",
+abgr:"Die DNA-Arbeiten bisher waren Literatur oder Fällungsversuche, ohne Elektrophorese.",
+opac:["Gelelektrophorese","DNA-Analyse forensisch","DNA Degradation","STR typing degraded DNA"],
+st:["Restriktionsverdau und Vergleich von „Verdächtigen“","nur eine Abbauform, dafür feiner abgestuft"]},
+{id:"tox-urin",k:"tox",a:"E",lv:2,f:["Chemie","Biologie"],fl:["chemie"],
+t:"Manipulierte Probe? Erkennbarkeit verfälschter Urinproben mit einfachen Prüfverfahren – ein Modellversuch mit künstlichem Urin",
+q:"Welche einfachen Prüfwerte decken welche Art der Manipulation einer Urinprobe auf?",
+uv:"Verfälschung: unverändert, verdünnt (1:1, 1:3), Essig, Bleiche, Seife, Salz",
+av:"pH-Wert, Dichte (Aräometer oder Massenbestimmung), Farbe, Teststreifenfelder, Schaumbildung; Erkennungsquote",
+kon:"künstlicher Urin nach Rezept aus der Literatur, unveränderte Kontrollprobe, je 3 Proben",
+mat:"Harnstoff, Salze, Lebensmittelfarbe, Urin-Teststreifen (Apotheke), pH-Meter, Messzylinder, Feinwaage",
+offen:"Ob alle Manipulationen erkannt werden oder einige unauffällig bleiben, zeigt erst der Versuch.",
+eigen:"eigene Prüfmatrix und Empfehlung für die Probenannahme",
+sich:"Bleiche nicht mit Säure mischen, Schutzbrille",
+abgr:"2025/2026 ging es um Kreuzreaktionen und Störfaktoren bei Drogen-Schnelltests. Hier geht es um die Echtheit der Probe selbst, ohne Drogentest. Mit Lehrkraft abklären.",
+opac:["Urinprobe Manipulation","forensische Toxikologie","Probenverfälschung","urine adulteration"],
+st:["Temperatur der Probe als Echtheitsmerkmal (Abkühlkurve)","nur Verdünnung in feinen Stufen"]},
+{id:"tox-dc",k:"tox",a:"E",lv:2,f:["Chemie"],fl:["chemie","geraet"],
+t:"Versteckt im Getränk: Einfluss des Getränks auf den dünnschichtchromatographischen Nachweis eines Wirkstoffs – Modellversuch mit Koffein",
+q:"Wie stark erschweren Getränkebestandteile (Zucker, Fett, Farbstoffe) den Nachweis eines beigemischten Wirkstoffs per Dünnschichtchromatographie?",
+uv:"Matrix (Wasser, Limonade, Milch, Orangensaft) und Wirkstoffkonzentration",
+av:"Sichtbarkeit und Rf-Wert des Koffeinflecks unter UV 254 nm, Nachweisgrenze",
+kon:"Referenzsubstanz Koffein, gleiche Extraktion, gleiches Laufmittel",
+mat:"DC-Platten mit Fluoreszenzindikator, UV-Lampe 254 nm, Koffeintabletten, Getränke, Laufmittel nach Anleitung",
+offen:"Ab welcher Konzentration der Nachweis in welcher Matrix scheitert, ist offen.",
+eigen:"Nachweisgrenzen selbst bestimmen, Bezug zu Giftbeibringung",
+sich:"Laufmittel im Abzug, UV-Schutz",
+abgr:"Frühere Tox-Arbeiten nutzten Schnelltests. Chromatographie in Getränken ist neu.",
+opac:["Dünnschichtchromatographie","forensische Toxikologie","Koffein Nachweis","thin layer chromatography toxicology"],
+st:["Lagerzeit des Getränks als Variable","Extraktionsmethode vergleichen"]},
+{id:"tox-pilz",k:"tox",a:"E",lv:2,f:["Biologie"],fl:["geraet"],
+t:"Speisepilz oder Giftpilz? Bleiben mikroskopische Pilzmerkmale nach Kochen und simulierter Verdauung erkennbar?",
+q:"Wie gut lassen sich Pilzreste nach dem Kochen und einer künstlichen Magenpassage mikroskopisch identifizieren?",
+uv:"Behandlung (roh, gekocht, gebraten, gekocht + künstlicher Magensaft 1 h/3 h) bei mehreren Speisepilzarten",
+av:"Erkennbarkeit von Sporen und Hyphenmerkmalen (Skala), Trefferquote bei Blindbestimmung",
+kon:"rohe Referenz, gleiche Pilzmenge, gleiche Präparation; nur Speisepilze als Modell",
+mat:"Champignon, Austernpilz, Shiitake, Mikroskop, Pepsin und verdünnte Salzsäure (künstlicher Magensaft), Wasserbad 37 °C",
+offen:"Welche Merkmale die Verdauung überstehen, ist offen.",
+eigen:"Merkmalskatalog und Blindtest, Bezug zur rechtsmedizinischen Mageninhaltsanalyse",
+sich:"keine echten Giftpilze verwenden; Salzsäure nur verdünnt mit Lehrkraft",
+abgr:"Giftpflanzen wurden 2025 untersucht, Pilze und Mageninhalt nicht.",
+opac:["Pilzvergiftung","Mykologie Mikroskopie","Mageninhalt Rechtsmedizin","mushroom poisoning spores"],
+st:["Pflanzenreste (Gewürze) statt Pilze","nur Verdauungszeit als Variable"]},
+{id:"it-exif",k:"it",a:"E",lv:1,f:["Informatik"],fl:["pc"],
+t:"Was ein Foto verrät: Welche Metadaten bleiben beim Versand über Messenger und soziale Netzwerke erhalten? – eine Untersuchung zur digitalen Forensik",
+q:"Welche Metadaten (Ort, Zeit, Gerät) überstehen den Versand über verschiedene Dienste, und wie leicht lassen sie sich fälschen?",
+uv:"Übertragungsweg (verschiedene Messenger in normaler und Originalqualität, als Datei, E-Mail, soziale Netzwerke) und Betriebssystem",
+av:"EXIF-Felder vor/nach dem Versand (z. B. mit ExifTool), Dateigröße, Auflösung; Tabelle",
+kon:"gleiche Testfotos, gleiche Geräte, dokumentierte App-Versionen",
+mat:"2 Smartphones, PC, kostenloses Metadaten-Werkzeug",
+offen:"Apps ändern ihr Verhalten ständig, aktuelle Daten gibt es kaum.",
+eigen:"systematische eigene Datenerhebung und Bewertung für Ermittlungen",
+sich:"nur eigene Testfotos, keine echten Standortdaten veröffentlichen",
+abgr:"IT-Forensik bisher: Cybercrime, Verschlüsselung, Gesichtserkennung. Metadaten sind neu.",
+opac:["IT-Forensik","Metadaten","digitale Beweismittel","EXIF forensics"],
+st:["Fälschbarkeit: Können Ermittelnde gefälschte Metadaten erkennen?","Videos statt Fotos"]},
+{id:"it-usb",k:"it",a:"E",lv:2,f:["Informatik"],fl:["pc"],
+t:"Gelöscht ist nicht weg: Wiederherstellbarkeit gelöschter Dateien auf USB-Sticks nach Löschen, Formatieren und Überschreiben",
+q:"Wie viele gelöschte Dateien lassen sich je nach Löschmethode und Dateisystem wiederherstellen?",
+uv:"Löschmethode (Papierkorb, Schnellformatierung, vollständige Formatierung, zu 25/50/75 % überschrieben) und Dateisystem (FAT32, exFAT, NTFS)",
+av:"Anteil vollständig bzw. teilweise wiederhergestellter Dateien (z. B. mit PhotoRec)",
+kon:"gleiche Sticks, gleicher Testdatensatz, je 3 Durchgänge",
+mat:"mehrere USB-Sticks, PC, kostenlose Wiederherstellungssoftware",
+offen:"Ab wie viel Überschreiben nichts mehr zu retten ist, ist offen.",
+eigen:"Versuchsmatrix, eigene Auswertung, Empfehlungen für Ermittler und Datenschutz",
+sich:"nur eigene Testdaten, keine fremden Datenträger",
+abgr:"Datenwiederherstellung wurde bisher nicht untersucht.",
+opac:["IT-Forensik","Datenrettung","digitale Forensik Datenträger","file carving"],
+st:["SD-Karten aus Kameras","Handyspeicher nach Zurücksetzen (nur eigene Altgeräte)"]},
+{id:"it-fake",k:"it",a:"S",lv:2,f:["Informatik","Psychologie"],fl:["personen","pc"],
+t:"Echt oder bearbeitet? Wie zuverlässig erkennen Menschen und frei verfügbare Analysewerkzeuge manipulierte Fotos?",
+q:"Erkennen Menschen oder einfache Analysewerkzeuge (z. B. Error Level Analysis) manipulierte Fotos besser, und welche Manipulationen bleiben unentdeckt?",
+uv:"Art der Manipulation (Objekt entfernt, eingefügt, KI-generiert, unbearbeitet) und Prüfer (Personen vs. Werkzeug)",
+av:"Trefferquote, falsch-positive Rate, Sicherheit der Einschätzung",
+kon:"gleiche Bildserie, zufällige Reihenfolge, mind. 30 Teilnehmende",
+mat:"selbst erstellte Testbilder, Online-Fragebogen, kostenloses Analysewerkzeug",
+offen:"Ob Menschen besser als Zufall sind, ist offen.",
+eigen:"eigene Testbilder, Studie und Werkzeugvergleich",
+sich:"Einverständnis, anonym, keine Bilder realer Personen ohne Zustimmung",
+abgr:"Gesichtserkennung (2026) war Literatur. Bildmanipulation ist neu.",
+opac:["Bildforensik","Bildmanipulation","digitale Forensik","image forensics"],
+st:["Schulung vorher vs. nachher","nur KI-Bilder vs. echte Bilder"]},
+{id:"it-stimme",k:"it",a:"S",lv:2,f:["Informatik","Psychologie"],fl:["personen","pc"],
+t:"Stimme aus der Maschine: Können Jugendliche KI-geklonte Stimmen von echten Aufnahmen unterscheiden? – eine Studie zur Audioforensik",
+q:"Wie gut erkennen Hörer:innen KI-generierte Sprachaufnahmen, und hilft es, die echte Stimme zu kennen?",
+uv:"Aufnahme (echt vs. KI) und Bekanntheit der Stimme (bekannt vs. unbekannt)",
+av:"Trefferquote, Sicherheit, genannte Erkennungsmerkmale",
+kon:"gleiche Sätze, gleiche Lautstärke, zufällige Reihenfolge",
+mat:"eigene Sprachaufnahmen (mit Einverständnis), frei verfügbares Stimmwerkzeug, Online-Fragebogen",
+offen:"Ob Menschen die Fälschung erkennen, ist offen und für Betrugsfälle (Enkeltrick) hoch relevant.",
+eigen:"eigene Aufnahmen, Studie und Auswertung",
+sich:"nur Stimmen mit ausdrücklichem Einverständnis, Aufnahmen nach der Arbeit löschen",
+abgr:"Audioforensik kam noch nicht vor.",
+opac:["forensische Phonetik","Sprechererkennung","Deepfake","voice cloning detection"],
+st:["Telefonqualität vs. Studioqualität","Altersgruppen vergleichen"]},
+{id:"aus-gegenueber",k:"aus",a:"S",lv:2,f:["Psychologie"],fl:["personen"],
+t:"Gegenüberstellung mit Folgen: Einfluss der Präsentationsform einer Wahllichtbildvorlage auf Fehlidentifikationen",
+q:"Führen simultane oder sequenzielle Fotovorlagen zu mehr Fehlidentifikationen, besonders wenn der Täter gar nicht dabei ist?",
+uv:"Präsentation (alle Fotos gleichzeitig vs. nacheinander) und Täter anwesend/abwesend",
+av:"Treffer, Fehlidentifikationen, richtige Zurückweisungen, Sicherheit auf einer Skala",
+kon:"gleiches Tatvideo, ähnlich aussehende Vergleichspersonen, zufällige Zuteilung, mind. 40 Teilnehmende",
+mat:"selbst gedrehtes kurzes Video einer gestellten Tat, Fotos (mit Einverständnis), Fragebogen",
+offen:"Die Fachliteratur ist uneins, welche Methode besser ist.",
+eigen:"eigenes Studiendesign, Video und Auswertung",
+sich:"Einverständnis aller Gefilmten und Teilnehmenden, anonym",
+abgr:"2026 Suggestivfragen und kindliche Zeugen. Die Täteridentifizierung ist neu.",
+opac:["Zeugenidentifizierung","Wahlgegenüberstellung","Aussagepsychologie","eyewitness lineup"],
+st:["Instruktion „Täter ist evtl. nicht dabei“ vs. ohne Hinweis","Zeitabstand bis zur Vorlage"]},
+{id:"aus-waffe",k:"aus",a:"S",lv:1,f:["Psychologie"],fl:["personen"],
+t:"Waffenfokus: Erinnern sich Zeug:innen schlechter an das Aussehen eines Täters, wenn eine Waffe zu sehen ist?",
+q:"Verringert der Anblick einer Waffe die Erinnerung an Gesicht und Kleidung des Täters?",
+uv:"Gegenstand in der Hand des Darstellers (Messer-Attrappe vs. Handy)",
+av:"Anzahl richtiger Details zu Gesicht, Kleidung, Gegenstand; Identifikation aus Fotos",
+kon:"identische Videos bis auf den Gegenstand, zufällige Gruppenzuteilung",
+mat:"zwei kurze Videos, Fragebogen, Fotoreihe",
+offen:"Ob der Effekt bei kurzen Videos messbar ist, ist offen.",
+eigen:"eigenes Experiment mit Kontrollgruppe",
+sich:"nur Attrappe, Hinweis vor dem Video, Einverständnis",
+abgr:"Bisherige Zeugenstudien untersuchten Fragen und Alter, nicht die Wirkung einer Waffe.",
+opac:["Waffenfokus","Aussagepsychologie","Zeugengedächtnis","weapon focus effect"],
+st:["Stress-Level messen (Puls)","Befragung sofort vs. nach einer Woche"]},
+{id:"aus-luege",k:"aus",a:"S",lv:1,f:["Psychologie"],fl:["personen"],
+t:"Lügen erkennen – können wir das? Trefferquote von Laien und Einfluss einer Schulung zu angeblichen Lügensignalen",
+q:"Erkennen Laien Lügen in Videoaussagen besser als der Zufall, und verbessert oder verschlechtert eine Schulung zu „typischen Lügensignalen“ das Urteil?",
+uv:"Gruppe (ohne Hinweise vs. mit Kurzschulung zu Körpersprache vs. Schulung zu Aussageinhalt)",
+av:"Trefferquote, Sicherheit",
+kon:"gleiche Videos (wahre und erfundene Erlebnisberichte), zufällige Zuteilung",
+mat:"10–12 kurze Videos (Mitschüler:innen erzählen wahr oder erfunden), Fragebogen",
+offen:"Ob Körpersprache-Tipps eher schaden, ist eine echte offene Frage.",
+eigen:"eigene Videos, Experiment mit drei Gruppen",
+sich:"Einverständnis, keine persönlichen Inhalte",
+abgr:"2023 Mimik (Literatur). Ein eigenes Experiment zur Lügenerkennung ist neu.",
+opac:["Lügenerkennung","Glaubhaftigkeitsbegutachtung","Aussagepsychologie","deception detection"],
+st:["Merkmalsorientierte Inhaltsanalyse (Realkennzeichen) testen","Erwachsene vs. Jugendliche als Beurteilende"]},
+{id:"aus-zeit",k:"aus",a:"S",lv:1,f:["Psychologie"],fl:["personen"],
+t:"Mit der Zeit verblasst die Aussage: Genauigkeit und Sicherheit von Zeugenaussagen bei sofortiger und späterer Befragung",
+q:"Wie verändern sich Genauigkeit und Selbstsicherheit einer Zeugenaussage zwischen sofortiger Befragung und einer Befragung nach einer Woche?",
+uv:"Zeitpunkt der Befragung (sofort, nach 1 Tag, nach 7 Tagen) und vorherige Befragung ja/nein",
+av:"Anteil korrekter Details, Fehler, Sicherheit; Zusammenhang Sicherheit–Richtigkeit",
+kon:"gleiches Video, gleiche Fragen, zufällige Gruppen",
+mat:"Video einer gestellten Szene, Fragebogen",
+offen:"Ob Sicherheit und Richtigkeit auseinanderlaufen, ist offen.",
+eigen:"Längsschnittstudie mit eigener Auswertung",
+sich:"Einverständnis, anonym",
+abgr:"Bisher Suggestivfragen und Alter, nicht die Zeit bis zur Befragung.",
+opac:["Zeugenaussage Gedächtnis","Aussagepsychologie","Vergessen","eyewitness memory delay"],
+st:["Gespräch mit anderen Zeugen dazwischen (Gedächtniskonformität)","nur Sicherheit vs. Richtigkeit"]},
+{id:"aus-anker",k:"aus",a:"S",lv:2,f:["Psychologie","Politik"],fl:["personen"],
+t:"Der Anker im Gerichtssaal: Beeinflusst die Strafforderung der Staatsanwaltschaft das Strafmaß von Laien?",
+q:"Verschiebt eine hohe oder niedrige Strafforderung das Urteil von Laienrichter:innen bei identischem Fall?",
+uv:"Strafforderung in der Fallbeschreibung (niedrig, hoch, keine)",
+av:"verhängtes Strafmaß in Monaten, Begründung",
+kon:"identischer Fall, zufällige Zuteilung, mind. 60 Teilnehmende",
+mat:"Fallvignette (z. B. Diebstahl), Online-Fragebogen",
+offen:"Wie stark der Effekt bei Jugendlichen ist, ist offen.",
+eigen:"eigenes Vignettenexperiment",
+sich:"anonym, harmloser Fall",
+abgr:"2026 Dark-Factor und Strafmaß (Persönlichkeit). Hier ist eine äußere Information die Variable.",
+opac:["Ankereffekt","Strafzumessung","Rechtspsychologie","anchoring sentencing"],
+st:["Würfel als zufälliger Anker","Juristen-Laien vs. Jugendliche"]},
+{id:"psy-geo",k:"psy",a:"L",lv:2,f:["Erdkunde","Mathematik","Psychologie"],fl:["pc"],
+t:"Geografisches Profiling: Lässt sich der Wohnort von Serientätern aus den Tatorten eingrenzen? – Überprüfung der Kreishypothese an dokumentierten Fällen",
+q:"Liegt der Wohnort von Serientätern tatsächlich im Kreis um die am weitesten entfernten Tatorte, und wie groß ist das Suchgebiet?",
+uv:"(Literaturarbeit mit eigener Auswertung) 8–10 gut dokumentierte Fälle",
+av:"Anteil der Fälle, in denen die Kreishypothese zutrifft; Abstand Wohnort–Mittelpunkt",
+kon:"nur Fälle mit gesicherten Ortsangaben aus Fachliteratur",
+mat:"Fachliteratur, Kartenwerkzeug, Tabellenkalkulation",
+offen:"Ob die Regel für deutsche Fälle gilt, ist offen.",
+eigen:"eigene Kartierung und Überprüfung der Theorie",
+sich:"keine Spekulation über ungeklärte Fälle mit lebenden Beteiligten",
+abgr:"Täterprofile wurden bisher biografisch betrachtet, nie räumlich.",
+opac:["geografische Fallanalyse","Operative Fallanalyse","Täterprofil","geographic profiling"],
+st:["Einbruchsserien statt Mordfälle","mehrere Modelle vergleichen"]},
+{id:"psy-truecrime",k:"psy",a:"S",lv:1,f:["Psychologie"],fl:["personen"],
+t:"True Crime und Kriminalitätsfurcht: Zusammenhang zwischen True-Crime-Konsum und der Angst vor Verbrechen bei Jugendlichen – eine Fragebogenstudie",
+q:"Haben Jugendliche, die viel True Crime konsumieren, mehr Angst vor Verbrechen und schätzen sie Kriminalität höher ein, als die Statistik zeigt?",
+uv:"Konsummenge (wenig, mittel, viel)",
+av:"Kriminalitätsfurcht (Skala), Schätzung von Mordzahlen im Vergleich zur Polizeilichen Kriminalstatistik",
+kon:"Alter, Geschlecht erfassen, mind. 80 Teilnehmende",
+mat:"Online-Fragebogen, Polizeiliche Kriminalstatistik",
+offen:"Ob ein Zusammenhang besteht, ist offen. Korrelation ist keine Kausalität.",
+eigen:"eigene Befragung und statistische Auswertung",
+sich:"anonym, sensible Fragen behutsam",
+abgr:"2022 war True Crime eine Literaturarbeit. Hier wird empirisch gemessen.",
+opac:["Kriminalitätsfurcht","Medienwirkung","True Crime","fear of crime media"],
+st:["Podcast vs. Serie vergleichen","Experiment: eine Folge vorher vs. Kontrollgruppe"]},
+{id:"psy-opfer",k:"psy",a:"S",lv:1,f:["Psychologie","Politik"],fl:["personen"],
+t:"Selbst schuld? Schuldzuschreibung an Opfer von Online-Betrug in Abhängigkeit vom dargestellten Verhalten – eine Vignettenstudie",
+q:"Wird Betrugsopfern mehr Schuld zugeschrieben, wenn sie als unvorsichtig dargestellt werden, auch bei gleichem Schaden?",
+uv:"Darstellung des Opfers (vorsichtig, neutral, unvorsichtig) und Alter des Opfers",
+av:"Schuldzuschreibung an Opfer und Täter (Skalen), empfohlene Strafe",
+kon:"gleicher Schaden, zufällige Zuteilung, mind. 60 Teilnehmende",
+mat:"Fallvignetten, Online-Fragebogen",
+offen:"Wie stark Jugendliche Opfern Schuld zuschreiben, ist offen.",
+eigen:"eigenes Experiment",
+sich:"anonym",
+abgr:"Opferperspektive kam 2024 als Einzelfall vor, nicht als Experiment.",
+opac:["Viktimologie","Opferbeschuldigung","Betrug Internet","victim blaming"],
+st:["Enkeltrick vs. Online-Shop-Betrug","Geschlecht der Opfer"]},
+{id:"lit-genealogie",k:"dna",a:"L",lv:2,f:["Biologie","Politik"],fl:[],
+t:"Forensische Genealogie: Wie DNA-Ahnenforschungsdatenbanken Cold Cases lösen – und welche rechtlichen Grenzen in Deutschland gelten",
+q:"Sollte die Polizei in Deutschland private DNA-Ahnendatenbanken nutzen dürfen? Abwägung von Aufklärungsnutzen und Datenschutz",
+uv:"(Literaturarbeit) Fallbeispiele USA, Rechtslage Deutschland",
+av:"eigene begründete Bewertung nach Kriterien",kon:"",mat:"Fachliteratur, Gesetzestexte, Fachartikel",
+offen:"Die Debatte ist rechtlich und ethisch offen.",
+eigen:"eigener Kriterienkatalog und Abwägung",sich:"",
+abgr:"DNA-Methoden wurden 2024 verglichen, die genealogische Suche nicht.",
+opac:["forensische Genealogie","DNA-Datenbank","Ahnenforschung DNA","investigative genetic genealogy"],
+st:["Fokus auf einen bekannten Fall","Vergleich mehrerer Länder"]},
+{id:"lit-phaenotyp",k:"dna",a:"L",lv:2,f:["Biologie","Politik"],fl:[],
+t:"Was darf DNA verraten? Erweiterte DNA-Analyse (§ 81e StPO) zu Augen-, Haar-, Hautfarbe und Alter – Chancen, Genauigkeit und Risiken",
+q:"Wie zuverlässig sind DNA-Vorhersagen äußerer Merkmale, und rechtfertigt ihr Nutzen die Risiken?",
+uv:"(Literaturarbeit)",av:"Bewertung der Treffsicherheit anhand von Studien",kon:"",mat:"Fachliteratur, Gesetz, Studien zur Vorhersagegenauigkeit",
+offen:"Genauigkeit und Diskriminierungsrisiken werden kontrovers diskutiert.",
+eigen:"Zusammenführung der Studiendaten, eigene Bewertung",sich:"",
+abgr:"Neu: Phänotypisierung kam noch nicht vor.",
+opac:["DNA-Phänotypisierung","erweiterte DNA-Analyse","forensic DNA phenotyping"],
+st:["Vergleich mit den Niederlanden","nur Altersschätzung"]},
+{id:"lit-fehlurteil",k:"spur",a:"L",lv:2,f:["Politik","Biologie"],fl:[],
+t:"Wenn Forensik irrt: Fehlurteile durch Bissspuren- und Haaranalysen – was macht eine forensische Methode wissenschaftlich belastbar?",
+q:"Nach welchen Kriterien lässt sich beurteilen, ob eine forensische Methode vor Gericht verlässlich ist?",
+uv:"(Literaturarbeit) Fallbeispiele und Gutachten (z. B. US-Berichte von 2009 und 2016)",av:"eigener Kriterienkatalog, angewandt auf 3 Methoden",kon:"",mat:"Fachliteratur, Berichte, Fallakten aus Fachbüchern",
+offen:"Die Bewertung der Methoden ist umstritten.",
+eigen:"Kriterienkatalog und Anwendung",sich:"",
+abgr:"Neu: Kritik an Methoden statt Darstellung einzelner Methoden.",
+opac:["Fehlurteile","forensische Wissenschaft Kritik","Sachverständigenbeweis","wrongful convictions forensic"],
+st:["auf eine Methode fokussieren","Deutsche Fälle (z. B. Wiederaufnahmeverfahren)"]},
+{id:"lit-isotope",k:"ident",a:"L",lv:3,f:["Chemie","Biologie"],fl:[],
+t:"Isotopenanalyse: Wie Haare und Knochen die Herkunft unbekannter Toter verraten",
+q:"Wie genau lässt sich die Herkunft einer unbekannten Person aus Isotopenverhältnissen bestimmen, und wo liegen die Grenzen?",
+uv:"(Literaturarbeit)",av:"Bewertung anhand von Fallbeispielen",kon:"",mat:"Fachliteratur Chemie/Rechtsmedizin",
+offen:"Genauigkeit hängt stark von Referenzdaten ab, die Bewertung ist offen.",
+eigen:"Vergleich und Bewertung von Fällen",sich:"",
+abgr:"Identifizierung bisher über Schädel, Brand und Tattoos.",
+opac:["Isotopenanalyse","Herkunftsbestimmung","Rechtsmedizin Identifizierung","stable isotope forensic"],
+st:["Fokus Haare als Zeitachse der Reisebewegungen","Lebensmittelherkunft als Vergleich"]},
+{id:"lit-mikrobiom",k:"ento",a:"L",lv:3,f:["Biologie"],fl:[],
+t:"Die Bakterien-Uhr: Kann das Thanatomikrobiom die Liegezeit genauer bestimmen als Insekten?",
+q:"Ist die Analyse von Bakteriengemeinschaften der Insektenkunde bei der Liegezeitbestimmung überlegen?",
+uv:"(Literaturarbeit)",av:"Vergleich von Genauigkeit und Anwendbarkeit",kon:"",mat:"Fachliteratur, Studien",
+offen:"Das Forschungsfeld ist jung, Ergebnis der Abwägung offen.",
+eigen:"Methodenvergleich mit Kriterien",sich:"",
+abgr:"Entomologie 2022 als Literatur. Das Mikrobiom ist neu.",
+opac:["Thanatomikrobiom","Liegezeit","postmortales Intervall","thanatomicrobiome"],
+st:["Vergleich mit Abkühlung und Totenstarre","Mikrobiom im Wasser"]},
+{id:"lit-phonetik",k:"it",a:"L",lv:2,f:["Deutsch","Informatik"],fl:[],
+t:"Forensische Phonetik: Wie zuverlässig ist der Stimmvergleich vor Gericht?",
+q:"Wie belastbar sind Stimmvergleiche als Beweismittel, und was ändert sich durch KI-Stimmen?",
+uv:"(Literaturarbeit, optional kleiner eigener Hörtest)",av:"Bewertung der Verfahren",kon:"",mat:"Fachliteratur, BKA-Veröffentlichungen",
+offen:"Durch Deepfakes neu zu bewerten.",
+eigen:"Kriterien und Bewertung, ggf. eigener kleiner Hörtest",sich:"",
+abgr:"Neu.",
+opac:["forensische Phonetik","Sprechererkennung","Stimmanalyse","forensic speaker comparison"],
+st:["Dialekte als Ermittlungshinweis","Notrufanalyse"]}
+];
+
+/* Neue Ideen, angeregt durch stern-Crime-Hefte */
+IDEEN.push(
+{id:"sc-lack",k:"mat",a:"E",lv:2,f:["Chemie","Physik"],fl:["chemie","geraet"],
+t:"Lacksplitter als Spur nach Fahrerflucht: Lassen sich Lackproben anhand von Schichtaufbau und Lösemittelverhalten einem Fahrzeug zuordnen?",
+q:"Wie zuverlässig lassen sich Lacksplitter mit schulischen Mitteln (Mikroskop, Lösemitteltests) dem richtigen „Fahrzeug“ zuordnen, und wie stark verändert Witterung die Merkmale?",
+uv:"Lackprobe (mehrere selbst hergestellte Schichtlacke bzw. Proben vom Schrottplatz/Autolackierer) und Vorbehandlung (frisch, 2 Wochen UV/Fensterlicht, Streusalzlösung)",
+av:"Zahl und Farbe der Schichten im Querschnitt (Mikroskop), Schichtdicke, Reaktion auf Lösemittel (Aceton, Ethanol, Wasser); Trefferquote bei Blindzuordnung",
+kon:"gleiche Präparation, Referenzproben je „Fahrzeug“, je 3 Splitter",
+mat:"lackierte Blechproben oder Sprühlack in mehreren Schichten (Grundierung, Farbe, Klarlack), Skalpell, Mikroskop, Aceton, Ethanol, Uhrgläser",
+offen:"Ob Alterung die Schichtmerkmale so verändert, dass Zuordnungen falsch werden, ist offen.",
+eigen:"eigene Probensammlung, Merkmalskatalog und Blindtest",
+sich:"Aceton ist leicht entzündlich: lüften, keine Flammen; Skalpell vorsichtig",
+abgr:"Lackspuren kamen bisher nicht vor.",
+opac:["Lackspuren","Kriminaltechnik Fahrzeug","Unfallflucht Spuren","automotive paint forensic"],
+st:["nur Farbe/Schichtzahl, dafür mehr Proben","Übertragung auf Kleidung (Abrieb) als zweite Frage"]},
+{id:"sc-maske",k:"aus",a:"S",lv:1,f:["Psychologie"],fl:["personen"],
+t:"Erkannt trotz Maske? Wie gut identifizieren Zeug:innen Täter mit Kapuze, Sonnenbrille oder Mund-Nasen-Schutz?",
+q:"Wie stark verringern verschiedene Arten der Verhüllung die Wiedererkennung eines Täters aus einer Fotoreihe?",
+uv:"Verhüllung im Tatvideo (keine, Kapuze, Sonnenbrille, Mund-Nasen-Schutz, Sturmhaube)",
+av:"Trefferquote und Fehlidentifikationen bei der späteren Fotovorlage (unverhüllt), Sicherheit",
+kon:"gleiche Darsteller:innen und Szene, zufällige Zuteilung, mind. 50 Teilnehmende",
+mat:"kurze selbst gedrehte Videos (mit Einverständnis), Fotoreihen, Fragebogen",
+offen:"Ob die Augenpartie oder die Mundpartie wichtiger ist, ist offen.",
+eigen:"eigenes Studiendesign mit fünf Gruppen",
+sich:"nur Attrappen, Einverständnis aller Gefilmten",
+abgr:"Neu: Verhüllung als Einflussfaktor.",
+opac:["Personenidentifizierung","Gesichtserkennung Psychologie","Zeugenidentifizierung","face masks recognition"],
+st:["Stimme als zusätzliches Merkmal","Erkennen bekannter vs. fremder Personen"]},
+{id:"sc-tracker",k:"it",a:"E",lv:1,f:["Informatik"],fl:["pc"],
+t:"Heimlich geortet: Wie schnell warnen Smartphones vor fremden Bluetooth-Trackern? – ein Beitrag zur Stalking-Prävention",
+q:"Nach welcher Zeit und unter welchen Bedingungen warnen iPhone und Android-Geräte vor einem fremden, mitgeführten Tracker?",
+uv:"Tracker-Modell (z. B. AirTag, SmartTag, Tile), Betriebssystem des „Opfer“-Handys, Bewegung (ruhig vs. unterwegs)",
+av:"Zeit bis zur Warnung, ob überhaupt gewarnt wird, Tonsignal des Trackers",
+kon:"gleiche Wege, Uhrzeit protokolliert, je 3 Durchgänge",
+mat:"eigene bzw. geliehene Tracker, zwei Smartphones verschiedener Hersteller, Protokollbogen",
+offen:"Die Schutzfunktionen werden laufend geändert, aktuelle Messungen fehlen.",
+eigen:"eigene Messreihe, Empfehlungen für Betroffene",
+sich:"nur eigene Geräte, niemanden ohne Wissen orten",
+abgr:"Stalking und Ortung kamen noch nicht vor.",
+opac:["Stalking","digitale Gewalt","IT-Forensik Ortung","bluetooth tracker stalking"],
+st:["Wie gut finden Prüf-Apps einen versteckten Tracker im Auto?","Literaturarbeit: Stalking-Paragraf und digitale Ortung"]},
+{id:"sc-homogen",k:"tox",a:"E",lv:2,f:["Chemie","Mathematik"],fl:["chemie"],
+t:"Die Probe macht das Ergebnis: Wie stark streuen Nachweise in einem Asservat, wenn es vor der Analyse nicht homogenisiert wird? – Modellversuch",
+q:"Wie stark weicht der gemessene Gehalt einer Teilprobe vom wahren Gehalt ab, je nachdem, wie gründlich ein Asservat (z. B. eine Zuckerdose) vorher gemahlen und gemischt wurde?",
+uv:"Vorbehandlung: nicht gemischt, kurz geschüttelt, gründlich gerührt, gemahlen und gemischt; Modell-„Gift“: Kochsalz in Zucker",
+av:"Salzgehalt in je 10 Teilproben über die Leitfähigkeit (Kalibriergerade), Streuung (Standardabweichung)",
+kon:"gleiche Gesamtmenge und Salzmenge, gleiche Probengröße, Kalibrierung mit bekannten Lösungen",
+mat:"Zucker, Kochsalz, Leitfähigkeitsmessgerät, Feinwaage, Mörser oder Mühle, Bechergläser",
+offen:"Wie groß die Fehler ohne Homogenisierung werden, ist offen.",
+eigen:"Kalibriergerade, Statistik, Bezug zur Asservatenanalyse",
+sich:"unbedenklich",
+abgr:"Bisherige Tox-Arbeiten untersuchten Tests, nicht die Probenahme.",
+opac:["Probenahme Analytik","forensische Toxikologie","Homogenisierung","sampling error"],
+st:["Probengröße als Variable","Farbstoff und Fotometer statt Salz"]},
+{id:"sc-feder",k:"mat",a:"E",lv:2,f:["Biologie"],fl:["geraet"],
+t:"Federn als Spur: Lassen sich Vogelarten anhand mikroskopischer Federmerkmale bestimmen? – ein Beitrag zur Artenschutz-Forensik",
+q:"Welche mikroskopischen Merkmale von Federn (Äste, Strahlen, Knoten) reichen aus, um Vogelgruppen sicher zu unterscheiden?",
+uv:"Federherkunft (z. B. Huhn, Taube, Gans, Ente, Wellensittich) und Federteil (Daune, Deckfeder)",
+av:"Merkmale unter dem Mikroskop (Knotenform, Abstand, Farbe), Bestimmungsschlüssel, Trefferquote bei Blindproben",
+kon:"gleiche Präparation, mehrere Federn pro Art",
+mat:"Federn (Bastelbedarf, Geflügelhof, Fundfedern von häufigen Arten), Mikroskop, Objektträger",
+offen:"Ob ein selbst erstellter Schlüssel Mitschüler:innen zur richtigen Bestimmung führt, ist offen.",
+eigen:"eigener Bestimmungsschlüssel und Blindtest",
+sich:"Fundfedern geschützter Arten nicht sammeln, Hände waschen",
+abgr:"Tierische Spuren und Artenschutz kamen noch nicht vor.",
+opac:["Federn Bestimmung","Artenschutz Kriminalität","Wildlife forensics","feather identification microscopy"],
+st:["Federn in Daunenjacken: stimmt die Angabe auf dem Etikett?","Federreste nach Vogelschlag (Flugzeug) als Literaturteil"]},
+{id:"sc-broken",k:"fall",a:"S",lv:1,f:["Psychologie","Politik"],fl:["personen","draussen"],
+t:"Broken Windows auf dem Schulhof? Beeinflusst sichtbare Unordnung, ob Menschen Regeln brechen? – eine Feldbeobachtung",
+q:"Werfen Menschen häufiger Müll weg oder ignorieren Schilder, wenn ein Ort bereits verschmutzt ist?",
+uv:"Zustand des Ortes (aufgeräumt vs. vermüllt) bei sonst gleicher Situation",
+av:"Anteil der Personen, die einen Flyer am Fahrrad wegwerfen bzw. eine Regel missachten",
+kon:"gleiche Uhrzeit und Stelle, gleiche Flyer, Beobachtung ohne Eingreifen, mind. 100 Beobachtungen",
+mat:"Flyer, Beobachtungsbogen, Absprache mit Schulleitung",
+offen:"Ob der in Studien beschriebene Effekt in deinem Umfeld auftritt, ist offen.",
+eigen:"eigene Feldbeobachtung mit Auswertung",
+sich:"Schulleitung informieren, keine Personen fotografieren, Müll danach beseitigen",
+abgr:"Kriminologische Feldstudien gab es bisher nicht.",
+opac:["Broken-Windows-Theorie","Kriminologie","Normverletzung","broken windows experiment"],
+st:["Graffiti statt Müll","Wirkung eines Hinweisschildes"]},
+{id:"sc-djatlow",k:"fall",a:"L",lv:2,f:["Physik","Biologie"],fl:[],
+t:"Das Rätsel vom Djatlow-Pass: Welche Erklärung hält einer forensischen Prüfung stand?",
+q:"Welche der Erklärungen für den Tod der Wandergruppe 1959 passt am besten zu den rechtsmedizinischen Befunden?",
+uv:"(Literaturarbeit) Hypothesen: Lawine, Unterkühlung, Gewalt, Wetterphänomene",
+av:"Bewertung jeder Hypothese anhand der Befunde (Verletzungen, Kleidung, Fundorte) in einer Kriterientabelle",kon:"",mat:"Fachliteratur, Untersuchungsberichte, wissenschaftliche Modellierungen",
+offen:"Der Fall ist bis heute umstritten.",
+eigen:"Kriterientabelle und begründete eigene Bewertung",sich:"",
+abgr:"Neu.",
+opac:["Unterkühlung Rechtsmedizin","Lawine Verletzungen","Dyatlov Pass","hypothermia forensic"],
+st:["Fokus auf Unterkühlung (paradoxes Entkleiden)","Fokus auf Verletzungsmuster"]},
+{id:"sc-211",k:"fall",a:"L",lv:2,f:["Politik","Deutsch"],fl:[],
+t:"Heimtücke und Haustyrann: Ist der Mordparagraf § 211 StGB reformbedürftig?",
+q:"Führt die Formulierung der Mordmerkmale zu ungerechten Urteilen, etwa wenn sich Opfer häuslicher Gewalt wehren?",
+uv:"(Literaturarbeit) Gesetz, Entstehungsgeschichte, Reformvorschläge, Fallbeispiele",
+av:"Vergleich der Reformvorschläge nach eigenen Kriterien",kon:"",mat:"Gesetzestexte, Kommentare, Fachartikel",
+offen:"Die Reformdebatte ist politisch offen.",
+eigen:"Kriterienkatalog und begründete Bewertung",sich:"",
+abgr:"Neu: Recht statt Täterpsychologie.",
+opac:["Mordmerkmale","Heimtücke","§ 211 StGB Reform","Tötungsdelikte Strafrecht"],
+st:["Vergleich mit Österreich oder der Schweiz","nur das Merkmal Heimtücke"]},
+{id:"sc-scharf",k:"ident",a:"L",lv:2,f:["Biologie"],fl:[],
+t:"Tötung oder Suizid? Woran die Rechtsmedizin bei scharfer Gewalt unterscheidet",
+q:"Welche Befunde (Lage, Anzahl, Probierschnitte, Abwehrverletzungen) erlauben eine sichere Unterscheidung, und wo bleiben Zweifel?",
+uv:"(Literaturarbeit, optional mit Modellversuch zu Abwehrverletzungen an Kleidung)",
+av:"Kriterientabelle aus Fachliteratur, angewandt auf dokumentierte Fallbeispiele",kon:"",mat:"Lehrbücher der Rechtsmedizin, Fachartikel",
+offen:"Grenzfälle sind auch für Fachleute schwer.",
+eigen:"Kriterientabelle und Fallbewertung",sich:"Thema ist belastend: mit Lehrkraft absprechen",
+abgr:"Bisherige Arbeiten untersuchten Wunden experimentell, nicht die Unterscheidung Suizid/Tötung.",
+opac:["scharfe Gewalt Rechtsmedizin","Stichverletzungen","Abwehrverletzungen","sharp force suicide homicide"],
+st:["Fokus auf Kleidungsbefunde","Vergleich mit stumpfer Gewalt"]},
+{id:"sc-strang",k:"ident",a:"L",lv:2,f:["Biologie"],fl:[],
+t:"Erhängen, Erdrosseln, Erwürgen: Woran erkennt die Rechtsmedizin, ob ein Strangulationstod Suizid oder Tötung war?",
+q:"Welche Befunde unterscheiden die Strangulationsarten, und wie sicher ist die Abgrenzung von Suizid und Fremdeinwirkung?",
+uv:"(Literaturarbeit)",av:"Kriterientabelle und Bewertung dokumentierter Fälle",kon:"",mat:"Lehrbücher der Rechtsmedizin, Fachartikel",
+offen:"Inszenierte Suizide machen die Bewertung schwierig.",
+eigen:"Kriterientabelle, Bewertung",sich:"Thema ist belastend: mit Lehrkraft absprechen",
+abgr:"Neu.",
+opac:["Strangulation Rechtsmedizin","Erhängen","Strangmarke","ligature strangulation"],
+st:["Fokus auf Spuren am Strangwerkzeug (Knoten, Fasern)","Fokus auf Stauungsblutungen"]},
+{id:"sc-slender",k:"psy",a:"L",lv:2,f:["Psychologie","Politik"],fl:[],
+t:"Wenn Internetlegenden gefährlich werden: Der Slenderman-Fall und die Frage nach der Schuldfähigkeit Jugendlicher",
+q:"Wie bewerten Psychologie und Recht Taten von Jugendlichen, die von Online-Mythen beeinflusst wurden?",
+uv:"(Literaturarbeit) Fallanalyse, Schuldfähigkeit, Jugendstrafrecht im Vergleich USA/Deutschland",
+av:"eigene Bewertung nach Kriterien",kon:"",mat:"Fachliteratur, Gerichtsberichte",
+offen:"Die Rolle der Medien ist umstritten.",
+eigen:"Vergleich der Rechtssysteme und eigene Bewertung",sich:"",
+abgr:"2022 „Wenn Kinder zu Straftätern werden“ war allgemein. Hier geht es um Online-Einfluss und Schuldfähigkeit.",
+opac:["Schuldfähigkeit Jugendliche","Jugendstrafrecht","Medienwirkung Gewalt","Slender Man case"],
+st:["Fokus auf Jugendstrafrecht","Fokus auf Wahn und Realitätsverlust"]},
+{id:"sc-feuer",k:"psy",a:"L",lv:2,f:["Psychologie"],fl:[],
+t:"Wenn Retter zündeln: Motive von Brandstiftern aus den eigenen Reihen der Feuerwehr",
+q:"Welche Motive treiben Feuerwehrleute zur Brandstiftung, und wie können Ermittler und Wehren Täter früher erkennen?",
+uv:"(Literaturarbeit) Täterstudien, Fallbeispiele, Präventionsansätze",
+av:"Vergleich und Bewertung der Erklärungsmodelle",kon:"",mat:"Fachliteratur Kriminologie, Polizeiveröffentlichungen",
+offen:"Die Datenlage ist dünn, die Bewertung offen.",
+eigen:"Typologie und Bewertung",sich:"",
+abgr:"Brandstiftung kam bisher nicht vor.",
+opac:["Brandstiftung Motive","Pyromanie","Feuerwehr Brandstifter","firefighter arson"],
+st:["Experimenteller Teil: Brandverlauf (siehe Holz-Verkohlung)","Pyromanie als psychische Störung"]},
+{id:"sc-massregel",k:"fall",a:"L",lv:2,f:["Politik","Psychologie"],fl:[],
+t:"Maßregelvollzug: Therapie oder lebenslänglich durch die Hintertür?",
+q:"Erfüllt der Maßregelvollzug sein Ziel, schuldunfähige Täter zu behandeln, und wie werden Entlassungsprognosen erstellt?",
+uv:"(Literaturarbeit) Rechtsgrundlagen, Prognoseverfahren, Statistiken",
+av:"Bewertung nach Kriterien (Therapieerfolg, Rückfall, Dauer)",kon:"",mat:"Fachliteratur, Statistiken, Gesetze",
+offen:"Fachleute bewerten die Praxis unterschiedlich.",
+eigen:"Auswertung von Statistiken und eigene Bewertung",sich:"",
+abgr:"Psychische Erkrankung und Schuld wurde 2023/24 betrachtet, der Maßregelvollzug selbst nicht.",
+opac:["Maßregelvollzug","Kriminalprognose","forensische Psychiatrie","forensic psychiatry detention"],
+st:["Fokus auf Prognoseinstrumente","Vergleich mit Sicherungsverwahrung"]}
+);
+
+/* stern Crime als Ideenfinder: Heft, Rubrik/Titel, eigene Kurzbeschreibung, passende Vorschläge */
+const SC=[
+["05","2016","Ein Spezialist für: Lacksplitter","Ein Kriminaltechniker bestimmt nach einer Fahrerflucht aus winzigen Lacksplittern Marke, Modell und Baujahr des Autos.",["sc-lack","mat-glas"]],
+["05","2016","Über die Kunst der Lüge","Gespräch mit einem Aussagepsychologen darüber, warum Lügen unter guter Befragung schwerer ist als die Wahrheit.",["aus-luege","aus-zeit"]],
+["05","2016","Die zweite Haut","Masken verbergen das Gesicht von Tätern und verraten trotzdem etwas über sie.",["sc-maske"]],
+["17","2018","„Manchmal kann es mit einem Mord enden“","Gespräch mit einer Psychologin über Stalking und wie es eskalieren kann.",["sc-tracker","it-exif"]],
+["17","2018","Kleine Freundinnen","Zwei Mädchen glauben an eine Internetfigur und wollen ihr ein Opfer bringen.",["sc-slender"]],
+["17","2018","Mein Bild","Ein Fotograf hält einen Verdächtigen fest, doch der wahre Mörder ist noch frei.",["aus-gegenueber"]],
+["18","2018","Ein Spezialist: Der Toxikologe","Ein LKA-Toxikologe untersucht einen ganzen Küchenschrank auf Gift und muss die Proben dafür erst fein mahlen und mischen.",["sc-homogen","tox-dc"]],
+["18","2018","Aus dem Dunkel","Eine Fotografin macht an alten Tatorten Blutspuren mit einer Chemikalie wieder sichtbar.",["blut-fehlalarm","blut-alter"]],
+["18","2018","Feuer","Eine Brandserie hält eine Region in Atem. Der Brandstifter kommt aus dem eigenen Ort.",["spur-holz","sc-feuer"]],
+["18","2018","Die Frauen an den Schienen","Berlin 1940: Die Opfer eines Serienmörders haben Verletzungen am Schädel.",["ball-stumpf"]],
+["18","2018","Essay: Ohne Ende","Über den Maßregelvollzug, in dem nicht schuldfähige Täter behandelt werden sollen.",["sc-massregel"]],
+["26","2019","Ein Spezialist: Der Rechtsmediziner","Ein Rechtsmediziner der Charité erklärt, wie er Stichverletzungen deutet und Tötung von Suizid unterscheidet.",["sc-scharf","ball-stumpf"]],
+["26","2019","Engel","Eine unbekannte Tote im Wald. Niemand weiß, wer sie ist.",["ident-groesse","lit-isotope"]],
+["26","2019","Der Bestatter","Wie Täter versuchen, Leichen verschwinden zu lassen, und warum es selten gelingt.",["ento-verpackt","ento-mumie"]],
+["26","2019","Aus der Asservatenkammer","Ein entführtes Mädchen schreibt heimlich einen Zettel.",["dok-eindruck","dok-tinte"]],
+["26","2019","Essay: Halbgötter in Schwarz","Die Justiz kann gnadenlos sein, auch gegenüber Unschuldigen.",["lit-fehlurteil"]],
+["29","2020","Der weiße Tod","Das bis heute ungeklärte Rätsel vom Djatlow-Pass.",["sc-djatlow"]],
+["29","2020","Gespräch mit einem Staatsanwalt","Über Cold Cases und wie alte Fälle doch noch gelöst werden.",["lit-genealogie","dna-gel"]],
+["29","2020","Essay: Die Höchststrafe","Über lebenslange Haft und die umstrittenen Mordmerkmale.",["sc-211"]],
+["44","2022","Die erhängte Frau","Der Fall scheint klar. Dann beginnt ein junger Kommissar zu zweifeln.",["sc-strang"]],
+["44","2022","Essay: Wider das Gesetz","Warum wir alle Regeln brechen, mit einem berühmten Experiment zu einem abgestellten Auto.",["sc-broken"]],
+["45","2022","Fowlers Verlangen","Ein Mann stiehlt seltene Vogelfedern und kennt dabei keine Grenzen.",["sc-feder"]],
+["45","2022","Das Leben einer Mutter","Eine Tote auf einem Feld, ihre Identität ist unbekannt.",["ident-groesse","ident-diatomeen"]]
+].map(r=>({nr:r[0],j:r[1],t:r[2],d:r[3],ids:r[4]}));
+
+</script>
+<script>
+{
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const OPAC=t=>"https://opac.lbs-osnabrueck.gbv.de/DB=1/CMD?ACT=SRCHA&IKT=1016&SRT=YOP&TRM="+encodeURIComponent(t);
+const ART={E:"Experimentell",S:"Empirische Studie",L:"Literatur"};
+const FAECHER=["Biologie","Chemie","Physik","Mathematik","Informatik","Psychologie","Politik","Deutsch","Erdkunde"];
+const NOGO=[["blut","Umgang mit Blut"],["gewebe","Rohes Fleisch, Tiergewebe"],["maden","Lebende Maden, starke Gerüche"],["personen","Versuchspersonen, Befragungen"],["feuer","Feuer, Ofen, hohe Hitze"],["chemie","Arbeit mit Chemikalien"]];
+const KEY="ffThemenfinder2";
+let S={ch:0,pg:0,cats:[],fach:[],art:[],no:[],zeit:"",lv:"",favA:[],favI:[],w:{base:"",Art:"E",man:{}},quiz:{},focus:"",af:{},if:{}};
+try{const d=JSON.parse(localStorage.getItem(KEY)||"null");if(d)S=Object.assign(S,d)}catch(e){}
+if(!S.w||typeof S.w!=="object")S.w={base:"",Art:"E",man:{}};if(!S.w.man)S.w.man={};
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
+const toast=m=>{const t=$("#toast");t.textContent=m;t.classList.add("on");clearTimeout(toast.h);toast.h=setTimeout(()=>t.classList.remove("on"),1800)};
+const chip=(name,val,label,checked,type,dot,cls)=>`<label class="chip${cls?" "+cls:""}"><input type="${type}" name="${name}" value="${esc(val)}"${checked?" checked":""}><span>${dot?`<i style="background:${dot}"></i>`:""}${esc(label)}</span></label>`;
+
+/* ---------- Ähnlichkeit zu früheren Themen ---------- */
+const STOP=new Set("einer eines einem einen eine der die das den dem des und oder mit ohne von vom zur zum bei auf aus für über unter durch als wie was wer wird werden wurde sind ist ihre seine sich nach nicht noch auch anhand hinblick bezug beispiel untersuchung untersuchungen experimentelle experimentell experimentellen experiment modellversuch modell modellexperiment forensische forensischen forensik forensisch einfluss einflusses analyse vergleich vergleichende verschiedener verschiedenen unterschiedlicher unterschiedlichen unterschiedliche abhängigkeit bedeutung kontext welche welchen inwiefern kann können zwischen deren dessen diese dieser dieses ihren lässt lassen mittels mögliche möglicher praktische theoretischer evaluation evaluierung betrachtung".split(" "));
+const toks=s=>new Set(String(s).toLowerCase().replace(/[^a-zäöüß0-9 ]+/g," ").split(/\s+/).filter(w=>w.length>3&&!STOP.has(w)).map(w=>w.slice(0,6)));
+const ATOK=ARCHIV.map(a=>toks(a.t));
+const similar=text=>{const T=toks(text);if(T.size<2)return[];return ARCHIV.map((a,i)=>{const A=ATOK[i];let n=0;T.forEach(w=>{if(A.has(w))n++});return{a,s:n/Math.sqrt(T.size*A.size)}}).filter(x=>x.s>0).sort((x,y)=>y.s-x.s).slice(0,3)};
+
+/* ---------- Passung ---------- */
+const hasPrefs=()=>S.cats.length||S.fach.length||S.art.length||S.favA.length||S.lv;
+const excluded=i=>S.no.some(n=>i.fl.includes(n)||(n==="maden"&&i.fl.includes("geruch")))||(S.zeit==="winter"&&i.fl.includes("saison"));
+const scoreIdea=i=>{let s=0;const r=[];
+if(S.cats.includes(i.k)){s+=4;r.push("dein Interessengebiet")}
+const nf=S.favA.filter(id=>{const a=ARCHIV.find(x=>x.id===id);return a&&a.k===i.k}).length;if(nf){s+=Math.min(3,nf)*1.5;r.push(nf===1?"Bereich eines deiner Favoriten":"Bereich von "+nf+" deiner Favoriten")}
+const ff=i.f.filter(f=>S.fach.includes(f));if(ff.length){s+=Math.min(2,ff.length)*1.5;r.push(ff.join(" und "))}
+if(S.art.length){if(S.art.includes(i.a)){s+=2;r.push(ART[i.a]+", wie gewünscht")}else s-=3}
+if(S.lv==="solide")s+=i.lv===1?1.5:i.lv===3?-1.5:0;if(S.lv==="hoch")s+=i.lv>=2?1:0;if(S.lv==="mittel")s+=i.lv===2?1:0;
+if(SC.some(x=>x.ids.includes(i.id)))r.push("aus stern Crime angeregt");
+return{s,r}};
+const ranked=()=>IDEEN.filter(i=>!excluded(i)).map(i=>Object.assign({i},scoreIdea(i))).sort((a,b)=>b.s-a.s);
+const dots=n=>"●".repeat(n)+"○".repeat(3-n);
+const short=t=>t.length>70?t.slice(0,68).replace(/\s\S*$/,"")+" …":t;
+
+/* ---------- Bausteine ---------- */
+const ideaCard=(x,open)=>{const i=x.i,c=CATS[i.k],star=S.favI.includes(i.id),sc=SC.filter(s=>s.ids.includes(i.id));
+const rows=[["Was du veränderst",i.uv],["Was du misst",i.av],["Konstant / Kontrolle",i.kon],["Material",i.mat],["Warum offen?",i.offen],["Deine Eigenleistung",i.eigen],["Sicherheit",i.sich],["Abgrenzung",i.abgr]].filter(r=>r[1]);
+return`<article class="idea${S.focus===i.id?" focus":""}" id="idea-${i.id}"><button class="star" data-fi="${i.id}" aria-pressed="${star}" aria-label="Vorschlag merken">★</button><div class="meta"><span class="pill"><i style="background:${c.c}"></i>${c.n}</span><span class="tag">${ART[i.a]}</span><span>Anspruch <span class="lv">${dots(i.lv)}</span></span>${i.fl.includes("saison")?`<span class="tag y">nur Mai bis September</span>`:""}${sc.length?`<span class="tag p">stern Crime Nr. ${sc.map(s=>s.nr).join(", ")}</span>`:""}</div><h3>${esc(i.t)}</h3><p class="small" style="color:var(--ink)">${esc(i.q)}</p>${x.r&&x.r.length?`<div class="why">Passt zu dir: ${esc(x.r.join(", "))}</div>`:""}<details${open?" open":""}><summary>Versuchsidee und Material ansehen</summary><dl class="facts">${rows.map(r=>`<dt>${r[0]}</dt><dd>${esc(r[1])}</dd>`).join("")}<dt>So kannst du es abwandeln</dt><dd>${i.st.map(esc).join("<br>")}</dd></dl></details><div class="row"><button class="btn small main" data-use="${i.id}">Dieses Thema zuschneiden ▶</button></div></article>`};
+
+/* ---------- Kapitel und Seiten ---------- */
+const WEG=[["Problem","Phänomen oder Rätsel",0],["Fragestellung","Eine klare Frage",0],["Hypothesen","Begründete Vermutungen",0],["Planung","Aufbau und Material",1],["Durchführung","Versuch nach Plan",1],["Daten","Beobachtungen, Messwerte",1],["Prüfen","Bestätigt oder widerlegt?",0],["Theorie","Erklärung, Fazit, Ausblick",0]];
+const QUIZ=[
+{q:"Welches Thema eignet sich besser für eine Facharbeit?",o:[["Forensische Entomologie – mit Insekten Verbrechen aufklären",0,"Das ist ein ganzes Fachgebiet. Es gibt keine Frage, die du mit eigenen Daten beantworten kannst."],["Der Einfluss der Temperatur auf die Entwicklung von Goldfliegen auf Leichen",1,"Genau: Eine Größe (Temperatur) wird verändert, eine andere (Entwicklung) gemessen."]]},
+{q:"Und hier?",o:[["Nachweisbarkeit von Blutspuren mit Luminol nach Erhitzen auf 100, 200 und 300 °C",1,"Richtig: klare Variable mit Stufen, messbares Ergebnis, Bezug zu Brandtatorten."],["Blut am Tatort – von der Spur zum Täter",0,"Hier wird nur Wissen zusammengetragen. Was wäre deine eigene Leistung?"]]},
+{q:"Welche Frage kannst du mit einem Schulexperiment beantworten?",o:[["Wie entsteht ein genetischer Fingerabdruck?",0,"Das ist eine Wissensfrage. Die Antwort steht schon im Lehrbuch."],["Warum werden Menschen zu Serienmördern?",0,"Viel zu groß und nicht im Experiment prüfbar."],["Wie verändert die Liegezeit die Qualität von Fingerspuren auf Glas?",1,"Ja! Liegezeit verändern, Qualität bewerten, Ergebnis offen."]]}
+];
+const CRIT=[["Eine Frage statt eines Themas","Kannst du dein Thema als eine Frage mit Fragezeichen aufschreiben?"],["Eine Sache verändern","Veränderst du genau eine Größe in mindestens drei Stufen und hältst den Rest gleich?"],["Messbar","Weißt du, was du misst oder beobachtest und wie (Zeit, Länge, Farbe, Anzahl, Skala)?"],["Ergebnis offen","Könnte dein Versuch auch anders ausgehen, als du vermutest?"],["Eigenleistung sichtbar","Erhebst du eigene Daten und wertest sie selbst aus?"],["Machbar und sicher","Gibt es Material an der Schule, und ist es ein ungefährliches Modellexperiment?"],["Literatur vorhanden","Findest du genug Fachliteratur für den theoretischen Teil?"]];
+
+const pArchiv=()=>{const f=S.af||{};return`<p class="say">Diese Themen gab es schon. Sie dürfen nicht noch einmal genommen werden, zeigen dir aber, wie ein Thema aussehen kann. Tippe auf ♥, wenn dich etwas anspricht. Deine Favoriten fließen in die Vorschläge ein.</p><div class="filters"><input type="search" data-af="q" value="${esc(f.q||"")}" placeholder="Suchen, z. B. Blut, Fliegen, Zeugen" aria-label="Archiv durchsuchen"><select data-af="k" aria-label="Bereich"><option value="">Alle Bereiche</option>${Object.entries(CATS).map(([k,c])=>`<option value="${k}"${f.k===k?" selected":""}>${c.n}</option>`).join("")}</select><select data-af="a" aria-label="Art"><option value="">Alle Arten</option>${Object.entries(ART).map(([k,v])=>`<option value="${k}"${f.a===k?" selected":""}>${v}</option>`).join("")}</select><select data-af="f" aria-label="Favoriten"><option value="">Alle Themen</option><option value="1"${f.f==="1"?" selected":""}>Nur ♥ Favoriten</option></select></div><div class="arch" id="arch">${archList()}</div>`};
+const archList=()=>{const f=S.af||{},q=(f.q||"").toLowerCase().trim();const list=ARCHIV.filter(x=>(!q||x.t.toLowerCase().includes(q))&&(!f.k||x.k===f.k)&&(!f.a||x.a===f.a)&&(!f.f||S.favA.includes(x.id)));
+const h=Object.entries(CATS).map(([ck,c])=>{const it=list.filter(x=>x.k===ck).sort((x,y)=>y.y.localeCompare(x.y));if(!it.length)return"";return`<h3 style="--c:${c.c}"><i></i>${c.n} <small>${it.length} ${it.length>1?"Themen":"Thema"}</small></h3><ul>${it.map(x=>`<li><button class="heart" data-fa="${x.id}" aria-pressed="${S.favA.includes(x.id)}" aria-label="Favorit">♥</button><span class="y">${x.y}</span><span class="tt">${esc(x.t)}</span><span class="art">${ART[x.a]}</span></li>`).join("")}</ul>`}).join("");
+return h||`<div class="empty">Keine Themen gefunden. Ändere die Suche oder die Filter.</div>`};
+
+const pIdeen=()=>{const f=S.if||{};return`<p class="say">Diese ${IDEEN.length} Themen gab es noch nicht. Sie sind nach deinen Interessen sortiert. Mit ★ merkst du dir ein Thema, mit „zuschneiden“ machst du es zu deinem eigenen.</p><div class="filters"><input type="search" data-if="q" value="${esc(f.q||"")}" placeholder="Suchen" aria-label="Vorschläge durchsuchen"><select data-if="k" aria-label="Bereich"><option value="">Alle Bereiche</option>${Object.entries(CATS).map(([k,c])=>`<option value="${k}"${f.k===k?" selected":""}>${c.n}</option>`).join("")}</select><select data-if="a" aria-label="Art"><option value="">Alle Arten</option>${Object.entries(ART).map(([k,v])=>`<option value="${k}"${f.a===k?" selected":""}>${v}</option>`).join("")}</select><select data-if="s" aria-label="Auswahl"><option value="">Passend zu mir</option><option value="g"${f.s==="g"?" selected":""}>Nur ★ gemerkte</option><option value="sc"${f.s==="sc"?" selected":""}>Nur aus stern Crime</option></select></div><div id="ilist" class="pbody">${ideaList()}</div>`};
+const ideaList=()=>{const f=S.if||{},q=(f.q||"").toLowerCase().trim();let list=ranked();const hid=IDEEN.length-list.length;
+if(S.focus){const k=list.findIndex(x=>x.i.id===S.focus);if(k>0)list.unshift(list.splice(k,1)[0])}
+if(q)list=list.filter(x=>(x.i.t+" "+x.i.q+" "+x.i.opac.join(" ")).toLowerCase().includes(q));if(f.k)list=list.filter(x=>x.i.k===f.k);if(f.a)list=list.filter(x=>x.i.a===f.a);if(f.s==="g")list=list.filter(x=>S.favI.includes(x.i.id));if(f.s==="sc")list=list.filter(x=>SC.some(s=>s.ids.includes(x.i.id)));
+const info=`<p class="small" style="background:var(--sheet);padding:2px 8px;border-radius:6px;width:fit-content">${list.length} Vorschläge${hasPrefs()?", die passendsten zuerst":". Tipp: Beantworte Kapitel 2, dann wird nach deinen Interessen sortiert"}${hid?` · ${hid} wegen deiner Ausschlüsse ausgeblendet`:""}</p>`;
+return info+(list.length?list.map(x=>ideaCard(x,S.focus===x.i.id)).join(""):`<div class="empty">Keine Vorschläge für diese Auswahl.</div>`)};
+
+const W=k=>esc(S.w[k]??"");
+const fld=(k,label,hint,type)=>`<div class="field"><label class="f" for="w${k}">${label}${hint?`<small>${hint}</small>`:""}</label>${type==="ta"?`<textarea id="w${k}" data-w="${k}">${W(k)}</textarea>`:`<input type="${type||"text"}" id="w${k}" data-w="${k}" value="${W(k)}">`}</div>`;
+const baseInfo=()=>{const b=IDEEN.find(i=>i.id===S.w.base);return b?`<div class="card info"><h3>Deine Vorlage</h3><p>${esc(b.t)}</p><p class="small">Die Felder sind mit der Vorlage vorbelegt. Formuliere sie in deinen eigenen Worten um und passe sie an.</p></div>`:`<div class="card info"><h3>Eigene Idee</h3><p class="small">Du startest ohne Vorlage. Du kannst auch in Kapitel 4 einen Vorschlag wählen und auf „zuschneiden“ tippen.</p></div>`};
+const MANUAL=[["m1","Material und Raum habe ich mit der Lehrkraft geklärt"],["m2","Mein Versuch ist ungefährlich bzw. ein Modellexperiment"],["m4","Das Ergebnis kann ich vorher nicht sicher vorhersagen"],["m5","Mein Zeitplan passt (Dauer, Jahreszeit, Abgabetermin)"],["m3","Ich habe im OPAC mindestens 5 passende Fachquellen gefunden"]];
+const filled=v=>String(v||"").trim().length>=8;
+const evalW=()=>{const w=S.w,art=w.Art||"E";const stufen=String(w.Stufen||"").split(/[,;]/).map(s=>s.trim()).filter(Boolean).length;const nB=["B1","B2","B3","B4"].filter(b=>filled(w[b])).length;
+const auto=[[filled(w.Frage)&&/\?\s*$/.test(String(w.Frage).trim()),"Eine Fragestellung mit Fragezeichen"],[filled(w.Bezug),"Forensischer Bezug beschrieben"]];
+if(art==="L")auto.push([filled(w.Streit),"Streitfrage benannt"],[filled(w.Krit),"Bewertungskriterien festgelegt"],[filled(w.EigenL),"Eigenleistung beschrieben"]);
+else auto.push([filled(w.Uv)&&stufen>=3,`Eine Variable in mindestens 3 Stufen (${stufen} angegeben)`],[filled(w.Av),"Messgröße und Methode beschrieben"],[filled(w.Kon),"Konstanten und Kontrolle festgelegt"],[art==="S"?filled(w.Kon):(+w.Wdh>=2),art==="S"?"Stichprobe geplant":"Mindestens 2 Wiederholungen pro Stufe"]);
+auto.push([filled(w.Hyp)&&/\b(weil|da|denn)\b/i.test(w.Hyp),"Hypothese mit Begründung (weil …)"],[nB>=3,`Entscheidungen begründet (${nB} von 4)`]);
+const sims=similar([w.Titel,w.Spur,w.Uv,w.Frage].join(" "));const dup=sims[0]&&sims[0].s>=.42;
+auto.push([filled(w.Titel)&&!dup,"Kein früheres Thema doppelt"]);
+const total=auto.length+MANUAL.length,done=auto.filter(a=>a[0]).length+MANUAL.filter(m=>w.man[m[0]]).length;return{auto,sims,dup,total,done}};
+const checkBox=()=>{const e=evalW();return`<div class="card"><h3>Wie reif ist dein Thema?</h3><div class="meter"><i style="width:${Math.round(e.done/e.total*100)}%"></i></div><p class="small">${e.done===e.total?"Alle Punkte erfüllt. Weiter zum Steckbrief!":`${e.done} von ${e.total} Punkten erfüllt.`}</p><ul class="checks">${e.auto.map(a=>`<li class="${a[0]?"y":"n"}"><b>${a[0]?"✓":"○"}</b><span>${a[1]}</span></li>`).join("")}${MANUAL.filter(m=>m[0]!=="m3").map(m=>`<li class="${S.w.man[m[0]]?"y":"n"}"><label><input type="checkbox" data-man="${m[0]}"${S.w.man[m[0]]?" checked":""}><span>${m[1]}</span></label></li>`).join("")}<li class="${S.w.man.m3?"y":"n"}"><b>${S.w.man.m3?"✓":"○"}</b><span>Literatur gefunden (Kapitel 6)</span></li></ul>${e.sims.length&&filled(S.w.Titel)?`<p class="small" style="margin-top:6px">Ähnlichste frühere Themen:</p><ul class="list small">${e.sims.map(x=>`<li${x.s>=.42?' class="w"':""}>${Math.round(x.s*100)} % · ${x.a.y}: ${esc(x.a.t)}</li>`).join("")}</ul>${e.dup?`<p class="w">Dein Thema ähnelt einem früheren stark. Ändere die Variable, das Modell oder die Spur, oder kläre die Abgrenzung mit deiner Lehrkraft.</p>`:""}`:""}</div>`};
+const terms=()=>{const b=IDEEN.find(i=>i.id===S.w.base);return b?b.opac:[S.w.Spur,S.w.Uv].filter(filled).map(s=>s.split(/\s+/).slice(0,3).join(" "))};
+const steckbrief=()=>{const w=S.w,L=w.Art==="L";const ln=(k,v)=>v&&String(v).trim()?`${k}: ${String(v).trim()}\n`:"";
+return`THEMENSTECKBRIEF – FACHARBEIT FORENSIK\n\n`+ln("Arbeitstitel",w.Titel)+ln("Art der Arbeit",ART[w.Art||"E"])+`\n1 PROBLEM UND FRAGE\n`+ln("Spur / Phänomen",w.Spur)+ln("Forensischer Bezug",w.Bezug)+ln("Fragestellung",w.Frage)+`\n2 PLANUNG\n`+(L?ln("Streitfrage",w.Streit)+ln("Bewertungskriterien",w.Krit)+ln("Eigenleistung",w.EigenL):ln("Modell",w.Modell)+ln("Unabhängige Variable",w.Uv)+ln("Stufen",w.Stufen)+ln("Messgröße / Methode",w.Av)+ln("Konstant / Kontrolle",w.Kon)+ln("Wiederholungen",w.Wdh)+ln("Material",w.Mat))+`\n3 HYPOTHESE\n`+ln("Vermutung",w.Hyp)+`\n4 BEGRÜNDUNGEN\n`+ln("Modell / Material",w.B1)+ln("Stufen / Bedingungen",w.B2)+ln("Messmethode",w.B3)+ln("Verworfene Alternative",w.B4)+`\n5 LITERATUR\n`+ln("Suchbegriffe",terms().join(", "))+ln("Mindestens 5 Fachquellen gefunden",S.w.man.m3?"ja":"noch nicht")};
+
+const CH=[
+{n:"Verstehen",c:"var(--c1)",p:[
+["Dein Weg zum Thema",()=>`<p class="say">In diesem Heft findest du Schritt für Schritt ein Facharbeitsthema, das zu dir passt, das du an der Schule umsetzen kannst und dessen Ergebnis noch niemand kennt.</p><div class="grid3">${[["1","Verstehen","Was ein gutes Thema ausmacht"],["2","Interessen","Was dich reizt und was nicht"],["3","Inspiration","Frühere Themen und Fälle aus stern Crime"],["4","Vorschläge","Neue Themen, die zu dir passen"],["5","Zuschneiden","Aus einer Idee wird dein Thema"],["6","Literatur & Steckbrief","Quellen finden, Ergebnis mitnehmen"]].map(x=>`<div class="card"><span class="tag">Kapitel ${x[0]}</span><h3>${x[1]}</h3><p class="small">${x[2]}</p></div>`).join("")}</div><div class="card rule"><h3>Keine Eile</h3><p>Du musst dich heute noch nicht festlegen. Am Ende hast du einen Steckbrief für das Gespräch mit deiner Lehrkraft.</p></div>`],
+["Der naturwissenschaftliche Erkenntnisweg",()=>`<p class="say">Deine Facharbeit folgt diesem Weg. Sie beginnt mit einer <b>Frage</b>, nicht mit einem Thema.</p><div class="weg">${WEG.map(w=>`<div class="st${w[2]?" exp":""}"><i></i><b>${w[0]}</b><small>${w[1]}</small></div>`).join("")}</div><div class="legend" style="background:var(--sheet);width:fit-content;padding:2px 8px;border-radius:6px"><span>Erkenntnisweg</span><span class="e">Experiment / Untersuchung</span></div><div class="card rule"><h3>Das Ergebnis ist offen</h3><p>Ein gutes Thema ist eine echte Frage: Vor dem Versuch weiß noch niemand, wie er ausgeht. Deine Hypothese kann sich bestätigen oder widerlegt werden. Beides ist ein Ergebnis.</p></div>`],
+["Oberthema oder Fragestellung?",()=>`<p class="say">Teste dich: Tippe die bessere Antwort an.</p>${QUIZ.map((t,ti)=>{const a=S.quiz[ti];return`<div class="task${a!=null&&t.o[a][1]?" solved":""}"><h3><span class="task-no">Aufgabe ${ti+1}</span>${t.q}</h3><div class="opts">${t.o.map((o,oi)=>`<button class="opt${a===oi?(o[1]?" right":" wrong"):""}" data-quiz="${ti}:${oi}">${esc(o[0])}${a===oi?`<span class="why">${o[1]?"✓ ":"✗ "}${esc(o[2])}</span>`:""}</button>`).join("")}</div></div>`}).join("")}`],
+["Sieben Prüffragen",()=>`<p class="say">An diesen Fragen erkennst du ein gutes Facharbeitsthema. Später in der Werkstatt prüfst du dein eigenes Thema genau damit.</p><div class="grid2">${CRIT.map((c,i)=>`<div class="card"><span class="tag">${i+1}</span><h3>${c[0]}</h3><p class="small" style="color:var(--ink)">${c[1]}</p></div>`).join("")}</div>`],
+["Experiment, Studie oder Literatur?",()=>`<p class="say">Es gibt drei Arten von Facharbeiten. Am meisten Eigenleistung zeigst du mit einem Experiment.</p><div class="grid3"><div class="card"><span class="tag g">am besten</span><h3>Experimentell</h3><p class="small" style="color:var(--ink)">Ein Modellversuch mit einer veränderten Größe, Kontrolle und Wiederholungen. Statt gefährlicher Versuche nur Modellexperimente.</p></div><div class="card"><span class="tag">gut</span><h3>Empirische Studie</h3><p class="small" style="color:var(--ink)">Ein Experiment mit Menschen, z. B. ein Zeugenversuch oder eine Befragung. Mit Einverständnis und anonym.</p></div><div class="card"><span class="tag y">notfalls</span><h3>Literaturarbeit</h3><p class="small" style="color:var(--ink)">Nur mit echter Streitfrage und eigener, begründeter Bewertung am Ende. Eine Nacherzählung reicht nicht.</p></div></div><div class="card warncard"><h3>Muster für eine Literaturarbeit</h3><p>Problem darstellen → Lösungsansätze vergleichen → Zwischenergebnisse → eigenes Fazit mit Bewertung.</p></div>`]]},
+{n:"Interessen",c:"var(--c3)",p:[
+["Was reizt dich?",()=>`<p class="say">Wähle alle Bereiche, die dich neugierig machen. Es gibt keine falschen Antworten.</p><div class="chips" data-grp="cats">${Object.entries(CATS).map(([k,c])=>chip("cats",k,c.n,S.cats.includes(k),"checkbox",c.c)).join("")}</div>`],
+["Fächer und Arbeitsweise",()=>`<p class="qh">Welche Fächer liegen dir?</p><div class="chips" data-grp="fach">${FAECHER.map(f=>chip("fach",f,f,S.fach.includes(f),"checkbox")).join("")}</div><p class="qh" style="margin-top:10px">Wie möchtest du arbeiten?</p><div class="chips" data-grp="art">${[["E","Experiment (Modellversuch)"],["S","Studie mit Menschen"],["L","Literaturarbeit"]].map(([k,v])=>chip("art",k,v,S.art.includes(k),"checkbox")).join("")}</div>`],
+["Was geht für dich nicht?",()=>`<p class="qh">Was kommt für dich nicht in Frage?</p><p class="small" style="background:var(--sheet);width:fit-content;padding:0 6px">Vorschläge damit werden ausgeblendet.</p><div class="chips" data-grp="no">${NOGO.map(([k,v])=>chip("no",k,v,S.no.includes(k),"checkbox","","no")).join("")}</div><p class="qh" style="margin-top:10px">Wann führst du dein Experiment durch?</p><div class="chips" data-grp="zeit">${[["winter","Herbst oder Winter"],["sommer","Frühling oder Sommer"]].map(([k,v])=>chip("zeit",k,v,S.zeit===k,"radio")).join("")}</div><p class="qh" style="margin-top:10px">Wie viel traust du dir zu?</p><div class="chips" data-grp="lv">${[["solide","Lieber solide und gut machbar"],["mittel","Mittlerer Anspruch"],["hoch","Gern anspruchsvoll"]].map(([k,v])=>chip("lv",k,v,S.lv===k,"radio")).join("")}</div>`],
+["Deine ersten Treffer",()=>{const r=ranked();return hasPrefs()?`<p class="say">Das sind die drei Vorschläge, die am besten zu deinen Antworten passen. Im nächsten Kapitel holst du dir noch mehr Inspiration.</p>${r.slice(0,3).map(x=>ideaCard(x,false)).join("")}`:`<div class="empty">Du hast noch nichts ausgewählt. Geh zurück und wähle Bereiche, Fächer oder eine Arbeitsweise.</div>`}]]},
+{n:"Inspiration",c:"var(--c2)",p:[
+["Themen der letzten Jahre",pArchiv],
+["Aus stern Crime",()=>`<p class="say">Echte Fälle aus dem Magazin stern Crime können eine Idee auslösen. Zu jedem Artikel findest du passende Themenvorschläge. Wenn du den ganzen Artikel lesen willst, frag deine Lehrkraft nach dem Heft.</p><div class="grid2">${SC.map(s=>`<div class="card"><span class="tag p">stern Crime Nr. ${s.nr} · ${s.j}</span><h3>${esc(s.t)}</h3><p class="small" style="color:var(--ink)">${esc(s.d)}</p><div class="row">${s.ids.map(id=>{const i=IDEEN.find(x=>x.id===id);return i&&!excluded(i)?`<button class="btn small" data-show="${id}">▶ ${esc(short(i.t))}</button>`:""}).join("")}</div></div>`).join("")}</div>`]]},
+{n:"Vorschläge",c:"var(--c7)",p:[["Neue Themenvorschläge",pIdeen]]},
+{n:"Zuschneiden",c:"var(--c5)",p:[
+["Problem und Frage",()=>`${baseInfo()}<div class="field"><label class="f" for="wArt">Art der Arbeit</label><select id="wArt" data-w="Art">${Object.entries(ART).map(([k,v])=>`<option value="${k}"${S.w.Art===k?" selected":""}>${v}</option>`).join("")}</select></div>${fld("Spur","Welche Spur, welches Phänomen untersuchst du?","z. B. latente Fingerspuren, Zeugenaussagen, Fliegenlarven")}${fld("Bezug","Welches Problem haben Ermittelnde damit?","Der forensische Bezug: Warum ist deine Frage für die Aufklärung wichtig?","ta")}${fld("Frage","Deine Fragestellung","Eine einzige Frage, die du mit Daten beantworten kannst. Mit Fragezeichen.","ta")}`],
+["Planung",()=>S.w.Art==="L"?`<p class="say">Für eine Literaturarbeit planst du, worüber gestritten wird und wie du am Ende bewertest.</p>${fld("Streit","Worüber sind sich Fachleute uneinig?","","ta")}${fld("Krit","Nach welchen Kriterien bewertest du am Ende?","","ta")}${fld("EigenL","Was ist deine eigene Leistung?","z. B. Vergleichstabelle, Kriterienkatalog, Auswertung von Fällen","ta")}`:`<p class="say">Verändere genau <b>eine</b> Größe. Alles andere bleibt gleich.</p>${fld("Modell","Womit bildest du die Wirklichkeit nach?","z. B. Schweineblut auf Baumwolle, Hackfleisch statt Leiche, Video statt echter Tat")}${fld("Uv","Was veränderst du gezielt? (unabhängige Variable)","","ta")}${fld("Stufen","In welchen Stufen?","Mit Komma trennen, mindestens drei, z. B. 1 h, 1 Tag, 7 Tage")}${fld("Av","Was misst oder beobachtest du, und wie? (abhängige Variable)","","ta")}${fld("Kon",S.w.Art==="S"?"Wen befragst du, wie viele, wie teilst du die Gruppen ein?":"Was hältst du konstant? Was ist deine Kontrollprobe?","","ta")}${S.w.Art==="S"?"":fld("Wdh","Wiederholungen pro Stufe","","number")}${fld("Mat","Material und Geräte","","ta")}`],
+["Hypothese",()=>`<p class="say">Was vermutest du? Die Begründung kommt aus deinem Vorwissen und der Literatur.</p>${fld("Hyp","Deine Hypothese","Am besten: „Je …, desto …, weil …“","ta")}<div class="card info"><h3>Beispiel</h3><p>Je länger eine Fingerspur liegt, desto weniger Minutien sind nach dem Einstauben erkennbar, weil die wässrigen Bestandteile des Schweißes verdunsten.</p></div><div class="card rule"><h3>Zurückkommen</h3><p>Im Fazit musst du auf deine Hypothese zurückkommen: Hat sie sich bestätigt oder nicht?</p></div>`],
+["Begründe deine Entscheidungen",()=>`<p class="say">Deine Lehrkraft wird genau danach fragen. Ein Plan ohne Begründung wirkt planlos.</p>${fld("B1","Warum dieses Modell bzw. Material und kein anderes?","z. B. Warum Schweinebauch und kein Schweinebein?","ta")}${fld("B2","Warum genau diese Stufen und Bedingungen?","","ta")}${fld("B3","Warum diese Mess- bzw. Auswertungsmethode?","","ta")}${fld("B4","Welche Alternative hast du verworfen, und warum?","","ta")}`],
+["Titel und Check",()=>`<div class="field"><label class="f" for="wTitel">Arbeitstitel</label><div class="row"><input type="text" id="wTitel" data-w="Titel" value="${W("Titel")}" style="flex:1 1 260px"><button type="button" class="btn small" id="wGen">Titel vorschlagen</button></div></div><div id="chk">${checkBox()}</div>`]]},
+{n:"Literatur & Steckbrief",c:"var(--c6)",p:[
+["Literatur im OPAC finden",()=>{const t=terms();return`<p class="say">Für den theoretischen Teil brauchst du Fachliteratur. Du suchst im Katalog der Bibliothek der Universität Osnabrück.</p><div class="card"><h3>Suchbegriffe zu deinem Thema</h3>${t.length?`<div class="opac">${t.map(x=>`<a href="${OPAC(x)}" target="_blank" rel="noopener">${esc(x)}</a>`).join("")}</div>`:`<p class="small">Trage zuerst in Kapitel 5 ein, welche Spur du untersuchst.</p>`}<form class="row" id="opacForm" style="margin-top:6px"><input type="search" id="opacQ" placeholder="Eigener Suchbegriff" aria-label="Suchbegriff für den OPAC" style="flex:1 1 200px"><button type="submit" class="btn small main">Im OPAC suchen</button></form><p class="small">Oder direkt: <a href="https://opac.lbs-osnabrueck.gbv.de" target="_blank" rel="noopener">opac.lbs-osnabrueck.gbv.de</a></p></div><div class="card info"><h3>So suchst du gut</h3><ul class="list"><li>Probiere deutsche und englische Begriffe.</li><li>Kombiniere zwei Wörter, z. B. „Blutspur Alter“.</li><li>Kürze mit ? ab: forens? findet forensisch, Forensik …</li><li>Fachbücher und Fachartikel sind besser als Webseiten.</li></ul></div><ul class="checks"><li class="${S.w.man.m3?"y":"n"}"><label><input type="checkbox" data-man="m3"${S.w.man.m3?" checked":""}><span>Ich habe mindestens 5 passende Fachquellen gefunden</span></label></li></ul>`}],
+["Dein Steckbrief",()=>{const e=evalW();return`<p class="say">Das ist dein Themensteckbrief. Kopiere ihn oder speichere ihn als Datei und bring ihn zum Beratungsgespräch mit.</p><p class="small" style="background:var(--sheet);width:fit-content;padding:0 6px">${e.done} von ${e.total} Prüfpunkten erfüllt${e.done<e.total?" – die offenen Punkte siehst du in Kapitel 5 auf der letzten Seite":""}.</p><pre class="sb">${esc(steckbrief())}</pre><div class="row"><button class="btn main" id="sbCopy">Steckbrief kopieren</button><button class="btn" id="sbSave">Als Textdatei speichern</button></div><div class="card rule"><h3>Wie geht es weiter?</h3><p>Besprich deinen Steckbrief mit deiner Lehrkraft. Erst danach ist dein Thema festgelegt.</p></div>`}]]}
+];
+
+/* ---------- Anzeige ---------- */
+const flat=CH.flatMap((c,ci)=>c.p.map((p,pi)=>[ci,pi]));
+const render=()=>{if(!CH[S.ch])S.ch=0;if(!CH[S.ch].p[S.pg])S.pg=0;const c=CH[S.ch],p=c.p[S.pg];
+document.documentElement.style.setProperty("--tab",c.c);
+$("#tabs").innerHTML=CH.map((x,i)=>`<button class="rtab" role="tab" aria-selected="${i===S.ch}" style="background:${x.c}" data-ch="${i}"><span class="n">${i+1}</span>${x.n}</button>`).join("");
+$("#stat").innerHTML=`<b>♥ ${S.favA.length}</b> Favoriten · <b>★ ${S.favI.length}</b> gemerkt`;
+try{$(".rtab[aria-selected=true]").scrollIntoView({block:"nearest",inline:"nearest"})}catch(e){}
+const k=flat.findIndex(f=>f[0]===S.ch&&f[1]===S.pg),last=k===flat.length-1,nextCh=!last&&flat[k+1][0]!==S.ch;
+$("#page").innerHTML=`<div class="chap">Kapitel ${S.ch+1} · ${c.n}</div><h2 class="ptitle">${p[0]}</h2><div class="pbody">${p[1]()}</div><div class="pager"><button class="btn" data-nav="-1"${k===0?" disabled":""}>◀ Zurück</button><div class="dots">${c.p.map((_,i)=>`<button class="dot${i===S.pg?" on":""}" data-pg="${i}" aria-label="Seite ${i+1}"></button>`).join("")}</div><span class="pcount">Seite ${S.pg+1} von ${c.p.length}</span><button class="btn main" data-nav="1"${last?" disabled":""}>${nextCh?`Weiter: ${CH[S.ch+1].n} ▶`:"Weiter ▶"}</button></div>`;
+save()};
+const go=(ch,pg,top=true)=>{S.ch=ch;S.pg=pg;render();if(top)window.scrollTo({top:0})};
+
+document.addEventListener("click",e=>{const t=e.target.closest("button,a");if(!t)return;
+if(t.dataset.ch!=null){go(+t.dataset.ch,0);return}
+if(t.dataset.pg!=null){go(S.ch,+t.dataset.pg);return}
+if(t.dataset.nav){const k=flat.findIndex(f=>f[0]===S.ch&&f[1]===S.pg)+(+t.dataset.nav);if(flat[k])go(flat[k][0],flat[k][1]);return}
+if(t.dataset.quiz){const[a,b]=t.dataset.quiz.split(":").map(Number);S.quiz[a]=b;render();return}
+if(t.dataset.fa){const id=t.dataset.fa;S.favA=S.favA.includes(id)?S.favA.filter(x=>x!==id):[...S.favA,id];save();$("#arch").innerHTML=archList();$("#stat").innerHTML=`<b>♥ ${S.favA.length}</b> Favoriten · <b>★ ${S.favI.length}</b> gemerkt`;return}
+if(t.dataset.fi){const id=t.dataset.fi;S.favI=S.favI.includes(id)?S.favI.filter(x=>x!==id):[...S.favI,id];t.setAttribute("aria-pressed",S.favI.includes(id));save();$("#stat").innerHTML=`<b>♥ ${S.favA.length}</b> Favoriten · <b>★ ${S.favI.length}</b> gemerkt`;return}
+if(t.dataset.show){S.focus=t.dataset.show;S.if={};go(3,0);return}
+if(t.dataset.use){loadIdea(t.dataset.use);go(4,0);toast("Vorlage übernommen");return}
+if(t.id==="wGen"){const w=S.w;let x;if(w.Art==="L")x=(w.Frage||w.Spur||"Thema").replace(/\?$/,"")+" – eine kritische Literaturanalyse";else if(w.Art==="S")x=`Einfluss von ${w.Uv||"…"} auf ${w.Spur||"…"} – eine empirische Studie`;else x=`Einfluss von ${w.Uv||"…"} auf ${w.Spur||"…"} – ein experimenteller Modellversuch${w.Modell?" mit "+w.Modell:""}`;S.w.Titel=x;$("#wTitel").value=x;save();$("#chk").innerHTML=checkBox();return}
+if(t.id==="sbCopy"){const s=steckbrief();const ok=()=>toast("Steckbrief kopiert");if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(s).then(ok,()=>fallback(s));else fallback(s);return}
+if(t.id==="sbSave"){try{const b=new Blob([steckbrief()],{type:"text/plain;charset=utf-8"});const a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="Themensteckbrief_Facharbeit.txt";document.body.appendChild(a);a.click();a.remove();toast("Datei gespeichert")}catch(err){toast("Speichern nicht möglich, bitte kopieren")}return}
+if(t.id==="resetBtn"){$("#resetBox").hidden=false;return}
+if(t.id==="resetNo"){$("#resetBox").hidden=true;return}
+if(t.id==="resetYes"){try{localStorage.removeItem(KEY)}catch(err){}location.reload();return}
+});
+const fallback=s=>{const ta=document.createElement("textarea");ta.value=s;ta.style.position="fixed";ta.style.opacity="0";document.body.appendChild(ta);ta.select();try{document.execCommand("copy");toast("Steckbrief kopiert")}catch(e){toast("Kopieren nicht möglich")}ta.remove()};
+document.addEventListener("change",e=>{const t=e.target;const g=t.closest("[data-grp]");
+if(g){const n=g.dataset.grp,v=[...g.querySelectorAll("input:checked")].map(i=>i.value);S[n]=(n==="zeit"||n==="lv")?(v[0]||""):v;save();return}
+if(t.dataset.man){S.w.man[t.dataset.man]=t.checked;t.closest("li").className=t.checked?"y":"n";save();const c=$("#chk");if(c)c.innerHTML=checkBox();return}
+if(t.dataset.w==="Art"){S.w.Art=t.value;save();return}});
+document.addEventListener("input",e=>{const t=e.target;
+if(t.dataset.w){S.w[t.dataset.w]=t.value;save();const c=$("#chk");if(c&&t.id==="wTitel")c.innerHTML=checkBox();return}
+if(t.dataset.af){S.af[t.dataset.af]=t.value;save();$("#arch").innerHTML=archList();return}
+if(t.dataset.if){S.if[t.dataset.if]=t.value;S.focus="";save();$("#ilist").innerHTML=ideaList();return}});
+document.addEventListener("submit",e=>{if(e.target.id!=="opacForm")return;e.preventDefault();const q=$("#opacQ").value.trim();if(!q)return;const a=document.createElement("a");a.href=OPAC(q);a.target="_blank";a.rel="noopener";document.body.appendChild(a);a.click();a.remove()});
+const loadIdea=id=>{const i=IDEEN.find(x=>x.id===id);if(!i)return;const par=(i.uv.match(/\(([^)]*)\)/)||["",""])[1];
+S.w={base:id,Art:i.a,Spur:"",Bezug:"",Frage:i.q,Modell:"",Uv:i.a==="L"?"":i.uv,Stufen:i.a!=="L"&&par.includes(",")?par:"",Av:i.a==="L"?"":i.av,Kon:i.a==="L"?"":i.kon,Wdh:i.a==="E"?3:"",Mat:i.a==="L"?"":i.mat,Streit:i.a==="L"?i.offen:"",Krit:"",EigenL:i.a==="L"?i.eigen:"",Hyp:"",B1:"",B2:"",B3:"",B4:"",Titel:i.t,man:{}};save()};
+render();
+}
+
+</script>
+</body>
+</html>
