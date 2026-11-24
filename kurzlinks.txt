@@ -71,3 +71,4 @@ kohl-detektiv | Chemie Klasse 6/Säuren und Laugen/Kohl-Detektiv – Rotkraut od
 kohl-chat | Chemie Klasse 6/Säuren und Laugen/Chat – Rotkraut oder Blaukraut.html
 flaeche-gefuehrt | Mathematik Oberstufe/Integralrechnung/Flächenheft 2 - Zerlegen geführt.html
 themenfinder | Forensik/Facharbeit/Themenfinder_Forensik.html
+flaeche-gefuehrt3 | Mathematik Oberstufe/Integralrechnung/Flächenheft 3 - Einstieg geführt.html
