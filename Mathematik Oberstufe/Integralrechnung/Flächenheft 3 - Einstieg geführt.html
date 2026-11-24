@@ -98,6 +98,7 @@ button.pl{cursor:pointer}
 .sol .sh{font-family:var(--hand);font-weight:400;font-size:22px;color:var(--ink);margin:14px 0 4px}
 .choice .k{overflow-x:auto;max-width:100%}
 .fb.pzfb{margin-bottom:6px}
+.merk3{margin:8px 0;background:var(--yellow);color:#25303f;border-radius:8px;padding:8px 12px}
 .pl .k,.chip .k,.choice .k{white-space:nowrap}.pl,.chip,.choice{overflow-x:auto;max-width:100%}
 </style>
 </head>
@@ -178,7 +179,7 @@ const L1=(t,c)=>({x:-1.05,y:7.4,t,cls:c||""}),L2=(t,c)=>({x:2.05,y:0.6,t,cls:c||
 const VIEW={
   start:{fills:[{a:-2,b:0,cls:"g-fill1"},{a:0,b:4,cls:"g-fill1"}]},
   pts:{pts:1,fills:[{a:-2,b:0,cls:"g-fill1"},{a:0,b:4,cls:"g-fill1"}]},
-  teil:{pts:1,fills:[{a:-2,b:0,cls:"g-fill1"},{a:0,b:4,cls:"g-fill2"}],labels:[L1("A₁: f oben"),L2("A₂: g oben")]},
+  teil:{pts:1,fills:[{a:-2,b:0,cls:"g-fill1"},{a:0,b:4,cls:"g-fill2"}],labels:[L1("A₁"),L2("A₂")]},
   plusminus:{pts:1,fills:[{a:-2,b:0,cls:"g-fill1"},{a:0,b:4,cls:"g-hatch"}],labels:[L1("+","g-big"),L2("−","g-big g-red")]},
   werte:{pts:1,fills:[{a:-2,b:0,cls:"g-fill1"},{a:0,b:4,cls:"g-hatch"}],labels:[L1("+20/3"),L2("−128/3","g-red")]},
   ende:{pts:1,fills:[{a:-2,b:0,cls:"g-fill1"},{a:0,b:4,cls:"g-fill2"}],labels:[L1("A₁ = 20/3"),L2("A₂ = 128/3")]}};
@@ -200,13 +201,13 @@ const PARTS=[
   q:"Zwischen den Schnittstellen liegen zwei Teilflächen. Mit welchem Term berechnen Sie den Inhalt A? Tippen Sie einen Term an – das Bild zeigt, wie die Flächen dann zählen.",
   choice:{opts:["A=\\left|"+IN(-2,0)+"\\right|+\\left|"+IN(0,4)+"\\right|","A="+IN(-2,4),"A=\\left|"+IN(-2,4)+"\\right|","A="+IN(-2,0)+"+"+IN(0,4)],right:0,
    views:["teil","plusminus","plusminus","plusminus"],
-   caps:["Zwei Teilflächen, jede mit einem eigenen Integral – von Schnittstelle zu Schnittstelle. Die Beträge sorgen dafür, dass beide Flächen positiv zählen.",
-         "Ein Integral über die Schnittstelle x = 0 hinweg: Rechts liegt g oben. Dieser Teil zählt <b>negativ</b> und hebt einen Teil der linken Fläche auf.",
+   caps:["Zwei Teilflächen, jede mit einem eigenen Integral – von Schnittstelle zu Schnittstelle. Die Beträge sorgen dafür, dass beide Flächen positiv zählen. Deshalb müssen Sie <b>nicht</b> schauen, welcher Graph oben liegt.",
+         "Ein Integral über die Schnittstelle x = 0 hinweg: Rechts davon ist f(x) − g(x) negativ. Dieser Teil zählt <b>negativ</b> und hebt einen Teil der linken Fläche auf.",
          "Auch hier wird über x = 0 hinweg integriert. Im Integral heben sich die Teile schon auf – der Betrag kommt zu spät.",
-         "Von 0 bis 4 liegt g oben: Das zweite Integral ist <b>negativ</b>. Ohne Betrag wird die rechte Fläche abgezogen statt addiert."],
+         "Das zweite Integral ist <b>negativ</b>. Ohne Betrag wird die rechte Fläche abgezogen statt addiert."],
    why:[null,"Über die Schnittstelle x = 0 hinweg heben sich Flächenteile auf. Integrieren Sie von Schnittstelle zu Schnittstelle.","Der Betrag um das ganze Integral hilft nicht: Innen haben sich die Teile schon aufgehoben.","Das zweite Integral ist negativ. Nehmen Sie von jedem Integral den Betrag."]},
   good:"Genau: Von Schnittstelle zu Schnittstelle integrieren und die Beträge addieren.",
-  hints:[UL(["Im Bild: Von wo bis wo reicht jede Teilfläche? Welcher Graph liegt jeweils oben?"]),UL(["Beginnend mit der linken Schnittstelle von Schnittstelle zu Schnittstelle die Integrale der Differenz von f(x) und g(x) berechnen.","Dann die Beträge der einzelnen Integrale addieren."])]},
+  hints:[UL(["Im Bild: Von wo bis wo reicht jede Teilfläche?"]),UL(["Beginnend mit der linken Schnittstelle von Schnittstelle zu Schnittstelle die Integrale der Differenz von f(x) und g(x) berechnen.","Dann die Beträge der einzelnen Integrale addieren."])]},
  {id:"c",t:"c) Differenz und Stammfunktion",
   q:"Vereinfachen Sie die Differenz von f(x) und g(x). Wählen Sie dann die passende Stammfunktion H aus.",
   fields:[{k:"c3",lab:K("f(x)-g(x)="),v:1,small:1,after:K("x^3+")},{k:"c2",v:-2,small:1,after:K("x^2+"),join:1},{k:"c1",v:-8,small:1,after:K("x+"),join:1,why:x=>near(x,-6)?"Vor x: −7x − x = −8x. Das Minus vor der Klammer dreht das Vorzeichen.":null},{k:"c0",v:0,small:1,join:1,why:x=>near(x,12)?"Die Zahl: +6 − 6 = 0. Das Minus vor der Klammer dreht das Vorzeichen.":null}],
@@ -224,15 +225,15 @@ const PARTS=[
         {t:"=\\Big[0\\Big]-\\Big[\\tfrac{52}{3}\\Big]",w:"Vorzeichen prüfen: (−2)³ = −8 und (−2)² = 4. Also ¼ · 16 − ⅔ · (−8) − 4 · 4 = 4 + 16/3 − 16."},
         {t:"=-\\tfrac{20}{3}",w:"0 − (−20/3): Minus mal Minus ergibt Plus."}]},
   q2:"Berechnen Sie jetzt beide Integrale (GTR erlaubt).",
-  fields:[{k:"i1",lab:K(IN(-2,0)+"="),v:I1},{k:"i2",lab:K(IN(0,4)+"="),v:I2,why:x=>near(x,-I2)?"Von 0 bis 4 liegt g oben. Das Integral ist dann <b>negativ</b>. Den Betrag nehmen Sie erst in e).":null}],
+  fields:[{k:"i1",lab:K(IN(-2,0)+"="),v:I1},{k:"i2",lab:K(IN(0,4)+"="),v:I2,why:x=>near(x,-I2)?"Rechnen Sie genau: Dieses Integral ist <b>negativ</b> – das ist richtig so. Welcher Graph oben liegt, müssen Sie nicht prüfen. Den Betrag nehmen Sie erst in e).":null}],
   pmini:"Als Bruch (z. B. 20/3) oder als Dezimalzahl auf zwei Stellen.",
-  good:"Das erste Integral ist positiv (f oben), das zweite negativ (g oben). Im Bild steht, wie die Flächen zählen.",
+  good:"Das erste Integral ist positiv, das zweite negativ. Das ist kein Fehler: Sie müssen vorher nicht schauen, welcher Graph oben liegt – in e) machen die Beträge alles positiv.",
   hints:[UL(["Zuerst: obere Grenze minus untere Grenze in H einsetzen – H(0) − H(−2).","Jede eckige Klammer einzeln ausrechnen. Achtung: (−2)³ = −8."]),UL(["Zweites Integral genauso: H(4) − H(0) – oder mit dem GTR.","Ein Integral darf negativ sein."])]},
  {id:"e",t:"e) Beträge addieren",view:"werte",after:"ende",
   q:"Berechnen Sie den Flächeninhalt A.",
   fields:[{k:"A",lab:"A =",v:A,after:"FE",why:x=>near(x,I1+I2)||near(x,-(I1+I2))?"Sie haben die Integrale ohne Beträge addiert – dann heben sich Flächen auf. Nehmen Sie von jedem Integral den Betrag.":near(x,-A)?"Ein Flächeninhalt ist nie negativ.":near(x,I1)||near(x,-I2)?"Das ist nur eine Teilfläche. Addieren Sie beide.":null}],
   pmini:"Als Bruch oder als Dezimalzahl auf zwei Stellen.",
-  good:"A = |20/3| + |−128/3| = 148/3 ≈ 49,33 FE. Geschafft! Gehen Sie jetzt zurück ins Heft zu b) und formulieren Sie Ihre Strategie.",
+  good:"A = |20/3| + |−128/3| = 148/3 ≈ 49,33 FE. Geschafft!<div class=\"merk3\">💡 <b>Merke:</b> Mit Beträgen müssen Sie nicht schauen, welcher Graph oben liegt. Sie rechnen immer mit f(x) − g(x) – die Beträge machen jedes Integral positiv.</div>Gehen Sie jetzt zurück ins Heft zu b) und formulieren Sie Ihre Strategie.",
   hints:[UL(["Flächeninhalte sind nie negativ."]),UL([K("A=\\left|"+IN(-2,0)+"\\right|+\\left|"+IN(0,4)+"\\right|")])]}
 ];
 function fieldsHTML(fs){let h='<div class="row">';fs.forEach((f,i)=>{if(i&&!f.join)h+='</div><div class="row">';h+=(f.lab?'<span>'+f.lab+'</span>':'')+'<input class="fin'+(f.small?" s":"")+'" data-k="'+f.k+'" inputmode="decimal" autocomplete="off" aria-label="'+f.k+'">'+(f.after?'<span>'+f.after+'</span>':'')});return h+"</div>"}
@@ -288,7 +289,7 @@ setMain(PARTS.filter(P=>ST[P.id]&&P.after).map(P=>P.after).pop()||"start");
 PARTS.forEach(part);progress();
 
 /* ---------- Musterlösung (Code der Lehrkraft) ---------- */
-const SOL=[{"h": "(1) Schnittstellen bestimmen"}, {"l": ["f(x)=g(x)"], "t": "Funktionsterme gleichsetzen."}, {"l": ["x^{3}-2x^{2}-7x+6=x+6"]}, {"l": ["\\Leftrightarrow\\;x^{3}-2x^{2}-8x=0"], "t": "Nach x umformen: alles auf eine Seite bringen."}, {"l": ["\\Leftrightarrow\\;x\\cdot\\big(x^{2}-2x-8\\big)=0"], "t": "Per Hand geht es hier auch: x ausklammern …"}, {"l": ["\\Rightarrow\\;x=0\\;\\text{ oder }\\;x^{2}-2x-8=0", "\\Rightarrow\\;x=1\\pm\\sqrt{1+8}=1\\pm3"], "t": "… und die pq-Formel benutzen."}, {"l": ["x_{1}=-2;\\quad x_{2}=0;\\quad x_{3}=4"], "t": "Lösungen von links nach rechts sortiert (GTR oder per Hand)."}, {"h": "(2) Von Schnittstelle zu Schnittstelle integrieren"}, {"l": ["f(x)-g(x)=\\big(x^{3}-2x^{2}-7x+6\\big)-\\big(x+6\\big)", "=x^{3}-2x^{2}-8x"], "t": "Die Differenz von f(x) und g(x) vereinfachen. Minus vor der Klammer: Alle Vorzeichen von g drehen sich."}, {"l": ["H(x)=\\tfrac{1}{4}x^{4}-\\tfrac{2}{3}x^{3}-4x^{2}"], "t": "Stammfunktion zu f(x) − g(x)."}, {"l": ["\\int_{-2}^{0}\\big(x^{3}-2x^{2}-8x\\big)\\,dx"], "t": "Integral 1: von −2 bis 0."}, {"l": ["=H(0)-H(-2)", "=\\Big[\\tfrac{1}{4}\\cdot 0^{4}-\\tfrac{2}{3}\\cdot 0^{3}-4\\cdot 0^{2}\\Big]-\\Big[\\tfrac{1}{4}\\cdot (-2)^{4}-\\tfrac{2}{3}\\cdot (-2)^{3}-4\\cdot (-2)^{2}\\Big]"], "t": "Grenzen in die Stammfunktion einsetzen."}, {"l": ["=\\Big[0\\Big]-\\Big[-\\tfrac{20}{3}\\Big]"]}, {"l": ["=\\tfrac{20}{3}\\approx 6{,}67"]}, {"l": ["\\int_{0}^{4}\\big(x^{3}-2x^{2}-8x\\big)\\,dx"], "t": "Integral 2: von 0 bis 4."}, {"l": ["=H(4)-H(0)", "=\\Big[\\tfrac{1}{4}\\cdot 4^{4}-\\tfrac{2}{3}\\cdot 4^{3}-4\\cdot 4^{2}\\Big]-\\Big[\\tfrac{1}{4}\\cdot 0^{4}-\\tfrac{2}{3}\\cdot 0^{3}-4\\cdot 0^{2}\\Big]"], "t": "Grenzen in die Stammfunktion einsetzen."}, {"l": ["=\\Big[-\\tfrac{128}{3}\\Big]-\\Big[0\\Big]"]}, {"l": ["=-\\tfrac{128}{3}\\approx -42{,}67"]}, {"h": "(3) Beträge addieren"}, {"l": ["A=\\left|\\tfrac{20}{3}\\right|+\\left|-\\tfrac{128}{3}\\right|", "=\\tfrac{20}{3}+\\tfrac{128}{3}", "=\\tfrac{148}{3}\\approx 49{,}33"]}, {"t": "Der Flächeninhalt beträgt 148/3 ≈ 49,33 FE."}];
+const SOL=[{"h": "(1) Schnittstellen bestimmen"}, {"l": ["f(x)=g(x)"], "t": "Funktionsterme gleichsetzen."}, {"l": ["x^{3}-2x^{2}-7x+6=x+6"]}, {"l": ["\\Leftrightarrow\\;x^{3}-2x^{2}-8x=0"], "t": "Nach x umformen: alles auf eine Seite bringen."}, {"l": ["\\Leftrightarrow\\;x\\cdot\\big(x^{2}-2x-8\\big)=0"], "t": "Per Hand geht es hier auch: x ausklammern …"}, {"l": ["\\Rightarrow\\;x=0\\;\\text{ oder }\\;x^{2}-2x-8=0", "\\Rightarrow\\;x=1\\pm\\sqrt{1+8}=1\\pm3"], "t": "… und die pq-Formel benutzen."}, {"l": ["x_{1}=-2;\\quad x_{2}=0;\\quad x_{3}=4"], "t": "Lösungen von links nach rechts sortiert (GTR oder per Hand)."}, {"h": "(2) Von Schnittstelle zu Schnittstelle integrieren"}, {"l": ["f(x)-g(x)=\\big(x^{3}-2x^{2}-7x+6\\big)-\\big(x+6\\big)", "=x^{3}-2x^{2}-8x"], "t": "Die Differenz von f(x) und g(x) vereinfachen. Minus vor der Klammer: Alle Vorzeichen von g drehen sich."}, {"l": ["H(x)=\\tfrac{1}{4}x^{4}-\\tfrac{2}{3}x^{3}-4x^{2}"], "t": "Stammfunktion zu f(x) − g(x)."}, {"l": ["\\int_{-2}^{0}\\big(x^{3}-2x^{2}-8x\\big)\\,dx"], "t": "Integral 1: von −2 bis 0."}, {"l": ["=H(0)-H(-2)", "=\\Big[\\tfrac{1}{4}\\cdot 0^{4}-\\tfrac{2}{3}\\cdot 0^{3}-4\\cdot 0^{2}\\Big]-\\Big[\\tfrac{1}{4}\\cdot (-2)^{4}-\\tfrac{2}{3}\\cdot (-2)^{3}-4\\cdot (-2)^{2}\\Big]"], "t": "Grenzen in die Stammfunktion einsetzen."}, {"l": ["=\\Big[0\\Big]-\\Big[-\\tfrac{20}{3}\\Big]"]}, {"l": ["=\\tfrac{20}{3}\\approx 6{,}67"]}, {"l": ["\\int_{0}^{4}\\big(x^{3}-2x^{2}-8x\\big)\\,dx"], "t": "Integral 2: von 0 bis 4."}, {"l": ["=H(4)-H(0)", "=\\Big[\\tfrac{1}{4}\\cdot 4^{4}-\\tfrac{2}{3}\\cdot 4^{3}-4\\cdot 4^{2}\\Big]-\\Big[\\tfrac{1}{4}\\cdot 0^{4}-\\tfrac{2}{3}\\cdot 0^{3}-4\\cdot 0^{2}\\Big]"], "t": "Grenzen in die Stammfunktion einsetzen."}, {"l": ["=\\Big[-\\tfrac{128}{3}\\Big]-\\Big[0\\Big]"]}, {"l": ["=-\\tfrac{128}{3}\\approx -42{,}67"], "t": "Negativ – das ist kein Fehler. Man muss nicht prüfen, welcher Graph oben liegt: Der Betrag in (3) macht es positiv."}, {"h": "(3) Beträge addieren"}, {"l": ["A=\\left|\\tfrac{20}{3}\\right|+\\left|-\\tfrac{128}{3}\\right|", "=\\tfrac{20}{3}+\\tfrac{128}{3}", "=\\tfrac{148}{3}\\approx 49{,}33"]}, {"t": "Durch die Beträge ist es egal, welcher Graph oben liegt."}, {"t": "Der Flächeninhalt beträgt 148/3 ≈ 49,33 FE."}];
 const hc=s=>{let h=0x811c9dc5;for(const c of s){h^=c.charCodeAt(0);h=Math.imul(h,16777619)>>>0}return h};
 const showSol=()=>{$("#lockBox").style.display="none";$("#sol").innerHTML="<h2>Musterlösung</h2>"+SOL.map(x=>x.h?'<h3 class="sh">'+x.h+"</h3>":(x.l?'<div class="sl">'+x.l.map(t=>'<span class="nw">'+K(t)+"</span>").join(" ")+'</div>':'')+(x.t?'<p class="st">'+x.t+'</p>':'')).join("")+'<div class="gr">'+graph(VIEW.ende)+"</div>";R($("#sol"))};
 $("#solBtn").onclick=()=>{$("#lockBox").style.display="block";$("#lockIn").focus()};

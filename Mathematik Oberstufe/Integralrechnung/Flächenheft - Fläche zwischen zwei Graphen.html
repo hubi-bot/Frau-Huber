@@ -889,7 +889,7 @@ function pairGraph(s,an,stage,focus,opts){
   const o=Object.assign(win([ff,gg],an.pts[0]-0.3,an.pts[an.pts.length-1]+0.3),{x0:xa,x1:xb},{fns:[],fills:[],labels:[],pts:[],vlines:[],aria:"Graphen von f und g"});
   an.parts.forEach((p,i)=>{const fTop=ff((p.a+p.b)/2)>=gg((p.a+p.b)/2);const cls=stage>=2?(i%2?"g-fill2":"g-fill1"):"g-fill1";
     o.fills.push({top:fTop?ff:gg,bot:fTop?gg:ff,a:p.a,b:p.b,cls:focus==="p"+i?"g-fill3":cls});
-    if(stage>=2){const xm=(p.a+p.b)/2;o.labels.push({x:xm,y:(ff(xm)+gg(xm))/2,t:(fTop?"f":"g")+" oben"})}});
+    if(stage>=2&&!(opts&&opts.noTop)){const xm=(p.a+p.b)/2;o.labels.push({x:xm,y:(ff(xm)+gg(xm))/2,t:(fTop?"f":"g")+" oben"})}});
   if(s.ab)o.vlines.push({x:s.ab[0],cls:"g-ghost"},{x:s.ab[1],cls:"g-ghost"});
   o.fns.push({f:ff,cls:"g-f"},{f:gg,cls:"g-g"});
   if(stage>=1||(opts&&opts.showPts))an.rts.filter(x=>x>=xa&&x<=xb).forEach(x=>{o.pts.push({x,y:ff(x)})});
@@ -938,14 +938,14 @@ function buildRech(s){
   steps.push({name:"Teilintegrale",TS:(box,ctx)=>an.parts.forEach((p,i)=>box.querySelector('[data-k="p'+i+'"]').value=dec(p.v*(ctx.sign||1),4)),
     render(box){box.innerHTML='<p class="q">Berechnen Sie die Integrale der Differenz von f(x) und g(x) – beginnend links, von Grenze zu Grenze. Ein negatives Ergebnis ist erlaubt.</p>'+numFields(an.parts.map((p,i)=>({k:"p"+i,focus:"p"+i,lab:K("\\int_{"+n2(p.a)+"}^{"+n2(p.b)+"}\\big(f(x)-g(x)\\big)\\,dx=")})))+'<p class="pmini">Auf zwei Nachkommastellen oder als Bruch.</p>';renderK(box)},
     check(box,ctx){const sg=ctx.sign||1,tot=P.integ(d,an.pts[0],an.pts[an.pts.length-1])*sg;
-      return checkNums(box,an.parts.map((p,i)=>({k:"p"+i,name:"Abschnitt "+(i+1),val:p.v*sg,tol,why:x=>near(x,-p.v*sg,tol)?"Der Betrag stimmt, aber das Vorzeichen nicht. In diesem Abschnitt liegt "+(p.v>0?"f":"g")+" oben – das Integral von "+(sg>0?"f − g":"g − f")+" ist dann "+(p.v*sg>0?"positiv":"negativ")+". Den Betrag nehmen Sie erst im nächsten Schritt.":an.parts.length>1&&near(x,tot,tol)?"Das ist das Integral über den ganzen Bereich. Sie müssen an der Schnittstelle teilen!":null})))},
-    hints:["Integrieren Sie nie über eine Schnittstelle hinweg – sonst heben sich Flächenteile auf.","Stammfunktion von f(x) − g(x): "+K("H(x)="+T(P.int(d))),"Ein negatives Teilintegral bedeutet: In diesem Abschnitt liegt g oben."]});
+      return checkNums(box,an.parts.map((p,i)=>({k:"p"+i,name:"Abschnitt "+(i+1),val:p.v*sg,tol,why:x=>near(x,-p.v*sg,tol)?"Der Betrag stimmt, aber das Vorzeichen nicht. Rechnen Sie das Integral genau aus – hier kommt eine "+(p.v*sg>0?"positive":"negative")+" Zahl heraus. Welcher Graph oben liegt, müssen Sie nicht prüfen: Den Betrag nehmen Sie erst im nächsten Schritt.":an.parts.length>1&&near(x,tot,tol)?"Das ist das Integral über den ganzen Bereich. Sie müssen an der Schnittstelle teilen!":null})))},
+    hints:["Integrieren Sie nie über eine Schnittstelle hinweg – sonst heben sich Flächenteile auf.","Stammfunktion von f(x) − g(x): "+K("H(x)="+T(P.int(d))),"Ein negatives Integral ist kein Fehler. Welcher Graph oben liegt, müssen Sie nicht prüfen – die Beträge im nächsten Schritt machen alles positiv."]});
   steps.push({name:"Gesamtfläche",T:[{k:"A",val:an.A}],render(box){box.innerHTML=numFields([{k:"A",lab:"Flächeninhalt A = "}])},
     check(box){const sum=an.parts.reduce((t,p)=>t+p.v,0);return checkNums(box,[{k:"A",name:"A",val:an.A,tol,why:x=>an.parts.length>1&&(near(x,sum,tol)||near(x,-sum,tol)||near(x,abs(sum),tol))?"Sie haben die Teilintegrale einfach addiert. Flächeninhalte sind nie negativ: Nehmen Sie von jedem Teilintegral den Betrag und addieren Sie dann.":near(x,-an.A,tol)?"Ein Flächeninhalt ist immer positiv.":null}])},
-    hints:["Flächeninhalte sind nie negativ.","A = |erstes Teilintegral| + |zweites Teilintegral| + …"]});
+    hints:["Flächeninhalte sind nie negativ.","A = |erstes Teilintegral| + |zweites Teilintegral| + …","Mit Beträgen müssen Sie nicht schauen, welcher Graph oben liegt. Die Beträge machen jedes Integral positiv."]});
   const Hc=P.int(d),exact=an.pts.every(x=>toFrac(x,12));
   const subT=(c,x)=>{c=P.trim(c);let s="";for(let i=c.length-1;i>=0;i--){const a=c[i];if(!a)continue;const f=toFrac(Math.abs(a));const co=i>0&&Math.abs(a)===1?"":(f?(f[1]===1?String(f[0]):"\\tfrac{"+f[0]+"}{"+f[1]+"}"):dec(Math.abs(a)).replace(",","{,}"));const xs=n2(x),b=(x<0||(i>1&&!Number.isInteger(x)))?"\\left("+xs+"\\right)":xs;s+=(a<0?"-":(s?"+":""))+(i===0?co:(co?co+"\\cdot ":"")+b+(i>1?"^{"+i+"}":""))}return s||"0"};
-  const intSol=an.parts.map((p,i)=>{const I0="\\int_{"+n2(p.a)+"}^{"+n2(p.b)+"}\\big(f(x)-g(x)\\big)\\,dx",tx="Integral "+(i+1)+": "+(an.parts[i].v>0?"f liegt oben, das Integral ist positiv.":"g liegt oben, das Integral ist negativ."),fig=i===0?()=>pairGraph(s,an,2,"p"+i,{ptLabels:1}):null;
+  const intSol=an.parts.map((p,i)=>{const I0="\\int_{"+n2(p.a)+"}^{"+n2(p.b)+"}\\big(f(x)-g(x)\\big)\\,dx",tx="Integral "+(i+1)+": "+(an.parts[i].v>0?"positiv.":"negativ – kein Problem, der Betrag macht es positiv."),fig=i===0?()=>pairGraph(s,an,2,"p"+i,{ptLabels:1,noTop:1}):null;
     if(!exact)return[{l:K(I0+fmtD(p.v).replace(/^/,"=")),t:tx,fig}];
     return[{l:K(I0),t:tx,fig},{l:K("=H("+n2(p.b)+")-H("+n2(p.a)+")=\\Big["+subT(Hc,p.b)+"\\Big]-\\Big["+subT(Hc,p.a)+"\\Big]")},{l:K("=\\Big["+fmt(P.ev(Hc,p.b))+"\\Big]-\\Big["+fmt(P.ev(Hc,p.a))+"\\Big]")},{l:K(fmtD(p.v).replace(/^/,"="))}]});
   const sol=[{l:K("f(x)=g(x)\\;\\Leftrightarrow\\;"+T(d)+"=0"),t:"Schnittstellen: Gleichsetzen und alles auf eine Seite bringen."},
@@ -955,11 +955,11 @@ function buildRech(s){
     .concat(...intSol)
     .concat([{l:K("A="+an.parts.map(p=>"\\left|"+fmt(p.v)+"\\right|").join("+")+fmtD(an.A).replace(/^/,"=")),t:"Beträge addieren. Probe mit dem GTR: fnInt(abs(f(x) − g(x)), x, "+dec(an.pts[0])+", "+dec(an.pts[an.pts.length-1])+")."}]);
   return{title:"Berechnen Sie den Inhalt der Fläche, die die Graphen von f und g "+(s.ab?"über dem Intervall ["+dec(s.ab[0])+"; "+dec(s.ab[1])+"] ":"")+"einschließen. "+K("f(x)="+T(s.f)+"\\quad g(x)="+T(s.g)),tag:s.name||(s.own?"eigene Aufgabe":"Stufe "+s.l),steps,solution:sol,
-    graph:(ctx,stage,focus)=>pairGraph(s,an,stage>=2?2:stage>=1?1:0,focus),finalMsg:"Strategie erfolgreich angewendet: Schnittstellen bestimmen → von Schnittstelle zu Schnittstelle integrieren → Beträge addieren."};
+    graph:(ctx,stage,focus)=>pairGraph(s,an,stage>=2?2:stage>=1?1:0,focus,{noTop:1}),finalMsg:"Strategie erfolgreich angewendet: Schnittstellen bestimmen → von Schnittstelle zu Schnittstelle integrieren → Beträge addieren. Mit Beträgen müssen Sie nicht schauen, welcher Graph oben liegt."};
 }
 
 const STRAT='<details class="merk"><summary><b>🗺️ Strategie: Fläche zwischen zwei Graphen</b> <span class="pmini">(erst selbst überlegen – dann öffnen)</span></summary><ol>'+
-  "<li><b>Schnittstellen bestimmen:</b> "+K("f(x)=g(x)")+" setzen und nach x umformen (GTR).</li><li>Beginnend mit der linken Schnittstelle <b>von Schnittstelle zu Schnittstelle</b> die Integrale der Differenz von f(x) und g(x) berechnen.</li><li>Die <b>Beträge</b> der einzelnen Integrale addieren: "+K("A=\\left|\\int_{x_1}^{x_2}\\big(f(x)-g(x)\\big)\\,dx\\right|+\\left|\\int_{x_2}^{x_3}\\big(f(x)-g(x)\\big)\\,dx\\right|")+"</li></ol></details>";
+  "<li><b>Schnittstellen bestimmen:</b> "+K("f(x)=g(x)")+" setzen und nach x umformen (GTR).</li><li>Beginnend mit der linken Schnittstelle <b>von Schnittstelle zu Schnittstelle</b> die Integrale der Differenz von f(x) und g(x) berechnen.</li><li>Die <b>Beträge</b> der einzelnen Integrale addieren: "+K("A=\\left|\\int_{x_1}^{x_2}\\big(f(x)-g(x)\\big)\\,dx\\right|+\\left|\\int_{x_2}^{x_3}\\big(f(x)-g(x)\\big)\\,dx\\right|")+" Dann ist es egal, welcher Graph oben liegt.</li></ol></details>";
 const ownForm='<p class="pmini">Leere Felder zählen als 0.</p>'+["f","g"].map(n=>'<div class="row">'+K(n+"(x)=")+["3","2","1","0"].map(i=>'<input class="fin s" id="o'+n+i+'" inputmode="decimal" aria-label="'+n+': Zahl vor x hoch '+i+'">'+(i==="0"?"":K("x"+(i==="1"?"":"^"+i))+"+")).join(" ")+"</div>").join("")+
   '<div class="row">Intervall (freiwillig): von <input class="fin s" id="oa" inputmode="decimal"> bis <input class="fin s" id="ob" inputmode="decimal"></div>';
 
