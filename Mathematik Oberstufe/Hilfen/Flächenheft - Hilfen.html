@@ -962,7 +962,8 @@ H2("ver-a","Gruppe B · a) Vorteil",[HB("Schauen Sie genau hin",["Wo liegen die 
 const VR=(c)=>{const h=t=>c?"\\textcolor{#cf2f2a}{"+t+"}":t,W=x=>'<span style="display:inline-block;max-width:100%;overflow-x:auto;white-space:nowrap;vertical-align:middle">'+x+"</span>";return[
   K(In(0,"6{,}5","\\big(f(x)+2\\big)")+"=F(6{,}5)-F(0)=\\Big[-\\tfrac{1}{12}\\cdot6{,}5^3+6{,}5^2"+h("+2\\cdot6{,}5")+"\\Big]-\\Big[0\\Big]"),
   K(In(0,"6{,}5","\\big(g(x)+2\\big)")+"=G(6{,}5)-G(0)=\\Big[\\tfrac{1}{12}\\cdot6{,}5^3-\\tfrac58\\cdot6{,}5^2"+h("+2\\cdot6{,}5")+"\\Big]-\\Big[0\\Big]"),
-  K("A=\\Big[-22{,}885+42{,}25"+h("+13")+"\\Big]-\\Big[22{,}885-26{,}406"+h("+13")+"\\Big]\\approx22{,}89")].map(W)};
+  K("A=F(6{,}5)-F(0)-\\big(G(6{,}5)-G(0)\\big)"),
+  K("\\phantom{A}=\\Big[-22{,}885+42{,}25"+h("+13")+"\\Big]-\\Big[22{,}885-26{,}406"+h("+13")+"\\Big]\\approx22{,}89")].map(W)};
 H2("ver-b","Gruppe B · b) Flächeninhalt",[
   "<b>Welche Flächen?</b>"+VF+UL2(["A = Fläche unter f(x) + 2 <b>minus</b> Fläche unter g(x) + 2","Grenzen: 0 und 6,5","Beide Integrale mit dem GTR"]),
   HB("So dokumentieren",[K("A="+In(0,"6{,}5","\\big(f(x)+2\\big)")+"-"+In(0,"6{,}5","\\big(g(x)+2\\big)")+"=\\ldots")])],
