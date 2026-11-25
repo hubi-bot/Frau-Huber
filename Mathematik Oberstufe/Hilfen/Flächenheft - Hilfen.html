@@ -968,15 +968,15 @@ H2("ver-b","Gruppe B · b) Flächeninhalt",[
   "<b>Welche Flächen?</b>"+VF+UL2(["A = Fläche unter f(x) + 2 <b>minus</b> Fläche unter g(x) + 2","Grenzen: 0 und 6,5","Beide Integrale mit dem GTR"]),
   HB("So dokumentieren",[K("A="+In(0,"6{,}5","\\big(f(x)+2\\big)")+"-"+In(0,"6{,}5","\\big(g(x)+2\\big)")+"=\\ldots")])],
   {chk:{v:A2,tol:.01,tips:[[32.365,"Das ist nur die Fläche unter dem Graphen von f(x) + 2. Ziehen Sie die Fläche unter g(x) + 2 ab."],[9.479,"Das ist nur die Fläche unter dem Graphen von g(x) + 2."]]}});
-H2("ver-c","Gruppe B · c) Mit f(x) − g(x) rechnen",[
-  HB("Differenz bilden",["Klammern setzen: "+K("f(x)-g(x)=\\big(-\\tfrac14x^2+2x\\big)-\\big(\\tfrac14x^2-\\tfrac54x\\big)"),"Minus vor der Klammer dreht beide Vorzeichen.","x² zu x², x zu x zusammenfassen."]),
-  HB("Integral berechnen",["Grenzen: die Schnittstellen 0 und 6,5",K(In(0,"6{,}5","\\big(f(x)-g(x)\\big)"))+" mit dem GTR berechnen","Vergleichen Sie mit Ihrem Ergebnis aus b)."])],
-  {chk:{v:A2,tol:.01,tips:[[19.365,"Das ist nur das Integral über f(x). Integrieren Sie f(x) − g(x)."],[-29.927,"Prüfen Sie f(x) − g(x): Das Minus vor der Klammer dreht beide Vorzeichen von g(x)."]]}});
+H2("ver-c","Gruppe B · c) Mit der Differenzfunktion rechnen",[
+  HB("Differenzfunktion nachrechnen",["Klammern setzen: "+K("d(x)=f(x)-g(x)=\\big(-\\tfrac14x^2+2x\\big)-\\big(\\tfrac14x^2-\\tfrac54x\\big)"),"Minus vor der Klammer dreht beide Vorzeichen.","x² zu x², x zu x zusammenfassen."]),
+  HB("Integral berechnen",["Grenzen: die Schnittstellen 0 und 6,5",K(In(0,"6{,}5","d(x)"))+" mit dem GTR berechnen","Vergleichen Sie mit Ihrem Ergebnis aus b)."])],
+  {chk:{v:A2,tol:.01,tips:[[19.365,"Das ist nur das Integral über f(x). Integrieren Sie f(x) − g(x)."],[-29.927,"Prüfen Sie d(x): Das Minus vor der Klammer dreht beide Vorzeichen von g(x)."]]}});
 H2("ver-d","Gruppe B · d) Einfluss der Verschiebung",[
   HB("Vergleichen Sie die beiden Klammern",["Schauen Sie sich die letzte Zeile der Rechnung im Heft an.","Welche Zahl kommt in <b>beiden</b> eckigen Klammern vor?","Was passiert mit dieser Zahl, wenn man die zweite Klammer von der ersten abzieht?"]),
   "<b>Hier ist es rot markiert</b>"+UL2(VR(1).concat(["Die +2 wird beim Aufleiten zu "+K("2x")+" – in beiden Stammfunktionen. An der Grenze 6,5 wird daraus "+K("2\\cdot6{,}5=13")+"."])),
   HB("Formulieren",["Beginnen Sie so: „Durch die Verschiebung um 2 …“","Vergleichen Sie Ihr A mit dem A der Gruppe A (≈ 22,89)."]),
-  HB("Und allgemein?",["Gilt das nur für +2 – oder für jede Zahl d, um die man beide Graphen verschiebt?","Muss man die Graphen zum Berechnen der Fläche dann überhaupt verschieben?"])]);
+  HB("Und allgemein?",["Gilt das nur für +2 – oder für jede Zahl k, um die man beide Graphen verschiebt?","Muss man die Graphen zum Berechnen der Fläche dann überhaupt verschieben?"])]);
 H2("ver-e","Gruppe B · e) Vom Term aus b) zum Term aus c)",[
   HB("Das sollen Sie zeigen",[K(In(0,"6{,}5","\\big(f(x)+2\\big)")+"-"+In(0,"6{,}5","\\big(g(x)+2\\big)")+"="+In(0,"6{,}5","\\big(f(x)-g(x)\\big)")),"Links steht Ihr Term aus b), rechts der Term aus c). Formen Sie die linke Seite so lange um, bis die rechte Seite dasteht."]),
   HB("Diese Regel brauchen Sie",[RSD,"Sie gilt für <b>Plus und Minus</b>."]),
@@ -998,12 +998,12 @@ C.push({id:"ver",heft:2,tit:"Gruppe B: Verschieben",online:null,build:()=>({titl
   L("","a) Nach dem Verschieben liegen beide Graphen zwischen 0 und 6,5 ganz über der x-Achse. Man braucht keine Nullstellen und keine Teilflächen unter der x-Achse."),
   L("A="+In(0,"6{,}5","\\big(f(x)+2\\big)")+"-"+In(0,"6{,}5","\\big(g(x)+2\\big)"),"b) Fläche unter f(x) + 2 minus Fläche unter g(x) + 2 (GTR)."),
   L("A\\approx32{,}365-9{,}479\\approx22{,}89","Mit dem GTR. Der Flächeninhalt beträgt etwa 22,89 FE – genauso viel wie bei Gruppe A."),
-  L("f(x)-g(x)=\\big(-\\tfrac14x^2+2x\\big)-\\big(\\tfrac14x^2-\\tfrac54x\\big)=-\\tfrac12x^2+\\tfrac{13}{4}x","c) Differenz bilden. Minus vor der Klammer dreht beide Vorzeichen."),
-  L(In(0,"6{,}5","\\big(f(x)-g(x)\\big)")+"\\approx22{,}89","Mit dem GTR. Das ist genau das Ergebnis aus b)."),
+  L("d(x)=f(x)-g(x)=\\big(-\\tfrac14x^2+2x\\big)-\\big(\\tfrac14x^2-\\tfrac54x\\big)=-\\tfrac14x^2+2x-\\tfrac14x^2+\\tfrac54x=-\\tfrac12x^2+\\tfrac{13}{4}x","c) Differenzfunktion nachrechnen. Minus vor der Klammer dreht beide Vorzeichen."),
+  L(In(0,"6{,}5","d(x)")+"="+In(0,"6{,}5","\\big(f(x)-g(x)\\big)")+"\\approx22{,}89","Mit dem GTR. Das ist genau das Ergebnis aus b)."),
   L("","d) Die Rechnung aus dem Heft – die gleichen Zahlen sind rot markiert:"),
   {l:VR(1).join("<br>"),t:""},
   L("","Durch die Verschiebung um 2 steht in beiden Stammfunktionen der Summand 2x. An der Grenze 6,5 steht deshalb in beiden eckigen Klammern +13. Beim Abziehen der Integrale hebt sich das auf: 13 − 13 = 0. Die Verschiebung um 2 ändert A also nicht."),
-  L("","Allgemein: Verschiebt man beide Graphen um dieselbe Zahl d, hebt sich +d − d beim Abziehen auf. Für die Fläche zwischen zwei Graphen ist es also egal, ob man die Graphen verschiebt – man kann sie auch so lassen, wie sie sind."),
+  L("","Allgemein: Verschiebt man beide Graphen um dieselbe Zahl k, hebt sich +k − k beim Abziehen auf. Für die Fläche zwischen zwei Graphen ist es also egal, ob man die Graphen verschiebt – man kann sie auch so lassen, wie sie sind."),
   L(In(0,"6{,}5","\\big(f(x)+2\\big)")+"-"+In(0,"6{,}5","\\big(g(x)+2\\big)")+"="+In(0,"6{,}5","\\big(f(x)-g(x)\\big)"),"e) Zu zeigen: links der Term aus b), rechts der Term aus c)."),
   L(In(0,"6{,}5","\\big(f(x)+2\\big)")+"-"+In(0,"6{,}5","\\big(g(x)+2\\big)"),"Linke Seite:"),
   L("="+In(0,"6{,}5","\\Big(\\big(f(x)+2\\big)-\\big(g(x)+2\\big)\\Big)"),"Differenzregel: gleiche Grenzen → ein Integral."),
