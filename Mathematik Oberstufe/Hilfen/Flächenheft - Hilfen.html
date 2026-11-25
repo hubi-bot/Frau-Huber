@@ -968,9 +968,9 @@ H2("ver-b","Gruppe B · b) Flächeninhalt",[
   HB("So dokumentieren",[K("A="+In(0,"6{,}5","\\big(f(x)+2\\big)")+"-"+In(0,"6{,}5","\\big(g(x)+2\\big)")+"=\\ldots")])],
   {chk:{v:A2,tol:.01,tips:[[32.365,"Das ist nur die Fläche unter dem Graphen von f(x) + 2. Ziehen Sie die Fläche unter g(x) + 2 ab."],[9.479,"Das ist nur die Fläche unter dem Graphen von g(x) + 2."]]}});
 H2("ver-c","Gruppe B · c) Einfluss der Verschiebung",[
-  "<b>So kann man A aus b) per Hand berechnen</b>"+UL2(["Stammfunktionen: "+K("F(x)=-\\tfrac{1}{12}x^3+x^2+2x")+" zu "+K("f(x)+2")+" und "+K("G(x)=\\tfrac{1}{12}x^3-\\tfrac58x^2+2x")+" zu "+K("g(x)+2")].concat(VR(1)).concat(["Was passiert mit den beiden roten Zahlen, wenn man die Integrale voneinander abzieht?"])),
-  HB("Woher kommt die rote Zahl?",["Die +2 wird beim Aufleiten zu "+K("2x")+" – in <b>beiden</b> Stammfunktionen.","An der Grenze 6,5 wird daraus "+K("2\\cdot6{,}5=13")+" – in beiden Klammern dieselbe Zahl.","Bei einer Verschiebung um d wird aus +d entsprechend "+K("d\\cdot x")+". Steht dann auch in beiden Klammern dieselbe Zahl?"]),
-  HB("Formulieren",["Beginnen Sie so: „Durch die Verschiebung um 2 …“","Für d: „Das gilt für jede Zahl d, weil …“"])]);
+  HB("Vergleichen Sie die beiden Klammern",["Schauen Sie sich die letzte Zeile der Rechnung im Heft an.","Welche Zahl kommt in <b>beiden</b> eckigen Klammern vor?","Was passiert mit dieser Zahl, wenn man die zweite Klammer von der ersten abzieht?"]),
+  "<b>Hier ist es rot markiert</b>"+UL2(VR(1).concat(["Die +2 wird beim Aufleiten zu "+K("2x")+" – in beiden Stammfunktionen. An der Grenze 6,5 wird daraus "+K("2\\cdot6{,}5=13")+"."])),
+  HB("Formulieren",["Beginnen Sie so: „Durch die Verschiebung um 2 …“","Vergleichen Sie Ihr A mit dem A der Gruppe A (≈ 22,89)."])]);
 H2("ver-d","Gruppe B · d) Mit f(x) − g(x) rechnen",[
   HB("Differenz bilden",["Klammern setzen: "+K("f(x)-g(x)=\\big(-\\tfrac14x^2+2x\\big)-\\big(\\tfrac14x^2-\\tfrac54x\\big)"),"Minus vor der Klammer dreht beide Vorzeichen.","x² zu x², x zu x zusammenfassen."]),
   HB("Integral berechnen",["Grenzen: die Schnittstellen 0 und 6,5",K(In(0,"6{,}5","\\big(f(x)-g(x)\\big)"))+" mit dem GTR berechnen","Vergleichen Sie mit Ihrem Ergebnis aus b)."])],
@@ -998,7 +998,6 @@ C.push({id:"ver",heft:2,tit:"Gruppe B: Verschieben",online:null,build:()=>({titl
   L("A\\approx32{,}365-9{,}479\\approx22{,}89","Mit dem GTR. Der Flächeninhalt beträgt etwa 22,89 FE – genauso viel wie bei Gruppe A."),
   {l:VR(1).join("<br>"),t:""},
   L("","c) Durch die Verschiebung um 2 steht in beiden Stammfunktionen der Summand 2x. An der Grenze 6,5 steht deshalb in beiden eckigen Klammern +13. Beim Abziehen der Integrale hebt sich das auf: 13 − 13 = 0. Die Verschiebung um 2 ändert A also nicht."),
-  L("","Das gilt für jede Zahl d: Aus +d wird in beiden Stammfunktionen d · x. In beiden Klammern steht dann dieselbe Zahl, und beim Abziehen hebt sie sich auf."),
   L("f(x)-g(x)=\\big(-\\tfrac14x^2+2x\\big)-\\big(\\tfrac14x^2-\\tfrac54x\\big)=-\\tfrac12x^2+\\tfrac{13}{4}x","d) Differenz bilden. Minus vor der Klammer dreht beide Vorzeichen."),
   L(In(0,"6{,}5","\\big(f(x)-g(x)\\big)")+"\\approx22{,}89","Mit dem GTR. Das ist genau das Ergebnis aus b)."),
   L(In(0,"6{,}5","\\big(f(x)+2\\big)")+"-"+In(0,"6{,}5","\\big(g(x)+2\\big)")+"="+In(0,"6{,}5","\\big(f(x)-g(x)\\big)"),"e) Zu zeigen: links der Term aus b), rechts der Term aus d)."),
