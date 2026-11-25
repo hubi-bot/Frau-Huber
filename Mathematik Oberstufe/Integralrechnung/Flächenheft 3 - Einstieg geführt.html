@@ -96,10 +96,12 @@ button.pl{cursor:pointer}
 .cap{display:none;margin:8px 0;background:color-mix(in srgb,var(--acc) 10%,var(--paper));border-left:4px solid var(--acc);border-radius:8px;padding:8px 12px}
 .sep{border:none;border-top:2px dashed var(--karo);margin:14px 0}
 .sol .sh{font-family:var(--hand);font-weight:400;font-size:22px;color:var(--ink);margin:14px 0 4px}
-.choice .k{overflow-x:auto;max-width:100%}
+
 .fb.pzfb{margin-bottom:6px}
 .merk3{margin:8px 0;background:var(--yellow);color:#25303f;border-radius:8px;padding:8px 12px}
-.pl .k,.chip .k,.choice .k{white-space:nowrap}.pl,.chip,.choice{overflow-x:auto;max-width:100%}
+
+.pl,.chip,.choice{max-width:100%}.pl .k,.chip .k,.choice .k{white-space:normal}.pl .katex,.chip .katex,.choice .katex{white-space:normal}.pl .k,.choice .k{min-width:0;flex:1}
+.pl .ks{flex:1;min-width:0}.ks .kn{display:inline-block;margin-right:.5em}.ks .kn .k,.ks .kn .katex{white-space:nowrap;flex:none}
 </style>
 </head>
 <body>
@@ -142,6 +144,7 @@ button.pl{cursor:pointer}
 const $=(s,r)=>(r||document).querySelector(s),$$=(s,r)=>[...(r||document).querySelectorAll(s)];
 const K=t=>'<span class="k" data-t="'+t.replace(/"/g,"&quot;")+'"></span>';
 const R=el=>{$$(".k",el).forEach(e=>{if(e.dataset.done)return;try{katex.render(e.dataset.t,e,{throwOnError:false});e.dataset.done=1}catch(x){e.textContent=e.dataset.t}})};
+const KS=t=>'<span class="ks">'+t.split("\\quad").map(x=>'<span class="kn">'+K(x)+"</span>").join("")+"</span>";
 const UL=a=>"<ul>"+a.map(x=>"<li>"+x+"</li>").join("")+"</ul>";
 const parseNum=s=>{s=String(s||"").trim().replace(/\s+/g,"").replace(/[−–]/g,"-").replace(/,/g,".");if(!s)return null;
   let m=s.match(/^([+-]?)(\d+(?:\.\d+)?)\/(\d+(?:\.\d+)?)$/);if(m)return +m[3]?(m[1]==="-"?-1:1)*(+m[2])/(+m[3]):NaN;
@@ -251,8 +254,8 @@ function part(P){
     show(box,true,"<b>Rechenweg richtig!</b>"+UL(PZ.why.map((w,i)=>"Zeile "+(i+2)+": "+w)));return true};
   if(PZ){
     const all=PZ.lines.map((t,i)=>({t,i})).concat(PZ.dis.map((d,j)=>({t:d.t,i:"d"+j,w:d.w})));for(let i=all.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[all[i],all[j]]=[all[j],all[i]]}
-    const draw=()=>{$(".proof",el).innerHTML='<li><div class="pl"><span class="nr">1</span>'+K(PZ.first)+'</div></li>'+placed.map((p,j)=>'<li><button type="button" class="pl" data-j="'+j+'"><span class="nr">'+(j+2)+'</span>'+K(p.t)+'</button></li>').join("")+(placed.length<PZ.lines.length?'<li><div class="pl next"><span class="nr">'+(placed.length+2)+'</span>nächster Schritt: ?</div></li>':'');
-      $(".pool",el).innerHTML=all.filter(p=>!placed.includes(p)).map(p=>'<button type="button" class="chip" data-i="'+p.i+'">'+K(p.t)+'</button>').join("");R(el);
+    const draw=()=>{$(".proof",el).innerHTML='<li><div class="pl"><span class="nr">1</span>'+K(PZ.first)+'</div></li>'+placed.map((p,j)=>'<li><button type="button" class="pl" data-j="'+j+'"><span class="nr">'+(j+2)+'</span>'+KS(p.t)+'</button></li>').join("")+(placed.length<PZ.lines.length?'<li><div class="pl next"><span class="nr">'+(placed.length+2)+'</span>nächster Schritt: ?</div></li>':'');
+      $(".pool",el).innerHTML=all.filter(p=>!placed.includes(p)).map(p=>'<button type="button" class="chip" data-i="'+p.i+'">'+KS(p.t)+'</button>').join("");R(el);
       $$(".chip",el).forEach(b=>b.onclick=()=>{if(placed.length>=PZ.lines.length)return;placed.push(all.find(p=>String(p.i)===b.dataset.i));draw()});
       $$("button.pl",el).forEach(b=>b.onclick=()=>{placed.splice(+b.dataset.j,1);pzOk=false;draw()})};
     draw();
@@ -274,7 +277,7 @@ setMain(PARTS.filter(P=>ST[P.id]&&P.after).map(P=>P.after).pop()||"start");
 PARTS.forEach(part);progress();
 
 /* ---------- Musterlösung (Code der Lehrkraft) ---------- */
-const SOL=[{"h": "(1) Schnittstellen bestimmen (GTR)"}, {"l": ["f(x)=g(x)", "\\Leftrightarrow\\;x^{3}-2x^{2}-7x+6=x+6"], "t": "Funktionsterme gleichsetzen."}, {"l": ["x_{1}=-2;\\quad x_{2}=0;\\quad x_{3}=4"], "t": "Mit dem GTR lösen (oder die Schnittpunkte der Graphen bestimmen), von links nach rechts sortiert."}, {"h": "(2) Von Schnittstelle zu Schnittstelle integrieren (GTR)"}, {"l": ["\\int_{-2}^{0}\\big(f(x)-g(x)\\big)\\,dx\\approx 6{,}667"], "t": "Integral 1 mit dem GTR."}, {"l": ["\\int_{0}^{4}\\big(f(x)-g(x)\\big)\\,dx\\approx -42{,}667"], "t": "Integral 2 mit dem GTR. Negativ – das ist kein Fehler. Welcher Graph oben liegt, muss man nicht prüfen: Der Betrag macht es positiv."}, {"h": "(3) Beträge addieren"}, {"l": ["A=\\left|6{,}667\\right|+\\left|-42{,}667\\right|\\approx 49{,}33"]}, {"t": "Das zweite Integral ist negativ, weil dort g oben liegt. Der Betrag macht daraus den Inhalt der Teilfläche – deshalb muss man nicht prüfen, welcher Graph oben liegt."}, {"t": "Der Flächeninhalt beträgt etwa 49,33 FE."}];
+const SOL=[{"h": "(1) Schnittstellen bestimmen (GTR)"}, {"l": ["f(x)=g(x)", "\\Leftrightarrow\\;x^{3}-2x^{2}-7x+6=x+6"], "t": "Funktionsterme gleichsetzen."}, {"l": ["x_{1}=-2;\\quad x_{2}=0;\\quad x_{3}=4"], "t": "Mit dem GTR lösen (oder die Schnittpunkte der Graphen bestimmen), von links nach rechts sortiert."}, {"h": "(2) Differenzfunktion bestimmen"}, {"l": ["d(x)=f(x)-g(x)=\\big(x^{3}-2x^{2}-7x+6\\big)-\\big(x+6\\big)", "=x^{3}-2x^{2}-8x"], "t": "Im GTR genügt: f und g als Y1 und Y2 eingeben, d(x) = Y1 − Y2."}, {"h": "(3) Von Schnittstelle zu Schnittstelle integrieren (GTR)"}, {"l": ["\\int_{-2}^{0}d(x)\\,dx\\approx 6{,}667"], "t": "Integral 1 mit dem GTR."}, {"l": ["\\int_{0}^{4}d(x)\\,dx\\approx -42{,}667"], "t": "Integral 2 mit dem GTR. Negativ – das ist kein Fehler. Welcher Graph oben liegt, muss man nicht prüfen: Der Betrag macht es positiv."}, {"h": "(4) Beträge addieren"}, {"l": ["A=\\left|6{,}667\\right|+\\left|-42{,}667\\right|\\approx 49{,}33"]}, {"t": "Das zweite Integral ist negativ, weil dort g oben liegt. Der Betrag macht daraus den Inhalt der Teilfläche – deshalb muss man nicht prüfen, welcher Graph oben liegt."}, {"t": "Der Flächeninhalt beträgt etwa 49,33 FE."}];
 const hc=s=>{let h=0x811c9dc5;for(const c of s){h^=c.charCodeAt(0);h=Math.imul(h,16777619)>>>0}return h};
 const showSol=()=>{$("#lockBox").style.display="none";$("#sol").innerHTML="<h2>Musterlösung</h2>"+SOL.map(x=>x.h?'<h3 class="sh">'+x.h+"</h3>":(x.l?'<div class="sl">'+x.l.map(t=>'<span class="nw">'+K(t)+"</span>").join(" ")+'</div>':'')+(x.t?'<p class="st">'+x.t+'</p>':'')).join("")+'<div class="gr">'+graph(VIEW.ende)+"</div>";R($("#sol"))};
 $("#solBtn").onclick=()=>{$("#lockBox").style.display="block";$("#lockIn").focus()};
