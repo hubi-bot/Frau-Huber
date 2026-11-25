@@ -135,10 +135,10 @@ const PARTS=[
   hints:[UL(["Nutzen Sie den GTR: Funktion eingeben, Integral von … bis …","Achten Sie auf die Grenzen jedes Integrals."]),UL(["Liegt der Graph unter der x-Achse, ist das Integral negativ.","Runden Sie auf zwei Nachkommastellen."])]},
  {id:"b",t:"b) Flächeninhalt A berechnen",
   q:"Welcher Term beschreibt A? Wählen Sie aus und berechnen Sie A.",
-  choice:{opts:[K("A="+F65+"-"+G05+"-"+G565),K("A="+F65+"+"+G05+"-"+G565),K("A="+F65+"-"+G05+"+"+G565)],right:0,
-   why:[null,"Das Integral von 0 bis 5 ist negativ. Damit die Fläche positiv zählt, gehört ein <b>Minus</b> davor.","Das Stück von 5 bis 6,5 unter dem Graphen von g(x) gehört nicht zu A. Es wird <b>abgezogen</b>."]},
-  fields:[{k:"A",lab:"A =",v:A,why:x=>near(x,If+Ig1-Ig2)?"Das Integral von 0 bis 5 ist negativ – davor gehört ein Minus.":near(x,If-Ig1+Ig2)?"Das Stück von 5 bis 6,5 muss abgezogen werden.":near(x,If)?"Das ist nur die Fläche unter dem Graphen von f(x).":null}],
-  hints:[UL(["A = A₁ + A₂ − A₃","A₂ liegt unter der x-Achse: Das Integral ist negativ."]),UL(["Statt Betragsstrichen schreiben Sie ein Minus davor:",K("\\left|"+G05+"\\right|=-"+G05),"Diese Schreibweise brauchen Sie in d) für die Rechenregeln!"]),UL(["Setzen Sie Ihre Werte aus a) in den Term ein."])]},
+  choice:{opts:[K("A_{ges}=\\left|"+G05+"\\right|+"+F65+"-"+G565),K("A_{ges}="+G05+"+"+F65+"-"+G565),K("A_{ges}=\\left|"+G05+"\\right|+"+F65+"+"+G565)],right:0,
+   why:[null,"Das Integral von 0 bis 5 ist negativ. Damit die Fläche positiv zählt, nehmen Sie den <b>Betrag</b>.","Das Stück von 5 bis 6,5 unter dem Graphen von g(x) gehört nicht zu A. Es wird <b>abgezogen</b>."]},
+  fields:[{k:"A",lab:"A =",v:A,why:x=>near(x,If+Ig1-Ig2)?"Das Integral von 0 bis 5 ist negativ – nehmen Sie den Betrag.":near(x,If-Ig1+Ig2)?"Das Stück von 5 bis 6,5 muss abgezogen werden.":near(x,If)?"Das ist nur die Fläche unter dem Graphen von f(x).":null}],
+  hints:[UL(["A_ges = A₂ + A₁ − A₃","A₂ liegt unter der x-Achse: Das Integral ist negativ."]),UL(["Für die Fläche nehmen Sie den Betrag:",K("A_2=\\left|"+G05+"\\right|")]),UL(["Setzen Sie Ihre Werte aus a) in den Term ein."])]},
  {id:"c",t:"c) Mit f(x) − g(x) rechnen",
   q:"Bilden Sie f(x) − g(x) und berechnen Sie "+K(I(0,"6{,}5","\\big(f(x)-g(x)\\big)"))+" (GTR erlaubt). Vergleichen Sie mit A aus b).",
   fields:[{k:"c2",lab:K("f(x)-g(x)="),v:-0.5,small:1,after:K("x^2+")},{k:"c1",lab:"",v:3.25,small:1,after:K("x"),join:1},{k:"cI",lab:K(I(0,"6{,}5","\\big(f(x)-g(x)\\big)")+"="),v:A}],
@@ -146,10 +146,10 @@ const PARTS=[
   hints:[UL(["Klammern setzen: "+K("f(x)-g(x)=\\big(-\\tfrac14x^2+2x\\big)-\\big(\\tfrac14x^2-\\tfrac54x\\big)"),"Minus vor der Klammer dreht beide Vorzeichen."]),UL(["x² zu x², x zu x zusammenfassen",K("-\\tfrac14-\\tfrac14=?")+" und "+K("2+\\tfrac54=?")])]},
  {id:"d",t:"d) Mit den Rechenregeln zeigen",puzzle:1}
 ];
-const PZ={first:F65+"-"+G05+"-"+G565,
- lines:["="+F65+"-\\Big("+G05+"+"+G565+"\\Big)","="+F65+"-"+G065,"="+I(0,"6{,}5","\\big(f(x)-g(x)\\big)")],
- why:["Minus ausklammern","Intervalle zusammenfügen","Differenzregel"],
- dis:[{t:"="+F65+"-\\Big("+G05+"-"+G565+"\\Big)",w:"Beim Ausklammern eines Minus drehen sich alle Vorzeichen: −a − b = −(a + b)."},{t:"="+I(0,5,"\\big(f(x)-g(x)\\big)"),w:"Die Fläche reicht bis 6,5. Die Grenzen müssen 0 und 6,5 sein."}]};
+const PZ={first:"\\left|"+G05+"\\right|+"+F65+"-"+G565,
+ lines:["=-"+G05+"-"+G565+"+"+F65,"=-\\Big("+G065+"\\Big)+"+F65,"="+F65+"-\\Big("+G065+"\\Big)","="+I(0,"6{,}5","\\big(f(x)-g(x)\\big)")],
+ why:["Betrag umschreiben (das Integral ist negativ, also |…| = −…) und umsortieren","Intervalle zusammenfügen","Umsortieren","Summen-/Differenzregel"],
+ dis:[{t:"="+G05+"-"+G565+"+"+F65,w:"Das Integral von 0 bis 5 ist negativ. Ohne Betragsstriche muss deshalb ein Minus davor: |…| = −…"},{t:"=-\\Big("+I(0,5,"g(x)")+"\\Big)+"+F65,w:"Die Fläche reicht bis 6,5: Von 0 bis 5 und von 5 bis 6,5 ergibt von 0 bis 6,5."},{t:"="+I(0,"6{,}5","\\big(f(x)+g(x)\\big)"),w:"Vor dem Integral über g(x) steht ein Minus. Die Differenzregel ergibt f(x) − g(x)."}]};
 const RULES='<details class="rules"><summary>📖 Rechenregeln für Integrale</summary>'+UL([K("\\int_a^b f(x)\\,dx+\\int_b^c f(x)\\,dx=\\int_a^c f(x)\\,dx")+" (Intervalle zusammenfügen)",K("\\int_a^b f(x)\\,dx+\\int_a^b g(x)\\,dx=\\int_a^b\\big(f(x)+g(x)\\big)\\,dx")+" (Summenregel)",K("\\int_a^b f(x)\\,dx-\\int_a^b g(x)\\,dx=\\int_a^b\\big(f(x)-g(x)\\big)\\,dx")+" (Differenzregel)"])+"</details>";
 function fieldsHTML(fs){let h='<div class="row">';fs.forEach((f,i)=>{if(i&&!f.join)h+='</div><div class="row">';h+=(f.lab?'<span>'+f.lab+'</span>':'')+'<input class="fin'+(f.small?" s":"")+'" data-k="'+f.k+'" inputmode="decimal" autocomplete="off" aria-label="'+f.k+'">'+(f.after?'<span>'+f.after+'</span>':'')});return h+"</div>"}
 function part(P){
@@ -194,9 +194,9 @@ function part(P){
 PARTS.forEach(part);
 const SOL=[["a) Grenzen","0 und 6,5 sind die Schnittstellen der Graphen. 5 ist die Nullstelle von g(x): "+K("\\tfrac14x^2-\\tfrac54x=0\\Rightarrow x\\,(\\tfrac14x-\\tfrac54)=0\\Rightarrow x=0\\text{ oder }x=5")],
  [K(F65+"\\approx19{,}365"),"Fläche zwischen dem Graphen von f(x) und der x-Achse"],[K(G05+"\\approx-5{,}208"),"negativ, weil der Graph von g(x) unter der x-Achse liegt"],[K(G565+"\\approx1{,}688"),"Fläche unter dem Graphen von g(x) – gehört nicht zu A"],
- [K("A="+F65+"-"+G05+"-"+G565),"b) Minus statt Betragsstrichen: "+K("\\left|"+G05+"\\right|=-"+G05)],[K("A\\approx19{,}365-(-5{,}208)-1{,}688\\approx22{,}89"),"Der Flächeninhalt beträgt etwa 22,89 FE."],
+ [K("A_{ges}=\\left|"+G05+"\\right|+"+F65+"-"+G565),"b) Für die Fläche unter der x-Achse den Betrag nehmen."],[K("A_{ges}\\approx\\left|-5{,}208\\right|+19{,}365-1{,}688\\approx22{,}89"),"Der Flächeninhalt beträgt etwa 22,89 FE."],
  [K("f(x)-g(x)=-\\tfrac12x^2+\\tfrac{13}{4}x"),"c) Differenz bilden"],[K(I(0,"6{,}5","\\big(f(x)-g(x)\\big)")+"\\approx22{,}89"),"Gleiches Ergebnis wie in b)."],
- [K(PZ.first),"d) Linke Seite"]].concat(PZ.lines.map((l,i)=>[K(l),PZ.why[i]])).concat([["","Man muss also nur f(x) − g(x) von Schnittstelle zu Schnittstelle integrieren."]]);
+ [K("A_{ges}="+PZ.first),"d) Ausgangsterm aus b)"]].concat(PZ.lines.map((l,i)=>[K(l),PZ.why[i]])).concat([["","Man muss also nur f(x) − g(x) von Schnittstelle zu Schnittstelle integrieren."]]);
 const hc=s=>{let h=0x811c9dc5;for(const c of s){h^=c.charCodeAt(0);h=Math.imul(h,16777619)>>>0}return h};
 const showSol=()=>{$("#lockBox").style.display="none";$("#sol").innerHTML="<h2>Musterlösung</h2>"+SOL.map(x=>(x[0]?'<div class="sl">'+x[0]+'</div>':'')+'<p class="st">'+x[1]+'</p>').join("");R($("#sol"))};
 $("#solBtn").onclick=()=>{$("#lockBox").style.display="block";$("#lockIn").focus()};

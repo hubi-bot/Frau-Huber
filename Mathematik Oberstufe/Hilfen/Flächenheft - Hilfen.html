@@ -876,7 +876,7 @@ const ownForm='<p class="pmini">Leere Felder zählen als 0.</p>'+["f","g"].map(n
   '<div class="row">Intervall (freiwillig): von <input class="fin s" id="oa" inputmode="decimal"> bis <input class="fin s" id="ob" inputmode="decimal"></div>';
 
 window.FL={buildEin,buildWerk,buildRech,analyse,pairGraph,wGraph,EIN_AB,SPECIAL};
-if(document.getElementById("tabs"))startHeft({key:"flaechenheft-v1",pdf:[["Heft 1: Einstieg (3 Seiten)","https://hubi-bot.github.io/Frau-Huber/flaeche-heft1.pdf"],["Heft 2: Strategieentwicklung (4 Seiten)","https://hubi-bot.github.io/Frau-Huber/flaeche-heft2.pdf"],["Heft 3: Strategieplanung und Vertiefung (13 Seiten)","https://hubi-bot.github.io/Frau-Huber/flaeche-goodnotes.pdf"]],
+if(document.getElementById("tabs"))startHeft({key:"flaechenheft-v1",pdf:[["Heft 1: Einstieg (3 Seiten)","https://hubi-bot.github.io/Frau-Huber/flaeche-heft1.pdf"],["Heft 2: Strategieentwicklung (5 Seiten)","https://hubi-bot.github.io/Frau-Huber/flaeche-heft2.pdf"],["Heft 3: Strategieplanung und Vertiefung (13 Seiten)","https://hubi-bot.github.io/Frau-Huber/flaeche-goodnotes.pdf"]],
   route(h){h=h.toLowerCase();let m;
     if((m=h.match(/^einstieg-([abc])$/)))return{kind:"ein",spec:Object.assign({l:1},EIN_AB[m[1]])};
     if(h==="einstieg")return{kind:"ein",level:1};
@@ -952,11 +952,11 @@ H2("zer-a","Gruppe A · a) Teilflächen",[
   "<b>Die Teilflächen</b>"+ZF+UL2(["A₁: zwischen dem Graphen von f(x) und der x-Achse, von 0 bis 6,5","A₂: zwischen dem Graphen von g(x) und der x-Achse, von 0 bis 5 (unter der x-Achse)","A₃: zwischen dem Graphen von g(x) und der x-Achse, von 5 bis 6,5 – gehört <b>nicht</b> zu A","A = A₁ + A₂ − A₃"])]);
 H2("zer-b","Gruppe A · b) Flächeninhalt",[
   HB("Integrale aufstellen",["Jede Teilfläche mit einem eigenen Integral (GTR erlaubt)","Grenzen: Schnittstellen 0 und 6,5, Nullstelle von g(x) bei x = 5","A = A₁ + A₂ − A₃"]),
-  HB("⚠️ Flächen unter der x-Achse",["Dort ist das Integral <b>negativ</b>: "+K(G05+"<0"),"Statt Betragsstrichen schreiben Sie ein <b>Minus</b> davor: "+K("\\left|"+G05+"\\right|=-"+G05),"Diese Schreibweise brauchen Sie in c) für die Rechenregeln!"]),
-  HB("So dokumentieren",["Für jede Teilfläche: Integral aufschreiben und Wert notieren","Am Ende: "+K("A="+F65+"-"+G05+"-"+G565+"=\\ldots")])],
-  {chk:{v:A2,tol:.01,tips:[[19.365,"Das ist nur die Fläche unter dem Graphen von f(x). Es fehlen noch die Teilflächen mit g(x)."],[14.156,"Das Integral von 0 bis 5 ist negativ. Für die Fläche gehört ein Minus davor."],[24.573,"Ziehen Sie noch das Stück unter dem Graphen von g(x) zwischen 5 und 6,5 ab."],[12.469,"Das Integral von 0 bis 5 ist negativ. Für die Fläche gehört ein Minus davor."]]}});
+  HB("⚠️ Flächen unter der x-Achse",["Dort ist das Integral <b>negativ</b>: "+K(G05+"<0"),"Für den Flächeninhalt nehmen Sie den <b>Betrag</b>: "+K("A_2=\\left|"+G05+"\\right|"),"In c) schreiben Sie den Betrag mit einem Minus um."]),
+  HB("So dokumentieren",["Für jede Teilfläche: Integral aufschreiben und Wert notieren","Am Ende: "+K("A_{ges}=\\left|"+G05+"\\right|+"+F65+"-"+G565+"=\\ldots")])],
+  {chk:{v:A2,tol:.01,tips:[[19.365,"Das ist nur die Fläche unter dem Graphen von f(x). Es fehlen noch die Teilflächen mit g(x)."],[14.156,"Das Integral von 0 bis 5 ist negativ. Für die Fläche nehmen Sie den Betrag."],[24.573,"Ziehen Sie noch das Stück unter dem Graphen von g(x) zwischen 5 und 6,5 ab."],[12.469,"Das Integral von 0 bis 5 ist negativ. Für die Fläche nehmen Sie den Betrag."]]}});
 H2("zer-c","Gruppe A · c) Rechenregeln",[REG,
-  HB("Vorgehen",["Betragsstriche zuerst durch ein Minus ersetzen","Die beiden Integrale über g(x) zusammenbringen: Minus ausklammern, dann Intervalle zusammenfügen","Zum Schluss die Differenzregel: zwei Integrale mit gleichen Grenzen → ein Integral"]),
+  HB("Vorgehen",["Betrag umschreiben: Das Integral von 0 bis 5 ist negativ, also "+K("\\left|"+G05+"\\right|=-"+G05)+".","Umsortieren: die beiden Integrale über g(x) nach vorn, nebeneinander.","Intervalle zusammenfügen: Aus den beiden Integralen über g(x) wird eines von 0 bis 6,5.","Noch einmal umsortieren, dann die Summen-/Differenzregel: zwei Integrale mit gleichen Grenzen → ein Integral."]),
   HB("Was fällt auf?",["Am Ende bleibt ein <b>einziges</b> Integral übrig.","Welcher Term steht darin? Was müssen Sie also nur noch integrieren?"])]);
 H2("ver-a","Gruppe B · a) Vorteil",[HB("Schauen Sie genau hin",["Wo liegen die verschobenen Graphen zwischen x = 0 und x = 6,5?","Liegt jetzt alles <b>über</b> der x-Achse?","Brauchen Sie dann noch Nullstellen oder Teilflächen unter der x-Achse?"])]);
 H2("ver-b","Gruppe B · b) Flächeninhalt",[
@@ -973,13 +973,15 @@ const L=(l,t)=>({l:l?K(l):"",t:t||""});
 C.push({id:"zer",heft:2,tit:"Gruppe A: Zerlegen",online:null,build:()=>({title:"Gruppe A",steps:[{name:"Musterlösung",hints:[]}],solution:[
   L("g(x)=0:\\quad\\tfrac14x^2-\\tfrac54x=0\\quad\\Rightarrow\\quad x\\,\\big(\\tfrac14x-\\tfrac54\\big)=0\\quad\\Rightarrow\\quad x=0\\text{ oder }x=5","a) Nullstellen von g(x). Bei x = 5 wechselt der Graph von g(x) von unterhalb nach oberhalb der x-Achse."),
   L("A_1="+F65+"\\approx19{,}365","Fläche zwischen dem Graphen von f(x) und der x-Achse (GTR)."),
-  L(G05+"\\approx-5{,}208\\quad\\Rightarrow\\quad A_2=-"+G05+"\\approx5{,}208","Unter der x-Achse ist das Integral negativ. Statt Betragsstrichen schreiben wir ein Minus davor."),
+  L(G05+"\\approx-5{,}208\\quad\\Rightarrow\\quad A_2=\\left|"+G05+"\\right|\\approx5{,}208","Unter der x-Achse ist das Integral negativ. Für die Fläche nehmen wir den Betrag."),
   L("A_3="+G565+"\\approx1{,}688","Stück unter dem Graphen von g(x) über der x-Achse – es gehört nicht zu A."),
-  L("A="+F65+"-"+G05+"-"+G565,"b) A = A₁ + A₂ − A₃"),
-  L("A\\approx19{,}365+5{,}208-1{,}688\\approx22{,}89","Der Flächeninhalt beträgt etwa 22,89 FE."),
-  L("A="+F65+"-\\Big("+G05+"+"+G565+"\\Big)","c) Minus ausklammern"),
-  L("="+F65+"-"+G065,"Intervalle zusammenfügen"),
-  L("="+In(0,"6{,}5","\\big(f(x)-g(x)\\big)"),"Differenzregel. Es fällt auf: Man muss nur f(x) − g(x) integrieren – ein einziges Integral, ohne Nullstellen und Teilflächen.")]})});
+  L("A_{ges}=\\left|"+G05+"\\right|+"+F65+"-"+G565,"b) Gesamtfläche: A₂ + A₁ − A₃"),
+  L("A_{ges}\\approx\\left|-5{,}208\\right|+19{,}365-1{,}688\\approx22{,}89","Der Flächeninhalt beträgt etwa 22,89 FE."),
+  L("A_{ges}=\\left|"+G05+"\\right|+"+F65+"-"+G565,"c) Ausgangsterm aus b)."),
+  L("=-"+G05+"-"+G565+"+"+F65,"Vereinfacht: Betrag umgeschrieben – das Integral ist negativ, also |…| = −… . Dann umsortiert: die Integrale über g(x) nach vorn."),
+  L("=-\\Big("+G065+"\\Big)+"+F65,"Intervalle zusammenfügen: Von 0 bis 5 und von 5 bis 6,5 ergibt von 0 bis 6,5."),
+  L("="+F65+"-\\Big("+G065+"\\Big)","Umsortieren."),
+  L("="+In(0,"6{,}5","\\big(f(x)-g(x)\\big)"),"Summen-/Differenzregel. Es fällt auf: Man muss nur f(x) − g(x) integrieren – ein einziges Integral, ohne Nullstellen und Teilflächen.")]})});
 C.push({id:"ver",heft:2,tit:"Gruppe B: Verschieben",online:null,build:()=>({title:"Gruppe B",steps:[{name:"Musterlösung",hints:[]}],solution:[
   L("","a) Nach dem Verschieben liegen beide Graphen zwischen 0 und 6,5 ganz über der x-Achse. Man braucht keine Nullstellen und keine Teilflächen unter der x-Achse."),
   L("A="+In(0,"6{,}5","\\big(f(x)+2\\big)")+"-"+In(0,"6{,}5","\\big(g(x)+2\\big)"),"b) Fläche unter f(x) + 2 minus Fläche unter g(x) + 2 (GTR)."),
