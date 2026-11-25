@@ -876,7 +876,7 @@ const ownForm='<p class="pmini">Leere Felder zählen als 0.</p>'+["f","g"].map(n
   '<div class="row">Intervall (freiwillig): von <input class="fin s" id="oa" inputmode="decimal"> bis <input class="fin s" id="ob" inputmode="decimal"></div>';
 
 window.FL={buildEin,buildWerk,buildRech,analyse,pairGraph,wGraph,EIN_AB,SPECIAL};
-if(document.getElementById("tabs"))startHeft({key:"flaechenheft-v1",pdf:[["Heft 1: Einstieg (3 Seiten)","https://hubi-bot.github.io/Frau-Huber/flaeche-heft1.pdf"],["Heft 2: Strategieentwicklung (5 Seiten)","https://hubi-bot.github.io/Frau-Huber/flaeche-heft2.pdf"],["Heft 3: Strategieplanung und Vertiefung (7 Seiten)","https://hubi-bot.github.io/Frau-Huber/flaeche-goodnotes.pdf"]],
+if(document.getElementById("tabs"))startHeft({key:"flaechenheft-v1",pdf:[["Heft 1: Einstieg (3 Seiten)","https://hubi-bot.github.io/Frau-Huber/flaeche-heft1.pdf"],["Heft 2: Strategieentwicklung (5 Seiten)","https://hubi-bot.github.io/Frau-Huber/flaeche-heft2.pdf"],["Heft 3: Strategieplanung und Vertiefung (6 Seiten)","https://hubi-bot.github.io/Frau-Huber/flaeche-goodnotes.pdf"]],
   route(h){h=h.toLowerCase();let m;
     if((m=h.match(/^einstieg-([abc])$/)))return{kind:"ein",spec:Object.assign({l:1},EIN_AB[m[1]])};
     if(h==="einstieg")return{kind:"ein",level:1};
@@ -1062,16 +1062,21 @@ const W3d=(a,b,neg)=>plot3({x0:-2.6,x1:4.6,y0:-19,y1:19,vl:[a,b],
   curves:[{fn:W3.d,col:"#16877a",w:2.6}].concat(neg?[{fn:ab3,a,b,col:"#16877a",dash:1,w:2}]:[]),
   labels:neg?[{x:2.4,y:-8,t:"−42,67",col:"var(--red)",size:15},{x:2.4,y:6.5,t:"|…| = 42,67",size:15},{x:-1.6,y:-11,t:"gestrichelt:",size:11},{x:-1.6,y:-14.5,t:"nach oben",size:11},{x:-1.6,y:-18,t:"geklappt",size:11},{x:-1.6,y:15.5,t:"d(x)",col:"#16877a",size:14}]
     :[{x:-1,y:2,t:"+6,67",size:15},{x:3.4,y:-13,t:"d(x)",col:"#16877a",size:14}]});
+const W3both=()=>plot3({x0:-2.6,x1:4.6,y0:-10,y1:14,vl:[-2,0,4],fills:[{a:-2,b:0,top:W3.f,bot:W3.g,fill:"var(--fill1)"},{a:0,b:4,top:W3.f,bot:W3.g,fill:"var(--fill2)"}],curves:[{fn:W3.f,col:"var(--fA)"},{fn:W3.g,col:"var(--fB)"}],labels:[{x:4.25,y:12.5,t:"f",col:"var(--fA)",size:15},{x:4.4,y:8,t:"g",col:"var(--fB)",size:15},{x:-1.2,y:7.3,t:"1",size:15},{x:2.1,y:2,t:"2",size:15}]});
+const W3dOnly=(a,b,mode)=>plot3({x0:-2.6,x1:4.6,y0:-19,y1:19,vl:[a,b],
+  fills:mode==="pos"?[{a,b,top:W3.d,bot:zero,fill:"var(--fill1)"}]:mode==="neg"?[{a,b,top:zero,bot:W3.d,fill:"hatch"}]:[{a,b,top:zero,bot:W3.d,fill:"hatch"},{a,b,top:ab3,bot:zero,fill:"var(--fill1)"}],
+  curves:[{fn:W3.d,col:"#16877a",w:2.6}].concat(mode==="flip"?[{fn:ab3,a,b,col:"#16877a",dash:1,w:2}]:[]),
+  labels:(mode==="pos"?[{x:-1,y:2,t:"+6,67",size:15}]:mode==="neg"?[{x:2.4,y:-8,t:"−42,67",col:"var(--red)",size:15}]:[{x:2.4,y:-8,t:"−42,67",col:"var(--red)",size:15},{x:2.4,y:6.5,t:"42,67",size:15}]).concat([{x:-1.6,y:15.5,t:"d(x)",col:"#16877a",size:14}])});
+const P3=(h,fig,txt)=>({h,fig,txt});
 C.push({id:"warum3",heft:3,tit:"Warum ist egal, welcher Graph oben liegt?",online:null,
-  build:()=>({title:"Warum ist egal, welcher Graph oben liegt?",steps:[{name:"Teilfläche 1",hints:[]},{name:"Teilfläche 2",hints:[]},{name:"Fazit",hints:[]}],solution:[],
-    info:si=>(si===0?'<p>Wir schauen uns die beiden Teilflächen aus a) nacheinander an – mit der Differenzfunktion '+nw("d(x)=f(x)-g(x)=x^3-2x^2-8x")+'.</p>':"")+[
-      '<div class="merk" style="max-width:440px;margin:0 auto"><h3 style="margin:0 0 6px">Teilfläche 1: von −2 bis 0</h3>'+W3fg(-2,0,"var(--fill1)",{x:-1.2,y:12.6,t:"f oben",size:14})+
-      '<p style="margin:8px 0">f liegt oben, also ist '+nw("d(x)=f(x)-g(x)>0")+'. Der Graph der Differenzfunktion verläuft <b>über</b> der x-Achse:</p>'+W3d(-2,0,0)+
-      '<p style="margin:8px 0 4px">'+nw("\\int_{-2}^{0}d(x)\\,dx\\approx6{,}67")+' ist <b>positiv</b>.</p><p style="margin:0">'+nw("\\left|6{,}67\\right|=6{,}67")+' – der Betrag <b>ändert nichts</b>.</p></div>',
-      '<div class="merk" style="max-width:440px;margin:0 auto"><h3 style="margin:0 0 6px">Teilfläche 2: von 0 bis 4</h3>'+W3fg(0,4,"var(--fill2)",{x:2.2,y:12.6,t:"g oben",size:14})+
-      '<p style="margin:8px 0">g liegt oben, also ist '+nw("d(x)=f(x)-g(x)<0")+'. Der Graph der Differenzfunktion verläuft <b>unter</b> der x-Achse:</p>'+W3d(0,4,1)+
-      '<p style="margin:8px 0 4px">'+nw("\\int_{0}^{4}d(x)\\,dx\\approx-42{,}67")+' ist <b>negativ</b>.</p><p style="margin:0">'+nw("\\left|-42{,}67\\right|=42{,}67")+' – der Betrag macht das Ergebnis <b>positiv</b>. Im Bild: Die Fläche unter der x-Achse wird nach oben geklappt (gestrichelt).</p></div>',
-      '<div class="merk" style="max-width:440px;margin:0 auto;border-color:var(--green);box-shadow:3px 3px 0 var(--green)"><b>Fazit</b>'+UL2(["Man rechnet <b>immer</b> mit "+nw("f(x)-g(x)")+" – egal, welcher Graph oben liegt.","Die Beträge sorgen dafür, dass negative Werte positiv werden. Positive Werte bleiben, wie sie sind.",nw("A=\\left|6{,}67\\right|+\\left|-42{,}67\\right|\\approx49{,}33"),"Wichtig: nur von Schnittstelle zu Schnittstelle! Dazwischen bleibt d(x) auf einer Seite der x-Achse."])+"</div>"][si]}),text:()=>""});
+  build:()=>({title:"Warum ist egal, welcher Graph oben liegt?",steps:[{name:"Erklärung",hints:[]}],solution:[],pages:[
+    P3("Die Ausgangslage",W3both(),'<p>Das ist die Fläche aus a). Sie besteht aus zwei Teilflächen:</p>'+UL2(["<b>Teilfläche 1</b> (blau, von −2 bis 0): Hier liegt <b>f</b> oben.","<b>Teilfläche 2</b> (rosa, von 0 bis 4): Hier liegt <b>g</b> oben."])+'<p>In Heft 2 haben Sie „oben minus unten“ gerechnet. Muss man also jedes Mal schauen, welcher Graph oben liegt? Das klären wir jetzt – erst Teilfläche 1, dann Teilfläche 2.</p>'),
+    P3("Teilfläche 1: f liegt oben",W3fg(-2,0,"var(--fill1)",{x:-1.2,y:12.6,t:"f oben",size:14}),'<p>Hier liegt <b>f</b> oben. „Oben minus unten“ ist also</p><p>'+nw("f(x)-g(x)=d(x)")+'</p><p>Das ist genau die Differenzfunktion. Der GTR liefert:</p><p>'+nw("\\int_{-2}^{0}d(x)\\,dx\\approx6{,}67")+'</p><p>Das ist der Inhalt der blauen Fläche.</p>'),
+    P3("Teilfläche 1: Was macht der Betrag?",W3dOnly(-2,0,"pos"),'<p>Im Bild sehen Sie den Graphen von d(x) (grün). Zwischen −2 und 0 verläuft er <b>über</b> der x-Achse.</p><p>Deshalb ist das Integral <b>positiv</b>: '+nw("+6{,}67")+'.</p><p>Der Betrag ändert daran nichts:</p><p>'+nw("\\left|6{,}67\\right|=6{,}67")+'</p>'),
+    P3("Teilfläche 2: g liegt oben",W3fg(0,4,"var(--fill2)",{x:2.2,y:12.6,t:"g oben",size:14}),'<p>Hier liegt <b>g</b> oben. „Oben minus unten“ wäre also</p><p>'+nw("g(x)-f(x)")+'</p><p>Damit liefert der GTR den Inhalt der rosa Fläche:</p><p>'+nw("\\int_{0}^{4}\\big(g(x)-f(x)\\big)\\,dx\\approx42{,}67")+'</p><p>Was passiert, wenn wir stattdessen <b>trotzdem</b> f(x) − g(x) = d(x) rechnen? Weiter auf der nächsten Seite.</p>'),
+    P3("Teilfläche 2: Wir rechnen trotzdem d(x) = f(x) − g(x)",W3dOnly(0,4,"neg"),'<p>Vergleichen Sie die beiden Terme:</p><p>'+nw("g(x)-f(x)")+'<br>'+nw("=-\\big(f(x)-g(x)\\big)")+'<br>'+nw("=-d(x)")+'</p><p>Sie unterscheiden sich nur im <b>Vorzeichen</b>. Im Bild: Zwischen 0 und 4 verläuft d(x) <b>unter</b> der x-Achse (rot schraffiert).</p><p>Deshalb kommt beim Integral dieselbe Zahl heraus – nur mit Minus:</p><p>'+nw("\\int_{0}^{4}d(x)\\,dx\\approx-42{,}67")+'</p>'),
+    P3("Teilfläche 2: Der Betrag klappt nach oben",W3dOnly(0,4,"flip"),'<p>Jetzt nehmen wir den Betrag:</p><p>'+nw("\\left|-42{,}67\\right|=42{,}67")+'</p><p>Das ist genau der Inhalt der rosa Fläche von vorhin.</p><p>Im Bild: Die rot schraffierte Fläche unter der x-Achse wird nach oben <b>geklappt</b> (gestrichelte Kurve, blaue Fläche). Das Minus verschwindet.</p><p>Also: Wir <b>dürfen</b> f(x) − g(x) rechnen, obwohl g oben liegt – der Betrag repariert das Vorzeichen.</p>'),
+    P3("Fazit",W3both(),'<p><b>Man rechnet immer mit d(x) = f(x) − g(x)</b> – egal, welcher Graph oben liegt.</p>'+UL2(["Liegt f oben: Integral positiv, der Betrag ändert nichts.","Liegt g oben: Integral negativ, der Betrag macht es positiv."])+'<p>'+nw("A=\\left|6{,}67\\right|+\\left|-42{,}67\\right|\\approx49{,}33")+'</p><p><b>Wichtig:</b> nur von Schnittstelle zu Schnittstelle – sonst heben sich positive und negative Teile auf.</p>')]}),text:()=>""});
 T3("ab20","b) Strategie selbst anwenden",{});
 T3("ueb1","Übung 1",{});
 T3("ueb2","Übung 2",{});
@@ -1102,7 +1107,7 @@ function showCheck(id){
 }
 function show(id,wantSol){
   const e=C.find(x=>x.id===id);if(!e){index();return}
-  const t=e.build(),ctx={hintLvl:0};let si=0;const lvl=t.steps.map(()=>0);
+  const t=e.build(),ctx={hintLvl:0};let si=0,pi=0;const lvl=t.steps.map(()=>0);
   document.documentElement.style.setProperty("--tab",["","var(--c4)","var(--c1)","var(--c2)"][e.heft]);
   function draw(){
     const st=t.steps[si],hs=typeof st.hints==="function"?st.hints({}):(st.hints||[]);ctx.hintLvl=lvl[si];
@@ -1110,6 +1115,7 @@ function show(id,wantSol){
     if(t.steps.length>1)h+='<ol class="phases">'+t.steps.map((s,i)=>'<li class="'+(i===si?"now":"")+'"><button class="chipb" data-s="'+i+'">'+(i+1)+" "+s.name+"</button></li>").join("")+"</ol>";
     if(t.graph)h+='<div class="fig hfigw">'+t.graph(ctx,si,null)+"</div>";
     if(t.info){h+=typeof t.info==="function"?t.info(si):t.info;if(typeof t.info==="function")h+='<div class="actions">'+(si>0?'<button class="btn" id="prevStep">◀ Zurück</button>':"")+(si<t.steps.length-1?'<button class="btn main" id="nextStep">Weiter ▶</button>':"")+"</div>"}
+    if(t.pages){const P=t.pages[pi];h+='<div class="merk"><h3 style="margin:0 0 8px">'+P.h+'</h3><div style="display:flex;flex-wrap:wrap;gap:14px;align-items:center"><div style="flex:1 1 250px;min-width:0">'+P.fig+'</div><div style="flex:1 1 220px;min-width:0">'+P.txt+'</div></div><div class="actions" style="margin-top:12px;justify-content:space-between;align-items:center"><button class="btn" id="pgPrev"'+(pi?"":" disabled")+'>◀ Zurück</button><span class="pmini">Seite '+(pi+1)+" von "+t.pages.length+'</span><button class="btn main" id="pgNext"'+(pi<t.pages.length-1?"":" disabled")+'>Weiter ▶</button></div></div>'}
     if(hs.length)h+='<div class="hintbox" aria-live="polite"><h4>💡 Gestufte Hilfen'+(t.steps.length>1?" zu Schritt "+(si+1)+" „"+st.name+"“":"")+" ("+lvl[si]+" von "+hs.length+")</h4>"+
       (lvl[si]?hs.slice(0,lvl[si]).map((x,i)=>'<div class="hl"><span class="hn">Hilfe '+(i+1)+":</span>"+x+"</div>").join(""):'<p class="pmini">Versuchen Sie es zuerst allein. Öffnen Sie dann immer nur die nächste Hilfe.</p>')+
       '<div class="actions" style="margin-top:6px">'+(lvl[si]<hs.length?'<button class="btn help" id="more">💡 Hilfe '+(lvl[si]+1)+" zeigen</button>":'<span class="pmini">Mehr Hilfen gibt es zu diesem Schritt nicht.</span>')+"</div></div>";
@@ -1117,6 +1123,7 @@ function show(id,wantSol){
     root.innerHTML=h;renderK(root);
     $$(".chipb",root).forEach(b=>b.onclick=()=>{si=+b.dataset.s;draw()});
     const m=$("#more");if(m)m.onclick=()=>{lvl[si]++;draw()};
+    const pp=$("#pgPrev"),pn=$("#pgNext");if(pp)pp.onclick=()=>{pi=Math.max(0,pi-1);draw()};if(pn)pn.onclick=()=>{pi=Math.min(t.pages.length-1,pi+1);draw()};
     const ns=$("#nextStep");if(ns)ns.onclick=()=>{si++;draw();root.scrollIntoView({behavior:"smooth"})};const ps=$("#prevStep");if(ps)ps.onclick=()=>{si--;draw()};
     $("#solb").onclick=()=>UNL[e.solH||0]?sol():ask();
   }
