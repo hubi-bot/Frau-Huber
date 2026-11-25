@@ -959,13 +959,17 @@ H2("zer-c","Gruppe A · c) Rechenregeln",[REG,
   HB("Vorgehen",["Betrag umschreiben: Das Integral von 0 bis 5 ist negativ, also "+K("\\left|"+G05+"\\right|=-"+G05)+".","Umsortieren: die beiden Integrale über g(x) nach vorn, nebeneinander.","Intervalle zusammenfügen: Aus den beiden Integralen über g(x) wird eines von 0 bis 6,5.","Noch einmal umsortieren, dann die Summen-/Differenzregel: zwei Integrale mit gleichen Grenzen → ein Integral."]),
   HB("Was fällt auf?",["Am Ende bleibt ein <b>einziges</b> Integral übrig.","Welcher Term steht darin? Was müssen Sie also nur noch integrieren?"])]);
 H2("ver-a","Gruppe B · a) Vorteil",[HB("Schauen Sie genau hin",["Wo liegen die verschobenen Graphen zwischen x = 0 und x = 6,5?","Liegt jetzt alles <b>über</b> der x-Achse?","Brauchen Sie dann noch Nullstellen oder Teilflächen unter der x-Achse?"])]);
-H2("ver-b","Gruppe B · b) Flächeninhalt per Hand",[
-  "<b>Welche Flächen?</b>"+VF+UL2(["A = Fläche unter f(x) + 2 <b>minus</b> Fläche unter g(x) + 2","Grenzen: 0 und 6,5"]),
-  HB("Stammfunktionen",[K("f(x)+2=-\\tfrac14x^2+2x+2")+" und "+K("g(x)+2=\\tfrac14x^2-\\tfrac54x+2"),"Exponent um 1 erhöhen, durch den neuen Exponenten teilen.","Die Zahl +2 wird zu "+K("2x")+"."]),
-  HB("So dokumentieren",["Jedes Integral einzeln: "+K("F(6{,}5)-F(0)=\\big[\\ldots\\big]-\\big[\\ldots\\big]"),"In jede eckige Klammer die Stammfunktion mit eingesetzter Zahl, dann ausrechnen.","Zum Schluss: "+K("A=")+" erstes Integral − zweites Integral"])],
+const VR=(c)=>{const h=t=>c?"\\textcolor{#cf2f2a}{"+t+"}":t,W=x=>'<span style="display:inline-block;max-width:100%;overflow-x:auto;white-space:nowrap;vertical-align:middle">'+x+"</span>";return[
+  K(In(0,"6{,}5","\\big(f(x)+2\\big)")+"=F(6{,}5)-F(0)=\\Big[-\\tfrac{1}{12}\\cdot6{,}5^3+6{,}5^2"+h("+2\\cdot6{,}5")+"\\Big]-\\Big[0\\Big]"),
+  K(In(0,"6{,}5","\\big(g(x)+2\\big)")+"=G(6{,}5)-G(0)=\\Big[\\tfrac{1}{12}\\cdot6{,}5^3-\\tfrac58\\cdot6{,}5^2"+h("+2\\cdot6{,}5")+"\\Big]-\\Big[0\\Big]"),
+  K("A=\\Big[-22{,}885+42{,}25"+h("+13")+"\\Big]-\\Big[22{,}885-26{,}406"+h("+13")+"\\Big]\\approx22{,}89")].map(W)};
+H2("ver-b","Gruppe B · b) Flächeninhalt",[
+  "<b>Welche Flächen?</b>"+VF+UL2(["A = Fläche unter f(x) + 2 <b>minus</b> Fläche unter g(x) + 2","Grenzen: 0 und 6,5","Beide Integrale mit dem GTR"]),
+  HB("So dokumentieren",[K("A="+In(0,"6{,}5","\\big(f(x)+2\\big)")+"-"+In(0,"6{,}5","\\big(g(x)+2\\big)")+"=\\ldots")])],
   {chk:{v:A2,tol:.01,tips:[[32.365,"Das ist nur die Fläche unter dem Graphen von f(x) + 2. Ziehen Sie die Fläche unter g(x) + 2 ab."],[9.479,"Das ist nur die Fläche unter dem Graphen von g(x) + 2."]]}});
 H2("ver-c","Gruppe B · c) Einfluss der Verschiebung",[
-  HB("Schauen Sie in Ihre Rechnung aus b)",["Woher kommt in beiden Stammfunktionen der Summand "+K("2x")+"?","Welche Zahl steht dadurch in <b>beiden</b> eckigen Klammern bei der Grenze 6,5?","Was passiert mit diesen Zahlen, wenn Sie die beiden Integrale voneinander abziehen?"]),
+  HB("Schauen Sie in die Rechnung im Heft",["Mit "+K("F(x)=-\\tfrac{1}{12}x^3+x^2+2x")+" und "+K("G(x)=\\tfrac{1}{12}x^3-\\tfrac58x^2+2x")+".","Woher kommt in beiden Stammfunktionen der Summand "+K("2x")+"?","Welche Zahl steht dadurch in <b>beiden</b> eckigen Klammern?"]),
+  "<b>Hier ist es rot markiert</b>"+UL2(VR(1).concat(["Was passiert mit den beiden roten Zahlen, wenn man die Integrale voneinander abzieht?"])),
   HB("Formulieren",["Beginnen Sie so: „Durch die Verschiebung um 2 …“","Vergleichen Sie Ihr A mit dem A der Gruppe A (≈ 22,89)."])]);
 H2("ver-d","Gruppe B · d) Mit f(x) − g(x) rechnen",[
   HB("Differenz bilden",["Klammern setzen: "+K("f(x)-g(x)=\\big(-\\tfrac14x^2+2x\\big)-\\big(\\tfrac14x^2-\\tfrac54x\\big)"),"Minus vor der Klammer dreht beide Vorzeichen.","x² zu x², x zu x zusammenfassen."]),
@@ -990,16 +994,9 @@ C.push({id:"zer",heft:2,tit:"Gruppe A: Zerlegen",online:null,build:()=>({title:"
   L("="+In(0,"6{,}5","\\big(f(x)-g(x)\\big)"),"Summen-/Differenzregel. Es fällt auf: Man muss nur f(x) − g(x) integrieren – ein einziges Integral, ohne Nullstellen und Teilflächen.")]})});
 C.push({id:"ver",heft:2,tit:"Gruppe B: Verschieben",online:null,build:()=>({title:"Gruppe B",steps:[{name:"Musterlösung",hints:[]}],solution:[
   L("","a) Nach dem Verschieben liegen beide Graphen zwischen 0 und 6,5 ganz über der x-Achse. Man braucht keine Nullstellen und keine Teilflächen unter der x-Achse."),
-  L("A="+In(0,"6{,}5","\\big(f(x)+2\\big)")+"-"+In(0,"6{,}5","\\big(g(x)+2\\big)"),"b) Fläche unter f(x) + 2 minus Fläche unter g(x) + 2."),
-  L("F(x)=-\\tfrac{1}{12}x^3+x^2+2x","Stammfunktion zu f(x) + 2 = −¼x² + 2x + 2. Aus +2 wird 2x."),
-  L(In(0,"6{,}5","\\big(f(x)+2\\big)")+"=F(6{,}5)-F(0)=\\Big[-\\tfrac{1}{12}\\cdot6{,}5^3+6{,}5^2+2\\cdot6{,}5\\Big]-\\Big[-\\tfrac{1}{12}\\cdot0^3+0^2+2\\cdot0\\Big]","Grenzen einsetzen."),
-  L("=\\Big[-22{,}885+42{,}25+13\\Big]-\\Big[0\\Big]",""),
-  L("\\approx32{,}365",""),
-  L("G(x)=\\tfrac{1}{12}x^3-\\tfrac58x^2+2x","Stammfunktion zu g(x) + 2 = ¼x² − 5/4 x + 2. Auch hier wird aus +2 der Summand 2x."),
-  L(In(0,"6{,}5","\\big(g(x)+2\\big)")+"=G(6{,}5)-G(0)=\\Big[\\tfrac{1}{12}\\cdot6{,}5^3-\\tfrac58\\cdot6{,}5^2+2\\cdot6{,}5\\Big]-\\Big[\\tfrac{1}{12}\\cdot0^3-\\tfrac58\\cdot0^2+2\\cdot0\\Big]","Grenzen einsetzen."),
-  L("=\\Big[22{,}885-26{,}406+13\\Big]-\\Big[0\\Big]",""),
-  L("\\approx9{,}479",""),
-  L("A\\approx32{,}365-9{,}479\\approx22{,}89","Der Flächeninhalt beträgt etwa 22,89 FE – genauso viel wie bei Gruppe A."),
+  L("A="+In(0,"6{,}5","\\big(f(x)+2\\big)")+"-"+In(0,"6{,}5","\\big(g(x)+2\\big)"),"b) Fläche unter f(x) + 2 minus Fläche unter g(x) + 2 (GTR)."),
+  L("A\\approx32{,}365-9{,}479\\approx22{,}89","Mit dem GTR. Der Flächeninhalt beträgt etwa 22,89 FE – genauso viel wie bei Gruppe A."),
+  {l:VR(1).join("<br>"),t:""},
   L("","c) In beiden Stammfunktionen steht durch die Verschiebung der Summand 2x. An der Grenze 6,5 steht deshalb in beiden eckigen Klammern +13. Beim Abziehen der Integrale hebt sich das auf: 13 − 13 = 0. Die Verschiebung um 2 ändert A also nicht. (Das gilt für jede Verschiebung um eine Konstante.)"),
   L("f(x)-g(x)=\\big(-\\tfrac14x^2+2x\\big)-\\big(\\tfrac14x^2-\\tfrac54x\\big)=-\\tfrac12x^2+\\tfrac{13}{4}x","d) Differenz bilden. Minus vor der Klammer dreht beide Vorzeichen."),
   L(In(0,"6{,}5","\\big(f(x)-g(x)\\big)")+"\\approx22{,}89","Mit dem GTR. Das ist genau das Ergebnis aus b)."),
