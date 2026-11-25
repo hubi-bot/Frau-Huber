@@ -964,7 +964,7 @@ const ownForm='<p class="pmini">Leere Felder zählen als 0.</p>'+["f","g"].map(n
   '<div class="row">Intervall (freiwillig): von <input class="fin s" id="oa" inputmode="decimal"> bis <input class="fin s" id="ob" inputmode="decimal"></div>';
 
 window.FL={buildEin,buildWerk,buildRech,analyse,pairGraph,wGraph,EIN_AB,SPECIAL};
-if(document.getElementById("tabs"))startHeft({key:"flaechenheft-v1",pdf:[["Heft 1: Einstieg (3 Seiten)","https://hubi-bot.github.io/Frau-Huber/flaeche-heft1.pdf"],["Heft 2: Strategieentwicklung (5 Seiten)","https://hubi-bot.github.io/Frau-Huber/flaeche-heft2.pdf"],["Heft 3: Strategieplanung und Vertiefung (11 Seiten)","https://hubi-bot.github.io/Frau-Huber/flaeche-goodnotes.pdf"]],
+if(document.getElementById("tabs"))startHeft({key:"flaechenheft-v1",pdf:[["Heft 1: Einstieg (3 Seiten)","https://hubi-bot.github.io/Frau-Huber/flaeche-heft1.pdf"],["Heft 2: Strategieentwicklung (5 Seiten)","https://hubi-bot.github.io/Frau-Huber/flaeche-heft2.pdf"],["Heft 3: Strategieplanung und Vertiefung (13 Seiten)","https://hubi-bot.github.io/Frau-Huber/flaeche-goodnotes.pdf"]],
   route(h){h=h.toLowerCase();let m;
     if((m=h.match(/^einstieg-([abc])$/)))return{kind:"ein",spec:Object.assign({l:1},EIN_AB[m[1]])};
     if(h==="einstieg")return{kind:"ein",level:1};
