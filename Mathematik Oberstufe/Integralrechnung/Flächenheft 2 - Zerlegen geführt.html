@@ -178,7 +178,7 @@ function part(P){
       if(ok&&placed.length<PZ.lines.length){show(false,"Bis hierhin stimmt alles. Der Beweis endet erst mit der rechten Seite.");return}
       if(!ok){show(false,UL(ms));return}
       show(true,"<b>Geschafft!</b> Begründungen:"+UL(PZ.why.map((w,i)=>"Zeile "+(i+2)+": "+w))+"Also gilt: Man muss nur <b>f(x) − g(x)</b> integrieren.");win()};
-    P.hints=[UL(["Zuerst die beiden Integrale über g(x) zusammenbringen: Minus ausklammern."]),UL(["Dann: Intervalle zusammenfügen (0 bis 5 und 5 bis 6,5).","Zum Schluss die Differenzregel: gleiche Grenzen → ein Integral."])];
+    P.hints=[UL(["Zuerst den Betrag umschreiben: Das Integral von 0 bis 5 ist negativ, also "+K("\\left|"+G05+"\\right|=-"+G05)+".","Dann umsortieren: die beiden Integrale über g(x) nach vorn, nebeneinander."]),UL(["Intervalle zusammenfügen: 0 bis 5 und 5 bis 6,5 ergibt 0 bis 6,5.","Noch einmal umsortieren: das Integral über f(x) nach vorn.","Zum Schluss die Summen-/Differenzregel: gleiche Grenzen → ein Integral."])];
     const b=document.createElement("button");b.className="btn help hb";b.type="button";b.textContent="💡 Hilfe";$(".bar",el).appendChild(b);
     b.onclick=()=>{if(hl<P.hints.length)hl++;hs.style.display="block";hs.innerHTML=P.hints.slice(0,hl).map((x,i)=>'<div class="hl"><span class="hn">Hilfe '+(i+1)+':</span>'+x+'</div>').join("");R(hs)};
   }else $(".chk",el).onclick=()=>{
