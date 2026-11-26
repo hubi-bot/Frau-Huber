@@ -72,3 +72,8 @@ kohl-chat | Chemie Klasse 6/Säuren und Laugen/Chat – Rotkraut oder Blaukraut.
 flaeche-gefuehrt | Mathematik Oberstufe/Integralrechnung/Flächenheft 2 - Zerlegen geführt.html
 themenfinder | Forensik/Facharbeit/Themenfinder_Forensik.html
 flaeche-gefuehrt3 | Mathematik Oberstufe/Integralrechnung/Flächenheft 3 - Einstieg geführt.html
+
+# Forensik – Daktyloskopie
+finger-muster | Forensik/Daktyloskopie/Station 1 - Fingerabdrücke untersuchen.html
+finger-sichern | Forensik/Daktyloskopie/Station 2 - Fingerabdrücke sichern.html
+finger-ninhydrin | Forensik/Daktyloskopie/Station 3 - Ninhydrin-Tauchverfahren.html

@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Station 3 – Ninhydrin-Tauchverfahren · Daktyloskopie</title>
+<meta name="description" content="Station 3 · Unsichtbare Spuren auf Papier chemisch sichtbar machen">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Lexend:wght@400;600;700;800&family=Special+Elite&display=swap" rel="stylesheet">
+<style>:root{
+  --desk:#0f121a; --desk2:#171c28; --ink:#e9edf5; --ink-dim:#a6b0c4;
+  --paper:#ecdfbd; --paper2:#e3d3aa; --paper-ink:#2a2418; --paper-dim:#5f5440; --paper-line:#cdb98a;
+  --tape:#f6c915; --tape-dark:#141414;
+  --red:#c8322b; --green:#1f8a4c; --pink:#ff6fb5; --pink-deep:#d6267f;
+  --mark:#fff09a;
+  --accent:#ff6fb5; --accent-soft:rgba(255,111,181,.18);
+  --radius:12px;
+  --shadow:0 18px 40px rgba(0,0,0,.45);
+  --type:'Special Elite','Courier New',monospace;
+  --text:'Lexend',system-ui,sans-serif;
+}
+@media (prefers-color-scheme: light){
+  :root{ --desk:#d9dde4; --desk2:#c9ced8; --ink:#1d2230; --ink-dim:#4c5568; --shadow:0 14px 30px rgba(20,25,40,.25); }
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%; overflow-x:hidden}
+.tapewrap{overflow:hidden; padding:6px 0 4px}
+body{
+  margin:0; font-family:var(--text); color:var(--ink); line-height:1.55;
+  background:
+    radial-gradient(1200px 600px at 85% -10%, var(--accent-soft), transparent 60%),
+    radial-gradient(900px 500px at -10% 110%, rgba(246,201,21,.07), transparent 60%),
+    var(--desk);
+  min-height:100vh; overflow-x:hidden;
+}
+body::before{ /* großer Fingerabdruck als Wasserzeichen */
+  content:""; position:fixed; right:-160px; bottom:-140px; width:620px; height:760px;
+  background-image:var(--fp-bg); background-size:contain; background-repeat:no-repeat;
+  opacity:.07; pointer-events:none; z-index:0; transform:rotate(-18deg);
+}
+a{color:var(--accent)}
+.wrap{max-width:1080px; margin:0 auto; padding:0 16px 60px; position:relative; z-index:1}
+
+/* Absperrband */
+.tape{position:relative; height:46px; margin:0 -40px 0; overflow:hidden; transform:rotate(-1.2deg); margin-top:14px;
+  background:var(--tape); box-shadow:0 6px 16px rgba(0,0,0,.35);
+  border-top:5px solid var(--tape-dark); border-bottom:5px solid var(--tape-dark)}
+.tape span{display:block; white-space:nowrap; font-family:'Black Ops One',var(--type); font-size:20px; letter-spacing:.12em;
+  color:var(--tape-dark); line-height:36px; animation:tape 40s linear infinite}
+@keyframes tape{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* Kopf / Fallakte */
+header.case{display:grid; grid-template-columns:auto 1fr auto; gap:18px; align-items:center; margin:26px 0 18px}
+.qrbtn{width:52px; height:52px; border-radius:10px; border:2px solid var(--ink); background:var(--desk2); color:var(--ink);
+  font:700 13px var(--text); cursor:pointer; box-shadow:3px 3px 0 var(--ink); display:grid; place-items:center}
+.qrbtn:active{transform:translate(3px,3px); box-shadow:none}
+.casefile{position:relative; background:var(--paper); color:var(--paper-ink); border-radius:4px 14px 6px 6px; padding:16px 22px 16px;
+  box-shadow:var(--shadow); transform:rotate(-.6deg); border:1px solid #b9a476}
+.casefile::before{content:""; position:absolute; top:-14px; left:24px; width:150px; height:18px; background:var(--paper2);
+  border-radius:8px 8px 0 0; border:1px solid #b9a476; border-bottom:none}
+.casefile .no{font-family:var(--type); font-size:13px; letter-spacing:.08em; color:var(--paper-dim)}
+.casefile h1{font-family:var(--type); font-weight:400; font-size:clamp(24px,4.2vw,40px); line-height:1.1; margin:4px 0 6px}
+.casefile .sub{font-size:15px; color:var(--paper-dim); margin:0}
+.casefile .clip{position:absolute; top:-18px; right:46px; width:22px; height:64px; border:4px solid #9aa3ad; border-radius:12px; border-bottom-color:transparent}
+.casefile .stamp-top{position:absolute; right:18px; bottom:10px; font-family:'Black Ops One',var(--type); color:var(--accent); opacity:.85;
+  border:3px solid currentColor; padding:2px 10px; border-radius:6px; transform:rotate(-8deg); font-size:16px; letter-spacing:.08em}
+.progress{display:grid; place-items:center; text-align:center; font-size:12px; color:var(--ink-dim)}
+.ring{width:84px; height:84px}
+.ring circle{fill:none; stroke-width:9}
+.ring .bg{stroke:rgba(127,127,127,.25)} .ring .fg{stroke:var(--accent); stroke-linecap:round; transition:stroke-dashoffset .6s}
+.ring text{font:700 20px var(--text); fill:var(--ink)}
+
+/* Reiter */
+nav.tabs{display:flex; gap:6px; flex-wrap:wrap; margin:8px 0 0; padding-left:6px}
+nav.tabs button{font:600 15px var(--text); padding:10px 16px 12px; border:1px solid #b9a476; border-bottom:none; cursor:pointer;
+  border-radius:12px 12px 0 0; background:var(--paper2); color:var(--paper-dim); position:relative; top:2px; opacity:.8}
+nav.tabs button[aria-selected="true"]{background:var(--paper); color:var(--paper-ink); opacity:1; top:1px; box-shadow:inset 0 4px 0 var(--accent)}
+nav.tabs button .done{color:var(--green); font-weight:800}
+.sheet{background:var(--paper); color:var(--paper-ink); border:1px solid #b9a476; border-radius:0 12px 12px 12px; box-shadow:var(--shadow);
+  padding:24px clamp(16px,3.5vw,36px) 30px; position:relative;
+  background-image:linear-gradient(transparent 31px, rgba(150,120,60,.13) 32px); background-size:100% 32px}
+.panel{display:none} .panel.active{display:block; animation:fade .35s ease}
+@keyframes fade{from{opacity:0; transform:translateY(6px)}to{opacity:1; transform:none}}
+.sheet h2{font-family:var(--type); font-weight:400; font-size:clamp(22px,3vw,30px); margin:0 0 6px}
+.sheet h3{font-family:var(--type); font-weight:400; font-size:21px; margin:26px 0 8px; display:flex; align-items:center; gap:10px}
+.sheet h3::before{content:""; width:14px; height:14px; background:var(--accent); border-radius:3px; transform:rotate(45deg); flex:none}
+.sheet p{margin:8px 0}
+.lead{font-size:17px}
+.muted{color:var(--paper-dim)}
+.grid{display:grid; gap:16px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
+
+/* Karten */
+.card{background:#fffaf0; border:1px solid var(--paper-line); border-radius:10px; padding:14px 16px; position:relative;
+  box-shadow:0 3px 0 rgba(90,70,30,.15)}
+.card h4{margin:0 0 6px; font-size:16px}
+.mission{background:#1b2130; color:#e9edf5; border-radius:12px; padding:16px 18px 16px 64px; position:relative; margin:14px 0;
+  border-left:6px solid var(--accent)}
+.mission::before{content:"🕵️"; position:absolute; left:16px; top:14px; font-size:30px}
+.mission b{color:var(--tape)}
+.warn{background:#fff3cd; border:2px solid #e0a800; border-radius:10px; padding:12px 16px; margin:12px 0}
+.danger{background:#fde2e0; border:2px solid var(--red); border-radius:10px; padding:12px 16px; margin:12px 0}
+.info{background:#e9f4ff; border:2px solid #4a8bd6; border-radius:10px; padding:12px 16px; margin:12px 0}
+.merke{background:var(--mark); border-radius:4px; padding:12px 16px; margin:14px 0; transform:rotate(-.4deg);
+  box-shadow:0 4px 10px rgba(0,0,0,.15); border-left:6px solid var(--accent)}
+.merke::before{content:"📌 Merke: "; font-weight:700}
+
+/* Beweismittel-Etikett (Material) */
+.tag{background:#fff; border:2px dashed #8b7a55; border-radius:8px 30px 30px 8px; padding:14px 22px 14px 40px; position:relative; margin:14px 0}
+.tag::before{content:""; position:absolute; left:14px; top:50%; width:12px; height:12px; margin-top:-6px; border-radius:50%; border:3px solid #8b7a55; background:var(--paper)}
+.tag .lbl{font-family:'Black Ops One',var(--type); color:var(--red); letter-spacing:.1em; font-size:14px}
+.tag ul{margin:6px 0 0; padding-left:20px; columns:2 220px}
+
+/* Spurenmarker-Schritte */
+ol.steps{list-style:none; padding:0; margin:14px 0; counter-reset:s}
+ol.steps li{counter-increment:s; display:grid; grid-template-columns:52px 1fr auto; gap:12px; align-items:start; padding:12px 12px; margin:10px 0;
+  background:#fffaf0; border:1px solid var(--paper-line); border-radius:10px; transition:background .3s}
+ol.steps li::before{content:counter(s); width:46px; height:40px; display:grid; place-items:end center; padding-bottom:3px;
+  font:800 18px var(--text); color:#111; background:var(--tape);
+  clip-path:polygon(50% 0,100% 100%,0 100%); filter:drop-shadow(0 2px 0 #9b7d00)}
+ol.steps li.ok{background:#e3f3e7; border-color:#8cc7a0}
+ol.steps li .chk{display:flex; align-items:center; gap:6px; font-size:13px; color:var(--paper-dim); cursor:pointer; white-space:nowrap}
+ol.steps li .chk input{width:22px; height:22px; accent-color:var(--green)}
+ol.steps li > div > b:first-child{display:block}
+.tip{font-size:14px; color:var(--paper-dim); margin-top:4px}
+.tip::before{content:"💡 "}
+
+/* Knöpfe */
+.btn{font:600 15px var(--text); padding:10px 16px; border-radius:10px; border:2px solid #1b1b1b; background:#fff; color:#1b1b1b;
+  cursor:pointer; box-shadow:3px 3px 0 #1b1b1b; margin:4px 6px 4px 0; display:inline-flex; gap:8px; align-items:center; text-decoration:none}
+.btn:active{transform:translate(3px,3px); box-shadow:none}
+.btn.primary{background:var(--accent); color:#fff; text-shadow:0 1px 1px rgba(0,0,0,.3)}
+.btn.small{padding:6px 10px; font-size:13px}
+.btn:disabled{opacity:.5; cursor:not-allowed}
+.row{display:flex; flex-wrap:wrap; gap:6px; align-items:center}
+
+/* Medien */
+.media{position:relative; width:100%; aspect-ratio:16/9; background:#0b0d12; border-radius:10px; overflow:hidden; border:3px solid #1b1b1b; box-shadow:5px 5px 0 #1b1b1b}
+.media iframe{position:absolute; inset:0; width:100%; height:100%; border:0}
+.polaroid{background:#fff; padding:10px 10px 8px; border-radius:3px; box-shadow:0 8px 18px rgba(0,0,0,.25); text-align:center; transition:transform .2s}
+.polaroid:nth-child(odd){transform:rotate(-1.5deg)} .polaroid:nth-child(even){transform:rotate(1.2deg)}
+.polaroid:hover{transform:rotate(0) scale(1.02)}
+.polaroid svg{width:100%; height:auto; background:#f7f3ea; border-radius:2px}
+.polaroid .cap{font-family:var(--type); font-size:16px; margin-top:6px}
+.polaroid .pct{font-size:13px; color:var(--paper-dim)}
+
+/* Aufgaben / Rückmeldung */
+.task{background:#fffaf0; border:2px solid var(--paper-line); border-radius:12px; padding:16px 18px; margin:18px 0; position:relative}
+.task > .tt{font-family:var(--type); font-size:19px; margin:0 0 6px}
+.q{padding:12px 0; border-top:1px dashed var(--paper-line)} .q:first-of-type{border-top:none}
+.q .qt{font-weight:600; margin-bottom:6px}
+.opts{display:grid; gap:6px}
+.opts label{display:flex; gap:10px; align-items:flex-start; padding:8px 12px; border:2px solid var(--paper-line); border-radius:10px; cursor:pointer; background:#fff}
+.opts label:hover{border-color:var(--accent)}
+.opts input{margin-top:4px; width:18px; height:18px; accent-color:var(--accent)}
+.right{border-color:var(--green)!important; background:#e6f5eb!important}
+.wrong{border-color:var(--red)!important; background:#fdeceb!important}
+.fb{margin-top:8px; padding:8px 12px; border-radius:8px; font-size:15px; display:none}
+.fb.show{display:block}
+.fb.good{background:#e6f5eb; color:#145c33; border-left:5px solid var(--green)}
+.fb.bad{background:#fdeceb; color:#8a1f1a; border-left:5px solid var(--red)}
+select, input[type=text], input[type=date], textarea{font:16px var(--text); color:#1c3fa0; background:#fff; border:2px solid var(--paper-line); border-radius:8px; padding:8px 10px; max-width:100%}
+select:focus, input:focus, textarea:focus, button:focus-visible{outline:3px solid var(--pink); outline-offset:2px}
+textarea{width:100%; min-height:96px; resize:vertical; line-height:1.5}
+.cloze{line-height:2.4}
+.cloze select{padding:4px 6px; margin:0 2px}
+
+/* Lehrer-Stempel */
+.stamp{position:fixed; left:50%; top:42%; z-index:90; pointer-events:none; font-family:'Black Ops One',var(--type);
+  font-size:clamp(40px,9vw,84px); color:var(--red); border:7px solid var(--red); border-radius:14px; padding:4px 26px;
+  transform:translate(-50%,-50%) rotate(-14deg) scale(2.2); opacity:0; mix-blend-mode:multiply; background:rgba(255,255,255,.35)}
+.stamp.go{animation:stamp 1.6s ease forwards}
+@keyframes stamp{0%{opacity:0; transform:translate(-50%,-50%) rotate(-14deg) scale(2.2)}15%{opacity:.95; transform:translate(-50%,-50%) rotate(-14deg) scale(1)}75%{opacity:.95}100%{opacity:0; transform:translate(-50%,-50%) rotate(-14deg) scale(1)}}
+
+/* Geschwärzter Hinweis */
+.redact{display:inline; background:#111; color:#111; border-radius:2px; cursor:pointer; padding:0 4px; transition:all .3s; user-select:none}
+.redact.open{background:var(--mark); color:var(--paper-ink); user-select:auto}
+.redact:not(.open)::after{content:" 🔒"; color:#fff; font-size:12px}
+
+/* Ordnen */
+.order{list-style:none; padding:0; margin:8px 0}
+.order li{display:flex; gap:8px; align-items:center; padding:8px 10px; margin:6px 0; background:#fff; border:2px solid var(--paper-line); border-radius:10px}
+.order li .txt{flex:1}
+.order li .nr{font:800 16px var(--text); width:28px; height:28px; border-radius:50%; background:var(--tape); color:#111; display:grid; place-items:center; flex:none}
+.order li button{width:38px; height:34px; border-radius:8px; border:2px solid #1b1b1b; background:#fff; cursor:pointer; font-size:16px}
+
+/* Tabelle */
+table.t{width:100%; border-collapse:collapse; background:#fff; border-radius:10px; overflow:hidden}
+table.t th, table.t td{border:1px solid var(--paper-line); padding:8px 10px; text-align:left; vertical-align:top}
+table.t th{background:var(--paper2); font-weight:600}
+.scroll-x{overflow-x:auto}
+
+/* Protokoll */
+.proto label.f{display:block; font-weight:600; margin:14px 0 4px}
+.proto .hint{font-weight:400; font-size:14px; color:var(--paper-dim)}
+.proto .two{display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:12px}
+.proto .two input{width:100%}
+.check-grade{background:#1b2130; color:#e9edf5; border-radius:12px; padding:14px 18px; margin-top:14px}
+.check-grade li{margin:4px 0}
+.saved{font-size:13px; color:var(--green); min-height:1em}
+.photo-prev img{max-width:100%; max-height:300px; border:4px solid #fff; box-shadow:0 6px 14px rgba(0,0,0,.25); margin-top:8px; transform:rotate(-1deg)}
+
+/* GHS */
+.ghs{display:flex; gap:14px; flex-wrap:wrap; margin:10px 0}
+.ghs figure{margin:0; text-align:center; width:120px; font-size:13px}
+.ghs svg{width:74px; height:74px}
+
+/* Footer */
+footer{margin-top:26px; color:var(--ink-dim); font-size:14px; text-align:center}
+footer .stations{display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-bottom:10px}
+footer .stations a{color:var(--ink); text-decoration:none; border:2px solid var(--ink-dim); padding:8px 14px; border-radius:999px; font-weight:600}
+footer .stations a.cur{background:var(--accent); border-color:var(--accent); color:#fff}
+
+/* Dialog QR */
+dialog{border:none; border-radius:16px; padding:22px; max-width:min(92vw,440px); text-align:center; background:#fff; color:#111}
+dialog::backdrop{background:rgba(0,0,0,.6)}
+#qrbox{display:inline-block; padding:10px; background:#fff}
+#qrbox img, #qrbox canvas{width:min(70vw,320px)!important; height:auto!important}
+.url{word-break:break-all; font-size:14px; color:#333; margin:10px 0}
+
+@media (max-width:640px){
+  header.case{grid-template-columns:auto 1fr; }
+  .progress{grid-column:1 / -1; grid-template-columns:auto auto; gap:10px; justify-content:start}
+  .ring{width:60px; height:60px}
+  .casefile .stamp-top{display:none}
+  nav.tabs button{padding:8px 10px 10px; font-size:14px}
+  ol.steps li{grid-template-columns:40px 1fr}
+  ol.steps li .chk{grid-column:2}
+  ol.steps li::before{width:36px; height:32px; font-size:15px}
+  .mission{padding-left:18px; padding-top:52px}
+}
+@media (prefers-reduced-motion: reduce){
+  *{animation:none!important; transition:none!important}
+}
+#printout{display:none}
+@media print{
+  body{background:#fff!important; color:#000}
+  body::before{display:none}
+  .wrap > *:not(#printout), .stamp, dialog{display:none!important}
+  #printout{display:block!important; font-family:var(--text); font-size:11.5pt; color:#000}
+  #printout h1{font-family:var(--type); font-size:20pt; margin:0 0 4pt}
+  #printout h2{font-size:13pt; margin:14pt 0 4pt; border-bottom:1px solid #999}
+  #printout .ans{white-space:pre-wrap; min-height:1.4em}
+  #printout img{max-width:9cm; max-height:9cm}
+  #printout table{border-collapse:collapse} #printout td, #printout th{border:1px solid #888; padding:3pt 6pt}
+}
+
+:root{--accent:#a24bd6; --accent-soft:#a24bd62e}</style>
+</head><body>
+<div class="tapewrap" aria-hidden="true"><div class="tape"><span>SPURENSICHERUNG ✦ TATORT ✦ NICHT BETRETEN ✦ DAKTYLOSKOPIE ✦ SPURENSICHERUNG ✦ TATORT ✦ NICHT BETRETEN ✦ DAKTYLOSKOPIE ✦ SPURENSICHERUNG ✦ TATORT ✦ NICHT BETRETEN ✦ DAKTYLOSKOPIE ✦ SPURENSICHERUNG ✦ TATORT ✦ NICHT BETRETEN ✦ DAKTYLOSKOPIE ✦ SPURENSICHERUNG ✦ TATORT ✦ NICHT BETRETEN ✦ DAKTYLOSKOPIE ✦ SPURENSICHERUNG ✦ TATORT ✦ NICHT BETRETEN ✦ DAKTYLOSKOPIE ✦ SPURENSICHERUNG ✦ TATORT ✦ NICHT BETRETEN ✦ DAKTYLOSKOPIE ✦ SPURENSICHERUNG ✦ TATORT ✦ NICHT BETRETEN ✦ DAKTYLOSKOPIE ✦ </span></div></div>
+<div class="wrap">
+<header class="case">
+  <button class="qrbtn" type="button" aria-label="QR-Code zu dieser Seite anzeigen" title="QR-Code">QR</button>
+  <div class="casefile"><div class="clip" aria-hidden="true"></div>
+    <div class="no">FALLAKTE DAK-03 · DAKTYLOSKOPIE</div>
+    <h1>Ninhydrin-Tauchverfahren</h1><p class="sub">Station 3 · Unsichtbare Spuren auf Papier chemisch sichtbar machen</p>
+    <div class="stamp-top" aria-hidden="true">STATION 3</div></div>
+  <div class="progress"><svg class="ring" viewBox="0 0 84 84" aria-hidden="true"><circle class="bg" cx="42" cy="42" r="36"/><circle class="fg" cx="42" cy="42" r="36" transform="rotate(-90 42 42)"/><text x="42" y="49" text-anchor="middle">0%</text></svg><span>Ermittlungs-<br>fortschritt</span></div>
+</header>
+<nav class="tabs" role="tablist"><button type="button" role="tab" aria-controls="p-sicher" aria-selected="false">⚠️ Sicherheit<span class="done"></span></button><button type="button" role="tab" aria-controls="p-versuch" aria-selected="false">🧪 Versuch<span class="done"></span></button><button type="button" role="tab" aria-controls="p-ausw" aria-selected="false">🧠 Auswertung<span class="done"></span></button><button type="button" role="tab" aria-controls="p-proto" aria-selected="false">📝 Mini-Protokoll<span class="done"></span></button></nav>
+<main class="sheet">
+<section class="panel" id="p-sicher" role="tabpanel">
+  <h2>Sicherheit zuerst!</h2>
+  <div class="mission"><b>Dein Auftrag:</b> Auf Papier versagt die Pulvermethode. Hier arbeitet die Spurensicherung mit <b>Chemie</b>: Ninhydrin färbt unsichtbare Fingerabdrücke violett. Bevor du beginnst, lies die Sicherheitshinweise und hake jeden Punkt ab.</div>
+  <div class="danger"><b>🥽 Schutzbrille und 🧤 Schutzhandschuhe sind bei dieser Station Pflicht</b> – vom Öffnen der Lösung bis zum Aufräumen.</div>
+
+  <h3>Gefahrstoffe in der Lösung</h3>
+  <p>Die Lösung ist schon fertig angesetzt: <b>0,1 g Ninhydrin</b>, <b>50 mL Ethanol</b> und <b>1,5 mL Essigsäure</b>.</p>
+  <div class="grid g3">
+    <div class="card"><h4>Ninhydrin <span class="muted">· Achtung</span></h4><div class="ghs" data-ghs="07"></div>Gesundheitsschädlich beim Verschlucken, reizt Haut, Augen und Atemwege. Färbt die Haut tagelang violett!</div>
+    <div class="card"><h4>Ethanol <span class="muted">· Gefahr</span></h4><div class="ghs" data-ghs="02 07"></div>Flüssigkeit und Dampf sind leicht entzündbar. Reizt die Augen.</div>
+    <div class="card"><h4>Essigsäure <span class="muted">· Gefahr</span></h4><div class="ghs" data-ghs="02 05"></div>Entzündbar. Konzentriert ätzend für Haut und Augen. In der Lösung stark verdünnt.</div>
+  </div>
+
+  <h3>Sicherheits-Check</h3>
+  <ol class="steps" data-id="s">
+    <li><div><b>Ich trage eine Schutzbrille.</b></div></li>
+    <li><div><b>Ich trage Schutzhandschuhe</b>, sobald ich mit der Lösung arbeite. (Den „Schwitz-Handschuh“ ziehe ich vorher aus.)</div></li>
+    <li><div><b>Keine offenen Flammen</b> in der Nähe. Ethanol ist leicht entzündbar.</div></li>
+    <li><div><b>Ich fasse das Papier nur mit der Pinzette an</b>, nie mit den Fingern.</div></li>
+    <li><div><b>Ich föhne erst, wenn das Papier abgetropft ist</b>, und halte den Föhn von der Petrischale fern. Die Petrischale ist dabei mit dem Deckel verschlossen.</div></li>
+    <li><div><b>Ich kenne die Entsorgung:</b> Reste der Lösung kommen in den Behälter für organische Lösemittelabfälle – nicht in den Ausguss.</div></li>
+  </ol>
+  <div class="row"><button class="btn primary" type="button" data-goto="p-versuch">Weiter zum Versuch ▶</button></div>
+</section>
+
+<section class="panel" id="p-versuch" role="tabpanel">
+  <h2>Versuch: Das Ninhydrin-Tauchverfahren</h2>
+  <div class="warn" id="safetyNag" hidden>⚠️ Dein Sicherheits-Check ist noch nicht vollständig. <a href="#" data-goto="p-sicher">Zum Sicherheits-Check</a></div>
+  <div class="tag"><div class="lbl">BEWEISMITTEL · MATERIAL</div>
+    <ul><li>Einweghandschuh (zum Schwitzen)</li><li>kleines Stück Kopierpapier</li><li>Bleistift</li><li>Ninhydrin-Lösung</li><li>Petrischale mit Deckel</li><li>Pinzette</li><li>Föhn</li><li>Schutzbrille, Schutzhandschuhe</li></ul></div>
+
+  <h3>Durchführung</h3>
+  <ol class="steps" data-id="v">
+    <li><div><b>Hand zum Schwitzen bringen.</b> Ziehe einen Einweghandschuh an und trage ihn etwa 10 Minuten. Darunter schwitzt deine Hand – genau das brauchen wir.<div class="tip">Nutze die Zeit: Lies schon den Auswertungsteil. Der Timer unten hilft dir.</div>
+      <div class="card" style="margin-top:8px;display:flex;gap:12px;align-items:center;flex-wrap:wrap"><span style="font:700 30px var(--type)" id="tm">10:00</span>
+        <button class="btn small" type="button" id="tmStart">▶ Start</button><button class="btn small" type="button" id="tmReset">↺</button><span id="tmMsg" class="muted"></span></div></div></li>
+    <li><div><b>Fingerabdruck setzen.</b> Handschuh ausziehen. Drücke einen Finger fest, aber ohne zu verrutschen, auf das Papierstück. Markiere die Stelle und schreibe deinen Namen mit <b>Bleistift</b> an den Rand.<div class="tip">Bleistift, weil Kugelschreiber-Tinte in der Lösung verlaufen kann.</div></div></li>
+    <li><div><b>Schutzausrüstung anlegen.</b> Jetzt Schutzbrille und Schutzhandschuhe anziehen.</div></li>
+    <li><div><b>Tauchbad vorbereiten.</b> Fülle so viel Ninhydrin-Lösung in die Petrischale, dass der Boden gut bedeckt ist. Flasche sofort wieder verschließen.</div></li>
+    <li><div><b>Eintauchen.</b> Nimm das Papier mit der Pinzette und tauche es für ein bis zwei Sekunden <b>vollständig</b> in die Lösung.</div></li>
+    <li><div><b>Herausnehmen und abtropfen.</b> Papier herausnehmen, über der Schale abtropfen lassen und auf eine Unterlage legen. Deckel auf die Petrischale. Kurz warten, bis das Ethanol größtenteils verdunstet ist.</div></li>
+    <li><div><b>Föhnen.</b> Föhne das Papier mit warmer Luft aus etwas Abstand. Die Wärme beschleunigt die Reaktion. Beobachte genau, was passiert!<div class="tip">Die Färbung kann einige Minuten dauern und wird oft noch nach Stunden kräftiger. Schau später noch einmal nach.</div></div></li>
+    <li><div><b>Dokumentieren.</b> Fotografiere dein Ergebnis und notiere deine Beobachtung.</div></li>
+    <li><div><b>Aufräumen.</b> Reste der Lösung in den Behälter für organische Lösemittelabfälle. Handschuhe ausziehen und entsorgen, Hände waschen.</div></li>
+  </ol>
+
+  <h3>Virtuelles Labor: Probelauf</h3>
+  <p class="muted">Hier kannst du den Ablauf vorher einmal ausprobieren. Klicke die Schritte in der richtigen Reihenfolge.</p>
+  <div class="card" data-task="sim">
+    <svg id="lab" viewBox="0 0 400 260" style="width:100%;max-width:520px;display:block;margin:auto" role="img" aria-label="Virtuelles Tauchbad">
+      <defs><linearGradient id="liq" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#fff7cf"/><stop offset="1" stop-color="#f2e7a8"/></linearGradient></defs>
+      <rect x="0" y="0" width="400" height="260" fill="#f7f3ea"/>
+      <ellipse cx="200" cy="215" rx="150" ry="28" fill="#d9dee6" stroke="#8892a0" stroke-width="2"/>
+      <ellipse cx="200" cy="212" rx="138" ry="22" fill="url(#liq)" opacity=".95"/>
+      <g id="paper" style="transition:transform 1s ease">
+        <rect x="150" y="40" width="100" height="120" fill="#fff" stroke="#c9c2b0" stroke-width="2"/>
+        <g id="fpPurple" opacity="0" style="transition:opacity .8s"></g>
+        <text x="158" y="152" font-size="10" fill="#777" font-family="Lexend">J. Muster</text>
+        <rect id="tw" x="196" y="0" width="8" height="48" fill="#8892a0" rx="3"/>
+      </g>
+      <ellipse cx="200" cy="214" rx="138" ry="22" fill="#f2e7a8" opacity=".55" pointer-events="none"/>
+      <g id="dryer" opacity="0" style="transition:opacity .4s">
+        <rect x="300" y="60" width="80" height="34" rx="14" fill="#d6267f"/><rect x="330" y="90" width="18" height="44" rx="6" fill="#a31c61"/>
+        <path id="air" d="M300 70 q-12 6 -24 0 t-24 0 M300 82 q-12 6 -24 0 t-24 0" stroke="#ff9f43" stroke-width="3" fill="none" stroke-dasharray="6 6"/>
+      </g>
+    </svg>
+    <div class="row" style="justify-content:center;margin-top:8px">
+      <button class="btn" type="button" data-sim="dip">⬇ Eintauchen</button>
+      <button class="btn" type="button" data-sim="out">⬆ Herausnehmen</button>
+      <button class="btn" type="button" data-sim="dry">💨 Föhnen</button>
+      <button class="btn small" type="button" data-sim="reset">↺ Neu</button>
+    </div>
+    <div class="fb show" id="simMsg" style="text-align:center">Das Papier hängt an der Pinzette. Was ist der erste Schritt?</div>
+    <span class="solvedflag" hidden>✅ Probelauf geschafft</span>
+  </div>
+  <div class="row"><button class="btn primary" type="button" data-goto="p-ausw">Weiter zur Auswertung ▶</button></div>
+</section>
+
+<section class="panel" id="p-ausw" role="tabpanel">
+  <h2>Auswertung: Warum wird der Abdruck violett?</h2>
+  <p class="lead">Ermittlungsbericht in fünf Schritten. Lies ihn genau – danach kannst du die Färbung erklären.</p>
+
+  <div class="grid g2">
+    <div class="card"><h4>① Die Spur: Aminosäuren im Schweiß</h4>Schweiß enthält neben Wasser und Salzen auch <b>Aminosäuren</b>. Beim Anfassen bleiben sie im Muster der Papillarleisten auf dem Papier zurück. Papier saugt sie auf und hält sie fest – deshalb lassen sich mit Ninhydrin sogar <b>mehrere Jahre alte</b> Spuren noch sichtbar machen.</div>
+    <div class="card"><h4>② Der Nachweis: Ninhydrin</h4><b>Ninhydrin</b> (2,2-Dihydroxy-1,3-indandion) ist ein farbloser Stoff, der sehr empfindlich auf Aminosäuren reagiert. Er sucht sich gezielt ihre <b>Aminogruppe (–NH₂)</b>.</div>
+    <div class="card"><h4>③ Die Reaktion</h4>Ninhydrin wirkt als <b>Oxidationsmittel</b>. Die Aminosäure gibt dabei Kohlenstoffdioxid ab (<b>Decarboxylierung</b>) und verliert ihre Aminogruppe (<b>oxidative Desaminierung</b>). Aus dem Rest der Aminosäure entsteht ein Aldehyd.</div>
+    <div class="card"><h4>④ Der Farbstoff: Ruhemanns Purpur</h4>Das <b>Stickstoff-Atom</b> der Aminosäure wird zur Brücke zwischen <b>zwei Ninhydrin-Resten</b>. So entsteht ein großes Farbstoff-Molekül: <b>Ruhemanns Purpur</b>, benannt nach Siegfried Ruhemann, der die Reaktion 1910 entdeckte.</div>
+  </div>
+  <div class="card" style="margin-top:16px"><h4>⑤ Warum gerade violett?</h4>
+    Im Farbstoff wechseln sich Einfach- und Doppelbindungen über das ganze Molekül ab. Ein so großes <b>konjugiertes System</b> verschluckt (absorbiert) sichtbares Licht – hier vor allem <b>gelbgrünes Licht</b> (um 570 nm). Unser Auge sieht dann die <b>Komplementärfarbe</b>, die übrig bleibt: <b>Violett/Purpur</b>.
+    <div style="display:flex;gap:6px;align-items:center;margin-top:10px;flex-wrap:wrap" aria-hidden="true">
+      <span style="flex:1;min-width:220px;height:22px;border-radius:6px;background:linear-gradient(90deg,#7a00ff,#0040ff,#00c0ff,#00d060,#c8f000,#ffe000,#ff8000,#ff0000);position:relative">
+        <span style="position:absolute;left:52%;top:-6px;bottom:-6px;width:13%;border:3px solid #111;border-radius:6px"></span></span>
+      <span>→ wird absorbiert → wir sehen</span><span style="width:40px;height:22px;border-radius:6px;background:#7b2d8e"></span></div>
+  </div>
+
+  <h3>Die Reaktionsgleichung</h3>
+  <div class="card" style="text-align:center"><b>2 Ninhydrin + Aminosäure → Ruhemanns Purpur + Aldehyd + CO₂ + 3 H₂O</b>
+    <img src="data:image/png;base64,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" alt="Strukturformeln: Reaktion von Ninhydrin mit einer Aminosäure zu Ruhemanns Purpur, im sauren und im neutralen Milieu" style="width:100%;max-width:760px;display:block;margin:12px auto 0;background:#fff;border-radius:6px">
+    <p class="muted" style="font-size:14px">Reaktion von Ninhydrin mit Aminosäuren: 1. im sauren Milieu (hellviolett/purpurfarben), 2. im neutralen Milieu (dunkelviolett/blau). Quelle: Versuchsvorschrift „Verwendung von Ninhydrin“, IfBZ Chemie, Universität Frankfurt/M.</p></div>
+  <div class="info">🍋 <b>Und die Essigsäure?</b> Die Säure beeinflusst, in welcher Form der Farbstoff vorliegt. Mit Essigsäure (sauer) erscheinen die Abdrücke <b>hellviolett/purpurfarben</b>. Ohne Säure (neutral) gibt der Farbstoff ein H⁺-Ion ab und die Spuren werden <b>dunkelviolett bis blau</b>.<br>🔥 <b>Und der Föhn?</b> Wärme beschleunigt die Reaktion. Ohne Wärme dauert es viel länger, bis die Farbe erscheint.</div>
+
+  <div class="task" data-kind="select" data-task="luecke3">
+    <p class="tt">🧩 Aufgabe 1: Erkläre die Färbung – fülle die Lücken.</p>
+    <p class="cloze">Im Schweiß befinden sich <select data-a="as" data-msg="Ninhydrin reagiert nicht mit Salz oder Fett, sondern mit Stoffen, die eine Aminogruppe haben."><option value="as">Aminosäuren</option><option value="salz">Salze</option><option value="fett">Fette</option></select>, die auf dem Papier zurückbleiben.
+    Ninhydrin reagiert mit ihrer <select data-a="amino"><option value="amino">Aminogruppe</option><option value="carboxy">Carboxygruppe</option><option value="ring">Benzolring</option></select>.
+    Dabei wirkt Ninhydrin als <select data-a="ox"><option value="ox">Oxidationsmittel</option><option value="red">Reduktionsmittel</option><option value="kat">Lösungsmittel</option></select>.
+    Die Aminosäure spaltet <select data-a="co2"><option value="co2">Kohlenstoffdioxid</option><option value="o2">Sauerstoff</option><option value="h2">Wasserstoff</option></select> ab.
+    Das <select data-a="n" data-msg="Überlege, welches Atom aus der Aminogruppe im Farbstoff wieder auftaucht."><option value="n">Stickstoff-Atom</option><option value="o">Sauerstoff-Atom</option><option value="c">Kohlenstoff-Atom</option></select> der Aminosäure verbindet <select data-a="2"><option value="2">zwei</option><option value="3">drei</option><option value="1">ein</option></select> Ninhydrin-Reste zum Farbstoff <select data-a="rp"><option value="rp">Ruhemanns Purpur</option><option value="ninblau">Ninhydrinblau</option><option value="chloro">Chlorophyll</option></select>.
+    Dieser absorbiert <select data-a="gg" data-msg="Wir sehen immer die Komplementärfarbe zum absorbierten Licht."><option value="gg">gelbgrünes</option><option value="violett">violettes</option><option value="rot">rotes</option></select> Licht, deshalb sehen wir Violett.</p>
+  </div>
+
+  <div class="task" id="mc3"><p class="tt">🧠 Aufgabe 2: Wissens-Check</p></div>
+
+  <div class="task">
+    <p class="tt">✍️ Aufgabe 3: Denk-Aufgaben für dein Protokoll</p>
+    <ol>
+      <li>Erkläre in eigenen Worten, warum der Fingerabdruck violett wird. Nutze die Begriffe <i>Aminosäure</i>, <i>Ninhydrin</i> und <i>Ruhemanns Purpur</i>.</li>
+      <li>Begründe, warum man bei diesem Versuch unbedingt Handschuhe tragen muss. <span class="muted">(Denk an deine eigene Haut!)</span></li>
+      <li>Vergleiche mit Station 2: Warum nimmt man für Papier Ninhydrin und nicht Pulver?</li>
+    </ol>
+    <p class="muted">Hinweis zu Frage 2: <span class="redact">Auch deine Haut enthält Aminosäuren und Eiweiße. Ninhydrin würde deine Finger violett färben – und deine Handschuh-freien Finger würden auf dem Papier neue Spuren hinterlassen.</span></p>
+  </div>
+  <div class="row"><button class="btn primary" type="button" data-goto="p-proto">Weiter zum Mini-Protokoll ▶</button></div>
+</section>
+
+<section class="panel" id="p-proto" role="tabpanel"><div class="proto">
+  <h2>Mini-Protokoll</h2>
+  <p>Mit einem sauberen Mini-Protokoll kannst du deine Note verbessern. Schreibe in ganzen Sätzen und in eigenen Worten. Deine Eingaben werden auf diesem Gerät gespeichert. Am Ende druckst du das Protokoll oder speicherst es als PDF und gibst es ab.</p>
+  <div class="two">
+    <div><label class="f" for="p-name">Name</label><input type="text" id="p-name" data-save="p-name" autocomplete="name"></div>
+    <div><label class="f" for="p-klasse">Klasse / Kurs</label><input type="text" id="p-klasse" data-save="p-klasse"></div>
+    <div><label class="f" for="p-datum">Datum</label><input type="date" id="p-datum" data-save="p-datum"></div>
+  </div>
+  <label class="f" for="p-frage">Fragestellung <span class="hint">– Was wolltest du herausfinden?</span></label>
+      <textarea id="p-frage" data-save="p-frage" data-label="Fragestellung"></textarea><label class="f" for="p-material">Material und Chemikalien <span class="hint">– Liste Geräte und Chemikalien auf.</span></label>
+      <textarea id="p-material" data-save="p-material" data-label="Material und Chemikalien"></textarea><label class="f" for="p-durch">Durchführung <span class="hint">– Beschreibe kurz in eigenen Worten, wie du vorgegangen bist.</span></label>
+      <textarea id="p-durch" data-save="p-durch" data-label="Durchführung"></textarea><label class="f" for="p-beob">Beobachtung <span class="hint">– Was hast du nach dem Eintauchen und beim Föhnen gesehen? Welche Farbe hat der Abdruck?</span></label>
+      <textarea id="p-beob" data-save="p-beob" data-label="Beobachtung"></textarea><label class="f" for="p-ausw">Auswertung <span class="hint">– Erkläre, warum sich der Abdruck violett färbt (Aminosäuren, Ninhydrin, Ruhemanns Purpur). Beantworte die Denk-Aufgaben.</span></label>
+      <textarea id="p-ausw" data-save="p-ausw" data-label="Auswertung"></textarea><label class="f" for="p-fehler">Fehlerquellen und Entsorgung <span class="hint">– Was hat nicht gut geklappt? Wie hast du die Reste entsorgt?</span></label>
+      <textarea id="p-fehler" data-save="p-fehler" data-label="Fehlerquellen und Entsorgung"></textarea>
+  <label class="f" for="photo">Foto deines Ergebnisses <span class="hint">– freiwillig, wird mitgedruckt</span></label>
+  <input type="file" id="photo" accept="image/*" capture="environment">
+  <div class="photo-prev"></div>
+  <p class="saved"></p>
+  <div class="row"><button class="btn primary" type="button" id="printBtn">🖨️ Protokoll drucken / als PDF speichern</button>
+    <button class="btn small" type="button" id="resetAll">🗑️ Alles auf diesem Gerät löschen</button></div>
+  <div class="check-grade"><b>✅ Checkliste für ein gutes Mini-Protokoll</b><ul>
+    <li>Alle Abschnitte sind ausgefüllt.</li>
+    <li>Beobachtung und Auswertung sind getrennt: erst <i>was</i> du gesehen hast, dann <i>warum</i>.</li>
+    <li>Die Fachbegriffe aus dem Briefing sind richtig verwendet.</li>
+    <li>Die Denk-Aufgaben sind beantwortet.</li>
+    <li>Ein Foto oder eine Skizze deines Ergebnisses ist dabei (Foto hier oder Skizze auf Papier).</li></ul></div>
+</div></section>
+</main>
+<footer><div class="stations"><a href="https://hubi-bot.github.io/Frau-Huber/finger-muster" class="">1 · Muster & Minuzien</a><a href="https://hubi-bot.github.io/Frau-Huber/finger-sichern" class="">2 · Pulver & Pinsel</a><a href="https://hubi-bot.github.io/Frau-Huber/finger-ninhydrin" class="cur">3 · Ninhydrin</a></div>Daktyloskopie · Station 3 von 3</footer>
+<div id="printout"></div>
+</div>
+<dialog id="qrdlg"><h2 style="margin:0 0 8px;font-family:'Special Elite',monospace">Station 3 öffnen</h2><div id="qrbox"></div><p class="url" id="qrurl"></p><button class="btn primary" id="qrclose" type="button">Schließen</button></dialog>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>const STATION={"id": "s3", "nr": 3, "title": "Ninhydrin-Tauchverfahren"};
+window.stationInit = function(){
+  // GHS-Piktogramme (vereinfacht gezeichnet)
+  const sym={
+    '02':['Flamme','<path d="M50 74c-12 0-19-8-19-18 0-9 6-14 9-22 3 6 2 10 5 13 1-9 6-16 12-21-1 9 4 14 7 20 3 6 5 10 5 13 0 9-8 15-19 15z" fill="#111"/><rect x="28" y="76" width="44" height="4" fill="#111"/>'],
+    '05':['Ätzwirkung','<path d="M30 30l14 6-2 4-14-6z M56 30l14 6-2 4-14-6z" fill="#111"/><circle cx="38" cy="46" r="2.5" fill="#111"/><circle cx="64" cy="46" r="2.5" fill="#111"/><path d="M26 60h22v8h-22z" fill="#111"/><path d="M54 62c6-4 14-4 20 0v6h-20z" fill="#111"/><path d="M26 72h48" stroke="#111" stroke-width="3"/>'],
+    '07':['Ausrufezeichen','<rect x="45" y="26" width="10" height="34" rx="3" fill="#111"/><circle cx="50" cy="70" r="5.5" fill="#111"/>']
+  };
+  $$('[data-ghs]').forEach(el=>{ el.innerHTML=el.dataset.ghs.split(' ').map(c=>`<figure><svg viewBox="0 0 100 100" aria-hidden="true"><rect x="18" y="18" width="64" height="64" transform="rotate(45 50 50)" fill="#fff" stroke="#e00" stroke-width="7"/>${sym[c][1]}</svg><figcaption>GHS${c}<br>${sym[c][0]}</figcaption></figure>`).join(''); });
+
+  // Sicherheits-Hinweis im Versuch
+  const nag=()=>{ const all=$$('ol[data-id=s] input'); const ok=all.length && all.every(c=>c.checked); $('#safetyNag').hidden=ok; };
+  document.addEventListener('change',e=>{ if(e.target.closest('ol[data-id=s]')) nag(); });
+  setTimeout(nag,0);
+
+  // Schwitz-Timer
+  let left=600, t=null; const tm=$('#tm'), msg=$('#tmMsg'), btn=$('#tmStart');
+  const show=()=>{ tm.textContent=String(Math.floor(left/60)).padStart(2,'0')+':'+String(left%60).padStart(2,'0'); };
+  btn.addEventListener('click',()=>{ if(t){ clearInterval(t); t=null; btn.textContent='▶ Weiter'; return; }
+    btn.textContent='⏸ Pause'; t=setInterval(()=>{ left--; show(); if(left<=0){ clearInterval(t); t=null; btn.textContent='▶ Start'; left=0; msg.innerHTML='<b style="color:var(--green)">Zeit um! Handschuh aus und Abdruck setzen.</b>'; try{navigator.vibrate&&navigator.vibrate(400);}catch(e){} } },1000); });
+  $('#tmReset').addEventListener('click',()=>{ clearInterval(t); t=null; left=600; show(); btn.textContent='▶ Start'; msg.textContent=''; });
+
+  // Virtuelles Labor
+  $('#fpPurple').innerHTML = `<g transform="translate(168 52) scale(.32)">${fingerprint('wirbel',{seed:21,color:'#7b2d8e',sw:4}).replace(/^<svg[^>]*>/,'').replace(/<\/svg>$/,'')}</g>`;
+  let state='start', heat=0; const paper=$('#paper'), m=$('#simMsg'), fp=$('#fpPurple'), dryer=$('#dryer');
+  const say=(txt,good)=>{ m.className='fb show '+(good===true?'good':good===false?'bad':''); m.innerHTML=txt; };
+  $$('[data-sim]').forEach(b=>b.addEventListener('click',()=>{
+    const a=b.dataset.sim;
+    if(a==='reset'){ state='start'; heat=0; paper.style.transform=''; fp.style.opacity=0; dryer.style.opacity=0; say('Das Papier hängt an der Pinzette. Was ist der erste Schritt?'); return; }
+    if(state==='start'){ if(a==='dip'){ state='in'; paper.style.transform='translateY(92px)'; say('Das Papier ist vollständig in der Lösung. Ein bis zwei Sekunden reichen …', true); }
+      else say(a==='dry' ? 'Noch nichts zu föhnen – das Papier war noch nicht in der Lösung.' : 'Das Papier ist doch noch gar nicht drin.', false); return; }
+    if(state==='in'){ if(a==='out'){ state='out'; paper.style.transform=''; say('Gut! Papier abtropfen lassen, Deckel auf die Schale. Und jetzt?', true); }
+      else say(a==='dry' ? 'Stopp! Niemals über der offenen Lösung föhnen – Ethanol ist leicht entzündbar.' : 'Es ist schon eingetaucht.', false); return; }
+    if(state==='out'||state==='dry'){ if(a==='dry'){ state='dry'; dryer.style.opacity=1; heat=Math.min(5,heat+1); fp.style.opacity=heat/5;
+        if(heat<5) say(`Föhnen … die Wärme beschleunigt die Reaktion. (${heat}/5) Klicke weiter.`, true);
+        else { say('🟣 Der Abdruck ist violett geworden: Ruhemanns Purpur! Warum? Das klärst du in der Auswertung.', true); dryer.style.opacity=0; if(!solved.has('sim')){ markSolved('sim'); stamp(); } } }
+      else say(a==='dip' ? 'Einmal eintauchen genügt.' : 'Das Papier ist schon draußen.', false); }
+  }));
+
+  renderMC($('#mc3'),[
+    {q:'Mit welchem Bestandteil des Schweißes reagiert Ninhydrin?', o:['mit Wasser','mit Kochsalz','mit Aminosäuren','mit Hautfett'], a:2, why:'Richtig! Genauer gesagt mit der Aminogruppe der Aminosäuren.'},
+    {q:'Warum eignet sich Ninhydrin besonders gut für Papier?', o:['Papier saugt die Aminosäuren auf und hält sie lange fest.','Auf Papier haftet Pulver besonders gut.','Ninhydrin löst Papier auf.'], a:0, why:'Genau – deshalb gelingen auch Jahre alte Spuren.'},
+    {q:'Woher kommt das Stickstoff-Atom im Farbstoff Ruhemanns Purpur?', o:['aus dem Ninhydrin','aus der Aminosäure','aus der Luft'], a:1, why:'Richtig! Es stammt aus der Aminogruppe der Aminosäure und verbindet die zwei Ninhydrin-Reste.'},
+    {q:'Wozu wird das Papier geföhnt?', o:['Nur damit es schneller trocken ist.','Die Wärme beschleunigt die Farbreaktion.','Damit das Ninhydrin verdampft.'], a:1, why:'Genau. Ohne Wärme läuft die Reaktion viel langsamer.'},
+    {q:'Ruhemanns Purpur absorbiert gelbgrünes Licht. Welche Farbe sehen wir?', o:['Gelbgrün','Violett','Weiß'], a:1, why:'Richtig: Wir sehen die Komplementärfarbe.', hint:'Wir sehen nicht das verschluckte Licht, sondern das, was übrig bleibt.'},
+    {q:'Wie entsorgst du die übrige Ninhydrin-Lösung?', o:['in den Ausguss mit viel Wasser','in den Restmüll','in den Behälter für organische Lösemittelabfälle'], a:2, why:'Richtig. Ethanol und Ninhydrin gehören nicht ins Abwasser.'}
+  ],'wissen3');
+};
+
+/* ===== Gemeinsamer Kern der Daktyloskopie-Stationen ===== */
+const KEY = 'dakty-' + STATION.id + '-';
+const store = {
+  get(k, d){ try{ const v = localStorage.getItem(KEY+k); return v===null ? d : JSON.parse(v); }catch(e){ return d; } },
+  set(k, v){ try{ localStorage.setItem(KEY+k, JSON.stringify(v)); return true; }catch(e){ return false; } },
+  del(k){ try{ localStorage.removeItem(KEY+k); }catch(e){} }
+};
+const $ = (s, r=document) => r.querySelector(s);
+const $$ = (s, r=document) => Array.from(r.querySelectorAll(s));
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+/* ---------- Fingerabdruck-Generator (SVG) ---------- */
+function rng(seed){ let s = seed >>> 0 || 1; return () => (s = (s * 1664525 + 1013904223) >>> 0) / 4294967296; }
+function fingerprint(type, o={}){
+  const W=200, H=260, cx=100, cy=128, r=rng(o.seed||7), col=o.color||'#2a2418', sw=o.sw||3.2, id='c'+Math.floor(r()*1e9);
+  const paths=[]; const wob=(a)=>Math.sin(a)*1.6;
+  const breakDash=()=> r()<0.35 ? ` stroke-dasharray="${(60+r()*160)|0} ${(5+r()*5)|0}"` : '';
+  const P = (d)=>paths.push(`<path d="${d}"${breakDash()}/>`);
+  if(type==='bogen'){
+    for(let b=30; b<300; b+=9.5){
+      const h = Math.max(0, 60 - Math.abs(b-150)*0.18) * (b<150 ? (b-20)/130 : 1);
+      let d=''; for(let x=-10; x<=210; x+=10){ const y=b - h*Math.exp(-Math.pow((x-cx)/48,2)) + wob(x/23+b); d+=(x===-10?'M':'L')+x+' '+y.toFixed(1)+' '; }
+      P(d);
+    }
+  } else if(type==='wirbel'){
+    for(let k=1; k<12; k++){
+      const rr=k*8.2; let d='';
+      for(let t=0; t<=360; t+=10){ const a=t*Math.PI/180; const x=cx+rr*Math.cos(a)+wob(a*3+k); const y=cy-10+rr*1.18*Math.sin(a)+wob(a*2+k); d+=(t?'L':'M')+x.toFixed(1)+' '+y.toFixed(1)+' '; }
+      P(d+'Z');
+    }
+    for(let b=238; b<300; b+=9.5){ let d=''; for(let x=-10;x<=210;x+=10){ d+=(x===-10?'M':'L')+x+' '+(b-18*Math.exp(-Math.pow((x-cx)/70,2))+wob(x/20)).toFixed(1)+' '; } P(d); }
+  } else { // schleife (öffnet nach links unten)
+    const g=[];
+    for(let k=0; k<8; k++){
+      const rr=6+k*9.5, x0=112; let d=`M -40 ${cy-rr} `;
+      for(let x=-30; x<=x0; x+=14) d+=`L ${x} ${(cy-rr+wob(x/18+k)).toFixed(1)} `;
+      d+=`A ${rr} ${rr} 0 0 1 ${x0} ${cy+rr} `;
+      for(let x=x0; x>=-40; x-=14) d+=`L ${x} ${(cy+rr+wob(x/16+k)).toFixed(1)} `;
+      g.push(`<path d="${d}"${breakDash()}/>`);
+    }
+    paths.push(`<g transform="rotate(28 ${cx} ${cy})">${g.join('')}</g>`);
+    for(let b=4; b<34; b+=9.5){ let d=''; for(let x=-10;x<=210;x+=10){ d+=(x===-10?'M':'L')+x+' '+(b+10*Math.exp(-Math.pow((x-cx)/60,2))+wob(x/20)).toFixed(1)+' '; } P(d); }
+    for(let b=242; b<300; b+=9.5){ let d=''; for(let x=-10;x<=210;x+=10){ d+=(x===-10?'M':'L')+x+' '+(b-14*Math.exp(-Math.pow((x-cx)/70,2))).toFixed(1)+' '; } P(d); }
+  }
+  const mirror = o.mirror ? ` transform="translate(${W} 0) scale(-1 1)"` : '';
+  return `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="${o.label||'Fingerabdruck'}"${o.attrs||''}>
+    <defs><clipPath id="${id}"><ellipse cx="${cx}" cy="${cy+6}" rx="86" ry="116"/></clipPath></defs>
+    <g clip-path="url(#${id})" fill="none" stroke="${col}" stroke-width="${sw}" stroke-linecap="round"${mirror}>${paths.join('')}</g></svg>`;
+}
+/* Wasserzeichen im Hintergrund */
+(function(){ const svg = fingerprint('wirbel',{seed:3,color:'#ffffff',sw:2.4}); document.documentElement.style.setProperty('--fp-bg', `url("data:image/svg+xml,${encodeURIComponent(svg)}")`); })();
+
+/* ---------- Minuzien-Skizzen ---------- */
+function minutia(kind, circle=true){
+  const L=(y)=>`<path d="M0 ${y} C 40 ${y-3}, 120 ${y+3}, 160 ${y}"/>`;
+  let s='';
+  const outer = L(10)+L(100);
+  switch(kind){
+    case 'ende': s=outer+L(32)+L(78)+`<path d="M0 55 C 30 53, 60 57, 82 55"/>`; break;
+    case 'gabel': s=outer+L(28)+L(82)+`<path d="M0 55 C 30 53, 60 57, 76 55 C 100 53, 120 44, 160 43"/><path d="M76 55 C 100 57, 120 66, 160 67"/>`; break;
+    case 'punkt': s=outer+L(32)+L(78)+`<path d="M0 55 L 48 55"/><path d="M112 55 L 160 55"/><circle cx="80" cy="55" r="4" fill="currentColor"/>`; break;
+    case 'insel': s=outer+L(32)+L(78)+`<path d="M0 55 L 40 55"/><path d="M120 55 L 160 55"/><path d="M62 55 L 98 55"/>`; break;
+    case 'auge': s=outer+L(28)+L(82)+`<path d="M0 55 L 56 55 C 66 42, 94 42, 104 55 C 94 68, 66 68, 56 55 M104 55 L 160 55"/>`; break;
+    case 'bruecke': s=outer+L(32)+L(78)+`<path d="M0 50 L 160 50"/><path d="M0 60 L 160 60" transform="translate(0 0)"/><path d="M0 50 L 160 50" opacity="0"/>`;
+      s=outer+L(30)+L(80)+`<path d="M0 47 C 50 45, 110 49, 160 47"/><path d="M0 63 C 50 61, 110 65, 160 63"/><path d="M68 47 L 92 63"/>`; break;
+  }
+  const mark = circle ? `<circle cx="80" cy="55" r="22" fill="none" stroke="#c8322b" stroke-width="2.5" stroke-dasharray="5 4"/>` : '';
+  return `<svg viewBox="-6 0 172 110" xmlns="http://www.w3.org/2000/svg"><g fill="none" stroke="#2a2418" stroke-width="5" stroke-linecap="round" style="color:#2a2418">${s}</g>${mark}</svg>`;
+}
+
+/* ---------- Lehrer-Stempel ---------- */
+function stamp(){
+  const words=['Prima!','Super!','Klasse!','Spitze!','Toll!','Fall gelöst!'];
+  let el=$('.stamp'); if(!el){ el=document.createElement('div'); el.className='stamp'; document.body.appendChild(el); }
+  el.textContent=words[Math.floor(Math.random()*words.length)];
+  el.classList.remove('go'); void el.offsetWidth; el.classList.add('go');
+}
+
+/* ---------- Fortschritt ---------- */
+const solved = new Set(store.get('solved', []));
+function markSolved(id){ solved.add(id); store.set('solved',[...solved]); updateProgress(); }
+function updateProgress(){
+  const steps=$$('ol.steps input[type=checkbox]'); const tasks=$$('[data-task]');
+  const total=steps.length+tasks.length+1;
+  const proto = ($$('.proto [data-save]').filter(e=>e.tagName==='TEXTAREA' && e.value.trim().length>20).length>=3) ? 1 : 0;
+  const done=steps.filter(c=>c.checked).length + tasks.filter(t=>solved.has(t.dataset.task)).length + proto;
+  const pct=Math.round(100*done/total);
+  const fg=$('.ring .fg'); if(fg){ const C=2*Math.PI*36; fg.style.strokeDasharray=C; fg.style.strokeDashoffset=C*(1-pct/100); }
+  const t=$('.ring text'); if(t) t.textContent=pct+'%';
+  tasks.forEach(t=>{ const b=t.querySelector('.solvedflag'); if(b) b.hidden=!solved.has(t.dataset.task); });
+  $$('nav.tabs button').forEach(b=>{
+    const p=$('#'+b.getAttribute('aria-controls')); if(!p) return;
+    const st=$$('ol.steps input[type=checkbox]',p), tk=$$('[data-task]',p);
+    const all=st.length+tk.length; const ok = all>0 && st.every(c=>c.checked) && tk.every(x=>solved.has(x.dataset.task));
+    b.querySelector('.done').textContent = ok ? ' ✓' : '';
+  });
+}
+
+/* ---------- Reiter ---------- */
+function initTabs(){
+  const btns=$$('nav.tabs button');
+  const show=(id)=>{ btns.forEach(b=>b.setAttribute('aria-selected', b.getAttribute('aria-controls')===id)); $$('.panel').forEach(p=>p.classList.toggle('active', p.id===id)); store.set('tab',id); };
+  btns.forEach(b=>b.addEventListener('click',()=>{ show(b.getAttribute('aria-controls')); $('.sheet').scrollIntoView({behavior:'smooth',block:'start'}); }));
+  $$('[data-goto]').forEach(a=>a.addEventListener('click',e=>{ e.preventDefault(); show(a.dataset.goto); $('.sheet').scrollIntoView({behavior:'smooth'}); }));
+  const last=store.get('tab',null); show(last && $('#'+last) ? last : btns[0].getAttribute('aria-controls'));
+}
+
+/* ---------- Schritte abhaken ---------- */
+function initSteps(){
+  const st=store.get('steps',{});
+  $$('ol.steps li').forEach((li,i)=>{
+    const id=(li.closest('ol').dataset.id||'s')+i;
+    const lab=document.createElement('label'); lab.className='chk'; lab.innerHTML=`<input type="checkbox"> erledigt`;
+    li.appendChild(lab); const c=lab.querySelector('input'); c.checked=!!st[id]; li.classList.toggle('ok',c.checked);
+    c.addEventListener('change',()=>{ st[id]=c.checked; store.set('steps',st); li.classList.toggle('ok',c.checked); updateProgress(); });
+  });
+}
+
+/* ---------- Multiple Choice ---------- */
+function renderMC(host, qs, taskId){
+  host.dataset.task=taskId;
+  const saved=store.get('mc-'+taskId,{});
+  host.insertAdjacentHTML('beforeend', qs.map((q,i)=>`<div class="q" data-i="${i}"><div class="qt">${i+1}. ${q.q}</div><div class="opts">${
+    q.o.map((o,j)=>`<label><input type="radio" name="${taskId}-${i}" value="${j}" ${saved[i]==j?'checked':''}> <span>${o}</span></label>`).join('')}</div><div class="fb"></div></div>`).join('')
+    + `<div class="row" style="margin-top:10px"><button class="btn primary" type="button">✓ Prüfen</button><span class="solvedflag" hidden>✅ gelöst</span></div><div class="fb sum"></div>`);
+  host.addEventListener('change',()=>{ const s={}; $$('.q',host).forEach(q=>{ const c=$('input:checked',q); if(c) s[q.dataset.i]=c.value; }); store.set('mc-'+taskId,s); });
+  $('.btn.primary',host).addEventListener('click',()=>{
+    let ok=0, open=0;
+    $$('.q',host).forEach((qe,i)=>{
+      const q=qs[i], c=$('input:checked',qe), fb=$('.fb',qe);
+      $$('label',qe).forEach(l=>l.classList.remove('right','wrong'));
+      if(!c){ open++; fb.className='fb show bad'; fb.innerHTML='Hier fehlt noch deine Antwort.'; return; }
+      if(+c.value===q.a){ ok++; c.parentElement.classList.add('right'); fb.className='fb show good'; fb.innerHTML='✔ '+(q.why||'Richtig!'); }
+      else { c.parentElement.classList.add('wrong'); fb.className='fb show bad'; fb.innerHTML='✘ Noch nicht. '+(q.hint||'Lies im Briefing noch einmal nach.'); }
+    });
+    const sum=$('.fb.sum',host);
+    if(ok===qs.length){ sum.className='fb sum show good'; sum.textContent=`Alle ${ok} Antworten stimmen. Fall gelöst!`; stamp(); markSolved(taskId); }
+    else { sum.className='fb sum show bad'; sum.textContent=`${ok} von ${qs.length} richtig${open?`, ${open} noch offen`:''}. Versuch es noch einmal – du hast beliebig viele Versuche.`; }
+  });
+}
+
+/* ---------- Auswahl-/Lückentext-Aufgaben ---------- */
+function initSelectTasks(){
+  $$('[data-kind=select]').forEach(host=>{
+    const id=host.dataset.task, saved=store.get('sel-'+id,{});
+    const sels=$$('select',host);
+    sels.forEach((s,i)=>{ if(!s.querySelector('option[value=""]')) s.insertAdjacentHTML('afterbegin','<option value="">– wählen –</option>'); s.value = saved[i]!==undefined ? saved[i] : ''; });
+    host.addEventListener('change',()=>{ const s={}; sels.forEach((x,i)=>s[i]=x.value); store.set('sel-'+id,s); });
+    host.insertAdjacentHTML('beforeend',`<div class="row" style="margin-top:10px"><button class="btn primary" type="button">✓ Prüfen</button><span class="solvedflag" hidden>✅ gelöst</span></div><div class="fb sum"></div>`);
+    $('.btn.primary',host).addEventListener('click',()=>{
+      let ok=0, empty=0; const msgs=[];
+      sels.forEach(s=>{
+        s.classList.remove('right','wrong');
+        if(!s.value){ empty++; return; }
+        const good = s.dataset.a.split('|').includes(s.value);
+        if(good){ ok++; s.classList.add('right'); } else { s.classList.add('wrong'); if(s.dataset.msg) msgs.push(s.dataset.msg); }
+      });
+      const sum=$('.fb.sum',host);
+      if(ok===sels.length){ sum.className='fb sum show good'; sum.textContent='Alles richtig zugeordnet!'; stamp(); markSolved(id); }
+      else { sum.className='fb sum show bad';
+        sum.innerHTML=`${ok} von ${sels.length} richtig${empty?` – ${empty} Feld(er) noch leer`:''}. Die rot umrandeten Felder stimmen noch nicht.` + (msgs.length?'<ul>'+[...new Set(msgs)].map(m=>'<li>'+m+'</li>').join('')+'</ul>':''); }
+    });
+  });
+}
+
+/* ---------- Reihenfolge ---------- */
+function renderOrder(host, items, taskId){
+  host.dataset.task=taskId;
+  let order=store.get('ord-'+taskId,null);
+  if(!order || order.length!==items.length){ order=items.map((_,i)=>i); do{ order.sort(()=>Math.random()-.5);}while(order.every((v,i)=>v===i)); }
+  const ul=document.createElement('ul'); ul.className='order'; host.appendChild(ul);
+  const draw=(marks)=>{ ul.innerHTML=order.map((k,pos)=>`<li class="${marks?(marks[pos]?'right':'wrong'):''}"><span class="nr">${pos+1}</span><span class="txt">${items[k]}</span>
+      <button type="button" aria-label="nach oben" data-u="${pos}">▲</button><button type="button" aria-label="nach unten" data-d="${pos}">▼</button></li>`).join(''); };
+  ul.addEventListener('click',e=>{ const b=e.target.closest('button'); if(!b) return; const p=+(b.dataset.u ?? b.dataset.d); const q = b.dataset.u!==undefined ? p-1 : p+1;
+    if(q<0||q>=order.length) return; [order[p],order[q]]=[order[q],order[p]]; store.set('ord-'+taskId,order); draw(); ul.querySelectorAll('button')[q*2+(b.dataset.u!==undefined?0:1)]?.focus(); });
+  draw();
+  host.insertAdjacentHTML('beforeend',`<div class="row"><button class="btn primary" type="button">✓ Prüfen</button><span class="solvedflag" hidden>✅ gelöst</span></div><div class="fb sum"></div>`);
+  $('.btn.primary',host).addEventListener('click',()=>{
+    const marks=order.map((k,pos)=>k===pos); draw(marks); const ok=marks.filter(Boolean).length; const sum=$('.fb.sum',host);
+    if(ok===items.length){ sum.className='fb sum show good'; sum.textContent='Perfekte Reihenfolge – so arbeitet die Spurensicherung!'; stamp(); markSolved(taskId); }
+    else { sum.className='fb sum show bad'; sum.textContent=`${ok} von ${items.length} Schritten stehen schon an der richtigen Stelle. Verschiebe die rot markierten.`; }
+  });
+}
+
+/* ---------- Gespeicherte Felder ---------- */
+function initSaveFields(){
+  const data=store.get('fields',{});
+  $$('[data-save]').forEach(el=>{
+    const k=el.dataset.save; if(data[k]!==undefined) el.value=data[k];
+    el.addEventListener('input',()=>{ data[k]=el.value; const ok=store.set('fields',data); const s=el.closest('.proto')?.querySelector('.saved'); if(s) s.textContent= ok ? '✔ automatisch gespeichert (auf diesem Gerät)' : '⚠ Speichern auf diesem Gerät nicht möglich – bitte drucken/als PDF sichern.'; updateProgress(); });
+  });
+}
+
+/* ---------- Geschwärzte Hinweise ---------- */
+function initRedact(){ $$('.redact').forEach(r=>{ r.setAttribute('role','button'); r.tabIndex=0; r.title='Klicken zum Aufdecken';
+  const open=()=>r.classList.add('open'); r.addEventListener('click',open); r.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){e.preventDefault();open();} }); }); }
+
+/* ---------- Foto ---------- */
+function initPhoto(){
+  const inp=$('#photo'), prev=$('.photo-prev'); if(!inp) return;
+  const show=(src)=>{ prev.innerHTML = src ? `<img src="${src}" alt="Foto deines Fingerabdrucks"><br><button class="btn small" type="button" id="photoDel">Foto entfernen</button>` : '';
+    const d=$('#photoDel'); if(d) d.onclick=()=>{ store.del('photo'); window._photo=null; show(null); }; };
+  window._photo=store.get('photo',null); show(window._photo);
+  inp.addEventListener('change',()=>{ const f=inp.files[0]; if(!f) return; const img=new Image(); const rd=new FileReader();
+    rd.onload=()=>{ img.onload=()=>{ const m=900, s=Math.min(1,m/Math.max(img.width,img.height)); const c=document.createElement('canvas'); c.width=img.width*s; c.height=img.height*s;
+      c.getContext('2d').drawImage(img,0,0,c.width,c.height); const url=c.toDataURL('image/jpeg',.8); window._photo=url; store.set('photo',url); show(url); }; img.src=rd.result; }; rd.readAsDataURL(f); });
+}
+
+/* ---------- Protokoll drucken ---------- */
+function printProtocol(){
+  const pr=$('#printout'); const f=(k)=>esc(($(`[data-save="${k}"]`)||{}).value||'');
+  let html=`<h1>Mini-Protokoll – ${esc(STATION.title)}</h1><p><b>Name:</b> ${f('p-name')} &nbsp; <b>Klasse/Kurs:</b> ${f('p-klasse')} &nbsp; <b>Datum:</b> ${f('p-datum')}</p>`;
+  $$('.proto [data-label]').forEach(el=>{ html+=`<h2>${esc(el.dataset.label)}</h2><div class="ans">${esc(el.value||'')}</div>`; if(el.dataset.extra && window[el.dataset.extra]) html+=window[el.dataset.extra](); });
+  if(window._photo) html+=`<h2>Foto des Ergebnisses</h2><img src="${window._photo}">`;
+  html+=`<p style="margin-top:18pt;color:#555;font-size:9pt">Erstellt mit der Lernumgebung „${esc(STATION.title)}“ · Station ${STATION.nr} Daktyloskopie</p>`;
+  pr.innerHTML=html; window.print();
+}
+
+/* ---------- QR ---------- */
+function initQR(){
+  const dlg=$('#qrdlg'); const url=location.origin+location.pathname;
+  $('.qrbtn').addEventListener('click',()=>{ $('#qrurl').textContent=url; const box=$('#qrbox'); box.innerHTML='';
+    try{ new QRCode(box,{text:url,width:320,height:320,correctLevel:QRCode.CorrectLevel.M}); }catch(e){ box.textContent='QR-Code konnte nicht geladen werden.'; }
+    dlg.showModal ? dlg.showModal() : dlg.setAttribute('open',''); });
+  $('#qrclose').addEventListener('click',()=>dlg.close ? dlg.close() : dlg.removeAttribute('open'));
+}
+
+/* ---------- Zurücksetzen ---------- */
+function initReset(){ const b=$('#resetAll'); if(!b) return; b.addEventListener('click',()=>{ if(confirm('Wirklich alle Eingaben dieser Station auf diesem Gerät löschen?')){ try{ Object.keys(localStorage).filter(k=>k.startsWith(KEY)).forEach(k=>localStorage.removeItem(k)); }catch(e){} location.reload(); } }); }
+
+function boot(){
+  if(window.stationInit) window.stationInit();
+  $$('[data-fp]').forEach(el=>{ el.innerHTML=fingerprint(el.dataset.fp,{seed:+(el.dataset.seed||5), mirror:el.dataset.mirror==='1', label:el.dataset.label}); });
+  $$('[data-min]').forEach(el=>{ el.innerHTML=minutia(el.dataset.min, el.dataset.circle!=='0'); });
+  initTabs(); initSteps(); initSaveFields(); initSelectTasks(); initRedact(); initPhoto(); initQR(); initReset();
+  const d=$('[data-save="p-datum"]'); if(d && !d.value){ d.value=new Date().toISOString().slice(0,10); }
+  $('#printBtn')?.addEventListener('click',printProtocol);
+  updateProgress();
+}
+document.readyState==='loading' ? document.addEventListener('DOMContentLoaded',boot) : boot();
+</script>
+</body></html>

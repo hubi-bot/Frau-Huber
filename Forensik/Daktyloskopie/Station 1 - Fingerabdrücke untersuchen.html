@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Station 1 – Fingerabdrücke untersuchen · Daktyloskopie</title>
+<meta name="description" content="Station 1 · Stempelkissen, Grundmuster und Minuzien">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Lexend:wght@400;600;700;800&family=Special+Elite&display=swap" rel="stylesheet">
+<style>:root{
+  --desk:#0f121a; --desk2:#171c28; --ink:#e9edf5; --ink-dim:#a6b0c4;
+  --paper:#ecdfbd; --paper2:#e3d3aa; --paper-ink:#2a2418; --paper-dim:#5f5440; --paper-line:#cdb98a;
+  --tape:#f6c915; --tape-dark:#141414;
+  --red:#c8322b; --green:#1f8a4c; --pink:#ff6fb5; --pink-deep:#d6267f;
+  --mark:#fff09a;
+  --accent:#ff6fb5; --accent-soft:rgba(255,111,181,.18);
+  --radius:12px;
+  --shadow:0 18px 40px rgba(0,0,0,.45);
+  --type:'Special Elite','Courier New',monospace;
+  --text:'Lexend',system-ui,sans-serif;
+}
+@media (prefers-color-scheme: light){
+  :root{ --desk:#d9dde4; --desk2:#c9ced8; --ink:#1d2230; --ink-dim:#4c5568; --shadow:0 14px 30px rgba(20,25,40,.25); }
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%; overflow-x:hidden}
+.tapewrap{overflow:hidden; padding:6px 0 4px}
+body{
+  margin:0; font-family:var(--text); color:var(--ink); line-height:1.55;
+  background:
+    radial-gradient(1200px 600px at 85% -10%, var(--accent-soft), transparent 60%),
+    radial-gradient(900px 500px at -10% 110%, rgba(246,201,21,.07), transparent 60%),
+    var(--desk);
+  min-height:100vh; overflow-x:hidden;
+}
+body::before{ /* großer Fingerabdruck als Wasserzeichen */
+  content:""; position:fixed; right:-160px; bottom:-140px; width:620px; height:760px;
+  background-image:var(--fp-bg); background-size:contain; background-repeat:no-repeat;
+  opacity:.07; pointer-events:none; z-index:0; transform:rotate(-18deg);
+}
+a{color:var(--accent)}
+.wrap{max-width:1080px; margin:0 auto; padding:0 16px 60px; position:relative; z-index:1}
+
+/* Absperrband */
+.tape{position:relative; height:46px; margin:0 -40px 0; overflow:hidden; transform:rotate(-1.2deg); margin-top:14px;
+  background:var(--tape); box-shadow:0 6px 16px rgba(0,0,0,.35);
+  border-top:5px solid var(--tape-dark); border-bottom:5px solid var(--tape-dark)}
+.tape span{display:block; white-space:nowrap; font-family:'Black Ops One',var(--type); font-size:20px; letter-spacing:.12em;
+  color:var(--tape-dark); line-height:36px; animation:tape 40s linear infinite}
+@keyframes tape{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* Kopf / Fallakte */
+header.case{display:grid; grid-template-columns:auto 1fr auto; gap:18px; align-items:center; margin:26px 0 18px}
+.qrbtn{width:52px; height:52px; border-radius:10px; border:2px solid var(--ink); background:var(--desk2); color:var(--ink);
+  font:700 13px var(--text); cursor:pointer; box-shadow:3px 3px 0 var(--ink); display:grid; place-items:center}
+.qrbtn:active{transform:translate(3px,3px); box-shadow:none}
+.casefile{position:relative; background:var(--paper); color:var(--paper-ink); border-radius:4px 14px 6px 6px; padding:16px 22px 16px;
+  box-shadow:var(--shadow); transform:rotate(-.6deg); border:1px solid #b9a476}
+.casefile::before{content:""; position:absolute; top:-14px; left:24px; width:150px; height:18px; background:var(--paper2);
+  border-radius:8px 8px 0 0; border:1px solid #b9a476; border-bottom:none}
+.casefile .no{font-family:var(--type); font-size:13px; letter-spacing:.08em; color:var(--paper-dim)}
+.casefile h1{font-family:var(--type); font-weight:400; font-size:clamp(24px,4.2vw,40px); line-height:1.1; margin:4px 0 6px}
+.casefile .sub{font-size:15px; color:var(--paper-dim); margin:0}
+.casefile .clip{position:absolute; top:-18px; right:46px; width:22px; height:64px; border:4px solid #9aa3ad; border-radius:12px; border-bottom-color:transparent}
+.casefile .stamp-top{position:absolute; right:18px; bottom:10px; font-family:'Black Ops One',var(--type); color:var(--accent); opacity:.85;
+  border:3px solid currentColor; padding:2px 10px; border-radius:6px; transform:rotate(-8deg); font-size:16px; letter-spacing:.08em}
+.progress{display:grid; place-items:center; text-align:center; font-size:12px; color:var(--ink-dim)}
+.ring{width:84px; height:84px}
+.ring circle{fill:none; stroke-width:9}
+.ring .bg{stroke:rgba(127,127,127,.25)} .ring .fg{stroke:var(--accent); stroke-linecap:round; transition:stroke-dashoffset .6s}
+.ring text{font:700 20px var(--text); fill:var(--ink)}
+
+/* Reiter */
+nav.tabs{display:flex; gap:6px; flex-wrap:wrap; margin:8px 0 0; padding-left:6px}
+nav.tabs button{font:600 15px var(--text); padding:10px 16px 12px; border:1px solid #b9a476; border-bottom:none; cursor:pointer;
+  border-radius:12px 12px 0 0; background:var(--paper2); color:var(--paper-dim); position:relative; top:2px; opacity:.8}
+nav.tabs button[aria-selected="true"]{background:var(--paper); color:var(--paper-ink); opacity:1; top:1px; box-shadow:inset 0 4px 0 var(--accent)}
+nav.tabs button .done{color:var(--green); font-weight:800}
+.sheet{background:var(--paper); color:var(--paper-ink); border:1px solid #b9a476; border-radius:0 12px 12px 12px; box-shadow:var(--shadow);
+  padding:24px clamp(16px,3.5vw,36px) 30px; position:relative;
+  background-image:linear-gradient(transparent 31px, rgba(150,120,60,.13) 32px); background-size:100% 32px}
+.panel{display:none} .panel.active{display:block; animation:fade .35s ease}
+@keyframes fade{from{opacity:0; transform:translateY(6px)}to{opacity:1; transform:none}}
+.sheet h2{font-family:var(--type); font-weight:400; font-size:clamp(22px,3vw,30px); margin:0 0 6px}
+.sheet h3{font-family:var(--type); font-weight:400; font-size:21px; margin:26px 0 8px; display:flex; align-items:center; gap:10px}
+.sheet h3::before{content:""; width:14px; height:14px; background:var(--accent); border-radius:3px; transform:rotate(45deg); flex:none}
+.sheet p{margin:8px 0}
+.lead{font-size:17px}
+.muted{color:var(--paper-dim)}
+.grid{display:grid; gap:16px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
+
+/* Karten */
+.card{background:#fffaf0; border:1px solid var(--paper-line); border-radius:10px; padding:14px 16px; position:relative;
+  box-shadow:0 3px 0 rgba(90,70,30,.15)}
+.card h4{margin:0 0 6px; font-size:16px}
+.mission{background:#1b2130; color:#e9edf5; border-radius:12px; padding:16px 18px 16px 64px; position:relative; margin:14px 0;
+  border-left:6px solid var(--accent)}
+.mission::before{content:"🕵️"; position:absolute; left:16px; top:14px; font-size:30px}
+.mission b{color:var(--tape)}
+.warn{background:#fff3cd; border:2px solid #e0a800; border-radius:10px; padding:12px 16px; margin:12px 0}
+.danger{background:#fde2e0; border:2px solid var(--red); border-radius:10px; padding:12px 16px; margin:12px 0}
+.info{background:#e9f4ff; border:2px solid #4a8bd6; border-radius:10px; padding:12px 16px; margin:12px 0}
+.merke{background:var(--mark); border-radius:4px; padding:12px 16px; margin:14px 0; transform:rotate(-.4deg);
+  box-shadow:0 4px 10px rgba(0,0,0,.15); border-left:6px solid var(--accent)}
+.merke::before{content:"📌 Merke: "; font-weight:700}
+
+/* Beweismittel-Etikett (Material) */
+.tag{background:#fff; border:2px dashed #8b7a55; border-radius:8px 30px 30px 8px; padding:14px 22px 14px 40px; position:relative; margin:14px 0}
+.tag::before{content:""; position:absolute; left:14px; top:50%; width:12px; height:12px; margin-top:-6px; border-radius:50%; border:3px solid #8b7a55; background:var(--paper)}
+.tag .lbl{font-family:'Black Ops One',var(--type); color:var(--red); letter-spacing:.1em; font-size:14px}
+.tag ul{margin:6px 0 0; padding-left:20px; columns:2 220px}
+
+/* Spurenmarker-Schritte */
+ol.steps{list-style:none; padding:0; margin:14px 0; counter-reset:s}
+ol.steps li{counter-increment:s; display:grid; grid-template-columns:52px 1fr auto; gap:12px; align-items:start; padding:12px 12px; margin:10px 0;
+  background:#fffaf0; border:1px solid var(--paper-line); border-radius:10px; transition:background .3s}
+ol.steps li::before{content:counter(s); width:46px; height:40px; display:grid; place-items:end center; padding-bottom:3px;
+  font:800 18px var(--text); color:#111; background:var(--tape);
+  clip-path:polygon(50% 0,100% 100%,0 100%); filter:drop-shadow(0 2px 0 #9b7d00)}
+ol.steps li.ok{background:#e3f3e7; border-color:#8cc7a0}
+ol.steps li .chk{display:flex; align-items:center; gap:6px; font-size:13px; color:var(--paper-dim); cursor:pointer; white-space:nowrap}
+ol.steps li .chk input{width:22px; height:22px; accent-color:var(--green)}
+ol.steps li > div > b:first-child{display:block}
+.tip{font-size:14px; color:var(--paper-dim); margin-top:4px}
+.tip::before{content:"💡 "}
+
+/* Knöpfe */
+.btn{font:600 15px var(--text); padding:10px 16px; border-radius:10px; border:2px solid #1b1b1b; background:#fff; color:#1b1b1b;
+  cursor:pointer; box-shadow:3px 3px 0 #1b1b1b; margin:4px 6px 4px 0; display:inline-flex; gap:8px; align-items:center; text-decoration:none}
+.btn:active{transform:translate(3px,3px); box-shadow:none}
+.btn.primary{background:var(--accent); color:#fff; text-shadow:0 1px 1px rgba(0,0,0,.3)}
+.btn.small{padding:6px 10px; font-size:13px}
+.btn:disabled{opacity:.5; cursor:not-allowed}
+.row{display:flex; flex-wrap:wrap; gap:6px; align-items:center}
+
+/* Medien */
+.media{position:relative; width:100%; aspect-ratio:16/9; background:#0b0d12; border-radius:10px; overflow:hidden; border:3px solid #1b1b1b; box-shadow:5px 5px 0 #1b1b1b}
+.media iframe{position:absolute; inset:0; width:100%; height:100%; border:0}
+.polaroid{background:#fff; padding:10px 10px 8px; border-radius:3px; box-shadow:0 8px 18px rgba(0,0,0,.25); text-align:center; transition:transform .2s}
+.polaroid:nth-child(odd){transform:rotate(-1.5deg)} .polaroid:nth-child(even){transform:rotate(1.2deg)}
+.polaroid:hover{transform:rotate(0) scale(1.02)}
+.polaroid svg{width:100%; height:auto; background:#f7f3ea; border-radius:2px}
+.polaroid .cap{font-family:var(--type); font-size:16px; margin-top:6px}
+.polaroid .pct{font-size:13px; color:var(--paper-dim)}
+
+/* Aufgaben / Rückmeldung */
+.task{background:#fffaf0; border:2px solid var(--paper-line); border-radius:12px; padding:16px 18px; margin:18px 0; position:relative}
+.task > .tt{font-family:var(--type); font-size:19px; margin:0 0 6px}
+.q{padding:12px 0; border-top:1px dashed var(--paper-line)} .q:first-of-type{border-top:none}
+.q .qt{font-weight:600; margin-bottom:6px}
+.opts{display:grid; gap:6px}
+.opts label{display:flex; gap:10px; align-items:flex-start; padding:8px 12px; border:2px solid var(--paper-line); border-radius:10px; cursor:pointer; background:#fff}
+.opts label:hover{border-color:var(--accent)}
+.opts input{margin-top:4px; width:18px; height:18px; accent-color:var(--accent)}
+.right{border-color:var(--green)!important; background:#e6f5eb!important}
+.wrong{border-color:var(--red)!important; background:#fdeceb!important}
+.fb{margin-top:8px; padding:8px 12px; border-radius:8px; font-size:15px; display:none}
+.fb.show{display:block}
+.fb.good{background:#e6f5eb; color:#145c33; border-left:5px solid var(--green)}
+.fb.bad{background:#fdeceb; color:#8a1f1a; border-left:5px solid var(--red)}
+select, input[type=text], input[type=date], textarea{font:16px var(--text); color:#1c3fa0; background:#fff; border:2px solid var(--paper-line); border-radius:8px; padding:8px 10px; max-width:100%}
+select:focus, input:focus, textarea:focus, button:focus-visible{outline:3px solid var(--pink); outline-offset:2px}
+textarea{width:100%; min-height:96px; resize:vertical; line-height:1.5}
+.cloze{line-height:2.4}
+.cloze select{padding:4px 6px; margin:0 2px}
+
+/* Lehrer-Stempel */
+.stamp{position:fixed; left:50%; top:42%; z-index:90; pointer-events:none; font-family:'Black Ops One',var(--type);
+  font-size:clamp(40px,9vw,84px); color:var(--red); border:7px solid var(--red); border-radius:14px; padding:4px 26px;
+  transform:translate(-50%,-50%) rotate(-14deg) scale(2.2); opacity:0; mix-blend-mode:multiply; background:rgba(255,255,255,.35)}
+.stamp.go{animation:stamp 1.6s ease forwards}
+@keyframes stamp{0%{opacity:0; transform:translate(-50%,-50%) rotate(-14deg) scale(2.2)}15%{opacity:.95; transform:translate(-50%,-50%) rotate(-14deg) scale(1)}75%{opacity:.95}100%{opacity:0; transform:translate(-50%,-50%) rotate(-14deg) scale(1)}}
+
+/* Geschwärzter Hinweis */
+.redact{display:inline; background:#111; color:#111; border-radius:2px; cursor:pointer; padding:0 4px; transition:all .3s; user-select:none}
+.redact.open{background:var(--mark); color:var(--paper-ink); user-select:auto}
+.redact:not(.open)::after{content:" 🔒"; color:#fff; font-size:12px}
+
+/* Ordnen */
+.order{list-style:none; padding:0; margin:8px 0}
+.order li{display:flex; gap:8px; align-items:center; padding:8px 10px; margin:6px 0; background:#fff; border:2px solid var(--paper-line); border-radius:10px}
+.order li .txt{flex:1}
+.order li .nr{font:800 16px var(--text); width:28px; height:28px; border-radius:50%; background:var(--tape); color:#111; display:grid; place-items:center; flex:none}
+.order li button{width:38px; height:34px; border-radius:8px; border:2px solid #1b1b1b; background:#fff; cursor:pointer; font-size:16px}
+
+/* Tabelle */
+table.t{width:100%; border-collapse:collapse; background:#fff; border-radius:10px; overflow:hidden}
+table.t th, table.t td{border:1px solid var(--paper-line); padding:8px 10px; text-align:left; vertical-align:top}
+table.t th{background:var(--paper2); font-weight:600}
+.scroll-x{overflow-x:auto}
+
+/* Protokoll */
+.proto label.f{display:block; font-weight:600; margin:14px 0 4px}
+.proto .hint{font-weight:400; font-size:14px; color:var(--paper-dim)}
+.proto .two{display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:12px}
+.proto .two input{width:100%}
+.check-grade{background:#1b2130; color:#e9edf5; border-radius:12px; padding:14px 18px; margin-top:14px}
+.check-grade li{margin:4px 0}
+.saved{font-size:13px; color:var(--green); min-height:1em}
+.photo-prev img{max-width:100%; max-height:300px; border:4px solid #fff; box-shadow:0 6px 14px rgba(0,0,0,.25); margin-top:8px; transform:rotate(-1deg)}
+
+/* GHS */
+.ghs{display:flex; gap:14px; flex-wrap:wrap; margin:10px 0}
+.ghs figure{margin:0; text-align:center; width:120px; font-size:13px}
+.ghs svg{width:74px; height:74px}
+
+/* Footer */
+footer{margin-top:26px; color:var(--ink-dim); font-size:14px; text-align:center}
+footer .stations{display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-bottom:10px}
+footer .stations a{color:var(--ink); text-decoration:none; border:2px solid var(--ink-dim); padding:8px 14px; border-radius:999px; font-weight:600}
+footer .stations a.cur{background:var(--accent); border-color:var(--accent); color:#fff}
+
+/* Dialog QR */
+dialog{border:none; border-radius:16px; padding:22px; max-width:min(92vw,440px); text-align:center; background:#fff; color:#111}
+dialog::backdrop{background:rgba(0,0,0,.6)}
+#qrbox{display:inline-block; padding:10px; background:#fff}
+#qrbox img, #qrbox canvas{width:min(70vw,320px)!important; height:auto!important}
+.url{word-break:break-all; font-size:14px; color:#333; margin:10px 0}
+
+@media (max-width:640px){
+  header.case{grid-template-columns:auto 1fr; }
+  .progress{grid-column:1 / -1; grid-template-columns:auto auto; gap:10px; justify-content:start}
+  .ring{width:60px; height:60px}
+  .casefile .stamp-top{display:none}
+  nav.tabs button{padding:8px 10px 10px; font-size:14px}
+  ol.steps li{grid-template-columns:40px 1fr}
+  ol.steps li .chk{grid-column:2}
+  ol.steps li::before{width:36px; height:32px; font-size:15px}
+  .mission{padding-left:18px; padding-top:52px}
+}
+@media (prefers-reduced-motion: reduce){
+  *{animation:none!important; transition:none!important}
+}
+#printout{display:none}
+@media print{
+  body{background:#fff!important; color:#000}
+  body::before{display:none}
+  .wrap > *:not(#printout), .stamp, dialog{display:none!important}
+  #printout{display:block!important; font-family:var(--text); font-size:11.5pt; color:#000}
+  #printout h1{font-family:var(--type); font-size:20pt; margin:0 0 4pt}
+  #printout h2{font-size:13pt; margin:14pt 0 4pt; border-bottom:1px solid #999}
+  #printout .ans{white-space:pre-wrap; min-height:1.4em}
+  #printout img{max-width:9cm; max-height:9cm}
+  #printout table{border-collapse:collapse} #printout td, #printout th{border:1px solid #888; padding:3pt 6pt}
+}
+
+:root{--accent:#2ec4b6; --accent-soft:#2ec4b62e}</style>
+</head><body>
+<div class="tapewrap" aria-hidden="true"><div class="tape"><span>SPURENSICHERUNG ✦ TATORT ✦ NICHT BETRETEN ✦ DAKTYLOSKOPIE ✦ SPURENSICHERUNG ✦ TATORT ✦ NICHT BETRETEN ✦ DAKTYLOSKOPIE ✦ SPURENSICHERUNG ✦ TATORT ✦ NICHT BETRETEN ✦ DAKTYLOSKOPIE ✦ SPURENSICHERUNG ✦ TATORT ✦ NICHT BETRETEN ✦ DAKTYLOSKOPIE ✦ SPURENSICHERUNG ✦ TATORT ✦ NICHT BETRETEN ✦ DAKTYLOSKOPIE ✦ SPURENSICHERUNG ✦ TATORT ✦ NICHT BETRETEN ✦ DAKTYLOSKOPIE ✦ SPURENSICHERUNG ✦ TATORT ✦ NICHT BETRETEN ✦ DAKTYLOSKOPIE ✦ SPURENSICHERUNG ✦ TATORT ✦ NICHT BETRETEN ✦ DAKTYLOSKOPIE ✦ </span></div></div>
+<div class="wrap">
+<header class="case">
+  <button class="qrbtn" type="button" aria-label="QR-Code zu dieser Seite anzeigen" title="QR-Code">QR</button>
+  <div class="casefile"><div class="clip" aria-hidden="true"></div>
+    <div class="no">FALLAKTE DAK-01 · DAKTYLOSKOPIE</div>
+    <h1>Fingerabdrücke untersuchen</h1><p class="sub">Station 1 · Stempelkissen, Grundmuster und Minuzien</p>
+    <div class="stamp-top" aria-hidden="true">STATION 1</div></div>
+  <div class="progress"><svg class="ring" viewBox="0 0 84 84" aria-hidden="true"><circle class="bg" cx="42" cy="42" r="36"/><circle class="fg" cx="42" cy="42" r="36" transform="rotate(-90 42 42)"/><text x="42" y="49" text-anchor="middle">0%</text></svg><span>Ermittlungs-<br>fortschritt</span></div>
+</header>
+<nav class="tabs" role="tablist"><button type="button" role="tab" aria-controls="p-brief" aria-selected="false">🔎 Briefing<span class="done"></span></button><button type="button" role="tab" aria-controls="p-versuch" aria-selected="false">🖐️ Versuch<span class="done"></span></button><button type="button" role="tab" aria-controls="p-ausw" aria-selected="false">🧠 Auswertung<span class="done"></span></button><button type="button" role="tab" aria-controls="p-proto" aria-selected="false">📝 Mini-Protokoll<span class="done"></span></button></nav>
+<main class="sheet">
+<section class="panel" id="p-brief" role="tabpanel">
+  <h2>Briefing: Jeder Finger hat seine Handschrift</h2>
+  <div class="mission"><b>Dein Auftrag:</b> Bei der Polizei werden von Verdächtigen alle zehn Fingerabdrücke genommen – die <b>Zehnfinger-Karte</b>. Genau das machst du jetzt mit deinen eigenen Fingern. Danach bestimmst du wie ein Daktyloskop (Fingerabdruck-Experte) die <b>Grundmuster</b> und suchst <b>Minuzien</b>, also besondere Merkmale in den Linien.</div>
+
+  <h3>Akte 1: Die Präsentation</h3>
+  <p>Arbeite zuerst die Präsentation vollständig durch. Klicke dich in Ruhe durch alle Seiten. Was du dort lernst, brauchst du für die Auswertung.</p>
+  <div class="media" style="aspect-ratio:16/10"><iframe title="Genially-Präsentation Daktyloskopie" src="https://view.genially.com/6162f63d61d5020ddc3b5b4e" allowfullscreen loading="lazy"></iframe></div>
+  <div class="row" style="margin-top:12px"><a class="btn primary" href="https://view.genially.com/6162f63d61d5020ddc3b5b4e" target="_blank" rel="noopener">🖥️ Präsentation in neuem Fenster öffnen</a>
+  <span class="muted" style="font-size:14px">Falls oben nichts angezeigt wird, nutze diesen Knopf.</span></div>
+  <ol class="steps" data-id="b"><li><div><b>Präsentation vollständig durchgearbeitet</b><div class="tip">Hake erst ab, wenn du bei der letzten Seite angekommen bist.</div></div></li></ol>
+
+  <h3>Akte 2: Was sind Papillarleisten?</h3>
+  <p>Auf deinen Fingerkuppen ist die Haut nicht glatt. Sie bildet feine erhabene Linien, die <b>Papillarleisten</b>. Dazwischen liegen Furchen. Auf den Leisten sitzen winzige Schweißporen. Die Leisten helfen beim Greifen und Fühlen.</p>
+  <div class="grid g3">
+    <div class="card"><h4>🔒 Einzigartig</h4>Kein Mensch hat die gleichen Fingerabdrücke wie ein anderer – auch eineiige Zwillinge nicht. Sogar deine zehn Finger unterscheiden sich voneinander.</div>
+    <div class="card"><h4>⏳ Unveränderlich</h4>Die Leisten sind schon vor der Geburt fertig ausgebildet und bleiben das ganze Leben gleich. Nach kleinen Verletzungen wachsen sie genau so nach. Nur tiefe Narben verändern das Bild.</div>
+    <div class="card"><h4>🗂️ Ordnungsfähig</h4>Fingerabdrücke lassen sich nach Mustern sortieren. So kann die Polizei sie in einer Datenbank schnell vergleichen.</div>
+  </div>
+
+  <h3>Akte 3: Die drei Grundmuster</h3>
+  <p>Schau dir die Mitte des Abdrucks an. Daran erkennst du das Grundmuster.</p>
+  <div class="grid g3">
+    <div class="polaroid"><div data-fp="bogen" data-seed="11" data-label="Bogen"></div><div class="cap">Bogen</div><div class="pct">Linien laufen von einer Seite zur anderen und wölben sich in der Mitte nach oben. Kein Zentrum. <br><b>ca. 5 %</b></div></div>
+    <div class="polaroid"><div data-fp="schleife" data-seed="12" data-label="Schleife"></div><div class="cap">Schleife</div><div class="pct">Linien kommen von einer Seite, machen eine Kehrtwende und laufen zur gleichen Seite zurück. <br><b>ca. 60–65 %</b></div></div>
+    <div class="polaroid"><div data-fp="wirbel" data-seed="13" data-label="Wirbel"></div><div class="cap">Wirbel</div><div class="pct">Linien laufen in Kreisen, Spiralen oder Ovalen um ein Zentrum herum. <br><b>ca. 30–35 %</b></div></div>
+  </div>
+  <p class="muted" style="font-size:14px">Die Prozentzahlen geben ungefähr an, wie häufig das Muster in der Bevölkerung vorkommt.</p>
+
+  <h3>Akte 4: Minuzien – die Einzelheiten</h3>
+  <p>Das Grundmuster allein reicht nicht, um einen Menschen zu erkennen. Entscheidend sind kleine Besonderheiten im Linienverlauf, die <b>Minuzien</b>. Ihre Art und ihre Lage sind bei jedem Menschen anders.</p>
+  <div class="grid g3">
+    <div class="polaroid"><div data-min="ende"></div><div class="cap">Linienende</div><div class="pct">Eine Linie hört plötzlich auf.</div></div>
+    <div class="polaroid"><div data-min="gabel"></div><div class="cap">Gabelung</div><div class="pct">Eine Linie teilt sich in zwei.</div></div>
+    <div class="polaroid"><div data-min="punkt"></div><div class="cap">Punkt</div><div class="pct">Ein winziges Linienstück, so lang wie breit.</div></div>
+    <div class="polaroid"><div data-min="insel"></div><div class="cap">Kurze Linie (Insel)</div><div class="pct">Ein kurzes, freistehendes Linienstück.</div></div>
+    <div class="polaroid"><div data-min="auge"></div><div class="cap">Auge</div><div class="pct">Eine Linie teilt sich und läuft wieder zusammen.</div></div>
+    <div class="polaroid"><div data-min="bruecke"></div><div class="cap">Brücke</div><div class="pct">Ein kurzes Stück verbindet zwei Linien.</div></div>
+  </div>
+  <div class="merke">In Deutschland gilt als Faustregel: Stimmen zwei Abdrücke in <b>mindestens 12 Minuzien</b> (Art und Lage) überein, stammen sie von derselben Person.</div>
+  <div class="row"><button class="btn primary" type="button" data-goto="p-versuch">Weiter zum Versuch ▶</button></div>
+</section>
+
+<section class="panel" id="p-versuch" role="tabpanel">
+  <h2>Versuch: Deine Zehnfinger-Karte</h2>
+  <div class="tag"><div class="lbl">BEWEISMITTEL · MATERIAL</div>
+    <ul><li>Stempelkissen</li><li>weißes Papier oder Zehnfinger-Bogen</li><li>Lupe</li><li>Bleistift</li><li>Feuchttücher / Waschbecken</li><li>Unterlage</li></ul></div>
+  <div class="row"><button class="btn" type="button" id="printSheet">🖨️ Zehnfinger-Bogen zum Ausdrucken</button></div>
+
+  <h3>Durchführung</h3>
+  <ol class="steps" data-id="v">
+    <li><div><b>Hände vorbereiten.</b> Wasche deine Hände und trockne sie gut ab. Fett und Schmutz machen die Abdrücke unscharf.</div></li>
+    <li><div><b>Finger einfärben.</b> Lege den Finger seitlich auf das Stempelkissen und rolle ihn einmal von Nagelrand zu Nagelrand ab.<div class="tip">Wenig Farbe ist besser als viel. Sonst laufen die Linien zu.</div></div></li>
+    <li><div><b>Abrollen.</b> Setze den Finger im passenden Feld auf das Papier und rolle ihn gleichmäßig von einer Seite zur anderen ab. Nicht drücken und nicht zurückrollen!<div class="tip">Deine Partnerin oder dein Partner kann deinen Finger locker führen. Das klappt oft besser.</div></div></li>
+    <li><div><b>Alle zehn Finger.</b> Wiederhole das für alle Finger beider Hände. Beschrifte jedes Feld (z. B. „rechter Daumen“). Ist ein Abdruck verwischt, mache daneben einen neuen.</div></li>
+    <li><div><b>Grundmuster bestimmen.</b> Betrachte jeden Abdruck mit der Lupe und trage das Grundmuster unten in deine digitale Zehnfinger-Karte ein.</div></li>
+    <li><div><b>Minuzien suchen.</b> Wähle deinen deutlichsten Abdruck. Suche mit der Lupe mindestens <b>fünf Minuzien</b>, kreise sie mit Bleistift ein und schreibe daneben, welche Art es ist.</div></li>
+    <li><div><b>Vergleichen.</b> Vergleiche deine Karte mit der deiner Partnerin oder deines Partners. Habt ihr gleiche Grundmuster? Findet ihr auch gleiche Minuzien an gleicher Stelle?</div></li>
+    <li><div><b>Aufräumen.</b> Hände waschen, Stempelkissen schließen, Platz sauber hinterlassen.</div></li>
+  </ol>
+
+  <h3>Digitale Zehnfinger-Karte</h3>
+  <div class="task" data-task="tenkarte">
+    <p class="tt">Trage für jeden Finger das Grundmuster ein.</p>
+    <div class="scroll-x"><table class="t" id="tenTable"></table></div>
+    <div id="tenStats" style="margin-top:14px"></div>
+    <span class="solvedflag" hidden>✅ vollständig</span>
+  </div>
+  <div class="row"><button class="btn primary" type="button" data-goto="p-ausw">Weiter zur Auswertung ▶</button></div>
+</section>
+
+<section class="panel" id="p-ausw" role="tabpanel">
+  <h2>Auswertung: Werde zum Daktyloskopen</h2>
+
+  <div class="task" data-kind="select" data-task="muster">
+    <p class="tt">🔎 Aufgabe 1: Welches Grundmuster ist das?</p>
+    <p class="muted">Sechs Abdrücke aus der Spurensammlung. Bestimme jeweils das Grundmuster.</p>
+    <div class="grid g3" id="musterGrid"></div>
+  </div>
+
+  <div class="task" data-kind="select" data-task="minuzien">
+    <p class="tt">🔎 Aufgabe 2: Welche Minuzie ist eingekreist?</p>
+    <div class="grid g3" id="minGrid"></div>
+  </div>
+
+  <div class="task" id="mc1"><p class="tt">🧠 Aufgabe 3: Wissens-Check</p></div>
+
+  <div class="task">
+    <p class="tt">✍️ Aufgabe 4: Denk-Aufgaben für dein Protokoll</p>
+    <ol>
+      <li>Vergleiche die Verteilung deiner Grundmuster mit der Häufigkeit in der Bevölkerung. Was fällt dir auf?</li>
+      <li>Begründe, warum das Grundmuster allein nicht ausreicht, um einen Täter zu überführen.</li>
+      <li>Erkläre, warum Fingerabdrücke für die Polizei so wertvoll sind. Nutze die Begriffe <i>einzigartig</i> und <i>unveränderlich</i>.</li>
+    </ol>
+    <p class="muted">Hinweis zu Frage 2: <span class="redact">Ein Muster wie die Schleife haben über die Hälfte aller Menschen. Erst Art und Lage vieler Minuzien machen einen Abdruck eindeutig.</span></p>
+  </div>
+  <div class="row"><button class="btn primary" type="button" data-goto="p-proto">Weiter zum Mini-Protokoll ▶</button></div>
+</section>
+
+<section class="panel" id="p-proto" role="tabpanel"><div class="proto">
+  <h2>Mini-Protokoll</h2>
+  <p>Mit einem sauberen Mini-Protokoll kannst du deine Note verbessern. Schreibe in ganzen Sätzen und in eigenen Worten. Deine Eingaben werden auf diesem Gerät gespeichert. Am Ende druckst du das Protokoll oder speicherst es als PDF und gibst es ab.</p>
+  <div class="two">
+    <div><label class="f" for="p-name">Name</label><input type="text" id="p-name" data-save="p-name" autocomplete="name"></div>
+    <div><label class="f" for="p-klasse">Klasse / Kurs</label><input type="text" id="p-klasse" data-save="p-klasse"></div>
+    <div><label class="f" for="p-datum">Datum</label><input type="date" id="p-datum" data-save="p-datum"></div>
+  </div>
+  <label class="f" for="p-frage">Fragestellung <span class="hint">– Was wolltest du herausfinden?</span></label>
+      <textarea id="p-frage" data-save="p-frage" data-label="Fragestellung"></textarea><label class="f" for="p-material">Material <span class="hint">– Liste alle Materialien auf.</span></label>
+      <textarea id="p-material" data-save="p-material" data-label="Material"></textarea><label class="f" for="p-durch">Durchführung <span class="hint">– Beschreibe kurz in eigenen Worten, wie du vorgegangen bist.</span></label>
+      <textarea id="p-durch" data-save="p-durch" data-label="Durchführung"></textarea><label class="f" for="p-beob">Beobachtung <span class="hint">– Welche Grundmuster hast du? Welche Minuzien hast du gefunden? (Deine Zehnfinger-Karte wird automatisch mitgedruckt.)</span></label>
+      <textarea id="p-beob" data-save="p-beob" data-label="Beobachtung" data-extra="tenPrint"></textarea><label class="f" for="p-ausw">Auswertung <span class="hint">– Beantworte die Denk-Aufgaben aus der Auswertung.</span></label>
+      <textarea id="p-ausw" data-save="p-ausw" data-label="Auswertung"></textarea><label class="f" for="p-fehler">Fehlerquellen <span class="hint">– Was hat nicht gut geklappt? Wie könnte man es besser machen?</span></label>
+      <textarea id="p-fehler" data-save="p-fehler" data-label="Fehlerquellen"></textarea>
+  <label class="f" for="photo">Foto deines Ergebnisses <span class="hint">– freiwillig, wird mitgedruckt</span></label>
+  <input type="file" id="photo" accept="image/*" capture="environment">
+  <div class="photo-prev"></div>
+  <p class="saved"></p>
+  <div class="row"><button class="btn primary" type="button" id="printBtn">🖨️ Protokoll drucken / als PDF speichern</button>
+    <button class="btn small" type="button" id="resetAll">🗑️ Alles auf diesem Gerät löschen</button></div>
+  <div class="check-grade"><b>✅ Checkliste für ein gutes Mini-Protokoll</b><ul>
+    <li>Alle Abschnitte sind ausgefüllt.</li>
+    <li>Beobachtung und Auswertung sind getrennt: erst <i>was</i> du gesehen hast, dann <i>warum</i>.</li>
+    <li>Die Fachbegriffe aus dem Briefing sind richtig verwendet.</li>
+    <li>Die Denk-Aufgaben sind beantwortet.</li>
+    <li>Ein Foto oder eine Skizze deines Ergebnisses ist dabei (Foto hier oder Skizze auf Papier).</li></ul></div>
+</div></section>
+</main>
+<footer><div class="stations"><a href="https://hubi-bot.github.io/Frau-Huber/finger-muster" class="cur">1 · Muster & Minuzien</a><a href="https://hubi-bot.github.io/Frau-Huber/finger-sichern" class="">2 · Pulver & Pinsel</a><a href="https://hubi-bot.github.io/Frau-Huber/finger-ninhydrin" class="">3 · Ninhydrin</a></div>Daktyloskopie · Station 1 von 3</footer>
+<div id="printout"></div>
+</div>
+<dialog id="qrdlg"><h2 style="margin:0 0 8px;font-family:'Special Elite',monospace">Station 1 öffnen</h2><div id="qrbox"></div><p class="url" id="qrurl"></p><button class="btn primary" id="qrclose" type="button">Schließen</button></dialog>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>const STATION={"id": "s1", "nr": 1, "title": "Fingerabdrücke untersuchen"};
+window.stationInit = function(){
+  const fingers=['Daumen','Zeigefinger','Mittelfinger','Ringfinger','Kleiner Finger'];
+  const types=['Bogen','Schleife','Wirbel','nicht erkennbar'];
+  const ten=store.get('ten',{});
+  const tbl=$('#tenTable');
+  tbl.innerHTML='<tr><th>Hand</th>'+fingers.map(f=>`<th>${f}</th>`).join('')+'</tr>'+
+    ['rechts','links'].map(h=>`<tr><th>${h==='rechts'?'Rechte':'Linke'} Hand</th>`+fingers.map((f,i)=>`<td><select data-k="${h}${i}" aria-label="${h} ${f}"><option value="">–</option>${types.map(t=>`<option>${t}</option>`).join('')}</select></td>`).join('')+'</tr>').join('');
+  $$('select',tbl).forEach(s=>{ s.value=ten[s.dataset.k]||''; s.addEventListener('change',()=>{ ten[s.dataset.k]=s.value; store.set('ten',ten); stats(); }); });
+  const pop={Bogen:5,Schleife:62,Wirbel:33};
+  function stats(){
+    const c={Bogen:0,Schleife:0,Wirbel:0,'nicht erkennbar':0}; let n=0;
+    Object.values(ten).forEach(v=>{ if(v){ c[v]++; n++; } });
+    $('#tenStats').innerHTML = `<b>Deine Verteilung (${n} von 10 eingetragen):</b>` + ['Bogen','Schleife','Wirbel'].map(t=>{
+      const p = n? Math.round(100*c[t]/n):0;
+      return `<div style="display:grid;grid-template-columns:90px 1fr;gap:8px;align-items:center;margin:6px 0"><span>${t}</span>
+       <div><div style="height:16px;width:${p}%;min-width:2px;background:var(--accent);border-radius:4px" title="du: ${p} %"></div>
+       <div style="height:8px;width:${pop[t]}%;background:#8b7a55;border-radius:4px;margin-top:3px;opacity:.6" title="Bevölkerung: ca. ${pop[t]} %"></div>
+       <span style="font-size:13px">du: ${c[t]}× (${p} %) · Bevölkerung: ca. ${pop[t]} %</span></div></div>`; }).join('')
+      + `<p class="muted" style="font-size:13px">Pinker Balken = deine Finger, brauner Balken = Bevölkerung (ungefähr).</p>`;
+    const id='tenkarte'; if(n===10 && !solved.has(id)){ markSolved(id); stamp(); }
+  }
+  stats();
+  window.tenPrint = function(){
+    return '<table><tr><th></th>'+fingers.map(f=>`<th>${f}</th>`).join('')+'</tr>'+['rechts','links'].map(h=>`<tr><th>${h==='rechts'?'Rechts':'Links'}</th>`+fingers.map((f,i)=>`<td>${esc(ten[h+i]||'')}</td>`).join('')+'</tr>').join('')+'</table>';
+  };
+  $('#printSheet').addEventListener('click',()=>{
+    const box=(t)=>`<td style="height:4.2cm;width:20%;vertical-align:bottom;font-size:9pt">${t}</td>`;
+    $('#printout').innerHTML=`<h1>Zehnfinger-Bogen</h1><p>Name: ______________________ &nbsp; Datum: ____________</p>
+      <h2>Rechte Hand</h2><table style="width:100%">${'<tr>'+fingers.map(f=>box('rechts – '+f)).join('')+'</tr>'}</table>
+      <h2>Linke Hand</h2><table style="width:100%">${'<tr>'+fingers.map(f=>box('links – '+f)).join('')+'</tr>'}</table>
+      <p style="font-size:9pt">Finger von Nagelrand zu Nagelrand abrollen · wenig Farbe · nicht zurückrollen</p>`;
+    window.print();
+  });
+
+  // Aufgabe 1: Grundmuster
+  const ms=[['wirbel',31,0],['bogen',32,0],['schleife',33,1],['schleife',34,0],['wirbel',35,1],['bogen',36,1]];
+  $('#musterGrid').innerHTML=ms.map((m,i)=>`<div class="polaroid"><div data-fp="${m[0]}" data-seed="${m[1]}" data-mirror="${m[2]}" data-label="Spur ${i+1}"></div>
+    <div class="cap">Spur ${i+1}</div><select data-a="${m[0]}" data-msg="${{bogen:'Schau genau: Gibt es ein Zentrum, um das die Linien kreisen oder umkehren?',schleife:'Prüfe, ob die Linien wieder zur selben Seite zurücklaufen.',wirbel:'Achte darauf, ob die Linien ein geschlossenes Zentrum umkreisen.'}[m[0]]}" aria-label="Grundmuster Spur ${i+1}">
+    <option value="bogen">Bogen</option><option value="schleife">Schleife</option><option value="wirbel">Wirbel</option></select></div>`).join('');
+
+  // Aufgabe 2: Minuzien
+  const mn=[['gabel'],['auge'],['ende'],['bruecke'],['punkt'],['insel']];
+  const names={ende:'Linienende',gabel:'Gabelung',punkt:'Punkt',insel:'Kurze Linie (Insel)',auge:'Auge',bruecke:'Brücke'};
+  $('#minGrid').innerHTML=mn.map((m,i)=>`<div class="polaroid"><div data-min="${m[0]}"></div><div class="cap">Merkmal ${String.fromCharCode(65+i)}</div>
+    <select data-a="${m[0]}" aria-label="Merkmal ${String.fromCharCode(65+i)}">${Object.entries(names).map(([k,v])=>`<option value="${k}">${v}</option>`).join('')}</select></div>`).join('');
+
+  // Aufgabe 3
+  renderMC($('#mc1'),[
+    {q:'Eineiige Zwillinge haben dieselben Gene. Was gilt für ihre Fingerabdrücke?', o:['Sie sind identisch.','Sie sind ähnlich, aber nicht gleich.','Zwillinge haben keine Minuzien.'], a:1, why:'Genau! Die Leisten entstehen vor der Geburt auch durch Zufälle im Mutterleib, zum Beispiel Lage und Druck. Darum sind sie selbst bei Zwillingen verschieden.', hint:'Denk an „einzigartig“.'},
+    {q:'Welches Grundmuster kommt in der Bevölkerung am häufigsten vor?', o:['Bogen','Schleife','Wirbel'], a:1, why:'Richtig, etwa 60–65 % aller Abdrücke sind Schleifen.'},
+    {q:'Warum rollt man den Finger beim Abnehmen von Nagelrand zu Nagelrand ab?', o:['Damit mehr Farbe auf das Papier kommt.','Damit die ganze Fingerkuppe mit allen Linien abgebildet wird.','Damit der Abdruck schneller trocknet.'], a:1, why:'Richtig! Ein gerollter Abdruck zeigt viel mehr Fläche – und damit mehr Minuzien – als ein bloß aufgedrückter.'},
+    {q:'Was sind Minuzien?', o:['Die drei Grundmuster Bogen, Schleife und Wirbel','Schweißporen auf der Haut','Besondere Stellen im Linienverlauf, z. B. Gabelungen oder Linienenden'], a:2, why:'Genau. Art und Lage der Minuzien machen einen Abdruck einzigartig.'},
+    {q:'Wie viele übereinstimmende Minuzien gelten in Deutschland als Faustregel für eine sichere Zuordnung?', o:['3','8','12','50'], a:2, why:'Richtig: mindestens 12 Minuzien nach Art und Lage.'},
+    {q:'Du hast dir als Kind tief in die Fingerkuppe geschnitten. Was passiert mit deinem Fingerabdruck?', o:['Er verschwindet für immer.','Die Linien wachsen gleich nach, aber eine tiefe Narbe bleibt als zusätzliches Merkmal sichtbar.','Er verwandelt sich in ein anderes Grundmuster.'], a:1, why:'Richtig. Eine Narbe ist sogar ein weiteres, sehr auffälliges Erkennungsmerkmal.'}
+  ],'wissen1');
+};
+
+/* ===== Gemeinsamer Kern der Daktyloskopie-Stationen ===== */
+const KEY = 'dakty-' + STATION.id + '-';
+const store = {
+  get(k, d){ try{ const v = localStorage.getItem(KEY+k); return v===null ? d : JSON.parse(v); }catch(e){ return d; } },
+  set(k, v){ try{ localStorage.setItem(KEY+k, JSON.stringify(v)); return true; }catch(e){ return false; } },
+  del(k){ try{ localStorage.removeItem(KEY+k); }catch(e){} }
+};
+const $ = (s, r=document) => r.querySelector(s);
+const $$ = (s, r=document) => Array.from(r.querySelectorAll(s));
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+/* ---------- Fingerabdruck-Generator (SVG) ---------- */
+function rng(seed){ let s = seed >>> 0 || 1; return () => (s = (s * 1664525 + 1013904223) >>> 0) / 4294967296; }
+function fingerprint(type, o={}){
+  const W=200, H=260, cx=100, cy=128, r=rng(o.seed||7), col=o.color||'#2a2418', sw=o.sw||3.2, id='c'+Math.floor(r()*1e9);
+  const paths=[]; const wob=(a)=>Math.sin(a)*1.6;
+  const breakDash=()=> r()<0.35 ? ` stroke-dasharray="${(60+r()*160)|0} ${(5+r()*5)|0}"` : '';
+  const P = (d)=>paths.push(`<path d="${d}"${breakDash()}/>`);
+  if(type==='bogen'){
+    for(let b=30; b<300; b+=9.5){
+      const h = Math.max(0, 60 - Math.abs(b-150)*0.18) * (b<150 ? (b-20)/130 : 1);
+      let d=''; for(let x=-10; x<=210; x+=10){ const y=b - h*Math.exp(-Math.pow((x-cx)/48,2)) + wob(x/23+b); d+=(x===-10?'M':'L')+x+' '+y.toFixed(1)+' '; }
+      P(d);
+    }
+  } else if(type==='wirbel'){
+    for(let k=1; k<12; k++){
+      const rr=k*8.2; let d='';
+      for(let t=0; t<=360; t+=10){ const a=t*Math.PI/180; const x=cx+rr*Math.cos(a)+wob(a*3+k); const y=cy-10+rr*1.18*Math.sin(a)+wob(a*2+k); d+=(t?'L':'M')+x.toFixed(1)+' '+y.toFixed(1)+' '; }
+      P(d+'Z');
+    }
+    for(let b=238; b<300; b+=9.5){ let d=''; for(let x=-10;x<=210;x+=10){ d+=(x===-10?'M':'L')+x+' '+(b-18*Math.exp(-Math.pow((x-cx)/70,2))+wob(x/20)).toFixed(1)+' '; } P(d); }
+  } else { // schleife (öffnet nach links unten)
+    const g=[];
+    for(let k=0; k<8; k++){
+      const rr=6+k*9.5, x0=112; let d=`M -40 ${cy-rr} `;
+      for(let x=-30; x<=x0; x+=14) d+=`L ${x} ${(cy-rr+wob(x/18+k)).toFixed(1)} `;
+      d+=`A ${rr} ${rr} 0 0 1 ${x0} ${cy+rr} `;
+      for(let x=x0; x>=-40; x-=14) d+=`L ${x} ${(cy+rr+wob(x/16+k)).toFixed(1)} `;
+      g.push(`<path d="${d}"${breakDash()}/>`);
+    }
+    paths.push(`<g transform="rotate(28 ${cx} ${cy})">${g.join('')}</g>`);
+    for(let b=4; b<34; b+=9.5){ let d=''; for(let x=-10;x<=210;x+=10){ d+=(x===-10?'M':'L')+x+' '+(b+10*Math.exp(-Math.pow((x-cx)/60,2))+wob(x/20)).toFixed(1)+' '; } P(d); }
+    for(let b=242; b<300; b+=9.5){ let d=''; for(let x=-10;x<=210;x+=10){ d+=(x===-10?'M':'L')+x+' '+(b-14*Math.exp(-Math.pow((x-cx)/70,2))).toFixed(1)+' '; } P(d); }
+  }
+  const mirror = o.mirror ? ` transform="translate(${W} 0) scale(-1 1)"` : '';
+  return `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="${o.label||'Fingerabdruck'}"${o.attrs||''}>
+    <defs><clipPath id="${id}"><ellipse cx="${cx}" cy="${cy+6}" rx="86" ry="116"/></clipPath></defs>
+    <g clip-path="url(#${id})" fill="none" stroke="${col}" stroke-width="${sw}" stroke-linecap="round"${mirror}>${paths.join('')}</g></svg>`;
+}
+/* Wasserzeichen im Hintergrund */
+(function(){ const svg = fingerprint('wirbel',{seed:3,color:'#ffffff',sw:2.4}); document.documentElement.style.setProperty('--fp-bg', `url("data:image/svg+xml,${encodeURIComponent(svg)}")`); })();
+
+/* ---------- Minuzien-Skizzen ---------- */
+function minutia(kind, circle=true){
+  const L=(y)=>`<path d="M0 ${y} C 40 ${y-3}, 120 ${y+3}, 160 ${y}"/>`;
+  let s='';
+  const outer = L(10)+L(100);
+  switch(kind){
+    case 'ende': s=outer+L(32)+L(78)+`<path d="M0 55 C 30 53, 60 57, 82 55"/>`; break;
+    case 'gabel': s=outer+L(28)+L(82)+`<path d="M0 55 C 30 53, 60 57, 76 55 C 100 53, 120 44, 160 43"/><path d="M76 55 C 100 57, 120 66, 160 67"/>`; break;
+    case 'punkt': s=outer+L(32)+L(78)+`<path d="M0 55 L 48 55"/><path d="M112 55 L 160 55"/><circle cx="80" cy="55" r="4" fill="currentColor"/>`; break;
+    case 'insel': s=outer+L(32)+L(78)+`<path d="M0 55 L 40 55"/><path d="M120 55 L 160 55"/><path d="M62 55 L 98 55"/>`; break;
+    case 'auge': s=outer+L(28)+L(82)+`<path d="M0 55 L 56 55 C 66 42, 94 42, 104 55 C 94 68, 66 68, 56 55 M104 55 L 160 55"/>`; break;
+    case 'bruecke': s=outer+L(32)+L(78)+`<path d="M0 50 L 160 50"/><path d="M0 60 L 160 60" transform="translate(0 0)"/><path d="M0 50 L 160 50" opacity="0"/>`;
+      s=outer+L(30)+L(80)+`<path d="M0 47 C 50 45, 110 49, 160 47"/><path d="M0 63 C 50 61, 110 65, 160 63"/><path d="M68 47 L 92 63"/>`; break;
+  }
+  const mark = circle ? `<circle cx="80" cy="55" r="22" fill="none" stroke="#c8322b" stroke-width="2.5" stroke-dasharray="5 4"/>` : '';
+  return `<svg viewBox="-6 0 172 110" xmlns="http://www.w3.org/2000/svg"><g fill="none" stroke="#2a2418" stroke-width="5" stroke-linecap="round" style="color:#2a2418">${s}</g>${mark}</svg>`;
+}
+
+/* ---------- Lehrer-Stempel ---------- */
+function stamp(){
+  const words=['Prima!','Super!','Klasse!','Spitze!','Toll!','Fall gelöst!'];
+  let el=$('.stamp'); if(!el){ el=document.createElement('div'); el.className='stamp'; document.body.appendChild(el); }
+  el.textContent=words[Math.floor(Math.random()*words.length)];
+  el.classList.remove('go'); void el.offsetWidth; el.classList.add('go');
+}
+
+/* ---------- Fortschritt ---------- */
+const solved = new Set(store.get('solved', []));
+function markSolved(id){ solved.add(id); store.set('solved',[...solved]); updateProgress(); }
+function updateProgress(){
+  const steps=$$('ol.steps input[type=checkbox]'); const tasks=$$('[data-task]');
+  const total=steps.length+tasks.length+1;
+  const proto = ($$('.proto [data-save]').filter(e=>e.tagName==='TEXTAREA' && e.value.trim().length>20).length>=3) ? 1 : 0;
+  const done=steps.filter(c=>c.checked).length + tasks.filter(t=>solved.has(t.dataset.task)).length + proto;
+  const pct=Math.round(100*done/total);
+  const fg=$('.ring .fg'); if(fg){ const C=2*Math.PI*36; fg.style.strokeDasharray=C; fg.style.strokeDashoffset=C*(1-pct/100); }
+  const t=$('.ring text'); if(t) t.textContent=pct+'%';
+  tasks.forEach(t=>{ const b=t.querySelector('.solvedflag'); if(b) b.hidden=!solved.has(t.dataset.task); });
+  $$('nav.tabs button').forEach(b=>{
+    const p=$('#'+b.getAttribute('aria-controls')); if(!p) return;
+    const st=$$('ol.steps input[type=checkbox]',p), tk=$$('[data-task]',p);
+    const all=st.length+tk.length; const ok = all>0 && st.every(c=>c.checked) && tk.every(x=>solved.has(x.dataset.task));
+    b.querySelector('.done').textContent = ok ? ' ✓' : '';
+  });
+}
+
+/* ---------- Reiter ---------- */
+function initTabs(){
+  const btns=$$('nav.tabs button');
+  const show=(id)=>{ btns.forEach(b=>b.setAttribute('aria-selected', b.getAttribute('aria-controls')===id)); $$('.panel').forEach(p=>p.classList.toggle('active', p.id===id)); store.set('tab',id); };
+  btns.forEach(b=>b.addEventListener('click',()=>{ show(b.getAttribute('aria-controls')); $('.sheet').scrollIntoView({behavior:'smooth',block:'start'}); }));
+  $$('[data-goto]').forEach(a=>a.addEventListener('click',e=>{ e.preventDefault(); show(a.dataset.goto); $('.sheet').scrollIntoView({behavior:'smooth'}); }));
+  const last=store.get('tab',null); show(last && $('#'+last) ? last : btns[0].getAttribute('aria-controls'));
+}
+
+/* ---------- Schritte abhaken ---------- */
+function initSteps(){
+  const st=store.get('steps',{});
+  $$('ol.steps li').forEach((li,i)=>{
+    const id=(li.closest('ol').dataset.id||'s')+i;
+    const lab=document.createElement('label'); lab.className='chk'; lab.innerHTML=`<input type="checkbox"> erledigt`;
+    li.appendChild(lab); const c=lab.querySelector('input'); c.checked=!!st[id]; li.classList.toggle('ok',c.checked);
+    c.addEventListener('change',()=>{ st[id]=c.checked; store.set('steps',st); li.classList.toggle('ok',c.checked); updateProgress(); });
+  });
+}
+
+/* ---------- Multiple Choice ---------- */
+function renderMC(host, qs, taskId){
+  host.dataset.task=taskId;
+  const saved=store.get('mc-'+taskId,{});
+  host.insertAdjacentHTML('beforeend', qs.map((q,i)=>`<div class="q" data-i="${i}"><div class="qt">${i+1}. ${q.q}</div><div class="opts">${
+    q.o.map((o,j)=>`<label><input type="radio" name="${taskId}-${i}" value="${j}" ${saved[i]==j?'checked':''}> <span>${o}</span></label>`).join('')}</div><div class="fb"></div></div>`).join('')
+    + `<div class="row" style="margin-top:10px"><button class="btn primary" type="button">✓ Prüfen</button><span class="solvedflag" hidden>✅ gelöst</span></div><div class="fb sum"></div>`);
+  host.addEventListener('change',()=>{ const s={}; $$('.q',host).forEach(q=>{ const c=$('input:checked',q); if(c) s[q.dataset.i]=c.value; }); store.set('mc-'+taskId,s); });
+  $('.btn.primary',host).addEventListener('click',()=>{
+    let ok=0, open=0;
+    $$('.q',host).forEach((qe,i)=>{
+      const q=qs[i], c=$('input:checked',qe), fb=$('.fb',qe);
+      $$('label',qe).forEach(l=>l.classList.remove('right','wrong'));
+      if(!c){ open++; fb.className='fb show bad'; fb.innerHTML='Hier fehlt noch deine Antwort.'; return; }
+      if(+c.value===q.a){ ok++; c.parentElement.classList.add('right'); fb.className='fb show good'; fb.innerHTML='✔ '+(q.why||'Richtig!'); }
+      else { c.parentElement.classList.add('wrong'); fb.className='fb show bad'; fb.innerHTML='✘ Noch nicht. '+(q.hint||'Lies im Briefing noch einmal nach.'); }
+    });
+    const sum=$('.fb.sum',host);
+    if(ok===qs.length){ sum.className='fb sum show good'; sum.textContent=`Alle ${ok} Antworten stimmen. Fall gelöst!`; stamp(); markSolved(taskId); }
+    else { sum.className='fb sum show bad'; sum.textContent=`${ok} von ${qs.length} richtig${open?`, ${open} noch offen`:''}. Versuch es noch einmal – du hast beliebig viele Versuche.`; }
+  });
+}
+
+/* ---------- Auswahl-/Lückentext-Aufgaben ---------- */
+function initSelectTasks(){
+  $$('[data-kind=select]').forEach(host=>{
+    const id=host.dataset.task, saved=store.get('sel-'+id,{});
+    const sels=$$('select',host);
+    sels.forEach((s,i)=>{ if(!s.querySelector('option[value=""]')) s.insertAdjacentHTML('afterbegin','<option value="">– wählen –</option>'); s.value = saved[i]!==undefined ? saved[i] : ''; });
+    host.addEventListener('change',()=>{ const s={}; sels.forEach((x,i)=>s[i]=x.value); store.set('sel-'+id,s); });
+    host.insertAdjacentHTML('beforeend',`<div class="row" style="margin-top:10px"><button class="btn primary" type="button">✓ Prüfen</button><span class="solvedflag" hidden>✅ gelöst</span></div><div class="fb sum"></div>`);
+    $('.btn.primary',host).addEventListener('click',()=>{
+      let ok=0, empty=0; const msgs=[];
+      sels.forEach(s=>{
+        s.classList.remove('right','wrong');
+        if(!s.value){ empty++; return; }
+        const good = s.dataset.a.split('|').includes(s.value);
+        if(good){ ok++; s.classList.add('right'); } else { s.classList.add('wrong'); if(s.dataset.msg) msgs.push(s.dataset.msg); }
+      });
+      const sum=$('.fb.sum',host);
+      if(ok===sels.length){ sum.className='fb sum show good'; sum.textContent='Alles richtig zugeordnet!'; stamp(); markSolved(id); }
+      else { sum.className='fb sum show bad';
+        sum.innerHTML=`${ok} von ${sels.length} richtig${empty?` – ${empty} Feld(er) noch leer`:''}. Die rot umrandeten Felder stimmen noch nicht.` + (msgs.length?'<ul>'+[...new Set(msgs)].map(m=>'<li>'+m+'</li>').join('')+'</ul>':''); }
+    });
+  });
+}
+
+/* ---------- Reihenfolge ---------- */
+function renderOrder(host, items, taskId){
+  host.dataset.task=taskId;
+  let order=store.get('ord-'+taskId,null);
+  if(!order || order.length!==items.length){ order=items.map((_,i)=>i); do{ order.sort(()=>Math.random()-.5);}while(order.every((v,i)=>v===i)); }
+  const ul=document.createElement('ul'); ul.className='order'; host.appendChild(ul);
+  const draw=(marks)=>{ ul.innerHTML=order.map((k,pos)=>`<li class="${marks?(marks[pos]?'right':'wrong'):''}"><span class="nr">${pos+1}</span><span class="txt">${items[k]}</span>
+      <button type="button" aria-label="nach oben" data-u="${pos}">▲</button><button type="button" aria-label="nach unten" data-d="${pos}">▼</button></li>`).join(''); };
+  ul.addEventListener('click',e=>{ const b=e.target.closest('button'); if(!b) return; const p=+(b.dataset.u ?? b.dataset.d); const q = b.dataset.u!==undefined ? p-1 : p+1;
+    if(q<0||q>=order.length) return; [order[p],order[q]]=[order[q],order[p]]; store.set('ord-'+taskId,order); draw(); ul.querySelectorAll('button')[q*2+(b.dataset.u!==undefined?0:1)]?.focus(); });
+  draw();
+  host.insertAdjacentHTML('beforeend',`<div class="row"><button class="btn primary" type="button">✓ Prüfen</button><span class="solvedflag" hidden>✅ gelöst</span></div><div class="fb sum"></div>`);
+  $('.btn.primary',host).addEventListener('click',()=>{
+    const marks=order.map((k,pos)=>k===pos); draw(marks); const ok=marks.filter(Boolean).length; const sum=$('.fb.sum',host);
+    if(ok===items.length){ sum.className='fb sum show good'; sum.textContent='Perfekte Reihenfolge – so arbeitet die Spurensicherung!'; stamp(); markSolved(taskId); }
+    else { sum.className='fb sum show bad'; sum.textContent=`${ok} von ${items.length} Schritten stehen schon an der richtigen Stelle. Verschiebe die rot markierten.`; }
+  });
+}
+
+/* ---------- Gespeicherte Felder ---------- */
+function initSaveFields(){
+  const data=store.get('fields',{});
+  $$('[data-save]').forEach(el=>{
+    const k=el.dataset.save; if(data[k]!==undefined) el.value=data[k];
+    el.addEventListener('input',()=>{ data[k]=el.value; const ok=store.set('fields',data); const s=el.closest('.proto')?.querySelector('.saved'); if(s) s.textContent= ok ? '✔ automatisch gespeichert (auf diesem Gerät)' : '⚠ Speichern auf diesem Gerät nicht möglich – bitte drucken/als PDF sichern.'; updateProgress(); });
+  });
+}
+
+/* ---------- Geschwärzte Hinweise ---------- */
+function initRedact(){ $$('.redact').forEach(r=>{ r.setAttribute('role','button'); r.tabIndex=0; r.title='Klicken zum Aufdecken';
+  const open=()=>r.classList.add('open'); r.addEventListener('click',open); r.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){e.preventDefault();open();} }); }); }
+
+/* ---------- Foto ---------- */
+function initPhoto(){
+  const inp=$('#photo'), prev=$('.photo-prev'); if(!inp) return;
+  const show=(src)=>{ prev.innerHTML = src ? `<img src="${src}" alt="Foto deines Fingerabdrucks"><br><button class="btn small" type="button" id="photoDel">Foto entfernen</button>` : '';
+    const d=$('#photoDel'); if(d) d.onclick=()=>{ store.del('photo'); window._photo=null; show(null); }; };
+  window._photo=store.get('photo',null); show(window._photo);
+  inp.addEventListener('change',()=>{ const f=inp.files[0]; if(!f) return; const img=new Image(); const rd=new FileReader();
+    rd.onload=()=>{ img.onload=()=>{ const m=900, s=Math.min(1,m/Math.max(img.width,img.height)); const c=document.createElement('canvas'); c.width=img.width*s; c.height=img.height*s;
+      c.getContext('2d').drawImage(img,0,0,c.width,c.height); const url=c.toDataURL('image/jpeg',.8); window._photo=url; store.set('photo',url); show(url); }; img.src=rd.result; }; rd.readAsDataURL(f); });
+}
+
+/* ---------- Protokoll drucken ---------- */
+function printProtocol(){
+  const pr=$('#printout'); const f=(k)=>esc(($(`[data-save="${k}"]`)||{}).value||'');
+  let html=`<h1>Mini-Protokoll – ${esc(STATION.title)}</h1><p><b>Name:</b> ${f('p-name')} &nbsp; <b>Klasse/Kurs:</b> ${f('p-klasse')} &nbsp; <b>Datum:</b> ${f('p-datum')}</p>`;
+  $$('.proto [data-label]').forEach(el=>{ html+=`<h2>${esc(el.dataset.label)}</h2><div class="ans">${esc(el.value||'')}</div>`; if(el.dataset.extra && window[el.dataset.extra]) html+=window[el.dataset.extra](); });
+  if(window._photo) html+=`<h2>Foto des Ergebnisses</h2><img src="${window._photo}">`;
+  html+=`<p style="margin-top:18pt;color:#555;font-size:9pt">Erstellt mit der Lernumgebung „${esc(STATION.title)}“ · Station ${STATION.nr} Daktyloskopie</p>`;
+  pr.innerHTML=html; window.print();
+}
+
+/* ---------- QR ---------- */
+function initQR(){
+  const dlg=$('#qrdlg'); const url=location.origin+location.pathname;
+  $('.qrbtn').addEventListener('click',()=>{ $('#qrurl').textContent=url; const box=$('#qrbox'); box.innerHTML='';
+    try{ new QRCode(box,{text:url,width:320,height:320,correctLevel:QRCode.CorrectLevel.M}); }catch(e){ box.textContent='QR-Code konnte nicht geladen werden.'; }
+    dlg.showModal ? dlg.showModal() : dlg.setAttribute('open',''); });
+  $('#qrclose').addEventListener('click',()=>dlg.close ? dlg.close() : dlg.removeAttribute('open'));
+}
+
+/* ---------- Zurücksetzen ---------- */
+function initReset(){ const b=$('#resetAll'); if(!b) return; b.addEventListener('click',()=>{ if(confirm('Wirklich alle Eingaben dieser Station auf diesem Gerät löschen?')){ try{ Object.keys(localStorage).filter(k=>k.startsWith(KEY)).forEach(k=>localStorage.removeItem(k)); }catch(e){} location.reload(); } }); }
+
+function boot(){
+  if(window.stationInit) window.stationInit();
+  $$('[data-fp]').forEach(el=>{ el.innerHTML=fingerprint(el.dataset.fp,{seed:+(el.dataset.seed||5), mirror:el.dataset.mirror==='1', label:el.dataset.label}); });
+  $$('[data-min]').forEach(el=>{ el.innerHTML=minutia(el.dataset.min, el.dataset.circle!=='0'); });
+  initTabs(); initSteps(); initSaveFields(); initSelectTasks(); initRedact(); initPhoto(); initQR(); initReset();
+  const d=$('[data-save="p-datum"]'); if(d && !d.value){ d.value=new Date().toISOString().slice(0,10); }
+  $('#printBtn')?.addEventListener('click',printProtocol);
+  updateProgress();
+}
+document.readyState==='loading' ? document.addEventListener('DOMContentLoaded',boot) : boot();
+</script>
+</body></html>
