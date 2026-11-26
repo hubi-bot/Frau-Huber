@@ -141,6 +141,22 @@ ol.steps li > div > b:first-child{display:block}
 .polaroid .cap{font-family:var(--type); font-size:16px; margin-top:6px}
 .polaroid .pct{font-size:13px; color:var(--paper-dim)}
 
+/* Echte Fotos */
+figure.polaroid{margin:0}
+.photo img{width:100%; height:auto; display:block; border-radius:2px; filter:contrast(1.05)}
+.fbi{position:relative}
+.fbi img{width:71.7%}
+.fbi span{position:absolute; left:73%; transform:translateY(-50%); font:600 clamp(11px,1.6vw,15px) var(--text); color:var(--paper-ink); background:var(--mark); padding:1px 6px; border-radius:4px; white-space:nowrap}
+.fbi.mirror img{transform:scaleX(-1); margin-left:auto}
+.fbi.mirror span{left:auto; right:73%; font:800 16px var(--text); background:var(--tape); color:#111; min-width:26px; text-align:center}
+.task.optional{border-style:dashed; border-color:var(--accent); background:#fffdf6}
+.task.optional::after{content:"OPTIONAL"; position:absolute; top:-12px; right:16px; background:var(--accent); color:#fff; font:800 12px var(--text); letter-spacing:.1em; padding:3px 10px; border-radius:999px}
+.denk{background:#fff8e1; border:2px solid #e0a800; border-radius:10px; padding:10px 14px; margin:6px 0 6px}
+.denk ol{margin:4px 0 0; padding-left:22px}
+.photos{display:flex; flex-wrap:wrap; gap:12px}
+.photos figure{margin:0; text-align:center}
+.photos img{max-width:240px; max-height:240px; border:4px solid #fff; box-shadow:0 6px 14px rgba(0,0,0,.25); display:block}
+
 /* Aufgaben / Rückmeldung */
 .task{background:#fffaf0; border:2px solid var(--paper-line); border-radius:12px; padding:16px 18px; margin:18px 0; position:relative}
 .task > .tt{font-family:var(--type); font-size:19px; margin:0 0 6px}
@@ -238,7 +254,8 @@ dialog::backdrop{background:rgba(0,0,0,.6)}
   #printout h1{font-family:var(--type); font-size:20pt; margin:0 0 4pt}
   #printout h2{font-size:13pt; margin:14pt 0 4pt; border-bottom:1px solid #999}
   #printout .ans{white-space:pre-wrap; min-height:1.4em}
-  #printout img{max-width:9cm; max-height:9cm}
+  #printout img{max-width:8cm; max-height:8cm; margin:0 6pt 6pt 0}
+  #printout .ph{border:1.5px dashed #888; height:6cm; display:flex; align-items:center; justify-content:center; color:#777}
   #printout table{border-collapse:collapse} #printout td, #printout th{border:1px solid #888; padding:3pt 6pt}
 }
 
@@ -299,8 +316,8 @@ dialog::backdrop{background:rgba(0,0,0,.6)}
 <section class="panel" id="p-versuch" role="tabpanel">
   <h2>Versuch: Pinseln wie die Spurensicherung</h2>
   <div class="tag"><div class="lbl">BEWEISMITTEL · MATERIAL</div>
-    <ul><li>Handcreme</li><li>Glasplatte (oder Trinkglas)</li><li>Fingerabdruckpulver</li><li>Marabupinsel</li><li>Klebestreifen (Tesafilm)</li><li>Kontrastkarte (weiß oder schwarz)</li><li>Stift</li><li>Unterlage / Küchenpapier</li></ul></div>
-  <div class="warn">⚠️ Arbeite auf einer Unterlage. Das Pulver ist sehr fein: nicht hineinpusten, nicht einatmen und nicht in die Augen bringen. Pinsel nicht in Richtung anderer Personen ausschütteln.</div>
+    <ul><li>Handcreme</li><li>Glasplatte (oder Trinkglas)</li><li>Fingerabdruckpulver</li><li>Petrischale</li><li>Marabupinsel</li><li>Klebestreifen (Tesafilm)</li><li>Kontrastkarte (weiß oder schwarz)</li><li>Stift</li><li>feuerfeste Unterlage</li></ul></div>
+  <div class="warn">⚠️ Arbeite auf der feuerfesten Unterlage. Das Pulver ist sehr fein: nicht hineinpusten, nicht einatmen und nicht in die Augen bringen. Pinsel nicht in Richtung anderer Personen ausschütteln.</div>
 
   <h3>Teil A: Spur legen</h3>
   <ol class="steps" data-id="a">
@@ -311,7 +328,9 @@ dialog::backdrop{background:rgba(0,0,0,.6)}
 
   <h3>Teil B: Spur sichtbar machen</h3>
   <ol class="steps" data-id="c">
-    <li><div><b>Pinsel vorbereiten.</b> Tupfe die Spitze des Marabupinsels leicht ins Pulver. Klopfe überschüssiges Pulver über der Unterlage ab.<div class="tip">Wenig Pulver ist mehr! Den Rest kannst du jederzeit nachholen.</div></div></li>
+    <li><div><b>Pulver bereitstellen.</b> Gib etwas Fingerabdruckpulver in die Petrischale. Ein kleines Häufchen reicht.</div></li>
+    <li><div><b>Pinsel eintunken.</b> Tunke den Marabupinsel ordentlich in das Pulver ein.</div></li>
+    <li><div><b>Ausklopfen.</b> Klopfe den Pinsel danach über der Petrischale etwas aus – so wie im Video. Dann sitzt nur noch feines Pulver in den Federn.<div class="tip">So vermeidest du, dass ein dicker Pulverklumpen die Linien zudeckt.</div></div></li>
     <li><div><b>Einstauben.</b> Streiche mit den Spitzen der Federn ganz sanft, mit kreisenden Bewegungen über die Stelle. Der Pinsel soll die Spur kaum berühren.</div></li>
     <li><div><b>Nacharbeiten.</b> Sobald Linien erscheinen, pinsle vorsichtig in Richtung der Linien. Überschüssiges Pulver nimmst du so mit dem Pinsel weg.</div></li>
   </ol>
@@ -323,7 +342,7 @@ dialog::backdrop{background:rgba(0,0,0,.6)}
     <li><div><b>Abziehen.</b> Ziehe den Streifen langsam und gleichmäßig in einem Zug ab.</div></li>
     <li><div><b>Auf Kontrastkarte kleben.</b> Dunkles Pulver auf eine weiße Karte, helles Pulver auf eine schwarze Karte. Glatt aufkleben.</div></li>
     <li><div><b>Beschriften.</b> Notiere auf der Karte: Spurennummer, Fundort (z. B. „Glasplatte, Tisch 3“), Finger, Datum und deinen Namen. Fotografiere dein Ergebnis für das Protokoll.</div></li>
-    <li><div><b>Aufräumen.</b> Glas reinigen, Pinsel über der Unterlage ausklopfen, Pulverdose schließen, Hände waschen.</div></li>
+    <li><div><b>Aufräumen.</b> Glas reinigen, Pinsel über der Petrischale ausklopfen, Pulver zurück in die Dose geben, Hände waschen.</div></li>
   </ol>
   <div class="info">🧪 <b>Tipp für Profis:</b> Lege mehrere Abdrücke nebeneinander: einmal mit viel, einmal mit wenig Creme, einmal mit starkem, einmal mit leichtem Druck. Vergleiche die Ergebnisse in deinem Protokoll.</div>
   <div class="row"><button class="btn primary" type="button" data-goto="p-ausw">Weiter zur Auswertung ▶</button></div>
@@ -368,11 +387,7 @@ dialog::backdrop{background:rgba(0,0,0,.6)}
 
   <div class="task">
     <p class="tt">✍️ Aufgabe 5: Denk-Aufgaben für dein Protokoll</p>
-    <ol>
-      <li>Beschreibe dein Ergebnis: Sind Grundmuster und Minuzien erkennbar?</li>
-      <li>Erkläre, warum die Pulvermethode bei einem Brief aus Papier kaum funktioniert.</li>
-      <li>Nenne zwei Fehlerquellen aus deinem Versuch und wie man sie vermeiden kann.</li>
-    </ol>
+    <ol id="denkList"></ol>
     <p class="muted">Hinweis zu Frage 2: <span class="redact">Papier saugt die Spur auf. Sie liegt nicht mehr oben auf, sondern in den Fasern. Dort kann das Pulver nicht haften.</span></p>
   </div>
   <div class="row"><button class="btn primary" type="button" data-goto="p-proto">Weiter zum Mini-Protokoll ▶</button></div>
@@ -390,11 +405,11 @@ dialog::backdrop{background:rgba(0,0,0,.6)}
       <textarea id="p-frage" data-save="p-frage" data-label="Fragestellung"></textarea><label class="f" for="p-material">Material <span class="hint">– Liste alle Materialien auf.</span></label>
       <textarea id="p-material" data-save="p-material" data-label="Material"></textarea><label class="f" for="p-durch">Durchführung <span class="hint">– Beschreibe kurz in eigenen Worten, wie du vorgegangen bist.</span></label>
       <textarea id="p-durch" data-save="p-durch" data-label="Durchführung"></textarea><label class="f" for="p-beob">Beobachtung <span class="hint">– Wie sah deine Spur nach dem Einstauben und auf der Kontrastkarte aus?</span></label>
-      <textarea id="p-beob" data-save="p-beob" data-label="Beobachtung"></textarea><label class="f" for="p-ausw">Auswertung <span class="hint">– Erkläre, warum das Pulver die Spur sichtbar macht. Beantworte die Denk-Aufgaben.</span></label>
-      <textarea id="p-ausw" data-save="p-ausw" data-label="Auswertung"></textarea><label class="f" for="p-fehler">Fehlerquellen <span class="hint">– Was hat nicht gut geklappt? Wie könnte man es besser machen?</span></label>
+      <textarea id="p-beob" data-save="p-beob" data-label="Beobachtung"></textarea><label class="f" for="p-ausw">Auswertung <span class="hint">– Erkläre, warum das Pulver die Spur sichtbar macht, und beantworte die Denk-Aufgaben.</span></label><div class="denk"><b>🧠 Deine Denk-Aufgaben:</b><ol><li>Beschreibe dein Ergebnis: Sind das Grundmuster und besondere Merkmale erkennbar?</li><li>Erkläre, warum die Pulvermethode bei einem Brief aus Papier kaum funktioniert.</li><li>Nenne zwei Fehlerquellen aus deinem Versuch und wie man sie vermeiden kann.</li></ol></div>
+      <textarea id="p-ausw" data-save="p-ausw" data-label="Auswertung" data-denk="1" style="min-height:180px"></textarea><label class="f" for="p-fehler">Fehlerquellen <span class="hint">– Was hat nicht gut geklappt? Wie könnte man es besser machen?</span></label>
       <textarea id="p-fehler" data-save="p-fehler" data-label="Fehlerquellen"></textarea>
-  <label class="f" for="photo">Foto deines Ergebnisses <span class="hint">– freiwillig, wird mitgedruckt</span></label>
-  <input type="file" id="photo" accept="image/*" capture="environment">
+  <label class="f" for="photo">📷 Fotos deiner Ergebnisse <span class="hint">– bis zu 3 Fotos, werden mitgedruckt. Du kannst sie auch später ergänzen.</span></label>
+  <input type="file" id="photo" accept="image/*" multiple>
   <div class="photo-prev"></div>
   <p class="saved"></p>
   <div class="row"><button class="btn primary" type="button" id="printBtn">🖨️ Protokoll drucken / als PDF speichern</button>
@@ -404,22 +419,23 @@ dialog::backdrop{background:rgba(0,0,0,.6)}
     <li>Beobachtung und Auswertung sind getrennt: erst <i>was</i> du gesehen hast, dann <i>warum</i>.</li>
     <li>Die Fachbegriffe aus dem Briefing sind richtig verwendet.</li>
     <li>Die Denk-Aufgaben sind beantwortet.</li>
-    <li>Ein Foto oder eine Skizze deines Ergebnisses ist dabei (Foto hier oder Skizze auf Papier).</li></ul></div>
+    <li>Ein Foto deines Ergebnisses ist dabei (hier hochladen oder auf den Ausdruck kleben).</li></ul></div>
 </div></section>
 </main>
-<footer><div class="stations"><a href="https://hubi-bot.github.io/Frau-Huber/finger-muster" class="">1 · Muster & Minuzien</a><a href="https://hubi-bot.github.io/Frau-Huber/finger-sichern" class="cur">2 · Pulver & Pinsel</a><a href="https://hubi-bot.github.io/Frau-Huber/finger-ninhydrin" class="">3 · Ninhydrin</a></div>Daktyloskopie · Station 2 von 3</footer>
+<footer><div class="stations"><a href="https://hubi-bot.github.io/Frau-Huber/finger-muster" class="">1 · Muster & Merkmale</a><a href="https://hubi-bot.github.io/Frau-Huber/finger-sichern" class="cur">2 · Pulver & Pinsel</a><a href="https://hubi-bot.github.io/Frau-Huber/finger-ninhydrin" class="">3 · Ninhydrin</a></div>Daktyloskopie · Station 2 von 3</footer>
 <div id="printout"></div>
 </div>
 <dialog id="qrdlg"><h2 style="margin:0 0 8px;font-family:'Special Elite',monospace">Station 2 öffnen</h2><div id="qrbox"></div><p class="url" id="qrurl"></p><button class="btn primary" id="qrclose" type="button">Schließen</button></dialog>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-<script>const STATION={"id": "s2", "nr": 2, "title": "Fingerabdrücke sichern"};
+<script>const STATION={"id": "s2", "nr": 2, "title": "Fingerabdrücke sichern", "denk": ["Beschreibe dein Ergebnis: Sind das Grundmuster und besondere Merkmale erkennbar?", "Erkläre, warum die Pulvermethode bei einem Brief aus Papier kaum funktioniert.", "Nenne zwei Fehlerquellen aus deinem Versuch und wie man sie vermeiden kann."]};
 window.stationInit = function(){
   const opts={druck:'zu starker Druck oder Finger verrutscht', pulver:'zu viel Pulver aufgetragen', blasen:'Klebestreifen nicht glatt aufgelegt und angedrückt', creme:'zu wenig Creme oder Spur schon abgewischt'};
   $$('[data-task=fehler] select').forEach(s=>{ s.innerHTML=Object.entries(opts).map(([k,v])=>`<option value="${k}">${v}</option>`).join(''); });
   renderOrder($('#ord1'),[
     'Finger leicht eincremen',
     'Finger kurz und leicht auf das Glas drücken',
-    'Pinsel ins Pulver tupfen und abklopfen',
+    'Pulver in die Petrischale geben',
+    'Pinsel ins Pulver tunken und etwas ausklopfen',
     'Spur sanft mit kreisenden Bewegungen einstauben',
     'Klebestreifen blasenfrei auflegen und andrücken',
     'Klebestreifen abziehen und auf die Kontrastkarte kleben',
@@ -479,7 +495,7 @@ function fingerprint(type, o={}){
 /* Wasserzeichen im Hintergrund */
 (function(){ const svg = fingerprint('wirbel',{seed:3,color:'#ffffff',sw:2.4}); document.documentElement.style.setProperty('--fp-bg', `url("data:image/svg+xml,${encodeURIComponent(svg)}")`); })();
 
-/* ---------- Minuzien-Skizzen ---------- */
+/* ---------- Merkmal-Skizzen ---------- */
 function minutia(kind, circle=true){
   const L=(y)=>`<path d="M0 ${y} C 40 ${y-3}, 120 ${y+3}, 160 ${y}"/>`;
   let s='';
@@ -509,7 +525,7 @@ function stamp(){
 const solved = new Set(store.get('solved', []));
 function markSolved(id){ solved.add(id); store.set('solved',[...solved]); updateProgress(); }
 function updateProgress(){
-  const steps=$$('ol.steps input[type=checkbox]'); const tasks=$$('[data-task]');
+  const steps=$$('ol.steps input[type=checkbox]'); const tasks=$$('[data-task]').filter(t=>!t.closest('.optional'));
   const total=steps.length+tasks.length+1;
   const proto = ($$('.proto [data-save]').filter(e=>e.tagName==='TEXTAREA' && e.value.trim().length>20).length>=3) ? 1 : 0;
   const done=steps.filter(c=>c.checked).length + tasks.filter(t=>solved.has(t.dataset.task)).length + proto;
@@ -519,7 +535,7 @@ function updateProgress(){
   tasks.forEach(t=>{ const b=t.querySelector('.solvedflag'); if(b) b.hidden=!solved.has(t.dataset.task); });
   $$('nav.tabs button').forEach(b=>{
     const p=$('#'+b.getAttribute('aria-controls')); if(!p) return;
-    const st=$$('ol.steps input[type=checkbox]',p), tk=$$('[data-task]',p);
+    const st=$$('ol.steps input[type=checkbox]',p), tk=$$('[data-task]',p).filter(t=>!t.closest('.optional'));
     const all=st.length+tk.length; const ok = all>0 && st.every(c=>c.checked) && tk.every(x=>solved.has(x.dataset.task));
     b.querySelector('.done').textContent = ok ? ' ✓' : '';
   });
@@ -624,23 +640,27 @@ function initSaveFields(){
 function initRedact(){ $$('.redact').forEach(r=>{ r.setAttribute('role','button'); r.tabIndex=0; r.title='Klicken zum Aufdecken';
   const open=()=>r.classList.add('open'); r.addEventListener('click',open); r.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){e.preventDefault();open();} }); }); }
 
-/* ---------- Foto ---------- */
+/* ---------- Fotos (mehrere, auch später ergänzbar) ---------- */
 function initPhoto(){
   const inp=$('#photo'), prev=$('.photo-prev'); if(!inp) return;
-  const show=(src)=>{ prev.innerHTML = src ? `<img src="${src}" alt="Foto deines Fingerabdrucks"><br><button class="btn small" type="button" id="photoDel">Foto entfernen</button>` : '';
-    const d=$('#photoDel'); if(d) d.onclick=()=>{ store.del('photo'); window._photo=null; show(null); }; };
-  window._photo=store.get('photo',null); show(window._photo);
-  inp.addEventListener('change',()=>{ const f=inp.files[0]; if(!f) return; const img=new Image(); const rd=new FileReader();
+  window._photos=store.get('photos',[]); if(!Array.isArray(window._photos)) window._photos=[];
+  const show=()=>{ prev.innerHTML = window._photos.length ? '<div class="photos">'+window._photos.map((p,i)=>`<figure><img src="${p}" alt="Foto ${i+1} deines Ergebnisses"><button class="btn small" type="button" data-del="${i}">Foto ${i+1} entfernen</button></figure>`).join('')+'</div>' : '<p class="muted">Noch kein Foto. Du kannst es auch später ergänzen – deine Eingaben bleiben auf diesem Gerät gespeichert.</p>'; };
+  prev.addEventListener('click',e=>{ const b=e.target.closest('[data-del]'); if(!b) return; window._photos.splice(+b.dataset.del,1); store.set('photos',window._photos); show(); });
+  show();
+  inp.addEventListener('change',()=>{ [...inp.files].slice(0,3).forEach(f=>{ const img=new Image(); const rd=new FileReader();
     rd.onload=()=>{ img.onload=()=>{ const m=900, s=Math.min(1,m/Math.max(img.width,img.height)); const c=document.createElement('canvas'); c.width=img.width*s; c.height=img.height*s;
-      c.getContext('2d').drawImage(img,0,0,c.width,c.height); const url=c.toDataURL('image/jpeg',.8); window._photo=url; store.set('photo',url); show(url); }; img.src=rd.result; }; rd.readAsDataURL(f); });
+      c.getContext('2d').drawImage(img,0,0,c.width,c.height); window._photos.push(c.toDataURL('image/jpeg',.78)); if(window._photos.length>3) window._photos.shift();
+      if(!store.set('photos',window._photos)) alert('Das Foto ist zu groß zum Speichern auf diesem Gerät. Es wird trotzdem mitgedruckt, solange die Seite offen ist.'); show(); }; img.src=rd.result; }; rd.readAsDataURL(f); }); inp.value=''; });
 }
 
 /* ---------- Protokoll drucken ---------- */
 function printProtocol(){
   const pr=$('#printout'); const f=(k)=>esc(($(`[data-save="${k}"]`)||{}).value||'');
   let html=`<h1>Mini-Protokoll – ${esc(STATION.title)}</h1><p><b>Name:</b> ${f('p-name')} &nbsp; <b>Klasse/Kurs:</b> ${f('p-klasse')} &nbsp; <b>Datum:</b> ${f('p-datum')}</p>`;
-  $$('.proto [data-label]').forEach(el=>{ html+=`<h2>${esc(el.dataset.label)}</h2><div class="ans">${esc(el.value||'')}</div>`; if(el.dataset.extra && window[el.dataset.extra]) html+=window[el.dataset.extra](); });
-  if(window._photo) html+=`<h2>Foto des Ergebnisses</h2><img src="${window._photo}">`;
+  $$('.proto [data-label]').forEach(el=>{ html+=`<h2>${esc(el.dataset.label)}</h2>`;
+    if(el.dataset.denk && STATION.denk) html+='<p style="font-size:10pt;color:#444"><b>Denk-Aufgaben:</b></p><ol style="font-size:10pt;color:#444;margin-top:0">'+STATION.denk.map(d=>'<li>'+d+'</li>').join('')+'</ol>';
+    html+=`<div class="ans">${esc(el.value||'')}</div>`; });
+  html+='<h2>Foto(s) des Ergebnisses</h2>' + ((window._photos||[]).length ? (window._photos).map(p=>`<img src="${p}">`).join('') : '<div class="ph">Foto hier einkleben oder später in der Lernumgebung ergänzen</div>');
   html+=`<p style="margin-top:18pt;color:#555;font-size:9pt">Erstellt mit der Lernumgebung „${esc(STATION.title)}“ · Station ${STATION.nr} Daktyloskopie</p>`;
   pr.innerHTML=html; window.print();
 }
@@ -658,6 +678,7 @@ function initQR(){
 function initReset(){ const b=$('#resetAll'); if(!b) return; b.addEventListener('click',()=>{ if(confirm('Wirklich alle Eingaben dieser Station auf diesem Gerät löschen?')){ try{ Object.keys(localStorage).filter(k=>k.startsWith(KEY)).forEach(k=>localStorage.removeItem(k)); }catch(e){} location.reload(); } }); }
 
 function boot(){
+  const dl=$('#denkList'); if(dl && STATION.denk) dl.innerHTML=STATION.denk.map(d=>`<li>${d}</li>`).join('');
   if(window.stationInit) window.stationInit();
   $$('[data-fp]').forEach(el=>{ el.innerHTML=fingerprint(el.dataset.fp,{seed:+(el.dataset.seed||5), mirror:el.dataset.mirror==='1', label:el.dataset.label}); });
   $$('[data-min]').forEach(el=>{ el.innerHTML=minutia(el.dataset.min, el.dataset.circle!=='0'); });

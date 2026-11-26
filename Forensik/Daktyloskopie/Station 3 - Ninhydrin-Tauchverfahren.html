@@ -141,6 +141,22 @@ ol.steps li > div > b:first-child{display:block}
 .polaroid .cap{font-family:var(--type); font-size:16px; margin-top:6px}
 .polaroid .pct{font-size:13px; color:var(--paper-dim)}
 
+/* Echte Fotos */
+figure.polaroid{margin:0}
+.photo img{width:100%; height:auto; display:block; border-radius:2px; filter:contrast(1.05)}
+.fbi{position:relative}
+.fbi img{width:71.7%}
+.fbi span{position:absolute; left:73%; transform:translateY(-50%); font:600 clamp(11px,1.6vw,15px) var(--text); color:var(--paper-ink); background:var(--mark); padding:1px 6px; border-radius:4px; white-space:nowrap}
+.fbi.mirror img{transform:scaleX(-1); margin-left:auto}
+.fbi.mirror span{left:auto; right:73%; font:800 16px var(--text); background:var(--tape); color:#111; min-width:26px; text-align:center}
+.task.optional{border-style:dashed; border-color:var(--accent); background:#fffdf6}
+.task.optional::after{content:"OPTIONAL"; position:absolute; top:-12px; right:16px; background:var(--accent); color:#fff; font:800 12px var(--text); letter-spacing:.1em; padding:3px 10px; border-radius:999px}
+.denk{background:#fff8e1; border:2px solid #e0a800; border-radius:10px; padding:10px 14px; margin:6px 0 6px}
+.denk ol{margin:4px 0 0; padding-left:22px}
+.photos{display:flex; flex-wrap:wrap; gap:12px}
+.photos figure{margin:0; text-align:center}
+.photos img{max-width:240px; max-height:240px; border:4px solid #fff; box-shadow:0 6px 14px rgba(0,0,0,.25); display:block}
+
 /* Aufgaben / Rückmeldung */
 .task{background:#fffaf0; border:2px solid var(--paper-line); border-radius:12px; padding:16px 18px; margin:18px 0; position:relative}
 .task > .tt{font-family:var(--type); font-size:19px; margin:0 0 6px}
@@ -238,7 +254,8 @@ dialog::backdrop{background:rgba(0,0,0,.6)}
   #printout h1{font-family:var(--type); font-size:20pt; margin:0 0 4pt}
   #printout h2{font-size:13pt; margin:14pt 0 4pt; border-bottom:1px solid #999}
   #printout .ans{white-space:pre-wrap; min-height:1.4em}
-  #printout img{max-width:9cm; max-height:9cm}
+  #printout img{max-width:8cm; max-height:8cm; margin:0 6pt 6pt 0}
+  #printout .ph{border:1.5px dashed #888; height:6cm; display:flex; align-items:center; justify-content:center; color:#777}
   #printout table{border-collapse:collapse} #printout td, #printout th{border:1px solid #888; padding:3pt 6pt}
 }
 
@@ -273,10 +290,8 @@ dialog::backdrop{background:rgba(0,0,0,.6)}
   <ol class="steps" data-id="s">
     <li><div><b>Ich trage eine Schutzbrille.</b></div></li>
     <li><div><b>Ich trage Schutzhandschuhe</b>, sobald ich mit der Lösung arbeite. (Den „Schwitz-Handschuh“ ziehe ich vorher aus.)</div></li>
-    <li><div><b>Keine offenen Flammen</b> in der Nähe. Ethanol ist leicht entzündbar.</div></li>
     <li><div><b>Ich fasse das Papier nur mit der Pinzette an</b>, nie mit den Fingern.</div></li>
     <li><div><b>Ich föhne erst, wenn das Papier abgetropft ist</b>, und halte den Föhn von der Petrischale fern. Die Petrischale ist dabei mit dem Deckel verschlossen.</div></li>
-    <li><div><b>Ich kenne die Entsorgung:</b> Reste der Lösung kommen in den Behälter für organische Lösemittelabfälle – nicht in den Ausguss.</div></li>
   </ol>
   <div class="row"><button class="btn primary" type="button" data-goto="p-versuch">Weiter zum Versuch ▶</button></div>
 </section>
@@ -299,7 +314,6 @@ dialog::backdrop{background:rgba(0,0,0,.6)}
     <li><div><b>Herausnehmen und abtropfen.</b> Papier herausnehmen, über der Schale abtropfen lassen und auf eine Unterlage legen. Deckel auf die Petrischale. Kurz warten, bis das Ethanol größtenteils verdunstet ist.</div></li>
     <li><div><b>Föhnen.</b> Föhne das Papier mit warmer Luft aus etwas Abstand. Die Wärme beschleunigt die Reaktion. Beobachte genau, was passiert!<div class="tip">Die Färbung kann einige Minuten dauern und wird oft noch nach Stunden kräftiger. Schau später noch einmal nach.</div></div></li>
     <li><div><b>Dokumentieren.</b> Fotografiere dein Ergebnis und notiere deine Beobachtung.</div></li>
-    <li><div><b>Aufräumen.</b> Reste der Lösung in den Behälter für organische Lösemittelabfälle. Handschuhe ausziehen und entsorgen, Hände waschen.</div></li>
   </ol>
 
   <h3>Virtuelles Labor: Probelauf</h3>
@@ -372,11 +386,7 @@ dialog::backdrop{background:rgba(0,0,0,.6)}
 
   <div class="task">
     <p class="tt">✍️ Aufgabe 3: Denk-Aufgaben für dein Protokoll</p>
-    <ol>
-      <li>Erkläre in eigenen Worten, warum der Fingerabdruck violett wird. Nutze die Begriffe <i>Aminosäure</i>, <i>Ninhydrin</i> und <i>Ruhemanns Purpur</i>.</li>
-      <li>Begründe, warum man bei diesem Versuch unbedingt Handschuhe tragen muss. <span class="muted">(Denk an deine eigene Haut!)</span></li>
-      <li>Vergleiche mit Station 2: Warum nimmt man für Papier Ninhydrin und nicht Pulver?</li>
-    </ol>
+    <ol id="denkList"></ol>
     <p class="muted">Hinweis zu Frage 2: <span class="redact">Auch deine Haut enthält Aminosäuren und Eiweiße. Ninhydrin würde deine Finger violett färben – und deine Handschuh-freien Finger würden auf dem Papier neue Spuren hinterlassen.</span></p>
   </div>
   <div class="row"><button class="btn primary" type="button" data-goto="p-proto">Weiter zum Mini-Protokoll ▶</button></div>
@@ -394,11 +404,11 @@ dialog::backdrop{background:rgba(0,0,0,.6)}
       <textarea id="p-frage" data-save="p-frage" data-label="Fragestellung"></textarea><label class="f" for="p-material">Material und Chemikalien <span class="hint">– Liste Geräte und Chemikalien auf.</span></label>
       <textarea id="p-material" data-save="p-material" data-label="Material und Chemikalien"></textarea><label class="f" for="p-durch">Durchführung <span class="hint">– Beschreibe kurz in eigenen Worten, wie du vorgegangen bist.</span></label>
       <textarea id="p-durch" data-save="p-durch" data-label="Durchführung"></textarea><label class="f" for="p-beob">Beobachtung <span class="hint">– Was hast du nach dem Eintauchen und beim Föhnen gesehen? Welche Farbe hat der Abdruck?</span></label>
-      <textarea id="p-beob" data-save="p-beob" data-label="Beobachtung"></textarea><label class="f" for="p-ausw">Auswertung <span class="hint">– Erkläre, warum sich der Abdruck violett färbt (Aminosäuren, Ninhydrin, Ruhemanns Purpur). Beantworte die Denk-Aufgaben.</span></label>
-      <textarea id="p-ausw" data-save="p-ausw" data-label="Auswertung"></textarea><label class="f" for="p-fehler">Fehlerquellen und Entsorgung <span class="hint">– Was hat nicht gut geklappt? Wie hast du die Reste entsorgt?</span></label>
-      <textarea id="p-fehler" data-save="p-fehler" data-label="Fehlerquellen und Entsorgung"></textarea>
-  <label class="f" for="photo">Foto deines Ergebnisses <span class="hint">– freiwillig, wird mitgedruckt</span></label>
-  <input type="file" id="photo" accept="image/*" capture="environment">
+      <textarea id="p-beob" data-save="p-beob" data-label="Beobachtung"></textarea><label class="f" for="p-ausw">Auswertung <span class="hint">– Beantworte die Denk-Aufgaben.</span></label><div class="denk"><b>🧠 Deine Denk-Aufgaben:</b><ol><li>Erkläre in eigenen Worten, warum der Fingerabdruck violett wird. Nutze die Begriffe <i>Aminosäure</i>, <i>Ninhydrin</i> und <i>Ruhemanns Purpur</i>.</li><li>Begründe, warum man bei diesem Versuch unbedingt Handschuhe tragen muss.</li><li>Vergleiche mit Station 2: Warum nimmt man für Papier Ninhydrin und nicht Pulver?</li></ol></div>
+      <textarea id="p-ausw" data-save="p-ausw" data-label="Auswertung" data-denk="1" style="min-height:180px"></textarea><label class="f" for="p-fehler">Fehlerquellen <span class="hint">– Was hat nicht gut geklappt? Wie könnte man es besser machen?</span></label>
+      <textarea id="p-fehler" data-save="p-fehler" data-label="Fehlerquellen"></textarea>
+  <label class="f" for="photo">📷 Fotos deiner Ergebnisse <span class="hint">– bis zu 3 Fotos, werden mitgedruckt. Du kannst sie auch später ergänzen.</span></label>
+  <input type="file" id="photo" accept="image/*" multiple>
   <div class="photo-prev"></div>
   <p class="saved"></p>
   <div class="row"><button class="btn primary" type="button" id="printBtn">🖨️ Protokoll drucken / als PDF speichern</button>
@@ -408,15 +418,15 @@ dialog::backdrop{background:rgba(0,0,0,.6)}
     <li>Beobachtung und Auswertung sind getrennt: erst <i>was</i> du gesehen hast, dann <i>warum</i>.</li>
     <li>Die Fachbegriffe aus dem Briefing sind richtig verwendet.</li>
     <li>Die Denk-Aufgaben sind beantwortet.</li>
-    <li>Ein Foto oder eine Skizze deines Ergebnisses ist dabei (Foto hier oder Skizze auf Papier).</li></ul></div>
+    <li>Ein Foto deines Ergebnisses ist dabei (hier hochladen oder auf den Ausdruck kleben).</li></ul></div>
 </div></section>
 </main>
-<footer><div class="stations"><a href="https://hubi-bot.github.io/Frau-Huber/finger-muster" class="">1 · Muster & Minuzien</a><a href="https://hubi-bot.github.io/Frau-Huber/finger-sichern" class="">2 · Pulver & Pinsel</a><a href="https://hubi-bot.github.io/Frau-Huber/finger-ninhydrin" class="cur">3 · Ninhydrin</a></div>Daktyloskopie · Station 3 von 3</footer>
+<footer><div class="stations"><a href="https://hubi-bot.github.io/Frau-Huber/finger-muster" class="">1 · Muster & Merkmale</a><a href="https://hubi-bot.github.io/Frau-Huber/finger-sichern" class="">2 · Pulver & Pinsel</a><a href="https://hubi-bot.github.io/Frau-Huber/finger-ninhydrin" class="cur">3 · Ninhydrin</a></div>Daktyloskopie · Station 3 von 3</footer>
 <div id="printout"></div>
 </div>
 <dialog id="qrdlg"><h2 style="margin:0 0 8px;font-family:'Special Elite',monospace">Station 3 öffnen</h2><div id="qrbox"></div><p class="url" id="qrurl"></p><button class="btn primary" id="qrclose" type="button">Schließen</button></dialog>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-<script>const STATION={"id": "s3", "nr": 3, "title": "Ninhydrin-Tauchverfahren"};
+<script>const STATION={"id": "s3", "nr": 3, "title": "Ninhydrin-Tauchverfahren", "denk": ["Erkläre in eigenen Worten, warum der Fingerabdruck violett wird. Nutze die Begriffe <i>Aminosäure</i>, <i>Ninhydrin</i> und <i>Ruhemanns Purpur</i>.", "Begründe, warum man bei diesem Versuch unbedingt Handschuhe tragen muss.", "Vergleiche mit Station 2: Warum nimmt man für Papier Ninhydrin und nicht Pulver?"]};
 window.stationInit = function(){
   // GHS-Piktogramme (vereinfacht gezeichnet)
   const sym={
@@ -460,8 +470,7 @@ window.stationInit = function(){
     {q:'Warum eignet sich Ninhydrin besonders gut für Papier?', o:['Papier saugt die Aminosäuren auf und hält sie lange fest.','Auf Papier haftet Pulver besonders gut.','Ninhydrin löst Papier auf.'], a:0, why:'Genau – deshalb gelingen auch Jahre alte Spuren.'},
     {q:'Woher kommt das Stickstoff-Atom im Farbstoff Ruhemanns Purpur?', o:['aus dem Ninhydrin','aus der Aminosäure','aus der Luft'], a:1, why:'Richtig! Es stammt aus der Aminogruppe der Aminosäure und verbindet die zwei Ninhydrin-Reste.'},
     {q:'Wozu wird das Papier geföhnt?', o:['Nur damit es schneller trocken ist.','Die Wärme beschleunigt die Farbreaktion.','Damit das Ninhydrin verdampft.'], a:1, why:'Genau. Ohne Wärme läuft die Reaktion viel langsamer.'},
-    {q:'Ruhemanns Purpur absorbiert gelbgrünes Licht. Welche Farbe sehen wir?', o:['Gelbgrün','Violett','Weiß'], a:1, why:'Richtig: Wir sehen die Komplementärfarbe.', hint:'Wir sehen nicht das verschluckte Licht, sondern das, was übrig bleibt.'},
-    {q:'Wie entsorgst du die übrige Ninhydrin-Lösung?', o:['in den Ausguss mit viel Wasser','in den Restmüll','in den Behälter für organische Lösemittelabfälle'], a:2, why:'Richtig. Ethanol und Ninhydrin gehören nicht ins Abwasser.'}
+    {q:'Ruhemanns Purpur absorbiert gelbgrünes Licht. Welche Farbe sehen wir?', o:['Gelbgrün','Violett','Weiß'], a:1, why:'Richtig: Wir sehen die Komplementärfarbe.', hint:'Wir sehen nicht das verschluckte Licht, sondern das, was übrig bleibt.'}
   ],'wissen3');
 };
 
@@ -517,7 +526,7 @@ function fingerprint(type, o={}){
 /* Wasserzeichen im Hintergrund */
 (function(){ const svg = fingerprint('wirbel',{seed:3,color:'#ffffff',sw:2.4}); document.documentElement.style.setProperty('--fp-bg', `url("data:image/svg+xml,${encodeURIComponent(svg)}")`); })();
 
-/* ---------- Minuzien-Skizzen ---------- */
+/* ---------- Merkmal-Skizzen ---------- */
 function minutia(kind, circle=true){
   const L=(y)=>`<path d="M0 ${y} C 40 ${y-3}, 120 ${y+3}, 160 ${y}"/>`;
   let s='';
@@ -547,7 +556,7 @@ function stamp(){
 const solved = new Set(store.get('solved', []));
 function markSolved(id){ solved.add(id); store.set('solved',[...solved]); updateProgress(); }
 function updateProgress(){
-  const steps=$$('ol.steps input[type=checkbox]'); const tasks=$$('[data-task]');
+  const steps=$$('ol.steps input[type=checkbox]'); const tasks=$$('[data-task]').filter(t=>!t.closest('.optional'));
   const total=steps.length+tasks.length+1;
   const proto = ($$('.proto [data-save]').filter(e=>e.tagName==='TEXTAREA' && e.value.trim().length>20).length>=3) ? 1 : 0;
   const done=steps.filter(c=>c.checked).length + tasks.filter(t=>solved.has(t.dataset.task)).length + proto;
@@ -557,7 +566,7 @@ function updateProgress(){
   tasks.forEach(t=>{ const b=t.querySelector('.solvedflag'); if(b) b.hidden=!solved.has(t.dataset.task); });
   $$('nav.tabs button').forEach(b=>{
     const p=$('#'+b.getAttribute('aria-controls')); if(!p) return;
-    const st=$$('ol.steps input[type=checkbox]',p), tk=$$('[data-task]',p);
+    const st=$$('ol.steps input[type=checkbox]',p), tk=$$('[data-task]',p).filter(t=>!t.closest('.optional'));
     const all=st.length+tk.length; const ok = all>0 && st.every(c=>c.checked) && tk.every(x=>solved.has(x.dataset.task));
     b.querySelector('.done').textContent = ok ? ' ✓' : '';
   });
@@ -662,23 +671,27 @@ function initSaveFields(){
 function initRedact(){ $$('.redact').forEach(r=>{ r.setAttribute('role','button'); r.tabIndex=0; r.title='Klicken zum Aufdecken';
   const open=()=>r.classList.add('open'); r.addEventListener('click',open); r.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){e.preventDefault();open();} }); }); }
 
-/* ---------- Foto ---------- */
+/* ---------- Fotos (mehrere, auch später ergänzbar) ---------- */
 function initPhoto(){
   const inp=$('#photo'), prev=$('.photo-prev'); if(!inp) return;
-  const show=(src)=>{ prev.innerHTML = src ? `<img src="${src}" alt="Foto deines Fingerabdrucks"><br><button class="btn small" type="button" id="photoDel">Foto entfernen</button>` : '';
-    const d=$('#photoDel'); if(d) d.onclick=()=>{ store.del('photo'); window._photo=null; show(null); }; };
-  window._photo=store.get('photo',null); show(window._photo);
-  inp.addEventListener('change',()=>{ const f=inp.files[0]; if(!f) return; const img=new Image(); const rd=new FileReader();
+  window._photos=store.get('photos',[]); if(!Array.isArray(window._photos)) window._photos=[];
+  const show=()=>{ prev.innerHTML = window._photos.length ? '<div class="photos">'+window._photos.map((p,i)=>`<figure><img src="${p}" alt="Foto ${i+1} deines Ergebnisses"><button class="btn small" type="button" data-del="${i}">Foto ${i+1} entfernen</button></figure>`).join('')+'</div>' : '<p class="muted">Noch kein Foto. Du kannst es auch später ergänzen – deine Eingaben bleiben auf diesem Gerät gespeichert.</p>'; };
+  prev.addEventListener('click',e=>{ const b=e.target.closest('[data-del]'); if(!b) return; window._photos.splice(+b.dataset.del,1); store.set('photos',window._photos); show(); });
+  show();
+  inp.addEventListener('change',()=>{ [...inp.files].slice(0,3).forEach(f=>{ const img=new Image(); const rd=new FileReader();
     rd.onload=()=>{ img.onload=()=>{ const m=900, s=Math.min(1,m/Math.max(img.width,img.height)); const c=document.createElement('canvas'); c.width=img.width*s; c.height=img.height*s;
-      c.getContext('2d').drawImage(img,0,0,c.width,c.height); const url=c.toDataURL('image/jpeg',.8); window._photo=url; store.set('photo',url); show(url); }; img.src=rd.result; }; rd.readAsDataURL(f); });
+      c.getContext('2d').drawImage(img,0,0,c.width,c.height); window._photos.push(c.toDataURL('image/jpeg',.78)); if(window._photos.length>3) window._photos.shift();
+      if(!store.set('photos',window._photos)) alert('Das Foto ist zu groß zum Speichern auf diesem Gerät. Es wird trotzdem mitgedruckt, solange die Seite offen ist.'); show(); }; img.src=rd.result; }; rd.readAsDataURL(f); }); inp.value=''; });
 }
 
 /* ---------- Protokoll drucken ---------- */
 function printProtocol(){
   const pr=$('#printout'); const f=(k)=>esc(($(`[data-save="${k}"]`)||{}).value||'');
   let html=`<h1>Mini-Protokoll – ${esc(STATION.title)}</h1><p><b>Name:</b> ${f('p-name')} &nbsp; <b>Klasse/Kurs:</b> ${f('p-klasse')} &nbsp; <b>Datum:</b> ${f('p-datum')}</p>`;
-  $$('.proto [data-label]').forEach(el=>{ html+=`<h2>${esc(el.dataset.label)}</h2><div class="ans">${esc(el.value||'')}</div>`; if(el.dataset.extra && window[el.dataset.extra]) html+=window[el.dataset.extra](); });
-  if(window._photo) html+=`<h2>Foto des Ergebnisses</h2><img src="${window._photo}">`;
+  $$('.proto [data-label]').forEach(el=>{ html+=`<h2>${esc(el.dataset.label)}</h2>`;
+    if(el.dataset.denk && STATION.denk) html+='<p style="font-size:10pt;color:#444"><b>Denk-Aufgaben:</b></p><ol style="font-size:10pt;color:#444;margin-top:0">'+STATION.denk.map(d=>'<li>'+d+'</li>').join('')+'</ol>';
+    html+=`<div class="ans">${esc(el.value||'')}</div>`; });
+  html+='<h2>Foto(s) des Ergebnisses</h2>' + ((window._photos||[]).length ? (window._photos).map(p=>`<img src="${p}">`).join('') : '<div class="ph">Foto hier einkleben oder später in der Lernumgebung ergänzen</div>');
   html+=`<p style="margin-top:18pt;color:#555;font-size:9pt">Erstellt mit der Lernumgebung „${esc(STATION.title)}“ · Station ${STATION.nr} Daktyloskopie</p>`;
   pr.innerHTML=html; window.print();
 }
@@ -696,6 +709,7 @@ function initQR(){
 function initReset(){ const b=$('#resetAll'); if(!b) return; b.addEventListener('click',()=>{ if(confirm('Wirklich alle Eingaben dieser Station auf diesem Gerät löschen?')){ try{ Object.keys(localStorage).filter(k=>k.startsWith(KEY)).forEach(k=>localStorage.removeItem(k)); }catch(e){} location.reload(); } }); }
 
 function boot(){
+  const dl=$('#denkList'); if(dl && STATION.denk) dl.innerHTML=STATION.denk.map(d=>`<li>${d}</li>`).join('');
   if(window.stationInit) window.stationInit();
   $$('[data-fp]').forEach(el=>{ el.innerHTML=fingerprint(el.dataset.fp,{seed:+(el.dataset.seed||5), mirror:el.dataset.mirror==='1', label:el.dataset.label}); });
   $$('[data-min]').forEach(el=>{ el.innerHTML=minutia(el.dataset.min, el.dataset.circle!=='0'); });
